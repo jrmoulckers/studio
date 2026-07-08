@@ -1,0 +1,21 @@
+{
+  "motion": {
+    "$description": "Semantic motion purposes. Each has a `reduced` companion; the CSS output also ships a prefers-reduced-motion block that collapses the underlying duration primitives to 0ms.",
+    "press": {
+      "duration": { "$value": "{duration.press}", "$type": "duration" },
+      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+    },
+    "state": {
+      "duration": { "$value": "{duration.state}", "$type": "duration" },
+      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+    },
+    "tile": {
+      "duration": { "$value": "{duration.tile}", "$type": "duration" },
+      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+    },
+    "reduced": {
+      "duration": { "$value": "{duration.reduced}", "$type": "duration" },
+      "easing": { "$value": "{easing.linear}", "$type": "cubicBezier" }
+    }
+  }
+}

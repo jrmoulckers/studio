@@ -1,0 +1,34 @@
+{
+  "button": {
+    "$description": "One shape language (9px controls, >=46px targets), one state model.",
+    "primary": {
+      "bg": { "$value": "{color.primary}", "$type": "color" },
+      "text": { "$value": "{color.on-primary}", "$type": "color" },
+      "border": { "$value": "{color.primary-strong}", "$type": "color" },
+      "hover-bg": { "$value": "{color.primary-strong}", "$type": "color" },
+      "radius": { "$value": "{radius.sm}", "$type": "dimension" },
+      "min-height": { "$value": "46px", "$type": "dimension" },
+      "padding-x": { "$value": "18px", "$type": "dimension" },
+      "padding-y": { "$value": "12px", "$type": "dimension" }
+    },
+    "default": {
+      "bg": { "$value": "{color.surface-2}", "$type": "color" },
+      "text": { "$value": "{color.text}", "$type": "color" },
+      "border": { "$value": "{color.border}", "$type": "color" },
+      "hover-bg": { "$value": "{color.surface-3}", "$type": "color" },
+      "radius": { "$value": "{radius.sm}", "$type": "dimension" },
+      "min-height": { "$value": "46px", "$type": "dimension" },
+      "padding-x": { "$value": "18px", "$type": "dimension" },
+      "padding-y": { "$value": "12px", "$type": "dimension" }
+    },
+    "ghost": {
+      "bg": { "$value": "transparent", "$type": "color" },
+      "text": { "$value": "{color.text}", "$type": "color" }
+    },
+    "danger": {
+      "bg": { "$value": "transparent", "$type": "color" },
+      "text": { "$value": "{color.danger}", "$type": "color" },
+      "border": { "$value": "{color.danger}", "$type": "color" }
+    }
+  }
+}

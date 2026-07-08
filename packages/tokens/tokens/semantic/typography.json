@@ -1,0 +1,36 @@
+{
+  "text": {
+    "$description": "Semantic type roles (the score-king hierarchy). Each binds family/size/weight/line-height primitives.",
+    "display": {
+      "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+      "size": { "$value": "{font.size.display}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.tight}", "$type": "number" }
+    },
+    "title": {
+      "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+      "size": { "$value": "{font.size.title}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.tight}", "$type": "number" }
+    },
+    "body": {
+      "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+      "size": { "$value": "{font.size.body}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.regular}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.normal}", "$type": "number" }
+    },
+    "label": {
+      "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+      "size": { "$value": "{font.size.label}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.regular}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.snug}", "$type": "number" }
+    },
+    "overline": {
+      "family": { "$value": "{font.family.sans}", "$type": "fontFamily" },
+      "size": { "$value": "{font.size.overline}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.semibold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.tight}", "$type": "number" },
+      "letter-spacing": { "$value": "{font.letterSpacing.wide}", "$type": "dimension" }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@jrm/prettier-config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared Prettier config for JRM Studio (seeded from finance + jrm-recipes).",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": ["index.js"],
+  "peerDependencies": {
+    "prettier": ">=3"
+  },
+  "dependencies": {
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

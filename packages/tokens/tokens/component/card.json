@@ -1,0 +1,21 @@
+{
+  "card": {
+    "$description": "14px container, one Soft Lift shadow.",
+    "bg": { "$value": "{color.surface}", "$type": "color" },
+    "text": { "$value": "{color.text}", "$type": "color" },
+    "border": { "$value": "{color.border}", "$type": "color" },
+    "radius": { "$value": "{radius.md}", "$type": "dimension" },
+    "padding": { "$value": "{spacing.lg}", "$type": "dimension" },
+    "shadow": { "$value": "{shadow.lift}", "$type": "shadow" }
+  },
+  "tile": {
+    "$description": "Game-tile card — the primary place per-game theming shows up; border turns Royal Violet on hover.",
+    "bg": { "$value": "{color.surface}", "$type": "color" },
+    "text": { "$value": "{color.text}", "$type": "color" },
+    "border": { "$value": "{color.border}", "$type": "color" },
+    "hover-border": { "$value": "{color.primary}", "$type": "color" },
+    "radius": { "$value": "{radius.md}", "$type": "dimension" },
+    "padding": { "$value": "{spacing.lg}", "$type": "dimension" },
+    "shadow": { "$value": "{shadow.lift}", "$type": "shadow" }
+  }
+}

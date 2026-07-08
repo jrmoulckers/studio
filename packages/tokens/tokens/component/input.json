@@ -1,0 +1,14 @@
+{
+  "input": {
+    "$description": "Surface fill with the shared Royal Violet focus ring.",
+    "bg": { "$value": "{color.surface}", "$type": "color" },
+    "text": { "$value": "{color.text}", "$type": "color" },
+    "border": { "$value": "{color.border}", "$type": "color" },
+    "placeholder": { "$value": "{color.text-muted}", "$type": "color" },
+    "focus-ring": { "$value": "{color.focus-ring}", "$type": "color" },
+    "radius": { "$value": "{radius.sm}", "$type": "dimension" },
+    "min-height": { "$value": "46px", "$type": "dimension" },
+    "padding-x": { "$value": "{spacing.md}", "$type": "dimension" },
+    "padding-y": { "$value": "11px", "$type": "dimension" }
+  }
+}

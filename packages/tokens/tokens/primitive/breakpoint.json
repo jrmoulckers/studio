@@ -1,0 +1,7 @@
+{
+  "breakpoint": {
+    "$description": "Layout breakpoints for the single-column, thumb-first shell.",
+    "content-max": { "$value": "760px", "$type": "dimension", "$description": "Max content column width" },
+    "tile-min": { "$value": "150px", "$type": "dimension", "$description": "Min game-tile width in the auto-fit grid" }
+  }
+}

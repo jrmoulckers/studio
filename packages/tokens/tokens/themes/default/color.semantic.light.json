@@ -1,0 +1,25 @@
+{
+  "$description": "score-king LIGHT semantic palette — a faithful inversion of dark. Emitted as :root (default). Only accent-ink and the neutral surfaces differ meaningfully from dark.",
+  "color": {
+    "bg": { "$value": "{color.paper.lilac-mist}", "$type": "color" },
+    "surface": { "$value": "{color.paper.white}", "$type": "color" },
+    "surface-2": { "$value": "{color.paper.frost}", "$type": "color" },
+    "surface-3": { "$value": "{color.paper.haze}", "$type": "color" },
+    "border": { "$value": "{color.paper.cloud-line}", "$type": "color" },
+    "text": { "$value": "{color.paper.ink}", "$type": "color" },
+    "text-muted": { "$value": "{color.paper.slate-gray}", "$type": "color" },
+    "primary": { "$value": "{color.royal-violet.500}", "$type": "color" },
+    "primary-strong": { "$value": "{color.royal-violet.600}", "$type": "color" },
+    "on-primary": { "$value": "{color.base.white}", "$type": "color" },
+    "accent": { "$value": "{color.crown-gold.500}", "$type": "color" },
+    "accent-ink": { "$value": "{color.crown-gold.ink-light}", "$type": "color", "$description": "Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold washes/fills as {color.accent}." },
+    "success": { "$value": "{color.win.500}", "$type": "color" },
+    "danger": { "$value": "{color.loss.500}", "$type": "color" },
+    "warning": { "$value": "{color.caution.500}", "$type": "color" },
+    "focus-ring": { "$value": "{color.royal-violet.500}", "$type": "color" }
+  },
+  "shadow": {
+    "lift": { "$value": "{shadow.soft-lift-light}", "$type": "shadow" },
+    "hairline": { "$value": "{shadow.inset-hairline}", "$type": "shadow" }
+  }
+}
