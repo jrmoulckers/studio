@@ -1,0 +1,42 @@
+{
+  "$description": "score-king DARK-OLED semantic palette (NEW) — true-black surfaces for AMOLED pixel-off battery savings. Restructured into the shared studio --semantic-* taxonomy; mode + true-black pattern ported from finance. Emitted under [data-theme=\"dark-oled\"]. Foregrounds keep the dark-mode brand (Royal Violet lightened, pure Crown Gold); borders are brightened for 3:1+ UI contrast against pure black.",
+  "semantic": {
+    "background": {
+      "primary": { "$value": "{color.oled.black}", "$type": "color", "$description": "True black — OLED pixels off (0,0,0)." },
+      "secondary": { "$value": "{color.oled.surface}", "$type": "color", "$description": "Near-black secondary surface (#0a0a0a)." },
+      "elevated": { "$value": "{color.oled.elevated}", "$type": "color", "$description": "Elevated surface for cards/modals (#111111)." },
+      "raised": { "$value": "{color.oled.elevated}", "$type": "color", "$description": "JRM extension (deepest chrome) — legacy --color-surface-3 alias." }
+    },
+    "text": {
+      "primary": { "$value": "{color.ink.moonlight}", "$type": "color", "$description": "Primary text — high contrast vs #000000." },
+      "secondary": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
+      "disabled": { "$value": "{color.ink.court-line}", "$type": "color", "$description": "Disabled text — WCAG-exempt." },
+      "inverse": { "$value": "{color.oled.black}", "$type": "color", "$description": "Text on interactive/brand fills." }
+    },
+    "border": {
+      "default": { "$value": "{color.ink.lavender-gray}", "$type": "color", "$description": "Brightened border for 3:1+ UI-component contrast against true black." },
+      "focus": { "$value": "{color.royal-violet.400}", "$type": "color" },
+      "error": { "$value": "{color.loss.400}", "$type": "color" }
+    },
+    "interactive": {
+      "default": { "$value": "{color.royal-violet.400}", "$type": "color", "$description": "Royal Violet lightened for contrast on true black." },
+      "hover": { "$value": "{color.royal-violet.300}", "$type": "color" },
+      "pressed": { "$value": "{color.royal-violet.200}", "$type": "color" },
+      "disabled": { "$value": "{color.ink.raised-slate}", "$type": "color", "$description": "Disabled interactive fill — WCAG-exempt." }
+    },
+    "accent": {
+      "default": { "$value": "{color.crown-gold.500}", "$type": "color" },
+      "ink": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Gold text on true black keeps pure Crown Gold." }
+    },
+    "status": {
+      "positive": { "$value": "{color.win.500}", "$type": "color" },
+      "negative": { "$value": "{color.loss.500}", "$type": "color" },
+      "warning": { "$value": "{color.caution.500}", "$type": "color" },
+      "info": { "$value": "{color.info.400}", "$type": "color" }
+    }
+  },
+  "shadow": {
+    "lift": { "$value": "{shadow.soft-lift-dark}", "$type": "shadow" },
+    "hairline": { "$value": "{shadow.inset-hairline}", "$type": "shadow" }
+  }
+}

@@ -4,6 +4,9 @@
     "xs": { "$value": "6px", "$type": "dimension" },
     "sm": { "$value": "10px", "$type": "dimension" },
     "md": { "$value": "14px", "$type": "dimension" },
-    "lg": { "$value": "16px", "$type": "dimension" }
+    "lg": { "$value": "16px", "$type": "dimension" },
+    "xl": { "$value": "20px", "$type": "dimension", "$description": "Roomier block padding — cognitive-accessibility mode." },
+    "2xl": { "$value": "24px", "$type": "dimension", "$description": "Card gap / inline padding — cognitive-accessibility mode." },
+    "3xl": { "$value": "32px", "$type": "dimension", "$description": "Section gap — cognitive-accessibility mode." }
   }
 }

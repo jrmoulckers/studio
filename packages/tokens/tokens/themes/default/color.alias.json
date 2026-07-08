@@ -1,0 +1,20 @@
+{
+  "color": {
+    "bg": { "$value": "{semantic.background.primary}", "$type": "color", "$description": "Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var." },
+    "surface": { "$value": "{semantic.background.elevated}", "$type": "color" },
+    "surface-2": { "$value": "{semantic.background.secondary}", "$type": "color" },
+    "surface-3": { "$value": "{semantic.background.raised}", "$type": "color" },
+    "border": { "$value": "{semantic.border.default}", "$type": "color" },
+    "text": { "$value": "{semantic.text.primary}", "$type": "color" },
+    "text-muted": { "$value": "{semantic.text.secondary}", "$type": "color" },
+    "primary": { "$value": "{semantic.interactive.default}", "$type": "color" },
+    "primary-strong": { "$value": "{semantic.interactive.hover}", "$type": "color" },
+    "on-primary": { "$value": "{semantic.text.inverse}", "$type": "color" },
+    "accent": { "$value": "{semantic.accent.default}", "$type": "color" },
+    "accent-ink": { "$value": "{semantic.accent.ink}", "$type": "color" },
+    "success": { "$value": "{semantic.status.positive}", "$type": "color" },
+    "danger": { "$value": "{semantic.status.negative}", "$type": "color" },
+    "warning": { "$value": "{semantic.status.warning}", "$type": "color" },
+    "focus-ring": { "$value": "{semantic.border.focus}", "$type": "color" }
+  }
+}

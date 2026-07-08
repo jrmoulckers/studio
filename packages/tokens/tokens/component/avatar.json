@@ -2,7 +2,7 @@
   "avatar": {
     "$description": "Circular initials chip filled from the player palette; identity never relies on color alone.",
     "bg": { "$value": "{color.player.1}", "$type": "color", "$description": "Default fill; runtime assigns {color.player.1}–{color.player.12} in order." },
-    "text": { "$value": "{color.on-primary}", "$type": "color" },
+    "text": { "$value": "{semantic.text.inverse}", "$type": "color" },
     "ring": { "$value": "{shadow.hairline}", "$type": "shadow" },
     "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
     "size": { "$value": "28px", "$type": "dimension" },

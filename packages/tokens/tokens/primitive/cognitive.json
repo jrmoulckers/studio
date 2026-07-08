@@ -1,0 +1,30 @@
+{
+  "cognitive": {
+    "$description": "Primitive values for cognitive-accessibility mode — larger touch targets, enhanced readability, reduced visual complexity. Structure ported from finance; grounded in WCAG 2.2 Target Size (AAA) and cognitive-accessibility best practices.",
+    "touchTargetMin": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Minimum interactive touch/click target — WCAG 2.2 SC 2.5.5 Target Size (Enhanced, AAA)."
+    },
+    "focusRingWidth": {
+      "$value": "3px",
+      "$type": "dimension",
+      "$description": "Enhanced focus-ring width for improved visibility (default is 2px)."
+    },
+    "focusRingOffset": {
+      "$value": "3px",
+      "$type": "dimension",
+      "$description": "Enhanced focus-ring offset for improved visibility (default is 2px)."
+    },
+    "borderWidth": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Enhanced border width for clearer element-boundary definition."
+    },
+    "maxChoicesPerGroup": {
+      "$value": 5,
+      "$type": "number",
+      "$description": "Maximum options presented in a single group/menu — Miller's Law (7±2) with a conservative bound for cognitive-load reduction."
+    }
+  }
+}

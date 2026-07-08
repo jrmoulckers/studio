@@ -1,9 +1,9 @@
 {
   "pill": {
     "$description": "Compact status/meta token — never a button.",
-    "bg": { "$value": "{color.surface-2}", "$type": "color" },
-    "text": { "$value": "{color.text-muted}", "$type": "color" },
-    "border": { "$value": "{color.border}", "$type": "color" },
+    "bg": { "$value": "{semantic.background.secondary}", "$type": "color" },
+    "text": { "$value": "{semantic.text.secondary}", "$type": "color" },
+    "border": { "$value": "{semantic.border.default}", "$type": "color" },
     "radius": { "$value": "{radius.pill}", "$type": "dimension" },
     "padding-x": { "$value": "{spacing.sm}", "$type": "dimension" },
     "padding-y": { "$value": "3px", "$type": "dimension" }

@@ -2,19 +2,19 @@
   "nav": {
     "$description": "Consistent chrome — the shell never changes game to game.",
     "tabbar": {
-      "bg": { "$value": "{color.surface}", "$type": "color", "$description": "Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule." },
-      "border": { "$value": "{color.border}", "$type": "color" },
+      "bg": { "$value": "{semantic.background.elevated}", "$type": "color", "$description": "Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule." },
+      "border": { "$value": "{semantic.border.default}", "$type": "color" },
       "radius": { "$value": "{radius.md}", "$type": "dimension" }
     },
     "tab": {
-      "text": { "$value": "{color.text-muted}", "$type": "color" },
-      "active-text": { "$value": "{color.text}", "$type": "color" },
-      "active-bg": { "$value": "{color.surface-2}", "$type": "color" },
+      "text": { "$value": "{semantic.text.secondary}", "$type": "color" },
+      "active-text": { "$value": "{semantic.text.primary}", "$type": "color" },
+      "active-bg": { "$value": "{semantic.background.secondary}", "$type": "color" },
       "radius": { "$value": "{radius.chip}", "$type": "dimension" }
     },
     "iconbtn": {
-      "bg": { "$value": "{color.surface-2}", "$type": "color" },
-      "text": { "$value": "{color.text}", "$type": "color" },
+      "bg": { "$value": "{semantic.background.secondary}", "$type": "color" },
+      "text": { "$value": "{semantic.text.primary}", "$type": "color" },
       "size": { "$value": "46px", "$type": "dimension" },
       "radius": { "$value": "{radius.chip}", "$type": "dimension" }
     }

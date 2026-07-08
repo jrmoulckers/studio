@@ -1,22 +1,39 @@
 {
-  "$description": "score-king DARK semantic palette — the canonical mode (the app boots data-theme=\"dark\"). Emitted under [data-theme=\"dark\"].",
-  "color": {
-    "bg": { "$value": "{color.ink.midnight}", "$type": "color" },
-    "surface": { "$value": "{color.ink.indigo-slate}", "$type": "color" },
-    "surface-2": { "$value": "{color.ink.raised-slate}", "$type": "color" },
-    "surface-3": { "$value": "{color.ink.lifted-slate}", "$type": "color" },
-    "border": { "$value": "{color.ink.court-line}", "$type": "color" },
-    "text": { "$value": "{color.ink.moonlight}", "$type": "color" },
-    "text-muted": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
-    "primary": { "$value": "{color.royal-violet.500}", "$type": "color" },
-    "primary-strong": { "$value": "{color.royal-violet.600}", "$type": "color" },
-    "on-primary": { "$value": "{color.base.white}", "$type": "color" },
-    "accent": { "$value": "{color.crown-gold.500}", "$type": "color" },
-    "accent-ink": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Gold text on dark surfaces keeps pure Crown Gold." },
-    "success": { "$value": "{color.win.500}", "$type": "color" },
-    "danger": { "$value": "{color.loss.500}", "$type": "color" },
-    "warning": { "$value": "{color.caution.500}", "$type": "color" },
-    "focus-ring": { "$value": "{color.royal-violet.500}", "$type": "color" }
+  "$description": "score-king DARK semantic palette — the canonical mode (the app boots data-theme=\"dark\"). Restructured into the shared studio --semantic-* taxonomy. Emitted under [data-theme=\"dark\"]. Brand stays JRM Studio: interactive = Royal Violet (lightened to the 300–400 steps for contrast on dark), accent = Crown Gold (pure).",
+  "semantic": {
+    "background": {
+      "primary": { "$value": "{color.ink.midnight}", "$type": "color", "$description": "Midnight Court — app background." },
+      "secondary": { "$value": "{color.ink.raised-slate}", "$type": "color" },
+      "elevated": { "$value": "{color.ink.indigo-slate}", "$type": "color", "$description": "Elevated surface — cards, popovers, inputs." },
+      "raised": { "$value": "{color.ink.lifted-slate}", "$type": "color", "$description": "JRM extension (deepest chrome) — legacy --color-surface-3 alias." }
+    },
+    "text": {
+      "primary": { "$value": "{color.ink.moonlight}", "$type": "color" },
+      "secondary": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
+      "disabled": { "$value": "{color.ink.court-line}", "$type": "color", "$description": "Disabled text — WCAG-exempt." },
+      "inverse": { "$value": "{color.ink.midnight}", "$type": "color", "$description": "Text on interactive/brand fills." }
+    },
+    "border": {
+      "default": { "$value": "{color.ink.court-line}", "$type": "color" },
+      "focus": { "$value": "{color.royal-violet.400}", "$type": "color" },
+      "error": { "$value": "{color.loss.400}", "$type": "color" }
+    },
+    "interactive": {
+      "default": { "$value": "{color.royal-violet.400}", "$type": "color", "$description": "Royal Violet lightened for contrast on dark surfaces." },
+      "hover": { "$value": "{color.royal-violet.300}", "$type": "color" },
+      "pressed": { "$value": "{color.royal-violet.200}", "$type": "color" },
+      "disabled": { "$value": "{color.ink.lifted-slate}", "$type": "color", "$description": "Disabled interactive fill — WCAG-exempt." }
+    },
+    "accent": {
+      "default": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Crown Gold fills/washes." },
+      "ink": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Gold text on dark surfaces keeps pure Crown Gold." }
+    },
+    "status": {
+      "positive": { "$value": "{color.win.500}", "$type": "color" },
+      "negative": { "$value": "{color.loss.500}", "$type": "color" },
+      "warning": { "$value": "{color.caution.500}", "$type": "color" },
+      "info": { "$value": "{color.info.400}", "$type": "color" }
+    }
   },
   "shadow": {
     "lift": { "$value": "{shadow.soft-lift-dark}", "$type": "shadow" },
