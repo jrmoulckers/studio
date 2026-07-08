@@ -1,0 +1,104 @@
+{
+  "color": {
+    "$description": "score-king theme color primitives. Vivid brand/semantic hues carry OKLCH tonal ramps (from .impeccable/design.json colorMeta); neutrals use the authoritative named hexes. The canonical brand hex is anchored at each ramp's 500 step.",
+    "royal-violet": {
+      "$description": "Royal Violet — the one brand action color (hue 285).",
+      "200": { "$value": "oklch(0.94 0.04 285)", "$type": "color" },
+      "300": { "$value": "oklch(0.83 0.10 285)", "$type": "color" },
+      "400": { "$value": "oklch(0.71 0.16 285)", "$type": "color" },
+      "500": { "$value": "#7c5cff", "$type": "color", "$description": "Royal Violet — canonical brand action color" },
+      "600": { "$value": "#6b46f0", "$type": "color", "$description": "Deep Violet — pressed/hover echo of the primary action" },
+      "700": { "$value": "oklch(0.38 0.14 285)", "$type": "color" },
+      "800": { "$value": "oklch(0.28 0.10 285)", "$type": "color" },
+      "900": { "$value": "oklch(0.18 0.06 285)", "$type": "color" }
+    },
+    "crown-gold": {
+      "$description": "Crown Gold — leader & winner only, the Crown Gold Rule (hue 90).",
+      "200": { "$value": "oklch(0.96 0.05 90)", "$type": "color" },
+      "300": { "$value": "oklch(0.90 0.10 90)", "$type": "color" },
+      "400": { "$value": "oklch(0.84 0.14 90)", "$type": "color" },
+      "500": { "$value": "#ffd166", "$type": "color", "$description": "Crown Gold — canonical" },
+      "600": { "$value": "oklch(0.65 0.11 90)", "$type": "color" },
+      "700": { "$value": "oklch(0.54 0.09 90)", "$type": "color" },
+      "800": { "$value": "oklch(0.42 0.07 90)", "$type": "color" },
+      "900": { "$value": "oklch(0.30 0.05 90)", "$type": "color" },
+      "ink-light": {
+        "$value": "#806600",
+        "$type": "color",
+        "$description": "Gold text on light surfaces — darkened to clear WCAG >=4.5:1 on white while keeping the gold identity."
+      }
+    },
+    "win": {
+      "$description": "Win Green — positive deltas, success/synced (hue 165).",
+      "200": { "$value": "oklch(0.95 0.05 165)", "$type": "color" },
+      "300": { "$value": "oklch(0.87 0.10 165)", "$type": "color" },
+      "400": { "$value": "oklch(0.78 0.15 165)", "$type": "color" },
+      "500": { "$value": "#34d399", "$type": "color", "$description": "Win Green — canonical" },
+      "600": { "$value": "oklch(0.58 0.12 165)", "$type": "color" },
+      "700": { "$value": "oklch(0.47 0.10 165)", "$type": "color" },
+      "800": { "$value": "oklch(0.36 0.07 165)", "$type": "color" },
+      "900": { "$value": "oklch(0.25 0.05 165)", "$type": "color" }
+    },
+    "loss": {
+      "$description": "Loss Coral — negative deltas, destructive text, errors (hue 25).",
+      "200": { "$value": "oklch(0.95 0.04 25)", "$type": "color" },
+      "300": { "$value": "oklch(0.88 0.09 25)", "$type": "color" },
+      "400": { "$value": "oklch(0.79 0.14 25)", "$type": "color" },
+      "500": { "$value": "#f87171", "$type": "color", "$description": "Loss Coral — canonical" },
+      "600": { "$value": "oklch(0.60 0.16 25)", "$type": "color" },
+      "700": { "$value": "oklch(0.50 0.13 25)", "$type": "color" },
+      "800": { "$value": "oklch(0.39 0.10 25)", "$type": "color" },
+      "900": { "$value": "oklch(0.28 0.06 25)", "$type": "color" }
+    },
+    "caution": {
+      "$description": "Caution Amber — warnings, pending/attention (hue 80).",
+      "200": { "$value": "oklch(0.96 0.05 80)", "$type": "color" },
+      "300": { "$value": "oklch(0.90 0.11 80)", "$type": "color" },
+      "400": { "$value": "oklch(0.83 0.16 80)", "$type": "color" },
+      "500": { "$value": "#fbbf24", "$type": "color", "$description": "Caution Amber — canonical" },
+      "600": { "$value": "oklch(0.64 0.13 80)", "$type": "color" },
+      "700": { "$value": "oklch(0.53 0.11 80)", "$type": "color" },
+      "800": { "$value": "oklch(0.41 0.08 80)", "$type": "color" },
+      "900": { "$value": "oklch(0.29 0.05 80)", "$type": "color" }
+    },
+    "ink": {
+      "$description": "Dark neutral ramp — Midnight Court through Moonlight (canonical hexes).",
+      "midnight": { "$value": "#0f1020", "$type": "color", "$description": "Midnight Court — app background" },
+      "indigo-slate": { "$value": "#1a1b2e", "$type": "color", "$description": "Indigo Slate — surface" },
+      "raised-slate": { "$value": "#24263f", "$type": "color", "$description": "Raised Slate — surface-2" },
+      "lifted-slate": { "$value": "#2c2e4d", "$type": "color", "$description": "Lifted Slate — surface-3" },
+      "court-line": { "$value": "#313357", "$type": "color", "$description": "Court Line — borders, dividers" },
+      "moonlight": { "$value": "#e9e9f4", "$type": "color", "$description": "Moonlight — primary text" },
+      "lavender-gray": { "$value": "#a3a6cb", "$type": "color", "$description": "Lavender Gray — muted text" }
+    },
+    "paper": {
+      "$description": "Light neutral ramp — Lilac Mist through Ink (canonical hexes).",
+      "lilac-mist": { "$value": "#f4f4fb", "$type": "color", "$description": "Lilac Mist — app background" },
+      "white": { "$value": "#ffffff", "$type": "color", "$description": "White — surface" },
+      "frost": { "$value": "#f1f1f9", "$type": "color", "$description": "Frost — surface-2" },
+      "haze": { "$value": "#e7e7f4", "$type": "color", "$description": "Haze — surface-3" },
+      "cloud-line": { "$value": "#dcdcea", "$type": "color", "$description": "Cloud Line — borders" },
+      "ink": { "$value": "#1c1d2e", "$type": "color", "$description": "Ink — primary text" },
+      "slate-gray": { "$value": "#5b5e7e", "$type": "color", "$description": "Slate Gray — muted text" }
+    },
+    "base": {
+      "white": { "$value": "#ffffff", "$type": "color" },
+      "black": { "$value": "#000000", "$type": "color" }
+    },
+    "player": {
+      "$description": "Fixed 12-color avatar palette, assigned in order; identity is always reinforced by initials, never color alone.",
+      "1": { "$value": "#7c5cff", "$type": "color" },
+      "2": { "$value": "#34d399", "$type": "color" },
+      "3": { "$value": "#f87171", "$type": "color" },
+      "4": { "$value": "#fbbf24", "$type": "color" },
+      "5": { "$value": "#38bdf8", "$type": "color" },
+      "6": { "$value": "#fb7185", "$type": "color" },
+      "7": { "$value": "#a78bfa", "$type": "color" },
+      "8": { "$value": "#4ade80", "$type": "color" },
+      "9": { "$value": "#f59e0b", "$type": "color" },
+      "10": { "$value": "#22d3ee", "$type": "color" },
+      "11": { "$value": "#e879f9", "$type": "color" },
+      "12": { "$value": "#facc15", "$type": "color" }
+    }
+  }
+}

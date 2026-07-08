@@ -1,0 +1,20 @@
+{
+  "shadow": {
+    "$description": "One soft shadow per theme (the Soft-Lift Rule) plus an avatar hairline.",
+    "soft-lift-dark": {
+      "$value": "0 10px 30px rgba(0, 0, 0, 0.45)",
+      "$type": "shadow",
+      "$description": "The single dark-theme shadow — floats cards, tiles, toast."
+    },
+    "soft-lift-light": {
+      "$value": "0 10px 30px rgba(60, 50, 120, 0.12)",
+      "$type": "shadow",
+      "$description": "Light-theme equivalent of Soft Lift."
+    },
+    "inset-hairline": {
+      "$value": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
+      "$type": "shadow",
+      "$description": "1px inner ring on avatars so light player colors keep their edge."
+    }
+  }
+}

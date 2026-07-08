@@ -1,0 +1,25 @@
+{
+  "$description": "score-king HIGH-CONTRAST semantic palette — a light-based mode that maximizes contrast for low vision / prefers-contrast: more. Emitted under [data-theme=\"high-contrast\"]. Brand hues drop to their 700–800 steps for AA/AAA text contrast on white; borders and text go near-black.",
+  "color": {
+    "bg": { "$value": "{color.base.white}", "$type": "color" },
+    "surface": { "$value": "{color.base.white}", "$type": "color" },
+    "surface-2": { "$value": "{color.paper.frost}", "$type": "color" },
+    "surface-3": { "$value": "{color.paper.haze}", "$type": "color" },
+    "border": { "$value": "{color.base.black}", "$type": "color", "$description": "Near-max element definition." },
+    "text": { "$value": "{color.base.black}", "$type": "color" },
+    "text-muted": { "$value": "{color.paper.ink}", "$type": "color", "$description": "Still near-black — muted by role, not by low contrast." },
+    "primary": { "$value": "{color.royal-violet.700}", "$type": "color" },
+    "primary-strong": { "$value": "{color.royal-violet.800}", "$type": "color" },
+    "on-primary": { "$value": "{color.base.white}", "$type": "color" },
+    "accent": { "$value": "{color.crown-gold.700}", "$type": "color" },
+    "accent-ink": { "$value": "{color.crown-gold.ink-light}", "$type": "color" },
+    "success": { "$value": "{color.win.700}", "$type": "color", "$description": "Pair with icon+text — never color alone." },
+    "danger": { "$value": "{color.loss.700}", "$type": "color" },
+    "warning": { "$value": "{color.caution.700}", "$type": "color" },
+    "focus-ring": { "$value": "{color.royal-violet.700}", "$type": "color" }
+  },
+  "shadow": {
+    "lift": { "$value": "{shadow.soft-lift-light}", "$type": "shadow" },
+    "hairline": { "$value": "{shadow.inset-hairline}", "$type": "shadow" }
+  }
+}

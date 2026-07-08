@@ -1,0 +1,40 @@
+{
+  "font": {
+    "family": {
+      "sans": {
+        "$value": [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif"
+        ],
+        "$type": "fontFamily",
+        "$description": "One native sans for everything — the Quiet-Type Rule."
+      }
+    },
+    "weight": {
+      "regular": { "$value": 400, "$type": "fontWeight" },
+      "semibold": { "$value": 600, "$type": "fontWeight" },
+      "bold": { "$value": 700, "$type": "fontWeight" }
+    },
+    "size": {
+      "display": { "$value": "1.6rem", "$type": "dimension" },
+      "title": { "$value": "1.25rem", "$type": "dimension" },
+      "body": { "$value": "1rem", "$type": "dimension" },
+      "label": { "$value": "0.9rem", "$type": "dimension" },
+      "overline": { "$value": "0.8rem", "$type": "dimension" }
+    },
+    "lineHeight": {
+      "tight": { "$value": 1.2, "$type": "number" },
+      "snug": { "$value": 1.4, "$type": "number" },
+      "normal": { "$value": 1.5, "$type": "number" }
+    },
+    "letterSpacing": {
+      "normal": { "$value": "0", "$type": "dimension" },
+      "wide": { "$value": "0.08em", "$type": "dimension", "$description": "Overline tracking" }
+    }
+  }
+}

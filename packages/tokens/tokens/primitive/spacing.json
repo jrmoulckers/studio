@@ -1,0 +1,9 @@
+{
+  "spacing": {
+    "$description": "Spacing scale from score-king's compact, thumb-first layout.",
+    "xs": { "$value": "6px", "$type": "dimension" },
+    "sm": { "$value": "10px", "$type": "dimension" },
+    "md": { "$value": "14px", "$type": "dimension" },
+    "lg": { "$value": "16px", "$type": "dimension" }
+  }
+}

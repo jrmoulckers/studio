@@ -1,0 +1,18 @@
+{
+  "duration": {
+    "$description": "Motion durations — fast and functional (150–250ms), never choreography.",
+    "instant": { "$value": "0ms", "$type": "duration" },
+    "press": { "$value": "50ms", "$type": "duration", "$description": "Button :active press-down" },
+    "state": { "$value": "150ms", "$type": "duration", "$description": "Hover / state color transitions" },
+    "tile": { "$value": "120ms", "$type": "duration", "$description": "Game-tile hover lift" },
+    "reduced": {
+      "$value": "0ms",
+      "$type": "duration",
+      "$description": "Reduced-motion alternative — collapse motion to instant (prefers-reduced-motion)."
+    }
+  },
+  "easing": {
+    "standard": { "$value": "ease", "$type": "cubicBezier", "$description": "Default functional easing" },
+    "linear": { "$value": "linear", "$type": "cubicBezier", "$description": "Reduced-motion / crossfade easing" }
+  }
+}

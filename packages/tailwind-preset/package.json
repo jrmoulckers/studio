@@ -1,0 +1,33 @@
+{
+  "name": "@jrm/tailwind-preset",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ready-to-use Tailwind preset for JRM Studio — wraps @jrm/tokens output and adds the shared shell (container, dark mode, animations).",
+  "license": "UNLICENSED",
+  "main": "./index.cjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.cjs",
+      "default": "./index.cjs"
+    }
+  },
+  "files": [
+    "index.cjs",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "node -e \"require('./index.cjs'); console.log('@jrm/tailwind-preset ok')\""
+  },
+  "dependencies": {
+    "@jrm/tokens": "workspace:*",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
