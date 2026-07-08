@@ -5,6 +5,8 @@ node_modules/
 # generated token / package build outputs (reproducible via `pnpm build`)
 build/
 dist/
+# …except the committed @jrm/tokens distribution the sync engine copies verbatim.
+!packages/tokens/dist/
 *.tsbuildinfo
 
 # turbo / tooling caches

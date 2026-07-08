@@ -109,6 +109,45 @@ build/
     └── index.js + index.d.ts     # barrel: tokens (=light), tokensDark, tokensDarkOled, themes, …
 ```
 
+## Distribution (`dist/`) — the committed, synced artifact
+
+JRM Studio is registry-free: `@jrm/tokens` is **never published**. Instead the sync engine (in
+the `jrmoulckers/.github` backbone repo) shallow-clones this repo and copies the committed
+`packages/tokens/dist/` tree **verbatim** into each opted-in product repo — it never runs this
+build. So `dist/` is the byte-for-byte interface those consumers see, and (unlike `build/`) it
+**is committed**.
+
+```bash
+pnpm --filter @jrm/tokens dist    # or, from the repo root:  pnpm tokens:dist
+```
+
+runs the Style Dictionary build and then deterministically mirrors the consumable subset
+(`css/`, `tailwind/`, `js/`) from `build/` into `dist/`:
+
+```
+packages/tokens/dist/
+├── css/default/{tokens,tokens-dark,tokens-dark-oled,tokens-high-contrast,index}.css
+├── tailwind/default.cjs
+└── js/
+    ├── index.js  index.d.ts
+    └── default/tokens.{light,dark,dark-oled,high-contrast}.{js,d.ts}
+```
+
+The copy is reproducible — files are walked in a stable order and normalized to LF (a repo-root
+`.gitattributes` also pins `packages/tokens/dist/** text eol=lf`), so the committed bytes don't
+drift across rebuilds or platforms.
+
+### Freshness guard
+
+`dist/` must never silently diverge from the token sources. A check regenerates it and fails on
+any diff — run it locally, and it also runs in CI (`.github/workflows/ci.yml`):
+
+```bash
+pnpm tokens:dist:check    # regenerates dist, then `git diff --exit-code -- packages/tokens/dist`
+```
+
+If it fails, run `pnpm tokens:dist` and commit the updated `dist/`.
+
 ## Consume
 
 **CSS / Svelte / React (plain vars):**

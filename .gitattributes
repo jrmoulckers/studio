@@ -1,0 +1,4 @@
+# The committed @jrm/tokens distribution is copied verbatim into member repos by
+# the registry-free sync engine, so its bytes must be deterministic (LF) on every
+# platform regardless of core.autocrlf. Keep the whole dist tree LF.
+packages/tokens/dist/** text eol=lf
