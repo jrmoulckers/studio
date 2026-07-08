@@ -19,6 +19,7 @@
     "./css": "./build/css/default/index.css",
     "./css/light": "./build/css/default/tokens.css",
     "./css/dark": "./build/css/default/tokens-dark.css",
+    "./css/dark-oled": "./build/css/default/tokens-dark-oled.css",
     "./css/high-contrast": "./build/css/default/tokens-high-contrast.css",
     "./tailwind": "./build/tailwind/default.cjs",
     "./package.json": "./package.json"

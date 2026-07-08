@@ -1,0 +1,49 @@
+{
+  "cognitiveType": {
+    "$description": "Cognitive type roles — mirror the score-king display/title/body/label/overline hierarchy but step the small roles up and relax the leading. Applied when the consumer sets [data-a11y-cognitive=\"true\"] on the root element (the finance activation mechanism). Structure ported from finance; values re-authored to the score-king type scale and spacing primitives.",
+    "display": {
+      "size": { "$value": "{font.size.display}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.normal}", "$type": "number", "$description": "Relaxed from tight (1.2) to normal (1.5)." }
+    },
+    "title": {
+      "size": { "$value": "{font.size.title}", "$type": "dimension" },
+      "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.normal}", "$type": "number", "$description": "Relaxed from tight (1.2) to normal (1.5)." }
+    },
+    "body": {
+      "size": { "$value": "{font.size.title}", "$type": "dimension", "$description": "Stepped up from body (1rem) to title (1.25rem) for readability." },
+      "weight": { "$value": "{font.weight.regular}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.relaxed}", "$type": "number", "$description": "Relaxed from normal (1.5) to relaxed (1.75)." }
+    },
+    "label": {
+      "size": { "$value": "{font.size.body}", "$type": "dimension", "$description": "Stepped up from label (0.9rem) to body (1rem)." },
+      "weight": { "$value": "{font.weight.regular}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.relaxed}", "$type": "number" }
+    },
+    "overline": {
+      "size": { "$value": "{font.size.label}", "$type": "dimension", "$description": "Stepped up from overline (0.8rem) to label (0.9rem) — 0.8rem is too small for cognitive needs." },
+      "weight": { "$value": "{font.weight.semibold}", "$type": "fontWeight" },
+      "line-height": { "$value": "{font.lineHeight.snug}", "$type": "number" }
+    }
+  },
+  "cognitiveSpacing": {
+    "$description": "Roomier spacing — more white space reduces visual clutter and improves scanability.",
+    "section-gap": { "$value": "{spacing.3xl}", "$type": "dimension", "$description": "Gap between major sections — 32px." },
+    "card-gap": { "$value": "{spacing.2xl}", "$type": "dimension", "$description": "Gap between cards — 24px." },
+    "element-gap": { "$value": "{spacing.lg}", "$type": "dimension", "$description": "Gap between elements within a section — 16px." },
+    "inline-padding": { "$value": "{spacing.2xl}", "$type": "dimension", "$description": "Horizontal padding inside containers — 24px." },
+    "block-padding": { "$value": "{spacing.xl}", "$type": "dimension", "$description": "Vertical padding inside containers — 20px." }
+  },
+  "cognitiveFocus": {
+    "$description": "Enhanced focus indicators — thicker, more visible rings.",
+    "width": { "$value": "{cognitive.focusRingWidth}", "$type": "dimension" },
+    "offset": { "$value": "{cognitive.focusRingOffset}", "$type": "dimension" }
+  },
+  "cognitiveElevation": {
+    "$description": "Simplified elevation — a flatter UI reduces visual noise.",
+    "none": { "$value": "{shadow.none}", "$type": "shadow" },
+    "low": { "$value": "{shadow.inset-hairline}", "$type": "shadow", "$description": "Minimal hairline instead of a drop shadow." },
+    "raised": { "$value": "{shadow.soft-lift-light}", "$type": "shadow", "$description": "The single soft lift, used sparingly." }
+  }
+}

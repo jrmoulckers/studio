@@ -1,22 +1,39 @@
 {
-  "$description": "score-king LIGHT semantic palette — a faithful inversion of dark. Emitted as :root (default). Only accent-ink and the neutral surfaces differ meaningfully from dark.",
-  "color": {
-    "bg": { "$value": "{color.paper.lilac-mist}", "$type": "color" },
-    "surface": { "$value": "{color.paper.white}", "$type": "color" },
-    "surface-2": { "$value": "{color.paper.frost}", "$type": "color" },
-    "surface-3": { "$value": "{color.paper.haze}", "$type": "color" },
-    "border": { "$value": "{color.paper.cloud-line}", "$type": "color" },
-    "text": { "$value": "{color.paper.ink}", "$type": "color" },
-    "text-muted": { "$value": "{color.paper.slate-gray}", "$type": "color" },
-    "primary": { "$value": "{color.royal-violet.500}", "$type": "color" },
-    "primary-strong": { "$value": "{color.royal-violet.600}", "$type": "color" },
-    "on-primary": { "$value": "{color.base.white}", "$type": "color" },
-    "accent": { "$value": "{color.crown-gold.500}", "$type": "color" },
-    "accent-ink": { "$value": "{color.crown-gold.ink-light}", "$type": "color", "$description": "Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold washes/fills as {color.accent}." },
-    "success": { "$value": "{color.win.500}", "$type": "color" },
-    "danger": { "$value": "{color.loss.500}", "$type": "color" },
-    "warning": { "$value": "{color.caution.500}", "$type": "color" },
-    "focus-ring": { "$value": "{color.royal-violet.500}", "$type": "color" }
+  "$description": "score-king LIGHT semantic palette, restructured into the shared studio --semantic-* taxonomy (adopted from finance's design-tokens). Emitted as :root (the default). Brand stays JRM Studio: interactive = Royal Violet, accent = Crown Gold. Only accent-ink and the neutral surfaces differ meaningfully from dark.",
+  "semantic": {
+    "background": {
+      "primary": { "$value": "{color.paper.lilac-mist}", "$type": "color", "$description": "App background." },
+      "secondary": { "$value": "{color.paper.frost}", "$type": "color", "$description": "Secondary chrome surface." },
+      "elevated": { "$value": "{color.paper.white}", "$type": "color", "$description": "Elevated surface — cards, popovers, inputs." },
+      "raised": { "$value": "{color.paper.haze}", "$type": "color", "$description": "JRM extension (deepest chrome surface) — preserves the legacy --color-surface-3 back-compat alias." }
+    },
+    "text": {
+      "primary": { "$value": "{color.paper.ink}", "$type": "color" },
+      "secondary": { "$value": "{color.paper.slate-gray}", "$type": "color" },
+      "disabled": { "$value": "{color.paper.cloud-line}", "$type": "color", "$description": "Disabled text — WCAG-exempt." },
+      "inverse": { "$value": "{color.base.white}", "$type": "color", "$description": "Text on interactive/brand fills." }
+    },
+    "border": {
+      "default": { "$value": "{color.paper.cloud-line}", "$type": "color" },
+      "focus": { "$value": "{color.royal-violet.500}", "$type": "color", "$description": "Shared Royal Violet focus ring." },
+      "error": { "$value": "{color.loss.500}", "$type": "color" }
+    },
+    "interactive": {
+      "default": { "$value": "{color.royal-violet.500}", "$type": "color", "$description": "Royal Violet — the one brand action color." },
+      "hover": { "$value": "{color.royal-violet.600}", "$type": "color", "$description": "Deep Violet hover echo." },
+      "pressed": { "$value": "{color.royal-violet.700}", "$type": "color" },
+      "disabled": { "$value": "{color.paper.haze}", "$type": "color", "$description": "Disabled interactive fill — WCAG-exempt." }
+    },
+    "accent": {
+      "default": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Crown Gold — leader & winner fills/washes (the Crown Gold Rule)." },
+      "ink": { "$value": "{color.crown-gold.ink-light}", "$type": "color", "$description": "Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold fills as accent.default." }
+    },
+    "status": {
+      "positive": { "$value": "{color.win.500}", "$type": "color" },
+      "negative": { "$value": "{color.loss.500}", "$type": "color" },
+      "warning": { "$value": "{color.caution.500}", "$type": "color" },
+      "info": { "$value": "{color.info.500}", "$type": "color" }
+    }
   },
   "shadow": {
     "lift": { "$value": "{shadow.soft-lift-light}", "$type": "shadow" },

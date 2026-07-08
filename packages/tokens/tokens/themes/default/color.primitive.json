@@ -61,6 +61,17 @@
       "800": { "$value": "oklch(0.41 0.08 80)", "$type": "color" },
       "900": { "$value": "oklch(0.29 0.05 80)", "$type": "color" }
     },
+    "info": {
+      "$description": "Info Sky — neutral informational status (the finance --semantic-* taxonomy needs a blue the JRM brand lacks). Seeded from the score-king player-5 sky hex; OKLCH tonal ramp at hue 230, canonical hex anchored at 500.",
+      "200": { "$value": "oklch(0.95 0.03 230)", "$type": "color" },
+      "300": { "$value": "oklch(0.88 0.07 230)", "$type": "color" },
+      "400": { "$value": "oklch(0.80 0.11 230)", "$type": "color" },
+      "500": { "$value": "#38bdf8", "$type": "color", "$description": "Info Sky — canonical (seeded from score-king player-5)." },
+      "600": { "$value": "oklch(0.62 0.13 230)", "$type": "color" },
+      "700": { "$value": "oklch(0.52 0.12 230)", "$type": "color" },
+      "800": { "$value": "oklch(0.42 0.10 230)", "$type": "color" },
+      "900": { "$value": "oklch(0.30 0.07 230)", "$type": "color" }
+    },
     "ink": {
       "$description": "Dark neutral ramp — Midnight Court through Moonlight (canonical hexes).",
       "midnight": { "$value": "#0f1020", "$type": "color", "$description": "Midnight Court — app background" },
@@ -84,6 +95,30 @@
     "base": {
       "white": { "$value": "#ffffff", "$type": "color" },
       "black": { "$value": "#000000", "$type": "color" }
+    },
+    "oled": {
+      "$description": "True-black surface set for the dark-oled mode — AMOLED pixel-off battery savings. Structural pattern ported from finance; hues stay studio-neutral.",
+      "black": { "$value": "#000000", "$type": "color", "$description": "True black — OLED pixels off (0,0,0), the app background." },
+      "surface": { "$value": "#0a0a0a", "$type": "color", "$description": "Near-black secondary surface." },
+      "elevated": { "$value": "#111111", "$type": "color", "$description": "Elevated surface for cards, modals, panels." }
+    },
+    "chart": {
+      "$description": "Generic 6-color data-viz ramp — IBM CVD-safe palette (shared studio standard, structure ported from finance). Charts MUST never convey meaning by color alone; always pair with labels/patterns/icons.",
+      "1": { "$value": "#648fff", "$type": "color", "$description": "CVD-safe blue" },
+      "2": { "$value": "#785ef0", "$type": "color", "$description": "CVD-safe purple" },
+      "3": { "$value": "#dc267f", "$type": "color", "$description": "CVD-safe magenta" },
+      "4": { "$value": "#fe6100", "$type": "color", "$description": "CVD-safe orange" },
+      "5": { "$value": "#ffb000", "$type": "color", "$description": "CVD-safe gold" },
+      "6": { "$value": "#009e73", "$type": "color", "$description": "CVD-safe teal" },
+      "hc": {
+        "$description": "High-contrast chart variants — darker CVD-safe hues that clear WCAG AA (>=4.5:1) on white. Swapped in under high-contrast / prefers-contrast: more.",
+        "1": { "$value": "#0043ce", "$type": "color", "$description": "HC blue — 7.8:1 vs white (AAA)" },
+        "2": { "$value": "#6929c4", "$type": "color", "$description": "HC purple — 6.0:1 vs white (AA)" },
+        "3": { "$value": "#9f1853", "$type": "color", "$description": "HC magenta — 8.0:1 vs white (AAA)" },
+        "4": { "$value": "#ba4e00", "$type": "color", "$description": "HC orange — 5.0:1 vs white (AA)" },
+        "5": { "$value": "#8e6a00", "$type": "color", "$description": "HC gold — 5.0:1 vs white (AA)" },
+        "6": { "$value": "#005d5d", "$type": "color", "$description": "HC teal — 6.5:1 vs white (AA)" }
+      }
     },
     "player": {
       "$description": "Fixed 12-color avatar palette, assigned in order; identity is always reinforced by initials, never color alone.",

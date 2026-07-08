@@ -15,6 +15,11 @@
       "$value": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
       "$type": "shadow",
       "$description": "1px inner ring on avatars so light player colors keep their edge."
+    },
+    "none": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "No shadow — the flattened surface used by cognitive-accessibility mode."
     }
   }
 }

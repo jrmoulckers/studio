@@ -13,7 +13,7 @@
 import StyleDictionary from 'style-dictionary';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
@@ -30,14 +30,17 @@ const themeDir = toGlob(join(root, 'tokens', 'themes', THEME));
 
 const primitives = toGlob(join(root, 'tokens', 'primitive', '*.json'));
 const colorPrimitive = `${themeDir}/color.primitive.json`;
+const colorAliasFile = `${themeDir}/color.alias.json`;
 const semLight = `${themeDir}/color.semantic.light.json`;
 const semDark = `${themeDir}/color.semantic.dark.json`;
+const semDarkOled = `${themeDir}/color.semantic.dark-oled.json`;
 const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
 
-/** Theme-agnostic semantic tokens (typography + motion purposes). */
+/** Theme-agnostic semantic tokens (typography + motion + cognitive purposes). */
 const sharedSemantic = [
   toGlob(join(root, 'tokens', 'semantic', 'typography.json')),
   toGlob(join(root, 'tokens', 'semantic', 'motion.json')),
+  toGlob(join(root, 'tokens', 'semantic', 'cognitive.json')),
 ];
 
 const components = toGlob(join(root, 'tokens', 'component', '*.json'));
@@ -137,12 +140,19 @@ StyleDictionary.registerFormat({
 /**
  * Tailwind preset object whose values are `var(--…)` references, so a runtime
  * theme/mode swap (changing `data-theme`) re-flows every utility with no rebuild.
- * Semantic color names are aliased to Tailwind-ergonomic keys.
+ *
+ * Exposes three color families:
+ *   • flat back-compat keys (from color.alias.json) — `background`, `foreground`,
+ *     `muted`, `primary`, `accent`, `danger`, … → `var(--color-*)`.
+ *   • the full semantic taxonomy, nested under `semantic.*` (e.g.
+ *     `bg-semantic-background-primary`) → `var(--semantic-*)`.
+ *   • `player.*` and `chart.*` (incl. `chart.hc.*`) primitives.
  */
 StyleDictionary.registerFormat({
   name: 'jrm/tailwind-preset',
   format: ({ dictionary }) => {
     const varRef = (path) => `var(--${path.join('-')})`;
+    // Flat-alias → Tailwind-ergonomic key names (mirrors the legacy preset).
     const colorAlias = {
       text: 'foreground',
       'text-muted': 'muted',
@@ -158,18 +168,33 @@ StyleDictionary.registerFormat({
     const fontSize = {};
     const fontFamily = {};
 
+    const setDeep = (root, keys, value) => {
+      let node = root;
+      for (let i = 0; i < keys.length - 1; i += 1) {
+        node[keys[i]] ??= {};
+        node = node[keys[i]];
+      }
+      node[keys[keys.length - 1]] = value;
+    };
+
     for (const token of dictionary.allTokens) {
       const [group, ...rest] = token.path;
-      const fromLightSemantic = norm(token.filePath).endsWith('color.semantic.light.json');
+      const file = norm(token.filePath);
 
       if (group === 'color') {
         if (rest[0] === 'player') {
           colors.player ??= {};
           colors.player[rest[1]] = varRef(token.path);
-        } else if (fromLightSemantic) {
+        } else if (rest[0] === 'chart') {
+          setDeep(colors, ['chart', ...rest.slice(1)], varRef(token.path));
+        } else if (file.endsWith('color.alias.json')) {
           const key = rest.join('-');
           colors[colorAlias[key] ?? key] = varRef(token.path);
         }
+        continue;
+      }
+      if (group === 'semantic' && file.endsWith('color.semantic.light.json')) {
+        setDeep(colors, ['semantic', ...rest], varRef(token.path));
         continue;
       }
       if (group === 'radius') {
@@ -180,7 +205,7 @@ StyleDictionary.registerFormat({
         spacing[rest.join('-')] = varRef(token.path);
         continue;
       }
-      if (group === 'shadow' && fromLightSemantic) {
+      if (group === 'shadow' && file.endsWith('color.semantic.light.json')) {
         boxShadow[rest.join('-')] = varRef(token.path);
         continue;
       }
@@ -214,9 +239,11 @@ const jsFiles = (mode) => ({
   ],
 });
 
-/** Root (:root) build for the light/default mode — every tier, references kept. */
+/** Root (:root) build for the light/default mode — every tier, references kept.
+ *  Includes the flat back-compat alias file so the legacy `--color-*` names are
+ *  declared once in :root and re-flow across every mode via the `--semantic-*` vars. */
 const lightSd = new StyleDictionary({
-  source: sourceFor(semLight),
+  source: [...sourceFor(semLight), colorAliasFile],
   usesDtcg: true,
   platforms: {
     css: {
@@ -262,28 +289,140 @@ const overrideSd = (mode, semanticColorFile, selector) =>
   });
 
 const darkSd = overrideSd('dark', semDark, '[data-theme="dark"]');
+const darkOledSd = overrideSd('dark-oled', semDarkOled, '[data-theme="dark-oled"]');
 const highContrastSd = overrideSd('high-contrast', semHighContrast, '[data-theme="high-contrast"]');
 
 // ---------------------------------------------------------------------------
 // Barrel files (not token-derived — stable wiring around the generated output)
 // ---------------------------------------------------------------------------
 
+/** `{color.ink.midnight}` → `--color-ink-midnight` (a var() target). */
+const refToVar = (ref) => '--' + String(ref).replace(/[{}]/g, '').trim().split('.').join('-');
+
+/**
+ * Turn a semantic-mode JSON file into `--semantic-*: var(--<primitive>)` remap
+ * lines. Used to port finance's consumer @media auto-switching into the package
+ * output so consumers get preference-driven theming for free.
+ */
+function cssRemapLines(semanticFile, indent = '    ') {
+  const json = JSON.parse(readFileSync(semanticFile, 'utf8'));
+  const lines = [];
+  const walk = (node, path) => {
+    for (const [k, v] of Object.entries(node)) {
+      if (k.startsWith('$')) continue;
+      if (v && typeof v === 'object' && '$value' in v) {
+        const name = '--' + [...path, k].join('-');
+        const raw = v.$value;
+        const val = typeof raw === 'string' && raw.startsWith('{') ? `var(${refToVar(raw)})` : raw;
+        lines.push(`${indent}${name}: ${val};`);
+      } else if (v && typeof v === 'object') {
+        walk(v, [...path, k]);
+      }
+    }
+  };
+  if (json.semantic) walk(json.semantic, ['semantic']);
+  if (json.shadow) walk(json.shadow, ['shadow']);
+  return lines.join('\n');
+}
+
+/** Swap the generic chart ramp for its CVD-safe high-contrast variants. */
+const chartHcRemap = (indent = '    ') =>
+  [1, 2, 3, 4, 5, 6].map((n) => `${indent}--color-chart-${n}: var(--color-chart-hc-${n});`).join('\n');
+
 function writeBarrels() {
   mkdirSync(cssBuildPath, { recursive: true });
   mkdirSync(jsBuildPath.replace(`${THEME}/`, ''), { recursive: true });
 
-  // CSS barrel: import all modes, then collapse motion under reduced-motion.
-  const indexCss = `${AUTOGEN.replace('//', '/*') } */
+  const darkRemap = cssRemapLines(semDark);
+  const highContrastRemap = cssRemapLines(semHighContrast);
+
+  // CSS barrel: import every mode, then port finance's preference auto-switching.
+  // Each @media block is guarded with :not([data-theme]) so an explicit theme wins.
+  const indexCss = `${AUTOGEN.replace('//', '/*')} */
 @import './tokens.css';
 @import './tokens-dark.css';
+@import './tokens-dark-oled.css';
 @import './tokens-high-contrast.css';
 
+/* Chart series swap to CVD-safe high-contrast variants under the explicit HC theme. */
+[data-theme="high-contrast"] {
+${chartHcRemap()}
+}
+
+/*
+ * System preference: auto-apply the dark palette when the OS prefers dark and
+ * the consumer has not pinned an explicit [data-theme].
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+${darkRemap}
+  }
+}
+
+/*
+ * prefers-contrast: more — promote the full high-contrast palette (WCAG 1.4.3 /
+ * 1.4.6 / 1.4.11), including the high-contrast chart ramp.
+ */
+@media (prefers-contrast: more) {
+  :root:not([data-theme]) {
+${highContrastRemap}
+${chartHcRemap()}
+  }
+}
+
+/*
+ * Dark + more contrast: brighter foregrounds and stronger borders on the dark
+ * surfaces for users who want both.
+ */
+@media (prefers-color-scheme: dark) and (prefers-contrast: more) {
+  :root:not([data-theme]) {
+    --semantic-text-primary: var(--color-base-white);
+    --semantic-text-secondary: var(--color-ink-moonlight);
+    --semantic-text-inverse: var(--color-ink-midnight);
+    --semantic-border-default: var(--color-ink-lavender-gray);
+    --semantic-border-focus: var(--color-royal-violet-300);
+    --semantic-border-error: var(--color-loss-300);
+    --semantic-interactive-default: var(--color-royal-violet-300);
+    --semantic-interactive-hover: var(--color-royal-violet-200);
+    --semantic-interactive-pressed: var(--color-royal-violet-200);
+    --semantic-status-positive: var(--color-win-500);
+    --semantic-status-negative: var(--color-loss-400);
+    --semantic-status-warning: var(--color-caution-500);
+    --semantic-status-info: var(--color-info-300);
+  }
+}
+
+/*
+ * Reduced motion: collapse the underlying motion durations to instant.
+ */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-press-duration: 0ms;
     --motion-state-duration: 0ms;
     --motion-tile-duration: 0ms;
   }
+}
+
+/*
+ * Cognitive-accessibility mode — activated by [data-a11y-cognitive="true"] on the
+ * root element (finance's mechanism). Steps up the type scale, relaxes leading,
+ * and disables motion (a superset of prefers-reduced-motion).
+ */
+[data-a11y-cognitive="true"] {
+  --text-display-size: var(--cognitive-type-display-size);
+  --text-display-line-height: var(--cognitive-type-display-line-height);
+  --text-title-size: var(--cognitive-type-title-size);
+  --text-title-line-height: var(--cognitive-type-title-line-height);
+  --text-body-size: var(--cognitive-type-body-size);
+  --text-body-line-height: var(--cognitive-type-body-line-height);
+  --text-label-size: var(--cognitive-type-label-size);
+  --text-label-line-height: var(--cognitive-type-label-line-height);
+  --text-overline-size: var(--cognitive-type-overline-size);
+  --text-overline-line-height: var(--cognitive-type-overline-line-height);
+
+  --motion-press-duration: 0ms;
+  --motion-state-duration: 0ms;
+  --motion-tile-duration: 0ms;
 }
 `;
   writeFileSync(join(root, 'build', 'css', THEME, 'index.css'), indexCss);
@@ -293,13 +432,15 @@ function writeBarrels() {
   const indexJs = `${AUTOGEN}
 import light from './${THEME}/tokens.light.js';
 import dark from './${THEME}/tokens.dark.js';
+import darkOled from './${THEME}/tokens.dark-oled.js';
 import highContrast from './${THEME}/tokens.high-contrast.js';
 
 export const tokens = light;
 export const tokensLight = light;
 export const tokensDark = dark;
+export const tokensDarkOled = darkOled;
 export const tokensHighContrast = highContrast;
-export const themes = { light, dark, 'high-contrast': highContrast };
+export const themes = { light, dark, 'dark-oled': darkOled, 'high-contrast': highContrast };
 
 export default tokens;
 `;
@@ -308,15 +449,18 @@ export default tokens;
   const indexDts = `${AUTOGEN}
 import light from './${THEME}/tokens.light.js';
 import dark from './${THEME}/tokens.dark.js';
+import darkOled from './${THEME}/tokens.dark-oled.js';
 import highContrast from './${THEME}/tokens.high-contrast.js';
 
 export declare const tokens: typeof light;
 export declare const tokensLight: typeof light;
 export declare const tokensDark: typeof dark;
+export declare const tokensDarkOled: typeof darkOled;
 export declare const tokensHighContrast: typeof highContrast;
 export declare const themes: {
   readonly light: typeof light;
   readonly dark: typeof dark;
+  readonly 'dark-oled': typeof darkOled;
   readonly 'high-contrast': typeof highContrast;
 };
 
@@ -332,9 +476,12 @@ export default tokens;
 try {
   await lightSd.buildAllPlatforms();
   await darkSd.buildAllPlatforms();
+  await darkOledSd.buildAllPlatforms();
   await highContrastSd.buildAllPlatforms();
   writeBarrels();
-  console.log(`✅ @jrm/tokens built (${THEME}: light + dark + high-contrast → css, tailwind, js).`);
+  console.log(
+    `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast → css, tailwind, js).`,
+  );
 } catch (err) {
   console.error('Build failed:', err);
   process.exit(1);
