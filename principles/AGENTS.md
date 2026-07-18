@@ -27,7 +27,8 @@ the agent proposes an addition rather than inventing an ad-hoc rule.
 | Architecture | [architecture.md](architecture.md) | `architect` |
 | Localization | [localization.md](localization.md) | `localization-engineer` |
 | Compliance | [compliance.md](compliance.md) | `compliance-specialist` |
-| AI | [ai.md](ai.md) | `ai-ops-engineer` |
+| AI Products | [ai-products.md](ai-products.md) | `ai-ops-engineer` |
+| AI Process | [ai-process.md](ai-process.md) | `ai-ops-engineer` |
 
 ## Shared practice (applies to every agent)
 

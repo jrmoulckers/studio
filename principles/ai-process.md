@@ -1,4 +1,4 @@
-# Principles — AI
+# Principles — AI Process
 
 > **Status:** Draft · **Owner:** _you_ · **Aligned agent:** `ai-ops-engineer`
 >

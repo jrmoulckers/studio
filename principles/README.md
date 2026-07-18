@@ -39,7 +39,8 @@ principle short, testable, and specific to its realm.
 | 16 | Architecture | [architecture.md](architecture.md) | `architect` |
 | 17 | Localization | [localization.md](localization.md) | `localization-engineer` |
 | 18 | Compliance | [compliance.md](compliance.md) | `compliance-specialist` |
-| 19 | AI | [ai.md](ai.md) | `ai-ops-engineer` |
+| 19 | AI Products | [ai-products.md](ai-products.md) | `ai-ops-engineer` |
+| 20 | AI Process | [ai-process.md](ai-process.md) | `ai-ops-engineer` |
 
 ## Status
 
