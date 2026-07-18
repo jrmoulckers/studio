@@ -7,7 +7,11 @@
 
 ## Purpose
 
-_One or two sentences: what this realm governs and why it exists._
+This realm governs **AI used in how we build** — the coding agents, skills, instructions,
+and prompt configuration that drive our development workflow — plus the meta-practice in
+[`AGENTS.md`](AGENTS.md) that aligns specialist agents to realms. It exists so that the AI
+layer is consistent, reproducible, least-privilege, and reviewable, rather than a pile of
+ad-hoc prompts. It does **not** cover user-facing AI features (see [AI Products](ai-products.md)).
 
 ## Principles
 
@@ -16,24 +20,214 @@ Add principles as a tree. Each top-level principle may have sub-principles.
 Copy the block below for each principle.
 -->
 
-### 1. <Principle name>
+### 1. One canonical source for AI configuration
 
-- **Statement:** _The rule, stated as an imperative._
-- **Why:** _The rationale / the cost of ignoring it._
-- **In practice:** _What doing this looks like in this repo._
-- **Anti-patterns:** _What violating it looks like._
+- **Statement:** Author every agent, skill, instruction, and prompt once in the
+  `jrmoulckers/.github` backbone; product repos consume synced copies and never hand-edit them.
+- **Why:** Divergent copies drift, and a fix in one repo silently misses the others. A single
+  source keeps behavior identical across `jrm-recipes`, `score-king`, `finance`, and future repos.
+- **In practice:** AI-layer files live under `agents/`, `skills/`, `instructions/`, `prompts/`,
+  and `evals/` in the backbone. Synced files carry a "generated — do not edit" header; changes
+  go to the backbone and re-sync. A product repo may pin *additional* tooling only in its own
+  `AGENTS.md`.
+- **Anti-patterns:** Editing a synced agent in a product repo; copy-pasting a prompt between
+  repos; two files defining the same agent.
 
-#### 1.1 <Sub-principle name> (optional)
+#### 1.1 Consistent frontmatter schema
 
-- **Statement:**
-- **Why:**
+- **Statement:** Every agent definition carries the full frontmatter schema — `name`,
+  `description`, `model`, `when_to_use`, `primary_paths`, `write_scope`, `risk_level`, `tools` —
+  with values drawn only from the allowed set for each field.
+- **Why:** A uniform schema lets the roster, dispatch, and permission tooling read every agent
+  the same way; missing or free-form fields break automation and hide risk.
+- **In practice:** Validate frontmatter in a pre-push check; `model` is `strong-reasoning` or
+  `standard`, `write_scope` is `read-only`/`scoped-write`/`full`, `risk_level` is `low`/`medium`/`high`.
+- **Anti-patterns:** An agent with no `write_scope`; a `risk_level: critical` that isn't in the
+  schema; `tools` described in prose instead of the `read`/`edit`/`search`/`shell` grants.
 
-### 2. <Principle name>
+### 2. Least-privilege tools and write scope
 
-- **Statement:**
-- **Why:**
-- **In practice:**
-- **Anti-patterns:**
+- **Statement:** Grant each agent the smallest tool set and narrowest `write_scope` that lets it
+  complete its documented workflow — add `edit` only when it authors files, `shell` only when
+  validation requires it.
+- **Why:** Every extra capability widens blast radius. An agent that only reviews should not be
+  able to write; one that never runs commands should not hold `shell`.
+- **In practice:** Map each tool grant to a concrete workflow step in the agent definition.
+  `write_scope` and `primary_paths` together bound what the agent can change.
+- **Anti-patterns:** Granting `full` write "to be safe"; `shell` on a read-only reviewer;
+  broadening permissions without a documented rationale in the PR.
+
+### 3. Non-overlapping ownership boundaries
+
+- **Statement:** Every path has exactly one lead agent; ownership globs must not collide, and each
+  agent's "do NOT edit" zones name the owning agent.
+- **Why:** Overlapping ownership produces conflicting edits and unclear accountability. One lead
+  per path keeps changes coherent and reviewable.
+- **In practice:** `primary_paths` across agents are disjoint; the realm→agent map in
+  [`AGENTS.md`](AGENTS.md) and each realm file's "Aligned agent" stay in sync. Cross-cutting work
+  hands off rather than reaching into another agent's zone.
+- **Anti-patterns:** Two agents claiming `.github/workflows/`; an AI-ops agent editing product
+  code or CI; a realm with no aligned agent.
+
+### 4. Capability manifest is the source of truth for the roster
+
+- **Statement:** Keep a single capability manifest / roster that lists every agent and skill, and
+  reconcile it with the actual definition files on every change.
+- **Why:** If the manifest and the files disagree, dispatch and discovery break — an agent exists
+  but nothing routes to it, or the roster advertises a capability that no longer exists.
+- **In practice:** The manifest, the realm→agent map, and the `agents/` files agree on names and
+  responsibilities. A CI check fails when an agent file has no roster entry or vice versa.
+- **Anti-patterns:** Adding an agent file without a manifest entry; a roster row pointing at a
+  deleted skill; manually maintained lists that silently fall out of date.
+
+### 5. Prompt engineering is explicit, structured, and testable
+
+- **Statement:** Write internal prompts and instructions as explicit, structured contracts —
+  stated role, scope, inputs, outputs, and boundaries — not open-ended prose.
+- **Why:** Vague prompts yield non-deterministic, unverifiable behavior. Structure makes intent
+  legible to humans and stable across model updates.
+- **In practice:** Instructions state the imperative rule, its rationale, and its boundaries;
+  prompts declare expected inputs/outputs; shared depth lives in reusable skills
+  (e.g. `prompt-engineering`) rather than being restated per agent.
+- **Anti-patterns:** A wall-of-text system prompt with no structure; duplicated instructions
+  across agents; prompts that assume undocumented context.
+
+### 6. Every internal agent has evals and a quality gate
+
+- **Statement:** No agent or skill ships or changes behavior without golden tasks, a scoring
+  rubric, and a regression check that must pass before merge.
+- **Why:** Prompt and config changes silently regress. Evals turn "seems fine" into a measurable,
+  repeatable gate and catch drift when models or dependencies change.
+- **In practice:** `evals/` holds golden tasks per agent; the rubric scores ownership clarity,
+  tool least-privilege, instruction precision, boundary completeness, and schema consistency.
+  Regression checks run in CI and block merges that broaden permissions without a documented reason.
+- **Anti-patterns:** Editing an agent's prompt with no eval run; a rubric that's never scored;
+  merging on a red eval "to fix later".
+
+### 7. Human-in-the-loop review of agent output
+
+- **Statement:** Agent-authored changes land through a reviewed PR, and high-risk or gated
+  operations stop for explicit human approval before proceeding.
+- **Why:** Agents are fast and confident but not accountable. A human gate is the last check
+  against wrong, unsafe, or out-of-scope changes.
+- **In practice:** Agents open PRs (they do not push to `main`/release); gated operations —
+  force-push to protected branches, merging PRs the agent didn't author, remote platform writes,
+  secrets, destructive ops — halt and request approval. Self-merge is allowed only for an agent's
+  own PR once the quality gate is green and mergeable.
+- **Anti-patterns:** Direct pushes to `main`; an agent merging another agent's PR unprompted;
+  bypassing review because "it's just a prompt tweak".
+
+### 8. Reproducible, versioned prompts and configs
+
+- **Statement:** Treat every prompt, agent, and config as versioned source — no runtime-only or
+  console-edited configuration — and pin what a given output was produced from.
+- **Why:** Reproducibility is what lets us diff behavior, bisect regressions, and roll back.
+  Untracked config makes failures impossible to explain or revert.
+- **In practice:** All AI-layer changes go through git with conventional commits
+  (`docs(agents): …`); prompts avoid embedded absolute paths or environment specifics; evals and
+  outputs reference the config version/commit they ran against.
+- **Anti-patterns:** Tweaking a prompt in a hosted console instead of the repo; unpinned model or
+  tool versions; prompts that only work on one machine's paths.
+
+### 9. Strict secrets and data boundaries for agent context
+
+- **Statement:** Never place secrets, credentials, or sensitive data into prompts, instructions,
+  skills, eval fixtures, or committed agent context; give agents only the least data their task needs.
+- **Why:** Context is logged, synced across repos, and sent to model providers. A secret in a
+  prompt is a secret leaked to third parties and to every downstream repo.
+- **In practice:** Reference secrets by name via the platform's secret store, never by value;
+  eval fixtures use synthetic data; agent `primary_paths` and tools are scoped so context can't
+  pull in unrelated sensitive files. Secret-handling and destructive ops are human-gated.
+- **Anti-patterns:** An API key pasted into a system prompt; real customer data in a golden task;
+  an agent granted read over the whole repo just to reach one config file.
+
+### 10. Explicit, staged agent workflows
+
+- **Statement:** Every agent declares an ordered workflow — Plan → Implement → Verify → Ship →
+  Monitor — and follows it; no step is skipped and Verify runs the repo's real checks.
+- **Why:** A named workflow makes agent behavior predictable and reviewable, and forces
+  verification before shipping instead of after a regression lands.
+- **In practice:** The agent definition spells out each stage: Plan lists affected files and
+  scope/tool changes; Verify runs `pnpm build`/`typecheck`/`lint` and any eval validation; Ship
+  opens a conventional-commit PR that closes the issue; Monitor watches CI and fixes on red.
+- **Anti-patterns:** Implementing before planning scope; shipping without running the repo's
+  pre-push checks; declaring "done" while CI is red.
+
+### 11. Skills are composable and single-responsibility
+
+- **Statement:** Factor reusable expertise into skills with one clear responsibility, loaded on
+  demand; agents reference skills instead of duplicating their content.
+- **Why:** Shared depth in a skill (e.g. `prompt-engineering`, `mcp-agent-tooling`,
+  `issue-management`) stays consistent and is fixed once. Inlining it per agent guarantees drift.
+- **In practice:** A skill does one thing and names when to load it; agents cite the skills they
+  depend on rather than restating them; a product repo can pin extra skills in its `AGENTS.md`.
+- **Anti-patterns:** A "kitchen-sink" skill covering unrelated topics; the same guidance copied
+  into three agents; a skill no agent references.
+
+### 12. Deterministic agent dispatch
+
+- **Statement:** Route each task to exactly one lead agent using its `when_to_use` and
+  `primary_paths`; dispatch criteria must be specific enough that two agents don't both match.
+- **Why:** Ambiguous dispatch sends work to the wrong specialist or splits it across agents,
+  producing conflicting edits. One clear owner per task keeps accountability intact.
+- **In practice:** `when_to_use` states concrete triggers; realm→agent alignment in
+  [`AGENTS.md`](AGENTS.md) resolves cross-cutting work to the owning realm; overlaps are resolved
+  by tightening criteria, not by letting both run.
+- **Anti-patterns:** Two agents with overlapping `when_to_use`; a vague trigger like "any code
+  change"; dispatching to an agent whose `primary_paths` don't cover the work.
+
+### 13. Isolated sessions with a single owning agent
+
+- **Statement:** Do each unit of work in an isolated session/worktree bound to one agent and one
+  branch; never edit the main checkout or reach outside the session's repo root.
+- **Why:** Isolation prevents cross-contamination between parallel workstreams and keeps every
+  change traceable to one branch, one agent, and one review.
+- **In practice:** One session = one worktree = one feature branch = one owning agent; the agent
+  commits to its own branch and opens a PR; file operations stay within the repo root.
+- **Anti-patterns:** Two agents writing the same worktree; editing the main checkout directly;
+  a session that touches files outside its repository root.
+
+### 14. Vetted, pinned, least-privilege MCP servers
+
+- **Statement:** Connect agents only to reviewed MCP servers, pinned to a known version, granting
+  the narrowest tool and scope surface the workflow needs.
+- **Why:** An MCP server is remote code with access to repo and platform context; an unpinned or
+  over-scoped server is an unaudited supply-chain and data-exfiltration risk.
+- **In practice:** Each MCP integration is documented (server, version, purpose) alongside the
+  agents that use it; tool grants map to workflow steps; prefer the `gh` CLI for GitHub operations
+  where it suffices over adding an MCP surface. Data sent to any server obeys Principle 9.
+- **Anti-patterns:** Wiring an agent to an unreviewed MCP server "to try it"; a floating/unpinned
+  server version; granting broad MCP tools an agent never invokes.
+
+### 15. A curated repository AI brain
+
+- **Statement:** Maintain a durable, version-controlled "AI brain" — the repository's shared
+  knowledge base of decisions, conventions, and context — and have agents read it before acting
+  and append to it after learning something reusable.
+- **Why:** Without persistent memory, every session rediscovers the same context and repeats past
+  mistakes. A curated brain turns one agent's finding into every agent's baseline and keeps
+  behavior coherent across sessions and repos.
+- **In practice:** Brain entries live in the backbone as tracked files, are cited when they drive
+  a decision, and are pruned when stale; agents propose a brain entry instead of hardcoding an
+  unwritten rule (mirroring the "propose, don't improvise" shared practice). Entries stay factual,
+  scoped, and dated.
+- **Anti-patterns:** Knowledge trapped in a single session's history; contradictory brain entries
+  left unreconciled; an ever-growing brain no one prunes; secrets or sensitive data written into it.
+
+### 16. Every artifact type has a mandatory template
+
+- **Statement:** Provide and enforce a documentation template for **every** artifact type —
+  document, skill, agent, MCP integration, instruction, prompt, brain entry, eval, and log — and
+  author each artifact from its template.
+- **Why:** Uniform structure makes artifacts scannable, diffable, and machine-readable; it is what
+  lets tooling validate frontmatter, reconcile the roster, and score evals. Freeform artifacts
+  break automation and hide missing fields.
+- **In practice:** Templates live beside the artifacts they govern (like this realm's
+  [`_template.md`](_template.md)); each defines the required sections/frontmatter for its type; a
+  pre-push check fails artifacts that don't match their template. New artifact types ship with a
+  template before they ship instances.
+- **Anti-patterns:** A skill with no standard sections; an agent authored freehand instead of from
+  the schema; a log or brain entry with an ad-hoc shape; adding an artifact type with no template.
 
 ## Aligned agent
 
@@ -42,4 +236,15 @@ when working in this realm.
 
 ## Related realms
 
-- _Link realms that overlap or hand off to this one._
+- **[AI Products](ai-products.md)** — the sibling AI realm. That realm governs *user-facing* AI
+  features; this realm governs *AI in how we build*. Model-quality, prompt, and safety practices
+  are shared in spirit, but ownership does not overlap: internal tooling here, shipped AI product
+  surfaces there.
+- **[Security](security.md)** — secrets/data boundaries for agent context (Principle 9) inherit
+  the Security realm's rules; hand off any product-facing exposure there.
+- **[DevOps](devops.md)** — owns `.github/workflows/`. This realm defines agent behavior and
+  quality gates; DevOps owns the CI that runs them. Keep the ownership line at the workflow files.
+- **[Process](process.md)** — PR, review, and release conventions that the human-in-the-loop gate
+  (Principle 7) and versioning (Principle 8) build on.
+- **[Documentation](documentation.md)** — human-facing docs outside the AI layer are owned by
+  `docs-writer`; this realm owns only the agent/skill/instruction/prompt configs.
