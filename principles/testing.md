@@ -92,6 +92,13 @@ testing exists to catch breaks at the source, not in downstream apps.
 - **In practice:** A feature PR includes tests for the new behavior; a bugfix PR adds a test that fails before the fix; changes to token names/outputs or config exports update the regression suite. Pure docs or comment changes need none.
 - **Anti-patterns:** "Tests in a follow-up PR"; closing a bug with no reproducing test; altering a semantic token name with no updated assertion.
 
+### 8. Show a test can fail before trusting that it passes
+
+- **Statement:** A green test is not evidence until it has been demonstrated capable of failing. Break the behavior it claims to guard, confirm it goes red, then restore the code.
+- **Why:** The most dangerous test is one that asserts something already guaranteed by its own setup, or that never exercises the branch it names — it looks like coverage, is counted as coverage, and protects nothing. Silent failure modes are exactly where this matters: a guard against "the tool reports success while doing nothing" is itself a candidate for reporting success while doing nothing.
+- **In practice:** Deleting the line under test is the cheapest mutation and usually enough. Assert the complement too — a test that a change is delivered should be paired with one that a local edit is still refused, or both are satisfied by code that stopped checking. Record which mutation kills which test in the PR body so a later reader can re-run it.
+- **Anti-patterns:** Deriving an expected value from the system under test; a timing-sensitive assertion with no wait, so it passes whether or not the code is correct; a fixture teardown that races an async body and makes the second half of the test run against nothing; counting a test as coverage because it names the behavior in its title.
+
 ## Aligned agent
 
 `qa-tester` — this specialist should treat the principles above as binding practice
