@@ -263,7 +263,10 @@ green, fast, and trustworthy for every downstream consumer.
   a difference the generator could not have produced is drift.
 - **Anti-patterns:** `diff canon/x member/.github/x` for an asset the sync stamps; explaining away
   a one-line delta as "just the header" instead of folding the header into the expected value;
-  an audit whose "clean" result depends on the transform being trivial today.
+  an audit whose "clean" result depends on the transform being trivial today; treating the presence
+  of a provenance stamp as evidence a file is current — a hand-copied older revision carries the
+  stamp too, so it reads as synced and only a byte comparison against `inject(path, canon)` says
+  otherwise.
 
 ### 14. A tool that refuses to clobber must report what it refused, where a human will look
 
@@ -283,6 +286,11 @@ green, fast, and trustworthy for every downstream consumer.
   definition, so the first run flags it and moves on rather than repairing it. Compare against the
   generator's rendered output, and enumerate from the manifest rather than from the consumer, so
   files that are merely absent are visible too.
+- **Match the escape hatch's scope to the failure's:** an override taken per run, per member or per
+  invocation cannot clear a single file, so reaching for it to fix one stale copy silently discards
+  every other local change in its blast radius. Where the conservative behaviour is per-file, the
+  override should be too — and until it is, say so at the place someone goes looking for the remedy,
+  because the flag's name will read like the answer.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
