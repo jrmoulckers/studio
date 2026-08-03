@@ -110,6 +110,14 @@ testing exists to catch breaks at the source, not in downstream apps.
 - **The ratchet:** A wrong value that acquires a passing test becomes defended. Correcting it now also deletes an assertion that looks deliberate and cites a verification, so the fix reads as the regression. Fixing the value is cheap on the day it lands and expensive the day after — which is the argument for validating recorded fields even when nothing executes them.
 - **Anti-patterns:** `deepEqual` between a config and a literal transcribed from it; a rationale in the assertion message that is true about the repo but does not support the assertion; an inline comment certifying a verification with no revision or date, which outlives the check and discourages the next reader from repeating it.
 
+### 10. A documented procedure has no failure mode — encode it as an assertion
+
+- **Statement:** When documentation tells someone how to check something, add the test that fails if the instruction stops being correct. Prose describing a procedure cannot detect that the system moved out from under it.
+- **Why:** Every other guard in a codebase reports when its premise breaks; a documented method silently becomes wrong and keeps being followed. The people most likely to follow it are the ones with the least context to notice, and they will attribute the bad result to the system rather than to the instruction.
+- **In practice:** Identify the condition under which the documented method would stop being valid, and assert its negation against the real configuration — if the docs say "compare against the transformed output", assert that every write is the transformed output _and_ that it is never the raw source. The negative assertion is the load-bearing one: it fails at the moment the documented comparison would start giving wrong answers, which nothing else observes.
+- **Report the invariant, not the measurement:** where two people check the same thing and get different numbers, prefer the form that does not depend on whose working tree it was measured in — an equality after normalization rather than a byte count. Sizes, offsets and hashes of raw bytes are artefacts of a checkout; identity under the tool's own comparison is not.
+- **Anti-patterns:** A runbook step whose correctness depends on code nobody has linked it to; documenting a diff command without asserting what that diff is supposed to produce; treating "we wrote it down" as equivalent to "it is enforced".
+
 ## Aligned agent
 
 `qa-tester` — this specialist should treat the principles above as binding practice

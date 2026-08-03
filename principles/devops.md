@@ -267,6 +267,12 @@ green, fast, and trustworthy for every downstream consumer.
 - **In practice:** The injector is exported as a pure function, so an audit imports it and
   compares against `inject(path, canon)`. A file matching that is adopted into the lockfile; only
   a difference the generator could not have produced is drift.
+- **Small, uniform and always present is the dangerous size:** a baseline error that produces a
+  large delta looks catastrophic and gets investigated; one that adds a single plausible line to
+  every file reads as a finding. A conclusion drawn that way survives only while the real
+  difference dominates the artefact — against a file stale by one line, the method reports one
+  added and one removed, and nothing in the output distinguishes the tool's own footprint from the
+  defect.
 - **Anti-patterns:** `diff canon/x member/.github/x` for an asset the sync stamps; explaining away
   a one-line delta as "just the header" instead of folding the header into the expected value;
   an audit whose "clean" result depends on the transform being trivial today; treating the presence
