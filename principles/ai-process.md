@@ -273,7 +273,11 @@ Copy the block below for each principle.
   "just now" against a commit named an hour ago is exactly as stale as the commit. The payoff for
   the notation is that it makes disagreement cheap to settle: when both parties state the revision
   they read, a contradiction resolves in one lookup instead of another round of crossing claims, so
-  pinning earns its keep precisely on the occasions it turns out to have been wrong. Pin **both sides** of a comparison: a
+  pinning earns its keep precisely on the occasions it turns out to have been wrong. It also earns
+  it on occasions nothing depended on it: re-resolving a reference produces a forward diff over
+  every changed path, not just the ones the check was aimed at, so the discipline surfaces defects
+  in artifacts nobody was watching. That is an argument for pinning references believed to be
+  inert — the value is the diff, not the assertion. Pin **both sides** of a comparison: a
   fidelity result is only meaningful as "clean as of `<subject sha>` against `<reference sha>`",
   because pinning the subject alone leaves the reference floating and the claim decays in silence —
   strictly worse than the subject moving, since there a fetch shows you, whereas here the artifact
