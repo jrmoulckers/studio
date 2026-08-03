@@ -447,6 +447,13 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **Convert a standing to-do into an artifact as soon as the channel shows loss, not once it proves
+  load-bearing.** An item addressed to someone else survives only if they re-derive it, and readers
+  re-derive what is in front of them: every claim about the repository a person is working in gets
+  rebuilt from that repository, while the one line about a _different_ repository is the line that
+  never gets checked and therefore never lands. Repeating it does not help, because the channel is
+  lossy in the same place each time. An issue is read by whoever needs it whenever they need it; a
+  message is read once, by one party, at a moment of their choosing.
 - **Freshness attaches to the fetch, not to the fact.** Re-reading a pinned revision at send time
   buys nothing, because a pin is already a recorded observation and will return the same bytes
   forever; what needs re-reading is the moving ref. State which of the two a claim rests on, since

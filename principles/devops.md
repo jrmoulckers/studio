@@ -103,7 +103,10 @@ green, fast, and trustworthy for every downstream consumer.
 - **Put the scope where the credential is created:** the error message a missing secret produces is
   the most likely place anyone ever reads about it, so the required permissions belong there in
   full — not only in the docs it beat to the reader. Guidance that lives only in documentation
-  loses to the string printed at the moment of failure.
+  loses to the string printed at the moment of failure. There is usually more than one such
+  surface — a `--help` string, a preflight error, the comment above the constant — and tightening
+  the documented scope in the places you remember leaves the old advice in the most-read one. Grep
+  for the superseded wording instead, and treat every copy the tool can print as documentation.
 - **Name the widening failure mode:** state, at the point of failure, that a permission error on a
   path the tool is not supposed to write is a **bug in the tool**, not a missing scope. Otherwise
   the first such error is "fixed" by granting the scope, and the guarantee is gone permanently in
