@@ -247,6 +247,27 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   origin; caching per-user responses in a shared cache; concluding that a client-rendered
   product may therefore hold third-party secrets in the browser.
 
+### 15. Constrain the format you emit rather than parsing the format you might receive
+
+- **Statement:** When the same system writes and later re-reads a marked region of a file, put the
+  requirement on the writer. A narrow, mechanically checkable shape — a fixed sentinel at a fixed
+  column, a delimiter that cannot occur in content — replaces a general parser for the surrounding
+  language.
+- **Why:** Recognising a construct in a rich format usually needs the whole grammar. Distinguishing
+  an indented code block from ordinary indented prose in Markdown requires blank-line precedence,
+  list continuation and lazy continuation; distinguishing a real marker from a quoted one requires
+  fence tracking. That is a parser's worth of machinery, and every gap in it is a silent
+  misclassification rather than an error. An anchor the emitter always satisfies gets the same
+  guarantee for free and fails visibly when it is wrong.
+- **In practice:** Anchor sentinels at column 0 because the writer always emits them there. Prefer
+  offset-preserving masking to stripping when a region must be ignored, so positions stay usable.
+  Before narrowing a pattern, check the real corpus for a legitimate case the stricter form would
+  exclude — over-strict matching fails in the opposite direction, by not finding an existing region
+  and appending a duplicate. Assert the post-condition too: exactly one region after a merge.
+- **Anti-patterns:** Reimplementing part of a markup grammar to locate your own output; a
+  permissive pattern justified by "the strict form might miss something", with no corpus checked
+  either way; a marker whose recognition rules differ between the writer and the reader.
+
 ## Aligned agent
 
 `architect` — this specialist should treat the principles above as binding practice
