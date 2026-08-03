@@ -249,6 +249,24 @@ green, fast, and trustworthy for every downstream consumer.
   a one-line delta as "just the header" instead of folding the header into the expected value;
   an audit whose "clean" result depends on the transform being trivial today.
 
+### 14. A tool that refuses to clobber must report what it refused, where a human will look
+
+- **Statement:** "Never overwrite local changes" and "always deliver the current version" are in
+  genuine tension. A tool that resolves it conservatively creates a class of content that can never
+  arrive, so the skip must surface in the artifact a human reviews — the PR body — not only in the
+  run log that nobody reads after a green run.
+- **Why:** The skipped file is, by construction, the one most likely to be stale, and staleness is
+  self-perpetuating: the tool will refuse it again on every subsequent run and report success each
+  time. The failure has no end state and no escalating signal. Worse, the content most worth
+  delivering is often documentation of a trap, so the repo missing it is the repo about to hit it.
+- **In practice:** Drift is surfaced per-file in the PR description with the reason and the fix, and
+  a run that changes nothing but has skips exits distinctly from a clean run. Resolution is a
+  targeted deletion or refresh of the offending file, never a global `--force`, which discards every
+  other local change indiscriminately in order to fix one.
+- **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
+  "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
+  only home is stdout of a scheduled job.
+
 ## Aligned agent
 
 `devops-engineer` — this specialist should treat the principles above as binding practice
