@@ -325,6 +325,12 @@ green, fast, and trustworthy for every downstream consumer.
   independent source to check it against. The unvalidated field therefore needs _more_ care than
   the load-bearing one, which is the opposite of how "this isn't validated" reads at the point of
   edit.
+- **A field becomes real when something fails without it.** The durable fix for a recorded field is
+  not a naming convention that warns readers it is unvalidated — it is giving the field a consumer,
+  so that a wrong or missing value turns something red. A test that demands a justification
+  whenever a setting departs from the default converts a decorative field into an executed one
+  without constraining what it says, and that promotion is available to most recorded fields for
+  the cost of a single assertion.
 - **The config's grouping is not the engine's grouping, and only the engine's is real.** Entries
   sitting under one key, one kind, or one array look like they share a code path, and often they do
   not: a switch on a literal filename inside the handler splits a category the file presents as

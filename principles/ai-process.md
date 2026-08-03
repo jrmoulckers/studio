@@ -447,6 +447,12 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
+  syntax of a resolvable reference while carrying context only the participants hold, and the reader
+  who follows it gets one failure that is consistent with three different conclusions — the file
+  moved, the finding is stale, or the path was never right. Repo-relative paths cost four characters
+  and collapse that ambiguity; the same applies to any identifier a reader will paste somewhere,
+  including branch names, revisions and issue numbers in another repository.
 - **Convert a standing to-do into an artifact as soon as the channel shows loss, not once it proves
   load-bearing.** An item addressed to someone else survives only if they re-derive it, and readers
   re-derive what is in front of them: every claim about the repository a person is working in gets
@@ -509,6 +515,11 @@ Copy the block below for each principle.
   A note written before anything turns on it also carries standing that the same note cannot have
   afterwards: filed once a decision is contested, it reads as testimony produced under pressure;
   filed beforehand, it is prior and unprompted, and only the timestamp distinguishes them.
+- **Coherence is not a stopping condition.** A pattern that explains every data point invites the
+  inquiry to end there, and a set of choices can look designed because the omissions happen to form
+  a shape no one intended. Before concluding that a pattern was chosen, locate whoever chose it or
+  the artifact the choice left behind; where neither exists, the honest finding is that the pattern
+  is unexplained, which is a different claim from the pattern being deliberate.
 - **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
   every state of the world, so consistency checks pass over it silently. Such values need a
   different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.
