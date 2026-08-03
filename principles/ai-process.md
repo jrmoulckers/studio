@@ -281,7 +281,13 @@ Copy the block below for each principle.
   the reader to guess how long what it _did_ see remains true. Prefer the
   tool's own output to a reimplementation of it whenever the tool can be run: a projection built by
   re-deriving what a generator would do is a model of the generator, and it inherits every
-  assumption the generator's actual inputs have since invalidated. Never write a test that pins a policy choice: assert schema and internal consistency, since a
+  assumption the generator's actual inputs have since invalidated. A wrong baseline usually fails
+  totally rather than subtly — every artifact differs, not a few — so a plausible-looking pass rate
+  is itself evidence the baseline is right, and a near-total failure should be read as a broken
+  comparison before a broken subject. The exception is where the generator has more than one mode:
+  applying one baseline uniformly leaves exactly the handful of differently-generated artifacts
+  looking like drift, which is the most dangerous size of false positive, because a total failure
+  gets diagnosed and a single one gets believed. Never write a test that pins a policy choice: assert schema and internal consistency, since a
   test converts a contested inference into a guarded invariant and forces the next person to argue
   with a red suite instead of a config value. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
@@ -289,7 +295,11 @@ Copy the block below for each principle.
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
   that enumerates what is present establishes fidelity, never completeness — and remember that
   ruling out one cause does not establish another — and a ruling-out argument is only as good as
-  the list of causes considered, so enumerate the third state before concluding the second. When a
+  the list of causes considered, so enumerate the third state before concluding the second. Shared
+  method is only a weakness when what you share is a peer model: agreeing with the authority itself
+  — running the generator's own function rather than a second reimplementation of it — is the point
+  rather than a correlation to be discounted, and two independent reimplementations agreeing is the
+  weaker evidence, not the stronger. When a
   set looks curated, weigh the null
   hypothesis first: an incomplete set is the ordinary outcome of an interrupted process, so
   promoting it to a decision needs evidence of a decider, not a story that fits. A hand-authored
