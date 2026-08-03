@@ -410,6 +410,17 @@ Copy the block below for each principle.
   your own words converts their unverified claim into your asserted one. When two parties disagree
   about an artifact, go to the artifact rather than weighing their credibility, and check whether
   each was looking at the same revision before concluding either is wrong.
+- **Take the scope of a check from the system, not from the claim.** A specific assertion names a
+  location, and naming it silently converts that location into the boundary of the audit — so the
+  refutation ends up in the one place the framing steered you away from. This is distinct from
+  simply believing a congenial premise: the check is genuine, diligent and thorough, and returns a
+  confident wrong answer because it was never pointed at the proposition. Before auditing "X does
+  Y", ask where else in the system Y could be true, and go there first.
+- **Partial refutation is more dangerous than none.** Finding a real inaccuracy inside the named
+  scope supplies the feeling of a completed correction and stops the search early, where finding
+  nothing would have kept it going. The true narrow finding is also what makes the false broad
+  conclusion credible to everyone downstream, so the correction travels further than the claim it
+  replaced. Treat a confirmed sub-error as a reason to widen the search, not to end it.
 - **Anti-patterns:** Agreeing with a conclusion and inheriting its premises; treating a source's
   past reliability as coverage for its current claim; describing a repository from the subtree you
   happened to have open; issuing a correction from a checkout old enough to be missing the files
