@@ -295,7 +295,12 @@ Copy the block below for each principle.
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
   that enumerates what is present establishes fidelity, never completeness — and remember that
   ruling out one cause does not establish another — and a ruling-out argument is only as good as
-  the list of causes considered, so enumerate the third state before concluding the second. Shared
+  the list of causes considered, so enumerate the third state before concluding the second. A
+  hypothesis space assembled without noticing that assembling it was a choice is the hardest defect
+  to see, because everything downstream of it stays rigorous: the elimination is valid, the evidence
+  is sound, and the conclusion is wrong. Coherence rather than sloppiness is what carries a bad
+  claim between people, so the question that catches it is not "is this argument tight" but "what
+  is missing from the list this argument is tight about." Shared
   method is only a weakness when what you share is a peer model: agreeing with the authority itself
   — running the generator's own function rather than a second reimplementation of it — is the point
   rather than a correlation to be discounted, and two independent reimplementations agreeing is the
@@ -304,9 +309,15 @@ Copy the block below for each principle.
   hypothesis first: an incomplete set is the ordinary outcome of an interrupted process, so
   promoting it to a decision needs evidence of a decider, not a story that fits. A hand-authored
   first pass is deliberate in mechanism and unreviewed in substance at the same time, so "someone
-  typed this on purpose" is not evidence that anyone weighed it; look inside the artifact for
+  typed this on purpose" is not evidence that anyone weighed it: it shares the trace of a considered
+  decision and the epistemic status of an accident, which is exactly why the commit history cannot
+  separate the two. Look inside the artifact for
   self-contradiction, which distinguishes oversight from judgment far better than its provenance
-  does. Receiving is half
+  does. And qualify the rule that intent questions need an author: an author reconstructing from
+  memory produces a plausible account at the same cost as a true one, and only the plausible one can
+  be wrong without anyone noticing — so ask the author, and ask whether they still have the receipt.
+  An answer sourced to a surviving artifact and an answer sourced to recollection deserve different
+  weight even when they come from the same person and agree. Receiving is half
   the discipline: a correction that arrives while you are mid-decision reads as commentary on the
   decision rather than as a change of premise, so when a message contradicts a fact you are
   standing on, stop and re-derive rather than reconcile. Build the cheap artifact _before_ taking
