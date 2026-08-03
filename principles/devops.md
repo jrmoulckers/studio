@@ -98,10 +98,20 @@ green, fast, and trustworthy for every downstream consumer.
   tags or write releases request `contents: write` on that job alone, not repo-wide. Before
   requesting a credential scope, enumerate the tool's actual write targets — a sync engine that
   resolves workflows but never writes them needs no `workflow` scope, and a fine-grained token
-  naming specific repositories beats a classic one carrying blanket `repo`.
+  naming specific repositories beats a classic one carrying blanket `repo`. Where a test already
+  asserts the write targets, cite it rather than re-deriving the scope by reading the code.
+- **Put the scope where the credential is created:** the error message a missing secret produces is
+  the most likely place anyone ever reads about it, so the required permissions belong there in
+  full — not only in the docs it beat to the reader. Guidance that lives only in documentation
+  loses to the string printed at the moment of failure.
+- **Name the widening failure mode:** state, at the point of failure, that a permission error on a
+  path the tool is not supposed to write is a **bug in the tool**, not a missing scope. Otherwise
+  the first such error is "fixed" by granting the scope, and the guarantee is gone permanently in
+  exchange for one green run. A narrow scope is only as durable as the first 403 against it.
 - **Anti-patterns:** Relying on the default token scope; `permissions: write-all`; secrets
   exposed to PR workflows from forks; requesting a scope because the tool touches a concept
-  rather than because it writes those files.
+  rather than because it writes those files; documenting a minimal scope while the runtime error
+  message still tells people to create a broad one.
 
 ### 4. Cache the deterministic, rebuild the rest
 
