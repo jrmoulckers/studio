@@ -143,6 +143,11 @@ can never rewrite the artifact out from under `tokens:dist:check`.
 > artifact placed under `dist/` — a `.woff2`, an image, anything non-text — would be **silently
 > corrupted in every member repo**, with no error at either end. If tokens ever need to ship a
 > binary asset, it needs a different transport, not this tree.
+>
+> This is now **enforced, not advisory**: `scripts/dist.mjs` refuses to copy any file that isn't
+> valid UTF-8 and exits non-zero, so a binary artifact fails the build (and CI, via
+> `tokens:dist:check`) instead of reaching a member repo. The check has to live here, because by
+> the time the sync engine sees the file the original bytes are already gone.
 
 ### Freshness guard
 
