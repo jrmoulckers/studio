@@ -264,7 +264,9 @@ Copy the block below for each principle.
   amount of evidence about a file reaches the reasoning that produced it. Re-reading mutable state
   is necessary and not sufficient — quote it with its revision (`at <sha>`) rather than in the
   present tense, because a read is not a lock and the value can move while you are still asserting
-  it. Never write a test that pins a policy choice: assert schema and internal consistency, since a
+  it. Report a check as a snapshot, not a state: "clean as of `<sha>`, N sessions active" rather
+  than "closed and clean", because durable-sounding language turns a momentary observation into a
+  standing guarantee the observer has no power to make. Never write a test that pins a policy choice: assert schema and internal consistency, since a
   test converts a contested inference into a guarded invariant and forces the next person to argue
   with a red suite instead of a config value. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
