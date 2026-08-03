@@ -229,6 +229,28 @@ Copy the block below for each principle.
 - **Anti-patterns:** A skill with no standard sections; an agent authored freehand instead of from
   the schema; a log or brain entry with an ad-hoc shape; adding an artifact type with no template.
 
+### 17. Cross-session reports carry verified facts, and corrections supersede explicitly
+
+- **Statement:** A report another session will act on states each fact at the durability it
+  actually has. Immutable observations — a CI run, a hash, a diff — may be quoted as observed, but
+  mutable state (merge status, branch head, registry contents) is re-read at report time. A
+  correction names the report it replaces. A claim about runtime behavior is settled by executing
+  it, not by reading the code.
+- **Why:** A stale fact in a report travels further than a stale fact in a file, because the
+  recipient cannot distinguish "was true when observed" from "is true now" and will relay it
+  onward as fresh. Two analyses that read the same code the same way produce correlated errors, so
+  their agreement is not corroboration — it is one conclusion counted twice.
+- **In practice:** Say "PR #N open, CI green, not merged" rather than anything that reads as
+  landed, and re-read merge state from the API before asserting it. A superseding report opens by
+  naming what it kills, because the original stays live in the recipient's context beside it.
+  Behavioral claims — what a force-push does, whether a run is idempotent — are reproduced against
+  throwaway fixtures before they are escalated, severity-rated, or documented. Relaying another
+  session's claim makes it yours: verify the part you relay.
+- **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
+  increment that reads as additive; treating agreement between two code reads as verification;
+  assigning a severity derived purely from reading; propagating a downstream session's claim
+  without re-checking it; documenting inferred behavior that nobody has executed.
+
 ## Aligned agent
 
 `ai-ops-engineer` — this specialist should treat the principles above as binding practice
