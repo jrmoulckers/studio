@@ -261,7 +261,12 @@ Copy the block below for each principle.
   executable underneath is won by the more articulate reading rather than the correct one. When
   the open question is intent rather than behavior, the artifact that settles it is a person or a
   session, so ask the author: one message is cheaper than encoding a guess permanently, and no
-  amount of evidence about a file reaches the reasoning that produced it. Before
+  amount of evidence about a file reaches the reasoning that produced it. Re-reading mutable state
+  is necessary and not sufficient — quote it with its revision (`at <sha>`) rather than in the
+  present tense, because a read is not a lock and the value can move while you are still asserting
+  it. Never write a test that pins a policy choice: assert schema and internal consistency, since a
+  test converts a contested inference into a guarded invariant and forces the next person to argue
+  with a red suite instead of a config value. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
   corrected, while a report is written once and travels unchallenged, so the repo is often right
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
@@ -293,7 +298,10 @@ Copy the block below for each principle.
   under test, which confirms only that the derivation ran; narrating a gap into a decision because
   the omissions form a pattern, when nobody has been found who made it; reading a correction as
   an objection to be answered rather than a premise to re-derive from; attributing a claim to
-  whoever relayed it and arguing with them instead of its author.
+  whoever relayed it and arguing with them instead of its author; asserting the current contents of
+  mutable state in the present tense on the strength of a read taken minutes earlier; a test that
+  encodes which option was chosen, and a second test that agrees with it because both were derived
+  from the same wrong value.
 
 ## Aligned agent
 
