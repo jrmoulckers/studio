@@ -464,7 +464,11 @@ Copy the block below for each principle.
   set depends on and pin each. **This applies inside a file as well as across files:** pinning a
   revision fixes a document's identity, not the sentences in it, so a quoted passage can be
   superseded while the path-level diff that would have caught it reports nothing changed. Quote
-  prose with the revision you read it at, and re-read the passage rather than the filename.
+  prose with the revision you read it at, and re-read the passage rather than the filename. **And
+  the reference you are least likely to re-read is the one you own** — your own repository, branch
+  or figure feels like the fixed side of a comparison while the other side is what moves, so it
+  goes unchecked for exactly as long as you are being careful about everything else. Re-resolve
+  your own pins on the same schedule as the ones you are auditing.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
