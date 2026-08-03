@@ -266,7 +266,14 @@ Copy the block below for each principle.
   present tense, because a read is not a lock and the value can move while you are still asserting
   it. Report a check as a snapshot, not a state: "clean as of `<sha>`, N sessions active" rather
   than "closed and clean", because durable-sounding language turns a momentary observation into a
-  standing guarantee the observer has no power to make. Never write a test that pins a policy choice: assert schema and internal consistency, since a
+  standing guarantee the observer has no power to make. Pin **both sides** of a comparison: a
+  fidelity result is only meaningful as "clean as of `<subject sha>` against `<reference sha>`",
+  because pinning the subject alone leaves the reference floating and the claim decays in silence —
+  strictly worse than the subject moving, since there a fetch shows you, whereas here the artifact
+  you verified is untouched and the verdict has still expired. Suspect this first when the reference
+  is itself under active development, and hardest when your own work is what moved it: a shared
+  baseline that has been stable for weeks can take several commits in the span of one exercise,
+  making every earlier result in that exercise stale by the exercise's own progress. Never write a test that pins a policy choice: assert schema and internal consistency, since a
   test converts a contested inference into a guarded invariant and forces the next person to argue
   with a red suite instead of a config value. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
@@ -303,7 +310,9 @@ Copy the block below for each principle.
   whoever relayed it and arguing with them instead of its author; asserting the current contents of
   mutable state in the present tense on the strength of a read taken minutes earlier; a test that
   encodes which option was chosen, and a second test that agrees with it because both were derived
-  from the same wrong value.
+  from the same wrong value; naming a subject's revision while leaving the reference it was compared
+  against unnamed; concluding from a tool's disagreement with reality that the tool is broken,
+  without checking whether the reference moved between the two runs.
 
 ## Aligned agent
 
