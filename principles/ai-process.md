@@ -413,6 +413,29 @@ Copy the block below for each principle.
   that would refute it — a correction derived from a stale read is still a stale read, and carries
   more weight because it arrives as a fix.
 
+### 20. Your tools are inputs, and a local checkout is a cache that looks like an authority
+
+- **Statement:** Apply the freshness discipline you apply to the thing you are verifying to the
+  thing you are verifying _with_. A working copy on disk is a snapshot of a moment you did not
+  choose; it is not the repository.
+- **Why:** The asymmetry is invisible from inside. Fetching the subject at a named revision while
+  reading the reference from a checkout of unknown age feels rigorous, because the half you are
+  thinking about is rigorous. Nothing about a local file announces its age — it is a git repo, it
+  answers instantly, and the source it reports is indistinguishable from the live one until the
+  moment it isn't. A live fetch is a few seconds slower and correct.
+- **In practice:** State the revision of every source a conclusion rests on, including the one you
+  read the code from. Prefer fetching at a ref to reading a checkout when the answer will be
+  reported to someone else. If a checkout must be used, print its HEAD alongside the finding so a
+  reader can judge it. Treat ambient tooling — a clone made for a different task, a cached
+  dependency, a vendored copy — as an input with a version, not as the environment.
+- **The blind spot to expect:** a staleness diagnosis you make about someone else will not
+  generalise to yourself if their stale artifact was created for the task and yours predates it.
+  The ones that predate the task are never reviewed, because they were never decided on.
+- **Anti-patterns:** Citing file and line from a working copy last pulled weeks ago; mixing a
+  pinned remote read and an unpinned local read in one argument; concluding the findings were fine
+  after discovering the source was stale, without noting that the surviving conclusions were the
+  ones whose files happened not to move.
+
 ## Aligned agent
 
 `ai-ops-engineer` — this specialist should treat the principles above as binding practice
