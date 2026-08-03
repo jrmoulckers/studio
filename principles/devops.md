@@ -272,7 +272,10 @@ green, fast, and trustworthy for every downstream consumer.
   every file reads as a finding. A conclusion drawn that way survives only while the real
   difference dominates the artefact — against a file stale by one line, the method reports one
   added and one removed, and nothing in the output distinguishes the tool's own footprint from the
-  defect.
+  defect. It also defeats outlier checks by construction: a systematic error yields a plausible
+  value on _every_ row rather than an anomaly on one, so scanning for the odd result out finds
+  nothing and returns confidence. Sanity-check a sweep against a known-good row computed a
+  different way, not against the shape of its own distribution.
 - **Anti-patterns:** `diff canon/x member/.github/x` for an asset the sync stamps; explaining away
   a one-line delta as "just the header" instead of folding the header into the expected value;
   an audit whose "clean" result depends on the transform being trivial today; treating the presence

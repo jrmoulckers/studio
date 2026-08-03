@@ -447,6 +447,10 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **Freshness attaches to the fetch, not to the fact.** Re-reading a pinned revision at send time
+  buys nothing, because a pin is already a recorded observation and will return the same bytes
+  forever; what needs re-reading is the moving ref. State which of the two a claim rests on, since
+  "I just checked" means something different for `?ref=main` than for a SHA.
 - **Weight an answer by its source even when sources agree — most especially then.** Agreement is
   the condition under which nobody checks either answer, so a recollection that matches the record
   is the one most likely to be adopted unverified. The hazard is not that a reconstruction from
@@ -551,6 +555,11 @@ Copy the block below for each principle.
 - **When a fix does not take, verify the fix was applied before concluding it does not work.** A
   remedy that appears to fail is more often an unapplied remedy than a wrong one, and the surprise
   is the signal to check the plumbing rather than the theory.
+- **Rigour is rarely the scarce input; noticing the question was executable is.** Careful parties
+  arguing in good faith can generate a long catalogue of reasoning errors over a value some tool
+  prints in ninety seconds, and no amount of additional care shortens that — only the observation
+  that the question had an execution path at all. Ask what the cheapest real run costs before
+  reasoning, and ask it again each time a disagreement survives a round.
 - **Anti-patterns:** Re-verifying the reference five times while the subject moves twice unattended;
   treating a two-sided protocol as self-updating on both sides because it was adopted deliberately;
   arguing a projection for hours in a repository whose engine has an offline mode.
