@@ -447,6 +447,12 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **Re-run the check at the moment of action, not at the moment of drafting.** Freshness has a
+  shelf life set by how fast the target moves, and the interval between composing something and
+  landing it is unbounded. A change verified against the head it was written from can be stale
+  against the head it merges into minutes later — the verification was correct and the artifact
+  still conflicts. Where a gate matters, put it on the send, the merge or the apply step, because
+  that is the moment whose truth is being claimed.
 - **When a report is disbelieved, hand over the check rather than repeating the claim.** A second
   assertion adds no evidence, and a third reads as pressure. Send the exact command that settles
   it, against an authority the other side can reach independently — the disagreement then resolves
