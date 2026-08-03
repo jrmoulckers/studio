@@ -447,6 +447,12 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **When a report is disbelieved, hand over the check rather than repeating the claim.** A second
+  assertion adds no evidence, and a third reads as pressure. Send the exact command that settles
+  it, against an authority the other side can reach independently — the disagreement then resolves
+  without either party's standing being the thing at issue. The obligation binds symmetrically:
+  quoting your own tooling back at someone who has disputed your tooling is the same move as
+  repeating the assertion, so run the transferable check on your own claims first.
 - **Anti-patterns:** Citing file and line from a working copy last pulled weeks ago; mixing a
   pinned remote read and an unpinned local read in one argument; concluding the findings were fine
   after discovering the source was stale, without noting that the surviving conclusions were the
