@@ -367,6 +367,32 @@ Copy the block below for each principle.
   out of the real tool with one derived from your own reimplementation of it, when the tool was
   runnable the whole time.
 
+### 18. Route a decision to whoever has standing to judge it, not whoever owns the file
+
+- **Statement:** Central configuration that governs a repository is a change to that repository in
+  every sense except which file it lives in. Notify the governed party and give them a channel to
+  object before it lands. Where a decision turns on intent, the party who formed the intent decides;
+  everyone else supplies evidence.
+- **Why:** File ownership and epistemic standing come apart. The reviewers of a registry can verify
+  that an entry is internally consistent and still have no way to know it is wrong, because the fact
+  that settles it lives in the governed repo or in one contributor's memory. The governed party
+  usually holds both, and is the only reader with an incentive to look.
+- **In practice:** Raise the objection in the place the decision is recorded, not through the party
+  who relayed it — a relay is what loses intent, and adding a hop repeats the failure. Verify the
+  state yourself before filing, since the thing may already have moved. Split the objection: concede
+  the parts that are defensible, so it reads as a correction rather than a wholesale revert. Prefer
+  evidence checkable inside the artifact — an entry that contradicts itself is refutable by any
+  reader — over testimony about what someone meant, which only its author can give.
+- **The watching gap:** Everyone monitors the artifacts a system produces; nobody monitors the
+  config that decides what it will produce, because that config is not one of them. Put the
+  governing file on the same diff watch as its outputs. A decision that changes no output today
+  still changes every output after it.
+- **Anti-patterns:** Landing a policy change about a repo without telling that repo; a config change
+  reviewed only for internal consistency; pinning a contested choice in the test suite, which
+  converts a line of JSON into a red build and makes it far harder to unwind than the original
+  proposal would have been; routing an objection through an intermediary because they are the one
+  you were already talking to.
+
 ## Aligned agent
 
 `ai-ops-engineer` — this specialist should treat the principles above as binding practice
