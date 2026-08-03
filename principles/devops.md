@@ -87,13 +87,21 @@ green, fast, and trustworthy for every downstream consumer.
 ### 3. Least-privilege, explicitly scoped permissions
 
 - **Statement:** Every workflow declares a top-level `permissions:` block set to the minimum
-  it needs (`contents: read` by default), elevating per-job only where required.
+  it needs (`contents: read` by default), elevating per-job only where required. The same rule
+  governs long-lived credentials: derive a token's scopes from the paths a tool provably writes,
+  not from the category of tool it is.
 - **Why:** A workflow token with write scope is a supply-chain blast radius. Default-deny is
-  the only safe posture for a package everyone installs.
+  the only safe posture for a package everyone installs. A stored PAT is worse than a job
+  token because it does not expire with the run, so an unnecessary scope persists indefinitely
+  and is almost never revoked once granted.
 - **In practice:** `ci.yml` sets `permissions: contents: read`. Release jobs that need to push
-  tags or write releases request `contents: write` on that job alone, not repo-wide.
+  tags or write releases request `contents: write` on that job alone, not repo-wide. Before
+  requesting a credential scope, enumerate the tool's actual write targets — a sync engine that
+  resolves workflows but never writes them needs no `workflow` scope, and a fine-grained token
+  naming specific repositories beats a classic one carrying blanket `repo`.
 - **Anti-patterns:** Relying on the default token scope; `permissions: write-all`; secrets
-  exposed to PR workflows from forks.
+  exposed to PR workflows from forks; requesting a scope because the tool touches a concept
+  rather than because it writes those files.
 
 ### 4. Cache the deterministic, rebuild the rest
 
