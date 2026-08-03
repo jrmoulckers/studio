@@ -595,6 +595,20 @@ Copy the block below for each principle.
 - **When a fix does not take, verify the fix was applied before concluding it does not work.** A
   remedy that appears to fail is more often an unapplied remedy than a wrong one, and the surprise
   is the signal to check the plumbing rather than the theory.
+- **Before concluding a check found nothing, confirm the check could have found something.** A
+  probe aimed at the wrong target, a filter matching nothing, a suite whose fixtures never loaded —
+  each returns the output you would expect if there were no problem, and absence of a warning is
+  the most reassuring signal a tool emits. Give every negative result a positive control: run the
+  same probe against a case known to fail and confirm it does. This is the instrument-level form of
+  refusing a reconciliation as reassurance — both demand that a clean result be shown to have a
+  reachable failure before it is believed.
+- **Keep a redundant earlier measurement, for its power to contradict rather than its reading.** The
+  second probe's value is not that it confirms; it is that a wrong result has something to collide
+  with, and a plausible wrong answer is caught by disagreement or not at all. Duplicated checks that
+  look stale are worth their upkeep for exactly the runs where vigilance was spent elsewhere.
+- **A wrong invocation that writes is worse than one that reads**, because it manufactures the state
+  that makes the next run agree with it. Where a tool both inspects and applies, validate the target
+  before the first write, not by warning on a suspicious result afterwards.
 - **Rigour is rarely the scarce input; noticing the question was executable is.** Careful parties
   arguing in good faith can generate a long catalogue of reasoning errors over a value some tool
   prints in ninety seconds, and no amount of additional care shortens that — only the observation
