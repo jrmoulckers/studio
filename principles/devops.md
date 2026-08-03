@@ -233,6 +233,22 @@ green, fast, and trustworthy for every downstream consumer.
   only ever been exercised on Linux CI; assuming `.gitattributes` is present in every consumer
   repo; reporting "N files locally modified" when the real difference is `\r`.
 
+### 13. Audit a generated file against what the generator would emit, not against its source
+
+- **Statement:** When a pipeline transforms an asset on the way out — injecting a provenance
+  header, normalizing line endings, splicing frontmatter — verify a downstream copy by running
+  it through the same transform, never by diffing it against the upstream source.
+- **Why:** Every correctly generated file differs from its source by exactly the transform. Diff
+  against the source and the tool's own output reads as local modification, so the audit reports
+  drift on the files that are most correct. The failure is quiet and uniform: it flags everything
+  equally, which looks like a systemic problem rather than a broken baseline.
+- **In practice:** The injector is exported as a pure function, so an audit imports it and
+  compares against `inject(path, canon)`. A file matching that is adopted into the lockfile; only
+  a difference the generator could not have produced is drift.
+- **Anti-patterns:** `diff canon/x member/.github/x` for an asset the sync stamps; explaining away
+  a one-line delta as "just the header" instead of folding the header into the expected value;
+  an audit whose "clean" result depends on the transform being trivial today.
+
 ## Aligned agent
 
 `devops-engineer` — this specialist should treat the principles above as binding practice
