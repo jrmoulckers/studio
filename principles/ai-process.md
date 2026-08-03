@@ -300,7 +300,11 @@ Copy the block below for each principle.
   looking like drift, which is the most dangerous size of false positive, because a total failure
   gets diagnosed and a single one gets believed. Never write a test that pins a policy choice: assert schema and internal consistency, since a
   test converts a contested inference into a guarded invariant and forces the next person to argue
-  with a red suite instead of a config value. Before
+  with a red suite instead of a config value. The distinction is not how many tests to write but
+  what they pin: behaviour the system must always exhibit is precisely what a suite is for, while a
+  value that could legitimately have been decided the other way is not. The discriminator is whether
+  changing it would be a bug or a decision — and where the worry is that someone might choose badly,
+  assert that they recorded a reason rather than asserting which choice they made. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
   corrected, while a report is written once and travels unchallenged, so the repo is often right
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
