@@ -245,6 +245,12 @@ green, fast, and trustworthy for every downstream consumer.
   compares equal regardless of checkout platform. Repos also declare `* text=auto eol=lf` in
   `.gitattributes` so the on-disk form is stable in the first place — belt and braces, because
   the normalization is what actually protects the tool.
+- **Idempotence must cover the tool's own metadata:** a run that changes no content must write no
+  file at all, including its lockfile, manifest or receipt. Any timestamp stamped on every write
+  turns a no-op into a diff, and scheduled automation that opens an empty PR every cycle gets
+  switched off — after which nothing syncs at all, which is a strictly worse failure than the noise.
+  The guarantee usually rests on a single `changed` flag being honest, so test the second run for a
+  byte-identical artifact rather than trusting the flag.
 - **Anti-patterns:** `sha256(readFileSync(path))` as a change detector; a drift check that has
   only ever been exercised on Linux CI; assuming `.gitattributes` is present in every consumer
   repo; reporting "N files locally modified" when the real difference is `\r`.
