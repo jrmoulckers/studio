@@ -263,9 +263,15 @@ Copy the block below for each principle.
   corrected, while a report is written once and travels unchallenged, so the repo is often right
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
   that enumerates what is present establishes fidelity, never completeness — and remember that
-  ruling out one cause does not establish another. When a set looks curated, weigh the null
+  ruling out one cause does not establish another — and a ruling-out argument is only as good as
+  the list of causes considered, so enumerate the third state before concluding the second. When a
+  set looks curated, weigh the null
   hypothesis first: an incomplete set is the ordinary outcome of an interrupted process, so
-  promoting it to a decision needs evidence of a decider, not a story that fits. Receiving is half
+  promoting it to a decision needs evidence of a decider, not a story that fits. A hand-authored
+  first pass is deliberate in mechanism and unreviewed in substance at the same time, so "someone
+  typed this on purpose" is not evidence that anyone weighed it; look inside the artifact for
+  self-contradiction, which distinguishes oversight from judgment far better than its provenance
+  does. Receiving is half
   the discipline: a correction that arrives while you are mid-decision reads as commentary on the
   decision rather than as a change of premise, so when a message contradicts a fact you are
   standing on, stop and re-derive rather than reconcile. Build the cheap artifact _before_ taking
