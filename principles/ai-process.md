@@ -247,12 +247,17 @@ Copy the block below for each principle.
   throwaway fixtures before they are escalated, severity-rated, or documented. What a field or
   function is named is a claim about intent; only its call graph is a claim about behavior, so
   trace consumers before asserting a consequence. Relaying another session's claim makes it yours:
-  verify the part you relay.
+  verify the part you relay. A reproduction is only as good as its inputs, so pin and state what it
+  ran against — the commit, the config, the fixture — because a sound method on stale inputs yields
+  a confident wrong answer.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
   it; assigning a severity derived purely from reading; propagating a downstream session's claim
-  without re-checking it; documenting inferred behavior that nobody has executed.
+  without re-checking it; documenting inferred behavior that nobody has executed; reporting a
+  rehearsal result without saying which revision and configuration it was rehearsed against;
+  reviewing your own output by re-reading it, when the defect is invisible precisely because you
+  wrote it.
 
 ## Aligned agent
 
