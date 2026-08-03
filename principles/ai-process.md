@@ -235,11 +235,15 @@ Copy the block below for each principle.
   actually has. Immutable observations — a CI run, a hash, a diff — may be quoted as observed, but
   mutable state (merge status, branch head, registry contents) is re-read at report time. A
   correction names the report it replaces. A claim about runtime behavior is settled by executing
-  it, not by reading the code.
+  it, not by reading the code — and a claim about what a value _causes_ is a behavioral claim, not
+  a factual one, however freshly the value itself was checked.
 - **Why:** A stale fact in a report travels further than a stale fact in a file, because the
   recipient cannot distinguish "was true when observed" from "is true now" and will relay it
   onward as fresh. Two analyses that read the same code the same way produce correlated errors, so
-  their agreement is not corroboration — it is one conclusion counted twice.
+  their agreement is not corroboration — it is one conclusion counted twice. A verified fact with
+  an unverified consequence bolted onto it passes every freshness check while carrying the error,
+  and the relay point amplifies whatever it carries, so the verification burden is heaviest there
+  rather than at the origin.
 - **In practice:** Say "PR #N open, CI green, not merged" rather than anything that reads as
   landed, and re-read merge state from the API before asserting it. A superseding report opens by
   naming what it kills, because the original stays live in the recipient's context beside it.
