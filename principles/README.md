@@ -17,6 +17,14 @@ principles/
 Each realm file is a tree: top-level principles with optional sub-principles. Keep each
 principle short, testable, and specific to its realm.
 
+**Write principles that instruct, not principles that diagnose.** A principle naming a failure
+mode explains an incident; a principle naming what to do instead survives contact with the next
+one. Where a finding is stated as a diagnosis, convert it before recording it — "a checksum
+invariant under the error class it is trusted to catch is worse than none" becomes "before quoting
+a reconciliation as reassurance, name a defect it would have caught." Both are true and only the
+second tells a reader what to do. The same rule applies to guards: a check that says what to do
+when it fires outranks one that only says what went wrong.
+
 ## The realm tree
 
 | #   | Realm            | File                                       | Aligned agent              |
