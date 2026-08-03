@@ -261,7 +261,9 @@ Copy the block below for each principle.
   executable underneath is won by the more articulate reading rather than the correct one. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
   corrected, while a report is written once and travels unchallenged, so the repo is often right
-  where the summary of it is stale.
+  where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
+  that enumerates what is present establishes fidelity, never completeness — and remember that
+  ruling out one cause does not establish another.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
