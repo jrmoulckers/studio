@@ -127,6 +127,19 @@ is private, unpublished, and pinned at `0.0.0`.
 - **Anti-patterns:** Silent releases with no changelog; accumulating months of unreleased
   changesets; hotfixes that skip the changeset/PR trail.
 
+#### 6.1 The deployed artifact is self-identifying
+
+- **Statement:** Extend the trace one step past the changelog: the released version must be
+  discoverable at runtime, so a running deploy can state which version it is without anyone
+  correlating deploy logs to commit SHAs.
+- **Why:** Traceability that stops at the changelog answers "what was in v1.4.0?" but not "is
+  v1.4.0 what's actually live?" — which is the question every incident and support report
+  starts with.
+- **In practice:** The build stamps its version and commit SHA into the artifact and the runtime
+  surfaces them (for a service, via the health endpoint in [DevOps](devops.md) principle 9; for
+  a client, in build metadata reachable from a bug report). The mechanism is per-product; the
+  guarantee is not.
+
 ### 7. The primary checkout tracks `main` when idle
 
 - **Statement:** Whenever the main repository's `main` worktree is not busy, fast-forward it to

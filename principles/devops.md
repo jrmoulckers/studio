@@ -21,8 +21,8 @@ green, fast, and trustworthy for every downstream consumer.
 - **Why:** Product repos consume this kernel directly — an unverified merge breaks every
   downstream app at once. The pipeline is the contract that says a change is safe.
 - **In practice:** `.github/workflows/ci.yml` runs on `push` to all branches and on
-  `pull_request`, executing install → build → typecheck → lint → tokens freshness in order.
-  Branch protection requires the `build` job on `main`.
+  `pull_request`, executing install → build → typecheck → lint → format check → tokens
+  freshness in order. Branch protection requires the `build` job on `main`.
 - **Anti-patterns:** Merging on a red or skipped run; "fixing" CI by deleting a check;
   verification steps that only exist on a developer's machine.
 
@@ -38,6 +38,23 @@ green, fast, and trustworthy for every downstream consumer.
   with `--frozen-lockfile`; never let CI float to "latest".
 - **Why:** A build that only passes on yesterday's transitive versions is not a build you can
   trust or roll back to.
+
+#### 1.3 A required check must run on every PR — never trigger-level path-skip it
+
+- **Statement:** A workflow that emits a required status check must trigger on every pull
+  request. Never narrow it with `on.pull_request.paths` / `paths-ignore`; scope the work with an
+  in-workflow change detector and let the real job skip instead.
+- **Why:** If a required context is gated by a trigger-level path filter, a PR that doesn't
+  match it never reports that context at all — so branch protection holds the PR in a
+  permanently pending `BLOCKED` state that only an admin override can clear. The check appears
+  to be protecting you while actually just blocking the queue.
+- **In practice:** A cheap always-on `changes` job computes a `relevant` output; real jobs
+  `needs: changes` and guard with an `if:` condition, so an irrelevant PR reports the context as
+  a _skip_, which branch protection counts as a pass. Each workflow includes its own file in its
+  filter so changes to the workflow always validate themselves.
+- **Anti-patterns:** `paths:` on `on.pull_request` for a workflow that emits a required check;
+  clearing a stuck PR with `--admin` instead of fixing the trigger; renaming a workflow or job
+  without updating the required-context name it publishes.
 
 ### 2. Reusable workflows over copy-paste
 
@@ -93,9 +110,12 @@ green, fast, and trustworthy for every downstream consumer.
   package every product installs.
 - **In practice:** Dependabot (or equivalent) opens grouped PRs for npm deps and GitHub
   Actions; each must pass the full CI gate before merge; `--frozen-lockfile` guarantees the
-  lockfile is authoritative.
+  lockfile is authoritative. Every third-party action is pinned to a **full 40-character commit
+  SHA** with an adjacent version comment (`uses: actions/checkout@<sha> # v6.0.3`) — the SHA is
+  what's enforced, the comment is what makes it reviewable and updatable.
 - **Anti-patterns:** Hand-editing versions without updating the lockfile; auto-merging
-  dependency PRs that skipped CI; unpinned `@latest` third-party actions.
+  dependency PRs that skipped CI; unpinned `@latest` third-party actions; a floating tag such
+  as `@v4`, which is mutable remote code executing with repository write scope.
 
 ### 7. Security scanning is a pipeline stage, not an afterthought
 
@@ -119,6 +139,27 @@ green, fast, and trustworthy for every downstream consumer.
   before any `npm publish` or tag push.
 - **Anti-patterns:** A push to `main` that auto-publishes to a registry; force-pushing tags;
   release notes assembled by hand outside the pipeline.
+
+### 9. A deployed service reports its own health and identity
+
+- **Statement:** Every deployed service exposes an unauthenticated health endpoint that runs a
+  cheap, time-bounded dependency check, is never cached, leaks no internals, and reports the
+  running version and build SHA.
+- **Why:** An outage should be found by tooling, not by users. A standard probe is the contract
+  every uptime monitor and load balancer binds to, and a self-identifying artifact answers
+  "which version is actually live?" without correlating deploy logs to commits.
+- **In practice:** The endpoint runs a short-timeout dependency check and distinguishes
+  _degraded_ (a configured dependency is unreachable → `503`) from _not configured_ (the
+  dependency is intentionally absent → still `200`). It returns coarse enum status plus version
+  and SHA — never a driver error, stack trace, or connection string — and sets `no-store` so
+  every hit is live. It stays unauthenticated so external monitors can reach it.
+- **Anti-patterns:** No health endpoint; a "health" route served from cache; a probe that dumps
+  exception details; auth-gating the liveness check; treating "the process is up" as healthy
+  while its database is unreachable; an app that can only identify itself by raw commit SHA.
+
+> **Scope note:** Client-only products (`libro`, `cartridge`) host no service and cannot serve a
+> probe. The portable half still applies — the built artifact records its version and build SHA
+> so a running client can identify itself in a bug report.
 
 ## Aligned agent
 

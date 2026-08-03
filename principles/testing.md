@@ -57,6 +57,13 @@ testing exists to catch breaks at the source, not in downstream apps.
 - **In practice:** CI runs `pnpm typecheck` and `pnpm lint` as required gates alongside `pnpm build`; a red gate blocks merge. Behavior still needs its own assertions.
 - **Anti-patterns:** Shipping untested logic because "it compiles"; `// @ts-expect-error` or disabled lint rules to dodge a gate; skipping the gate locally and relying on CI to notice.
 
+#### 4.1 Encode statically-detectable invariants as lint rules, not review guidance
+
+- **Statement:** When a convention matters enough to be a principle and can be detected statically, ship it as a custom lint rule scoped to the paths it governs and run it at `--max-warnings 0` — don't rely on reviewers to remember it.
+- **Why:** Review-only rules are enforced inconsistently and decay as the team and the codebase grow. A rule makes the invariant self-documenting, fails at the moment of authorship with an actionable message, and blocks regressions deterministically. Several principles here already _assume_ such a check exists; this makes writing one the default rather than the exception.
+- **In practice:** Repo-local ESLint rules carry a message explaining the fix, are scoped by `files:` globs to the paths that must comply, and are set to `error` there. A green lint run then constitutes proof the invariant holds.
+- **Anti-patterns:** A "please always…" note in a doc with no rule behind it; a rule authored then left at `warn` forever; blanket `eslint-disable` comments to dodge an invariant instead of changing the code or the rule.
+
 ### 5. Build must be green and reproducible
 
 - **Statement:** `pnpm build` (and `pnpm -r build`) must succeed from a clean install, and generated output must not be committed.

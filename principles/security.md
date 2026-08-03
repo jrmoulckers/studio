@@ -22,9 +22,14 @@ trustworthy, and keep review disciplined enough that a bad change is caught befo
   leaked token is a leak everywhere, and rotation is expensive and error-prone.
 - **In practice:** `.env*` stays git-ignored; secrets are read from `process.env`; a secret
   scanner (e.g. gitleaks) runs in CI and pre-commit; publish/registry tokens live only in CI
-  secrets, never in `.npmrc` committed to the tree.
+  secrets, never in `.npmrc` committed to the tree. Detection is layered: platform **push
+  protection** blocks a secret before it ever lands, while an independent blocking CI gate
+  catches what push protection misses. Because push protection is an org/repo setting rather
+  than code, enabling it is tracked as an explicit human action — the CI gate must not depend
+  on it being on.
 - **Anti-patterns:** Hardcoded API keys "just for testing"; `NPM_TOKEN` in a committed
-  `.npmrc`; base64-encoding a secret to sneak it past review; disabling the secret scanner.
+  `.npmrc`; base64-encoding a secret to sneak it past review; disabling the secret scanner;
+  relying solely on a platform toggle that no one has verified is enabled.
 
 #### 1.1 Rotate on exposure, don't just delete
 
@@ -78,6 +83,20 @@ trustworthy, and keep review disciplined enough that a bad change is caught befo
   exporting internals "in case someone needs them"; long-lived tokens where short-lived
   OIDC/ephemeral credentials would do.
 
+#### 4.1 Machine-triggered endpoints authenticate and default to off
+
+- **Statement:** Endpoints that trigger scheduled or background work must require a shared
+  secret, and must be disabled — returning `503`, not running the job — whenever that secret is
+  unset.
+- **Why:** Cron and webhook trigger routes are internet-reachable but have no human in front of
+  them. Unauthenticated, they let anyone fire expensive or destructive work on demand. Failing
+  _open_ when the secret is missing is the worst case: the job runs for everyone.
+- **In practice:** The scheduler sends the secret as an `Authorization` header; the handler
+  refuses every request when the secret is absent from config, so a misconfigured deploy is
+  inert rather than public.
+- **Anti-patterns:** An open `/api/cron/*` route; a trigger that no-ops _open_ and runs the job
+  when its secret is missing; relying on the URL being unguessable.
+
 ### 5. Validate and sanitize every untrusted input
 
 - **Statement:** Validate, type-check, and bound every value that crosses a trust boundary —
@@ -113,6 +132,41 @@ trustworthy, and keep review disciplined enough that a bad change is caught befo
   and logs are treated as potentially public.
 - **Anti-patterns:** Logging the full request/config including a token; shipping source maps
   or comments that expose secret endpoints; defaulting to "allow" when a check throws.
+
+#### 7.1 Zero-config in development, fail-closed in production
+
+- **Statement:** Optional configuration may be absent locally so a fresh clone runs with no
+  secrets, but a production build must run a preflight that hard-fails on missing or malformed
+  security-critical config — and on any development bypass flag still being enabled.
+- **Why:** The leniency that makes a repo contributable is exactly what silently ships a
+  production deploy with no database, the wrong public URL, or a shared dev auth bypass. The
+  failure is invisible precisely because the app still boots.
+- **In practice:** The preflight runs first in the production build, before compilation and
+  migrations, and only in the production environment; local, CI, and preview skip it. It fails
+  with an actionable message naming the missing variable. Guards are layered — preflight at
+  deploy, a boot-time assertion, and a per-request check — so no single missed check is fatal.
+  The permissive half of this pair lives in [Local-First](local-first.md) principle 4.
+- **Anti-patterns:** A production build going green with no database configured; a dev-bypass
+  flag that survives into production; a single guard with no defense in depth; preflight logic
+  that also fires locally and blocks zero-config development.
+
+### 8. Publish a disclosure policy and answer reports on a stated clock
+
+- **Statement:** Every deployable repo ships a `SECURITY.md` naming a **private** reporting
+  channel, the supported-version window, an acknowledgement SLA, and a coordinated-disclosure
+  timeline with good-faith safe-harbor terms.
+- **Why:** Without a stated private channel, a researcher's only options are a public issue —
+  which discloses a live vulnerability to everyone at once — or silence. A disclosure policy is
+  the one security control that is itself a public promise, and an unanswered report reliably
+  becomes a public one.
+- **In practice:** `SECURITY.md` declares what is supported (for a continuously deployed
+  product, "current `main`" rather than a version matrix), forbids public issues for security
+  reports, routes them to a private GitHub Security Advisory or security address, and commits
+  to a concrete acknowledgement window and a coordinated public-disclosure deadline. Safe
+  harbor states plainly that good-faith research will not be pursued.
+- **Anti-patterns:** No `SECURITY.md`; "email us" with no response commitment; asking for
+  private reports while offering only a public tracker; disclosure terms that bind no supported
+  version set; an SLA nobody is accountable for.
 
 ## Aligned agent
 

@@ -86,6 +86,15 @@ Copy the block below for each principle.
 - **In practice:** Link messages with `aria-describedby`, mark invalid fields with `aria-invalid`, move focus to the first error, and say what to do ("Enter a date after today"). Never rely on color alone to signal the error.
 - **Anti-patterns:** Toast-only validation that disappears; red outline with no text; blocking submit with no explanation; error summaries that aren't focusable.
 
+### 7. Cognitive accessibility is a first-class, tokenized mode
+
+- **Statement:** Ship cognitive support as an opt-in mode driven by a single root attribute (`data-a11y-cognitive="true"`) that remaps tokens — increasing type size and spacing, enlarging targets, strengthening focus, flattening visual noise, and disabling motion — never as per-component special-casing.
+- **Why:** Users with ADHD, autism, TBI, dyslexia, age-related decline, or situational overload are excluded by dense, animated, jargon-heavy UI. Driving the mode from the token layer means it ships once in the kernel and every product and surface inherits it; special-casing it per component guarantees it rots the moment someone adds a screen.
+- **In practice:** The kernel owns the mechanism: `@jrm/tokens` defines the `--cognitive-*` scale and the `[data-a11y-cognitive="true"]` block that remaps semantic vars. Products toggle the attribute on the root element and persist the preference; they never re-derive the values. The mode stacks orthogonally on theme and is a **superset** of `prefers-reduced-motion` — enabling it zeroes motion regardless of the OS setting. Content follows plain-language rules and caps choices per group (`--cognitive-max-choices-per-group`).
+- **Anti-patterns:** Cognitive support hardcoded per component; **a mode that only changes font size**; motion that bypasses the mode; jargon with no plain-language variant; a product defining its own cognitive values instead of consuming the kernel's.
+
+> **Known gap (kernel):** `@jrm/tokens` currently defines all 30 `--cognitive-*` values, but the `[data-a11y-cognitive="true"]` block only remaps **type and motion**. The spacing, focus, elevation, border-width, and 48px touch-target values are emitted but never applied, because the default output has no semantic `--focus-*` / `--elevation-*` / border / touch-target roles to override. Closing this needs a semantic role layer in [Design](design.md) — until then the mode meets only part of this principle.
+
 ## Aligned agent
 
 `accessibility-reviewer` — this specialist should treat the principles above as binding practice
