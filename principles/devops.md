@@ -271,6 +271,28 @@ green, fast, and trustworthy for every downstream consumer.
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
 
+### 15. A config format must show which fields the tool executes and which it merely records
+
+- **Statement:** Fields that determine behavior and fields that only describe it must be
+  distinguishable by looking at the file. Where they share a shape and a namespace, every reader —
+  human or agent — has to trace the code to learn which half of the file is load-bearing, and none
+  of them will.
+- **Why:** A recorded field is worse than an absent one. An executed field that is wrong turns CI
+  red, someone fixes it, and the value converges on truth; a recorded field can be quietly wrong
+  forever while looking equally authoritative, and its only readers are the people with no
+  independent source to check it against. The unvalidated field therefore needs _more_ care than
+  the load-bearing one, which is the opposite of how "this isn't validated" reads at the point of
+  edit.
+- **In practice:** Separate the two classes visibly — key order, a nested object, or a comment at
+  the point of editing rather than in a design doc nobody opens first. Prefer deriving a descriptive
+  field from the artifact it describes over asserting it: if the tool already clones the subject, it
+  can read the real answer. Any field with no consumer at all is a comment with the syntax of data —
+  give it a reader or delete it.
+- **Anti-patterns:** Guarding a hand-typed unvalidated field with a hand-typed expected-value table,
+  which catches later drift but not a shared initial error, and reproduces the exact mechanism that
+  produced the original wrong value — now agreed upon in two places; a validation snapshot dated in
+  a comment and described as enforcement.
+
 ## Aligned agent
 
 `devops-engineer` — this specialist should treat the principles above as binding practice
