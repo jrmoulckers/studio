@@ -47,6 +47,21 @@ that has no server at all. Several products are exactly that: `score-king` is an
   local-first product that silently drops writes is worse than one that never claimed
   durability, because the user has already stopped keeping their own copy.
 
+#### 1.2 Portable data and device-local state are separated at the type level
+
+- **Statement:** Draw an explicit line between data the user owns and must travel with them, and
+  state that is meaningful only on this device — then make the boundary structural, so
+  device-local state cannot end up in an export or a sync payload.
+- **Why:** Left undivided, UI scratch state, scroll positions, cached derivations, and device
+  identifiers leak into exports and sync — bloating payloads, creating false conflicts between
+  devices, and quietly exporting more about the user than they asked for. Enforced only by
+  convention, the boundary erodes with the first hurried feature.
+- **In practice:** The two live in separate types and separate stores, so serializing the
+  portable set cannot accidentally include the local set. The export shape is the type, which
+  means adding a field to the wrong side is a compile error rather than a review comment.
+- **Anti-patterns:** One store holding both, filtered by a hand-maintained key list on export;
+  device identifiers in a synced record; ephemeral UI state provoking a sync conflict.
+
 ### 2. Sync is optional and layers onto owned data behind a seam
 
 - **Statement:** Build the product fully functional against local data first, then add sync

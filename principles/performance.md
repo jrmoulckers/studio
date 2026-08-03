@@ -34,10 +34,17 @@ Copy the block below for each principle.
 - **In practice:** Budgets cover shared-package size, build/CI time, and token runtime cost. Changing a threshold is a reviewed edit to `performance.budget.json` with rationale, coordinated with `@devops-engineer` for CI enforcement.
 - **Anti-patterns:** Thresholds living only in someone's head or a CI script. Silently raising a budget to make a red check green.
 
-#### 1.1 Budgets have owners and review triggers
+#### 2.1 Budgets have owners and review triggers
 
 - **Statement:** Every budget names the metric, platform, method, and threshold, and is revisited when the consuming products or build pipeline change materially.
 - **Why:** A budget with no method or owner can't be reproduced or defended, and drifts out of date.
+
+#### 2.2 Budget the static artifact and the real-world experience separately
+
+- **Statement:** Enforce two complementary budgets: a deterministic per-route bundle-size limit that blocks merges, and a Core Web Vitals budget measured against a running build.
+- **Why:** They fail differently and catch different regressions. Bundle size is deterministic and attributable, so it can block a PR — but a small bundle can still deliver terrible LCP or CLS. Lab CWV numbers are noisy on shared CI runners, so gating merges on them trains everyone to ignore the check.
+- **In practice:** Per-route byte budgets are versioned and blocking. CWV thresholds start advisory while a baseline is established, and are tightened to blocking once the measurement is stable enough to trust. Which of the two is authoritative is stated explicitly, so a warning is never mistaken for a gate.
+- **Anti-patterns:** Only measuring total bundle size while per-route weight grows; treating a flaky lab CWV score as a hard gate; leaving thresholds advisory forever because nobody revisited them; raising a byte budget to clear a red check without recording why.
 
 ### 3. Shared packages ship the smallest surface a consumer needs
 

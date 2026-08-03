@@ -53,6 +53,19 @@ Copy the block below for each principle.
 - **In practice:** Animate via `var(--motion-*-duration)` / easing tokens, not hard-coded `300ms`. Avoid essential meaning conveyed only through motion; keep auto-playing/looping animation out or user-pausable. Verify with the OS "reduce motion" setting on.
 - **Anti-patterns:** Inline `transition: 300ms` or JS-driven animation that ignores the media query; auto-advancing carousels with no pause; large parallax or motion-only affordances.
 
+#### 3.1 The preference gates imperative animation too, not just CSS
+
+- **Statement:** Read the reduced-motion preference in code and skip the animation entirely for JS/Web-Animations-driven and canvas motion — don't assume the CSS media query covers it.
+- **Why:** The token-level reduced-motion block only collapses CSS durations. Animation driven imperatively bypasses it completely, so the most elaborate motion in a product — the part most likely to cause harm — is usually the part that ignores the preference.
+- **In practice:** Query the preference before starting imperative motion and jump straight to the end state; subscribe to changes so a mid-session toggle takes effect.
+
+#### 3.2 Accessibility controls live in the product, not only in the OS
+
+- **Statement:** Offer in-app controls for the accessibility preferences that matter (motion, contrast, cognitive mode), defaulting to the OS setting but allowing an explicit per-product override that persists.
+- **Why:** OS-level settings are all-or-nothing across every app, and many users cannot or will not change them globally — on a shared, borrowed, or managed device they may not be able to at all. Honoring only the system preference makes accessibility contingent on control the user may not have.
+- **In practice:** Preferences initialize from the media query, can be overridden in-product, and persist. An explicit user choice always wins over the detected default.
+- **Anti-patterns:** "We respect `prefers-reduced-motion`" as the entire accessibility story; a control that resets on reload; an override the media query silently re-clobbers on the next render.
+
 ### 4. Everything works from the keyboard and switch
 
 - **Statement:** Every interactive control must be reachable, operable, and clearly focus-visible using keyboard or switch alone, in a logical order.

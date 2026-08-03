@@ -36,6 +36,13 @@ testing exists to catch breaks at the source, not in downstream apps.
 - **Statement:** Reserve end-to-end tests for high-value flows (theme/mode switch renders correct tokens, app boots with the preset applied).
 - **Why:** E2E is the slowest and flakiest layer; spend it where a failure means a broken user experience.
 
+#### 1.4 Keep domain logic framework-free so it can be tested directly
+
+- **Statement:** Extract rules, scoring, calculations, and state transitions into plain modules with no framework, DOM, or store imports, and unit-test them directly rather than through a rendered component.
+- **Why:** Logic reachable only through a component can only be tested through a renderer, which is slower, flakier, and tests the framework as much as the rule. It also makes the logic unusable anywhere else — a background worker, a CLI, or a second product — because using it drags the whole UI stack along.
+- **In practice:** The domain module takes values and returns values; the component reads it and renders. Edge cases are covered against the module directly, so component tests can stay focused on rendering and interaction.
+- **Anti-patterns:** A scoring rule living inside a component body or a store subscription; testing arithmetic by mounting a view and reading text out of the DOM; domain modules importing framework primitives for convenience.
+
 ### 2. Test the contract, not the implementation
 
 - **Statement:** Assert public behavior and stable outputs; do not pin internal structure that is free to change.

@@ -56,6 +56,22 @@ green, fast, and trustworthy for every downstream consumer.
   clearing a stuck PR with `--admin` instead of fixing the trigger; renaming a workflow or job
   without updating the required-context name it publishes.
 
+#### 1.4 CI verifies with no real secrets
+
+- **Statement:** The full verification pipeline — build, typecheck, lint, tests, migrations —
+  must pass with no production credentials available, using ephemeral throwaway services and
+  placeholder config instead.
+- **Why:** A pipeline that needs real secrets cannot run safely on a fork or an untrusted
+  contribution, and every secret exposed to CI is a secret exposed to anything CI executes.
+  Requiring them also means the checks quietly stop running exactly when they matter — on
+  outside PRs.
+- **In practice:** Database-backed jobs spin up a disposable service container; optional
+  integrations resolve to no-ops when unconfigured (see [Local-First](local-first.md) principle
+  4); any test needing a real credential is the rare, explicitly-scoped exception rather than
+  the default.
+- **Anti-patterns:** Tests skipped in CI because a secret is missing; a production connection
+  string in repository secrets used by ordinary test jobs; a pipeline that cannot run on a fork.
+
 ### 2. Reusable workflows over copy-paste
 
 - **Statement:** Factor shared CI behavior (setup, build, verify) into reusable workflows

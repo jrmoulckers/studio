@@ -120,6 +120,15 @@ fragmenting. Per-product identity is a palette swap, never a fork.
 - **Anti-patterns:** A hand-built alternate layout for accessibility; cognitive values
   hardcoded in an app; shipping motion/contrast without the cognitive path considered.
 
+> **Known gap:** the statement above is currently aspirational for spacing, focus, and
+> elevation. `semantic/cognitive.json` defines those values and they are emitted as
+> `--cognitive-*` custom properties, but the generated `[data-a11y-cognitive="true"]` block
+> only remaps **type and motion** — because the default output exposes no semantic
+> `--focus-*` / `--elevation-*` / border / touch-target roles to remap onto. Until that role
+> layer exists, enabling the mode changes text size and motion only, which is precisely the
+> anti-pattern [Accessibility](accessibility.md) principle 7 warns about. Closing it is a
+> Design-realm change and will alter `packages/tokens/dist/`.
+
 ### 9. Optimize for ease of use first
 
 - **Statement:** When usability and novelty conflict, choose the option that lets a user
@@ -143,6 +152,31 @@ fragmenting. Per-product identity is a palette swap, never a fork.
   and motion give immediate, consistent feedback in all modes.
 - **Anti-patterns:** Actions with no feedback; focus styles removed for looks; error state
   shown by color alone or not at all.
+
+#### 9.2 One primary action per view, and one meaning per accent
+
+- **Statement:** Give each screen a single visually dominant action, and let the accent color
+  carry exactly one meaning within a product — scarcity is what makes emphasis legible.
+- **Why:** Emphasis is relative, not absolute. Three primary buttons are three ordinary
+  buttons, and an accent reused for "selected", "live", and "warning" stops communicating any
+  of them. Users then have to read every control instead of scanning.
+- **In practice:** Secondary and tertiary actions step down to quieter component-token variants
+  rather than competing. What the accent means is decided once per product and written down;
+  anything else needing attention uses hierarchy, spacing, or type weight.
+- **Anti-patterns:** A toolbar of equally weighted primary buttons; the accent applied for
+  decoration; a destructive action styled identically to the safe default.
+
+#### 9.3 Numbers that change in place use tabular figures
+
+- **Statement:** Render any number that updates, or that stacks in a column for comparison —
+  scores, money, timers, counts — with tabular (fixed-width) numerals.
+- **Why:** In proportional type a `1` is narrower than an `8`, so a live-updating value visibly
+  jitters and columns of figures fail to align on the decimal. Both make numbers harder to
+  compare and read, and the jitter reads as instability.
+- **In practice:** Apply `font-variant-numeric: tabular-nums` through the shared type roles and
+  numeric component tokens, so products inherit it instead of each remembering the rule.
+- **Anti-patterns:** A running total or countdown that shifts width as it changes; a
+  right-aligned money column whose digits don't line up; applying it ad hoc per component.
 
 ### 10. Consolidate before adding
 
