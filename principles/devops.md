@@ -223,9 +223,15 @@ green, fast, and trustworthy for every downstream consumer.
   configs are referenced (`uses: org/.github/...@main`, `extends:`) rather than vendored. Sync
   tooling resolves such files, reports them, and deliberately does not write them. Docs state
   the prohibition explicitly rather than only stating that the file is "not synced."
+- **When the copy shares canon's name:** the divergence becomes undetectable from either side. A
+  registry sees a member that never calls the shared workflow; the member sees a workflow it calls
+  every run; and only someone holding both trees notices they are different files wearing one name.
+  Any later switch from `uses: ./…` to `uses: org/.github/…@main` then silently swaps in a
+  different definition. Give a genuinely local workflow a local name, or reference canon.
 - **Anti-patterns:** Vendoring a reusable workflow to "pin" it, then never revisiting the copy;
   a member repo carrying its own health files because a scaffolding step copied them in;
-  documentation that says a file is never written without saying it must never be added.
+  documentation that says a file is never written without saying it must never be added; a local
+  workflow whose filename matches a canon workflow it has diverged from.
 
 ### 12. Content-addressed comparison normalizes what the platform rewrites
 
