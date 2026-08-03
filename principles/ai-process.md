@@ -244,11 +244,14 @@ Copy the block below for each principle.
   landed, and re-read merge state from the API before asserting it. A superseding report opens by
   naming what it kills, because the original stays live in the recipient's context beside it.
   Behavioral claims — what a force-push does, whether a run is idempotent — are reproduced against
-  throwaway fixtures before they are escalated, severity-rated, or documented. Relaying another
-  session's claim makes it yours: verify the part you relay.
+  throwaway fixtures before they are escalated, severity-rated, or documented. What a field or
+  function is named is a claim about intent; only its call graph is a claim about behavior, so
+  trace consumers before asserting a consequence. Relaying another session's claim makes it yours:
+  verify the part you relay.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
-  assigning a severity derived purely from reading; propagating a downstream session's claim
+  inferring a consequence from what an identifier sounds like it does rather than from what reads
+  it; assigning a severity derived purely from reading; propagating a downstream session's claim
   without re-checking it; documenting inferred behavior that nobody has executed.
 
 ## Aligned agent
