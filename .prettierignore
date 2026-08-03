@@ -1,0 +1,16 @@
+# Generated token output.
+#
+# packages/tokens/dist/ is the COMMITTED distribution artifact the sync engine copies
+# verbatim into product repos. It is assembled deterministically (stable walk order,
+# LF-normalized) and guarded by `pnpm tokens:dist:check`. Formatting it would rewrite
+# those bytes and fail that check on the next run — never let Prettier near it.
+packages/tokens/dist/
+build/
+
+# Lockfile — owned by pnpm.
+pnpm-lock.yaml
+
+# Dependencies and caches.
+node_modules/
+.pnpm-store/
+.turbo/

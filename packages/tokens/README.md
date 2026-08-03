@@ -39,14 +39,14 @@ tokens/
 
 The stable contract every component and theme speaks is the finance-grade `--semantic-*` set:
 
-| group | tokens |
-|---|---|
-| `background` | `primary` `secondary` `elevated` `raised` |
-| `text` | `primary` `secondary` `disabled` `inverse` |
-| `border` | `default` `focus` `error` |
-| `interactive` | `default` `hover` `pressed` `disabled` — the **Royal Violet** ramp |
-| `accent` | `default` `ink` — **Crown Gold** (ink darkened to `#806600` on light/HC for WCAG text) |
-| `status` | `positive` `negative` `warning` `info` |
+| group         | tokens                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------- |
+| `background`  | `primary` `secondary` `elevated` `raised`                                              |
+| `text`        | `primary` `secondary` `disabled` `inverse`                                             |
+| `border`      | `default` `focus` `error`                                                              |
+| `interactive` | `default` `hover` `pressed` `disabled` — the **Royal Violet** ramp                     |
+| `accent`      | `default` `ink` — **Crown Gold** (ink darkened to `#806600` on light/HC for WCAG text) |
+| `status`      | `positive` `negative` `warning` `info`                                                 |
 
 Plus a per-mode `shadow.lift` / `shadow.hairline` pair and a generic `chart.{1..6}` ramp
 (CVD-safe) with `chart.hc.{1..6}` high-contrast variants that auto-swap under high contrast.
@@ -135,7 +135,14 @@ packages/tokens/dist/
 
 The copy is reproducible — files are walked in a stable order and normalized to LF (a repo-root
 `.gitattributes` also pins `packages/tokens/dist/** text eol=lf`), so the committed bytes don't
-drift across rebuilds or platforms.
+drift across rebuilds or platforms. A repo-root `.prettierignore` excludes `dist/` so formatting
+can never rewrite the artifact out from under `tokens:dist:check`.
+
+> **Hard constraint: `dist/` must stay text-only.** The sync engine reads every source file as
+> UTF-8 (`assets.mjs:readSource`) and LF-normalizes uncommentable files before hashing. A binary
+> artifact placed under `dist/` — a `.woff2`, an image, anything non-text — would be **silently
+> corrupted in every member repo**, with no error at either end. If tokens ever need to ship a
+> binary asset, it needs a different transport, not this tree.
 
 ### Freshness guard
 
@@ -153,7 +160,7 @@ If it fails, run `pnpm tokens:dist` and commit the updated `dist/`.
 **CSS / Svelte / React (plain vars):**
 
 ```css
-@import "@jrm/tokens/css";
+@import '@jrm/tokens/css';
 
 .card {
   background: var(--color-surface);
@@ -167,28 +174,35 @@ Switch modes by setting an attribute anywhere up the tree:
 
 ```html
 <html data-theme="dark">
-<html data-theme="dark-oled">
-<html data-theme="high-contrast">
-<html data-a11y-cognitive="true">
+  <html data-theme="dark-oled">
+    <html data-theme="high-contrast">
+      <html data-a11y-cognitive="true"></html>
+    </html>
+  </html>
+</html>
 ```
 
 Prefer the `--semantic-*` names for new code; the flat `--color-*` aliases remain for
 back-compat:
 
 ```css
-.button { background: var(--semantic-interactive-default); }  /* Royal Violet */
-.legacy { background: var(--color-primary); }                 /* alias → same var */
+.button {
+  background: var(--semantic-interactive-default);
+} /* Royal Violet */
+.legacy {
+  background: var(--color-primary);
+} /* alias → same var */
 ```
 
 **Typed JS/TS:**
 
 ```ts
-import { tokens, tokensDark, themes } from "@jrm/tokens";
+import { tokens, tokensDark, themes } from '@jrm/tokens';
 
-tokens.semantic.interactive.default;      // resolved light value (Royal Violet)
-tokensDark.semantic.interactive.default;  // resolved dark value
-tokens.color.primary;                     // flat alias — still present
-themes["high-contrast"].semantic.text.primary;
+tokens.semantic.interactive.default; // resolved light value (Royal Violet)
+tokensDark.semantic.interactive.default; // resolved dark value
+tokens.color.primary; // flat alias — still present
+themes['high-contrast'].semantic.text.primary;
 ```
 
 **Tailwind:** don't import this directly — use [`@jrm/tailwind-preset`](../tailwind-preset),
