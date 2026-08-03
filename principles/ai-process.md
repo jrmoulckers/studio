@@ -258,7 +258,10 @@ Copy the block below for each principle.
   if a claim would change what someone else does, trace it or execute it, because the readings
   that go unchecked are the reasonable-sounding ones. Where two sessions disagree, resolve it
   against an artifact — a fixture, a call graph, a `git show` — since an argument with nothing
-  executable underneath is won by the more articulate reading rather than the correct one. Before
+  executable underneath is won by the more articulate reading rather than the correct one. When
+  the open question is intent rather than behavior, the artifact that settles it is a person or a
+  session, so ask the author: one message is cheaper than encoding a guess permanently, and no
+  amount of evidence about a file reaches the reasoning that produced it. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
   corrected, while a report is written once and travels unchallenged, so the repo is often right
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
