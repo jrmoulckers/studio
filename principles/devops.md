@@ -324,6 +324,11 @@ green, fast, and trustworthy for every downstream consumer.
   field from the artifact it describes over asserting it: if the tool already clones the subject, it
   can read the real answer. Any field with no consumer at all is a comment with the syntax of data —
   give it a reader or delete it.
+- **A recorded field graduates when something asserts on it:** the cheapest repair is not to delete
+  the field but to give it a consumer with teeth. A free-text `notes` becomes load-bearing the
+  moment a test requires it to be present and specific whenever a related setting departs from the
+  default — the field stops being decoration and acquires the convergence pressure that only
+  executed fields normally have.
 - **Anti-patterns:** Guarding a hand-typed unvalidated field with a hand-typed expected-value table,
   which catches later drift but not a shared initial error, and reproduces the exact mechanism that
   produced the original wrong value — now agreed upon in two places; a validation snapshot dated in

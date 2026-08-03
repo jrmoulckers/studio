@@ -438,6 +438,12 @@ Copy the block below for each principle.
 - **The blind spot to expect:** a staleness diagnosis you make about someone else will not
   generalise to yourself if their stale artifact was created for the task and yours predates it.
   The ones that predate the task are never reviewed, because they were never decided on.
+- **The reference is usually compound:** where a comparison's expected set is _selected_ by one
+  artifact and _supplied_ by another, both are references and both move. Pinning the content source
+  while re-resolving the selector — or the reverse — produces a check that is stale in a dimension
+  its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
+  set of things that should exist has changed underneath it. Enumerate every artifact the expected
+  set depends on and pin each.
 - **Anti-patterns:** Citing file and line from a working copy last pulled weeks ago; mixing a
   pinned remote read and an unpinned local read in one argument; concluding the findings were fine
   after discovering the source was stale, without noting that the surviving conclusions were the
@@ -466,6 +472,11 @@ Copy the block below for each principle.
   because it converts an open question into a closed one. A sum over categories cannot see an item
   move between categories. Before quoting a reconciliation as reassurance, name a defect it would
   have caught.
+- **An impossible output is a gift:** a result that cannot be true — a negative count, a total
+  exceeding the population — announces its own defect and costs nothing to catch. A plausible wrong
+  result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode
+  is a slightly different number, and treat any output you had to reason about before believing as
+  the more dangerous of the two.
 - **Anti-patterns:** Reporting the method rather than the proposition — "verified against the repo
   tree, name by name" — where the method's target is not in dispute; citing thoroughness as
   though it substituted for relevance; a self-refuting record written and read in the same sitting,
