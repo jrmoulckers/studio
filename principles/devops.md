@@ -319,6 +319,13 @@ green, fast, and trustworthy for every downstream consumer.
   independent source to check it against. The unvalidated field therefore needs _more_ care than
   the load-bearing one, which is the opposite of how "this isn't validated" reads at the point of
   edit.
+- **The config's grouping is not the engine's grouping, and only the engine's is real.** Entries
+  sitting under one key, one kind, or one array look like they share a code path, and often they do
+  not: a switch on a literal filename inside the handler splits a category the file presents as
+  uniform. Any rule stated at the category's granularity is then wrong in both directions — assume
+  the special case is general and you get a false alarm on every ordinary member; assume the
+  general case covers everything and the special one is silently cleared. Read the dispatch before
+  writing a rule about a category, and where a category has an exception, say so at the config.
 - **In practice:** Separate the two classes visibly — key order, a nested object, or a comment at
   the point of editing rather than in a design doc nobody opens first. Prefer deriving a descriptive
   field from the artifact it describes over asserting it: if the tool already clones the subject, it

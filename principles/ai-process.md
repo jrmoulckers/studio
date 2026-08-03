@@ -447,6 +447,12 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **A lagging reader's correction is indistinguishable from a correct catch.** Both arrive as "you
+  said X, but Y", and only the sender holds the record that separates them — which makes the sender
+  the party least able to judge it impartially, since the flattering reading is always available.
+  Resolve it by quoting your own sends with timestamps, not by asserting the other side is behind;
+  and where a correction arrives with a revision you can check in one call, check it before
+  answering, because that form is cheap to falsify and therefore usually offered in good faith.
 - **Re-run the check at the moment of action, not at the moment of drafting.** Freshness has a
   shelf life set by how fast the target moves, and the interval between composing something and
   landing it is unbounded. A change verified against the head it was written from can be stale
