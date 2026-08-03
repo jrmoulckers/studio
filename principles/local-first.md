@@ -120,7 +120,9 @@ when working in this realm.
 ## Related realms
 
 - **[Architecture](architecture.md)** (`architect`) — owns the shape of the `@jrm` kernel and
-  its contracts; this realm owns the data tier of the products that consume it.
+  its contracts; this realm owns the data tier of the products that consume it. Architecture
+  #14 defines the credential-proxy boundary a local-first product uses when it must reach a
+  secret-bearing third-party API without giving up client-owned data.
 - **[Backend](backend.md)** (`backend-engineer`) — owns the server-side surface. A product
   with both a server and client-owned data follows both realms; migrations and server
   persistence stay there.

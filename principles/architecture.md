@@ -222,6 +222,31 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   contrast handling bolted on per product instead of guaranteed by the kernel; a baseline
   that assumes the best device or network.
 
+### 14. Put third-party credentials behind a minimal first-party proxy
+
+- **Statement:** When a client-owned product must reach a third-party API that requires a
+  secret, route it through a first-party service that holds the credential, stores no user
+  data, and admits only known origins. Never ship the secret to the client, and never let the
+  proxy grow into a user-data tier.
+- **Why:** A browser cannot keep a secret ([Frontend](frontend.md) #7), but adding a
+  conventional backend to a local-first product would relocate the user's data off their
+  device and break the trust contract ([Local-First](local-first.md) #1). A stateless
+  credential proxy resolves both: it is the simplest boundary that satisfies the constraint
+  (#6) and carries the least data possible (#7). A client-side product is therefore not
+  automatically a product with no server tier — these are two distinct, sanctioned shapes,
+  and which one applies depends on whether a third-party secret is in play.
+- **In practice:** The proxy holds only the vendor credential, injected as a deployment
+  secret and never committed to the tree. It caches only vendor responses keyed by public
+  inputs — never anything user-specific. Callers are restricted by an exact-match origin
+  allowlist with no wildcard. The user's library, history, and preferences stay in
+  client-owned storage. `cartridge`'s `bridge/` Worker is the reference implementation: it
+  holds the IGDB/Twitch credentials, caches only lookups keyed by search term or game id, and
+  never stores a user's library.
+- **Anti-patterns:** Embedding an API key in client code or a public build-time variable;
+  letting the proxy accumulate user accounts or libraries "while we're here"; a wildcard CORS
+  origin; caching per-user responses in a shared cache; concluding that a client-rendered
+  product may therefore hold third-party secrets in the browser.
+
 ## Aligned agent
 
 `architect` — this specialist should treat the principles above as binding practice
