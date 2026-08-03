@@ -447,6 +447,12 @@ Copy the block below for each principle.
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
   set depends on and pin each.
+- **Weight an answer by its source even when sources agree — most especially then.** Agreement is
+  the condition under which nobody checks either answer, so a recollection that matches the record
+  is the one most likely to be adopted unverified. The hazard is not that a reconstruction from
+  memory would be sloppy; it is that it would be _good_, and indistinguishable from a read. Mark
+  each claim with where it came from, and treat a concurrence between two unverified sources as one
+  claim counted twice rather than as two.
 - **A lagging reader's correction is indistinguishable from a correct catch.** Both arrive as "you
   said X, but Y", and only the sender holds the record that separates them — which makes the sender
   the party least able to judge it impartially, since the flattering reading is always available.
@@ -485,6 +491,13 @@ Copy the block below for each principle.
   Ask what a _failing_ result would have looked like: if no realistic failure exists, the check was
   a restatement. Where the question is about intent, no reading of the artifact at any fidelity
   answers it — find the author or find the artifact the decision left behind.
+- **Record intent at the moment of the choice, because it is the one thing no artifact recovers.**
+  "Keep the receipt" is not a usable rule on its own — you cannot know in advance which throwaway
+  script settles a later dispute, and the ones that survive do so by accident. What is knowable at
+  the time is _why_, and a reconstruction from surviving code can only ever recover what was done.
+  A note written before anything turns on it also carries standing that the same note cannot have
+  afterwards: filed once a decision is contested, it reads as testimony produced under pressure;
+  filed beforehand, it is prior and unprompted, and only the timestamp distinguishes them.
 - **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
   every state of the world, so consistency checks pass over it silently. Such values need a
   different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.
