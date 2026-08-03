@@ -254,7 +254,11 @@ Copy the block below for each principle.
   verify the part you relay. A reproduction is only as good as its inputs, so pin and state what it
   ran against — the commit, the config, the fixture — because a sound method on stale inputs yields
   a confident wrong answer. For any claim about runtime behavior the escalation gate is "has anyone
-  run it", never "how many agree".
+  run it", never "how many agree". The trigger for that gate is not implausibility but leverage:
+  if a claim would change what someone else does, trace it or execute it, because the readings
+  that go unchecked are the reasonable-sounding ones. Where two sessions disagree, resolve it
+  against an artifact — a fixture, a call graph, a `git show` — since an argument with nothing
+  executable underneath is won by the more articulate reading rather than the correct one.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
