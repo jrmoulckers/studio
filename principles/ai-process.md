@@ -459,7 +459,11 @@ Copy the block below for each principle.
   rebuilt from that repository, while the one line about a _different_ repository is the line that
   never gets checked and therefore never lands. Repeating it does not help, because the channel is
   lossy in the same place each time. An issue is read by whoever needs it whenever they need it; a
-  message is read once, by one party, at a moment of their choosing.
+  message is read once, by one party, at a moment of their choosing. Once it is an artifact, stop
+  relaying the finding — further sends add noise without adding durability — but keep correcting a
+  wrong claim about _state_, which is a different act that looks identical in the channel. A
+  confident "nothing outstanding" is exactly what causes a filed artifact to go unread, so one line
+  restoring the open item is worth sending where a sixth restatement of its evidence is not.
 - **Freshness attaches to the fetch, not to the fact.** Re-reading a pinned revision at send time
   buys nothing, because a pin is already a recorded observation and will return the same bytes
   forever; what needs re-reading is the moving ref. State which of the two a claim rests on, since
