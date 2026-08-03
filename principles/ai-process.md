@@ -258,7 +258,10 @@ Copy the block below for each principle.
   if a claim would change what someone else does, trace it or execute it, because the readings
   that go unchecked are the reasonable-sounding ones. Where two sessions disagree, resolve it
   against an artifact — a fixture, a call graph, a `git show` — since an argument with nothing
-  executable underneath is won by the more articulate reading rather than the correct one.
+  executable underneath is won by the more articulate reading rather than the correct one. Before
+  restating an earlier finding, re-read what was actually merged: committed text gets diffed and
+  corrected, while a report is written once and travels unchallenged, so the repo is often right
+  where the summary of it is stale.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
