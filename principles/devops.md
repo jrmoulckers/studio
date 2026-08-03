@@ -177,6 +177,38 @@ green, fast, and trustworthy for every downstream consumer.
 > probe. The portable half still applies — the built artifact records its version and build SHA
 > so a running client can identify itself in a bug report.
 
+### 10. Unvalidated configuration needs more discipline, not less
+
+- **Statement:** Configuration that no tool reads, validates, or fails on is the configuration
+  most likely to be silently wrong forever. Treat descriptive fields as a stricter obligation
+  than load-bearing ones, and say so where they are declared.
+- **Why:** A wrong load-bearing value is self-correcting — the build breaks, someone fixes it,
+  and the config converges on truth. A wrong descriptive value has no failure mode at all. Its
+  only readers are humans and agents deciding how to treat a repo, and they have no independent
+  source to check it against.
+- **In practice:** Where a field is descriptive, the schema or docs say plainly that it is
+  unvalidated and unenforced. Better still, add the cheap check that would have caught it —
+  asserting a declared package manager matches the lockfile actually present costs one test.
+- **Anti-patterns:** Assuming a field is enforced because its name sounds functional
+  (`packageManager` that only feeds a log line); a registry entry describing a repo's stack
+  that nothing ever reconciles against the repo; treating "it can't break anything" as a
+  reason to review it less carefully.
+
+### 11. A local copy of an inherited default silently opts you out
+
+- **Statement:** Where a platform supplies defaults by inheritance, a member repo must not keep
+  its own copy of an inherited file. Having a stale copy is worse than having none.
+- **Why:** Inheritance is resolved by absence. The moment a local file exists it wins, and the
+  repo is frozen at that snapshot — while still appearing to participate in the shared standard.
+  The failure is invisible: nothing errors, the file is simply never updated again.
+- **In practice:** Org-level community health files, shared workflow definitions, and base
+  configs are referenced (`uses: org/.github/...@main`, `extends:`) rather than vendored. Sync
+  tooling resolves such files, reports them, and deliberately does not write them. Docs state
+  the prohibition explicitly rather than only stating that the file is "not synced."
+- **Anti-patterns:** Vendoring a reusable workflow to "pin" it, then never revisiting the copy;
+  a member repo carrying its own health files because a scaffolding step copied them in;
+  documentation that says a file is never written without saying it must never be added.
+
 ## Aligned agent
 
 `devops-engineer` — this specialist should treat the principles above as binding practice
