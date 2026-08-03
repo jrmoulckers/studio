@@ -613,6 +613,13 @@ Copy the block below for each principle.
   same probe against a case known to fail and confirm it does. This is the instrument-level form of
   refusing a reconciliation as reassurance — both demand that a clean result be shown to have a
   reachable failure before it is believed.
+- **A reproduction confirms; only a variation explains.** Rebuilding someone's setup exactly tells
+  you whether their claim holds, and nothing about what it depends on — a single control is a
+  sample of one, so any property the fixture happened to have is silently promoted into the
+  finding. Vary one attribute of the fixture and re-run before generalising, because the attribute
+  that turns out to matter is usually the one chosen without thought. Beware especially of building
+  a "realistic" case: realistic tends to mean shaped like whatever you have been looking at, which
+  is precisely the shape that will not generalise.
 - **Keep a redundant earlier measurement, for its power to contradict rather than its reading.** The
   second probe's value is not that it confirms; it is that a wrong result has something to collide
   with, and a plausible wrong answer is caught by disagreement or not at all. Duplicated checks that
