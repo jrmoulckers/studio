@@ -342,9 +342,16 @@ Copy the block below for each principle.
   provenance decays faster than content: an argument is retained accurately while the identity of
   whoever made it is lost, so attributing a position to whoever last relayed it is the default
   outcome rather than a lapse — quote the claim, not the claimant, and let the author correct the
-  record. Build the cheap artifact _before_ taking
+  record. The discriminator for when a name was safe to attach at all: **if correcting the
+  attribution leaves the conclusion standing, the attribution was decoration.** A clause that
+  carries no inferential weight should not carry a name either, because attaching one welds an
+  independent claim to an argument that never depended on it and makes both fail together. Build
+  the cheap artifact _before_ taking
   a position — once one is argued for, the fixture has to overcome the investment as well as the
-  question, which is why everyone reaches for it late.
+  question, which is why everyone reaches for it late. And note what cataloguing a failure mode
+  actually buys: **naming one confers the vocabulary to describe your own instance, not immunity
+  from it.** The taxonomy is retrieved after the error, by grep, from a written record — which is
+  the argument for writing principles down rather than expecting them to be recalled in flight.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
