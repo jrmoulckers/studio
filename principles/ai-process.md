@@ -341,7 +341,10 @@ Copy the block below for each principle.
   without re-checking it; documenting inferred behavior that nobody has executed; reporting a
   rehearsal result without saying which revision and configuration it was rehearsed against;
   reviewing your own output by re-reading it, when the defect is invisible precisely because you
-  wrote it; mistaking elaboration for verification — severity ratings, impact analyses and ranked
+  wrote it; checking a claim against the primary artifact instead of the report of it, when the
+  claim was itself derived from that artifact — switching medium is not switching source, and
+  "I verified against the repo, not the summary" is worthless where the summary was an enumeration
+  of the repo; mistaking elaboration for verification — severity ratings, impact analyses and ranked
   fix options stacked on an unchecked premise, so that confidence scales with how much has been
   written rather than how much has been checked; deriving a test's expected value from the system
   under test, which confirms only that the derivation ran; narrating a gap into a decision because
