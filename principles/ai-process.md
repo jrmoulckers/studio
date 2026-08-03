@@ -443,6 +443,29 @@ Copy the block below for each principle.
   after discovering the source was stale, without noting that the surviving conclusions were the
   ones whose files happened not to move.
 
+### 21. Check what the check establishes
+
+- **Statement:** Before treating a verification as settling a question, state the proposition it
+  actually tests and compare it to the one in dispute. A check that passes against a neighbouring
+  proposition is worse than no check, because it licenses the conclusion instead of leaving it
+  open.
+- **Why:** Verification produces confidence in proportion to effort, not to fit. Enumerating a
+  list name-by-name against a repository tree is real work, and it establishes that the names
+  exist — which is not the claim when the dispute is whether anyone chose them. The result is a
+  belief held with the weight of evidence and the content of an assumption, and the effort spent is
+  what makes it hard to revisit.
+- **In practice:** Write the question down before checking, in the form a result could contradict.
+  Ask what a _failing_ result would have looked like: if no realistic failure exists, the check was
+  a restatement. Where the question is about intent, no reading of the artifact at any fidelity
+  answers it — find the author or find the artifact the decision left behind.
+- **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
+  every state of the world, so consistency checks pass over it silently. Such values need a
+  different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.
+- **Anti-patterns:** Reporting the method rather than the proposition — "verified against the repo
+  tree, name by name" — where the method's target is not in dispute; citing thoroughness as
+  though it substituted for relevance; a self-refuting record written and read in the same sitting,
+  because by then the rationale is doing the reading instead of the artifact.
+
 ## Aligned agent
 
 `ai-ops-engineer` — this specialist should treat the principles above as binding practice
