@@ -29,6 +29,7 @@ the agent proposes an addition rather than inventing an ad-hoc rule.
 | Compliance       | [compliance.md](compliance.md)             | `compliance-specialist`    |
 | AI Products      | [ai-products.md](ai-products.md)           | `ai-ops-engineer`          |
 | AI Process       | [ai-process.md](ai-process.md)             | `ai-ops-engineer`          |
+| Local-First      | [local-first.md](local-first.md)           | `web-engineer`             |
 
 ## Shared practice (applies to every agent)
 

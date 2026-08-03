@@ -245,3 +245,5 @@ when working in this realm.
   guarantees (reduced-motion, high-contrast) are owned jointly with this realm.
 - **[Testing](testing.md)** (`qa-tester`) — reproducible builds and platform parity are what
   the test suite verifies.
+- **[Local-First](local-first.md)** (`web-engineer`) — owns the client-owned data tier of the
+  products; Architecture owns the shape of the kernel they consume.

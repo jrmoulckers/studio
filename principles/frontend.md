@@ -119,3 +119,5 @@ when working in this realm.
 - **[Security](security.md)** — owns the CSP and browser-security posture principle 7 upholds.
 - **[Backend](backend.md)** — owns the data contracts this UI orchestrates; coordinate changes
   there rather than reshaping them in the client.
+- **[Local-First](local-first.md)** — shares this agent; owns what the client stores and how
+  it syncs, while this realm owns how it renders.

@@ -11,7 +11,7 @@ Backend governs the server-side surface of JRM Studio's **product apps** (Next.j
 `jrm-recipes`, Svelte PWA `score-king`, Gradle `finance`) — their APIs, data and
 persistence, auth, migrations, service reliability, and privacy. The `@jrm` kernel ships no
 runtime backend, so this realm exists to keep the **polyglot** backends of the products
-consistent, safe, and reversible while they consume the same shared config presets.
+consistent, safe, and recoverable while they consume the same shared config presets.
 
 > **Scope note:** These principles are stack-agnostic by design — they must hold whether the
 > backend is a Next.js route handler, a Svelte PWA sync endpoint, or a Gradle/JVM service.
@@ -59,17 +59,28 @@ consistent, safe, and reversible while they consume the same shared config prese
 - **Anti-patterns:** Concatenating user input into a query; one app querying another app's
   tables directly; "we'll enforce that in code" instead of a constraint.
 
-### 3. Migrations are versioned, reviewed, and reversible
+### 3. Migrations are versioned, reviewed, and forward-only
 
-- **Statement:** Change schema only through committed, ordered migrations that include a
-  rollback (or an explicit, reviewed rollback plan when the change is irreversible).
-- **Why:** Ad-hoc production changes are unrepeatable and unrecoverable; reversibility is the
-  difference between a bad deploy and an outage.
-- **In practice:** Migrations are code, reviewed in the PR that needs them, and run in CI.
-  Risky data changes are two-phase (expand → migrate → contract) so old and new code overlap
-  safely. Roll-forward and rollback notes go in the PR.
-- **Anti-patterns:** Editing a production database by hand; destructive column drops in the
-  same release that stops writing them; a migration with no down path and no documented reason.
+- **Statement:** Change schema only through committed, ordered migrations that roll forward.
+  Recover from a bad migration by shipping the next one — never by reversing one that has
+  already been applied to production.
+- **Why:** A down-migration is a recovery plan that has never been executed against real
+  production data. It is the least-tested code in the repo at the exact moment it matters
+  most, and reversing an applied change silently discards every row written between the
+  deploy and the revert. Making each step independently safe turns recovery into an ordinary
+  deploy instead of an untested reversal.
+- **In practice:** Migrations are code — generated, committed, reviewed in the PR that needs
+  them, and applied automatically on deploy. Risky data changes are two-phase
+  (expand → backfill → contract), with each phase in its own release so old and new code
+  overlap safely; this is what makes forward-only recovery possible. CI proves the chain:
+  regenerating migrations must leave a clean tree (drift gate), and applying the chain twice
+  against a throwaway database must be idempotent. Stateful operations are guarded by
+  environment — a non-production deploy refuses to migrate shared state unless an isolated
+  target is explicitly opted into. Recovery notes go in the PR.
+- **Anti-patterns:** Editing a production database by hand; reversing an applied migration in
+  production instead of rolling forward; destructive column drops in the same release that
+  stops writing them; hand-written migrations that drift from the declared schema; letting a
+  preview deploy inherit the production database URL.
 
 ### 4. Auth is explicit, least-privilege, and enforced server-side
 
@@ -136,3 +147,5 @@ when working in this realm.
 - **[DevOps](devops.md)** — runs migrations in CI/CD and operates the observability the
   services emit.
 - **[Testing](testing.md)** — success and failure paths, contract tests, and migration tests.
+- **[Local-First](local-first.md)** — owns data the client is the system of record for; this
+  realm stays scoped to the server tier. Products with both follow both.

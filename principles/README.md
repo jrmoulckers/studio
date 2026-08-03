@@ -41,6 +41,7 @@ principle short, testable, and specific to its realm.
 | 18  | Compliance       | [compliance.md](compliance.md)             | `compliance-specialist`    |
 | 19  | AI Products      | [ai-products.md](ai-products.md)           | `ai-ops-engineer`          |
 | 20  | AI Process       | [ai-process.md](ai-process.md)             | `ai-ops-engineer`          |
+| 21  | Local-First      | [local-first.md](local-first.md)           | `web-engineer`             |
 
 ## Status
 
