@@ -263,7 +263,9 @@ Copy the block below for each principle.
   corrected, while a report is written once and travels unchallenged, so the repo is often right
   where the summary of it is stale. Ask what a check is structurally unable to see — a verifier
   that enumerates what is present establishes fidelity, never completeness — and remember that
-  ruling out one cause does not establish another.
+  ruling out one cause does not establish another. When a set looks curated, weigh the null
+  hypothesis first: an incomplete set is the ordinary outcome of an interrupted process, so
+  promoting it to a decision needs evidence of a decider, not a story that fits.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
@@ -274,7 +276,8 @@ Copy the block below for each principle.
   wrote it; mistaking elaboration for verification — severity ratings, impact analyses and ranked
   fix options stacked on an unchecked premise, so that confidence scales with how much has been
   written rather than how much has been checked; deriving a test's expected value from the system
-  under test, which confirms only that the derivation ran.
+  under test, which confirms only that the derivation ran; narrating a gap into a decision because
+  the omissions form a pattern, when nobody has been found who made it.
 
 ## Aligned agent
 
