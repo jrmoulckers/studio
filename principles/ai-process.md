@@ -240,7 +240,10 @@ Copy the block below for each principle.
 - **Why:** A stale fact in a report travels further than a stale fact in a file, because the
   recipient cannot distinguish "was true when observed" from "is true now" and will relay it
   onward as fresh. Two analyses that read the same code the same way produce correlated errors, so
-  their agreement is not corroboration — it is one conclusion counted twice. A verified fact with
+  their agreement is not corroboration — it is one conclusion counted twice. Reports also decay
+  faster than the artifacts they describe, because a repository is diffed on every change while a
+  message is only ever quoted: put every conclusion somewhere reviewable, and treat the message as
+  a pointer to it rather than the record. A verified fact with
   an unverified consequence bolted onto it passes every freshness check while carrying the error,
   and the relay point amplifies whatever it carries, so the verification burden is heaviest there
   rather than at the origin.
