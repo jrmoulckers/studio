@@ -264,6 +264,17 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   Before narrowing a pattern, check the real corpus for a legitimate case the stricter form would
   exclude — over-strict matching fails in the opposite direction, by not finding an existing region
   and appending a duplicate. Assert the post-condition too: exactly one region after a merge.
+  **Absence of the region cannot tell you whether the file is yours.** A file with no managed block
+  is exactly what a first sync looks like, so "never synced" and "belongs to someone else" are the
+  same observation — which means a merge-on-absence path can never derive consent from content the
+  way a whole-file copy derives it from a hash comparison. Establish that the _target_ is the
+  intended one, by identity, before any write that appends rather than replaces.
+- **An exception to a general path inherits none of the general path's guards.** Special-casing one
+  file by name gives it a code route that quietly lacks whatever the ordinary route checked, and
+  the special case is usually special because it is the most common or most sensitive file — so the
+  one item with bespoke handling ends up the one item with no protection. When you branch out of a
+  shared path, enumerate what the shared path was doing for you and re-establish each of them
+  deliberately, or assert the exception's own precondition in its place.
 - **Anti-patterns:** Reimplementing part of a markup grammar to locate your own output; a
   permissive pattern justified by "the strict form might miss something", with no corpus checked
   either way; a marker whose recognition rules differ between the writer and the reader.
