@@ -428,6 +428,13 @@ Copy the block below for each principle.
   reported to someone else. If a checkout must be used, print its HEAD alongside the finding so a
   reader can judge it. Treat ambient tooling — a clone made for a different task, a cached
   dependency, a vendored copy — as an input with a version, not as the environment.
+- **`origin/main` is the sharpest case:** a remote-tracking ref is a local cache wearing the
+  remote's name. `git log origin/main` answers from disk and never contacts the server, so it
+  reports a confident, correctly-named, arbitrarily old answer — and the operation _feels_ like
+  consulting the remote in a way that reading a working file does not. Where a fetch-and-read is
+  expressed as two commands, expect the first to be dropped. Prefer a single call that cannot
+  succeed without network I/O, and confirm existence rather than absence: asking whether a known
+  commit resolves distinguishes "not there" from "not fetched", where a log listing cannot.
 - **The blind spot to expect:** a staleness diagnosis you make about someone else will not
   generalise to yourself if their stale artifact was created for the task and yours predates it.
   The ones that predate the task are never reviewed, because they were never decided on.
