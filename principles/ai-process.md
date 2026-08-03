@@ -461,7 +461,10 @@ Copy the block below for each principle.
   while re-resolving the selector — or the reverse — produces a check that is stale in a dimension
   its own filter cannot see: a diff restricted to content paths reports "nothing changed" while the
   set of things that should exist has changed underneath it. Enumerate every artifact the expected
-  set depends on and pin each.
+  set depends on and pin each. **This applies inside a file as well as across files:** pinning a
+  revision fixes a document's identity, not the sentences in it, so a quoted passage can be
+  superseded while the path-level diff that would have caught it reports nothing changed. Quote
+  prose with the revision you read it at, and re-read the passage rather than the filename.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
