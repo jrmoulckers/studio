@@ -268,7 +268,8 @@ Copy the block below for each principle.
   reviewing your own output by re-reading it, when the defect is invisible precisely because you
   wrote it; mistaking elaboration for verification — severity ratings, impact analyses and ranked
   fix options stacked on an unchecked premise, so that confidence scales with how much has been
-  written rather than how much has been checked.
+  written rather than how much has been checked; deriving a test's expected value from the system
+  under test, which confirms only that the derivation ran.
 
 ## Aligned agent
 
