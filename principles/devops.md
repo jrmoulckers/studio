@@ -262,7 +262,11 @@ green, fast, and trustworthy for every downstream consumer.
 - **In practice:** Drift is surfaced per-file in the PR description with the reason and the fix, and
   a run that changes nothing but has skips exits distinctly from a clean run. Resolution is a
   targeted deletion or refresh of the offending file, never a global `--force`, which discards every
-  other local change indiscriminately in order to fix one.
+  other local change indiscriminately in order to fix one. Audit every consumer for pre-existing
+  staleness _before_ the first run: any drift on a repo that has never synced predates the tool by
+  definition, so the first run flags it and moves on rather than repairing it. Compare against the
+  generator's rendered output, and enumerate from the manifest rather than from the consumer, so
+  files that are merely absent are visible too.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
