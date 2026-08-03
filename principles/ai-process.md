@@ -477,6 +477,15 @@ Copy the block below for each principle.
   result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode
   is a slightly different number, and treat any output you had to reason about before believing as
   the more dangerous of the two.
+- **Deliberate in mechanism is not deliberate in substance:** that a value was typed by hand, or
+  produced by a step someone ran on purpose, establishes only that nothing was truncated. It says
+  nothing about what the value was reasoned from, or whether that premise survived the change it
+  shipped in. Arguments that a decision "was made" and arguments that it "was right" answer
+  different questions, and conflating them lets a correct rebuttal defend a wrong conclusion.
+- **Prefer a self-contradiction to an inference about intent:** where a record includes something
+  that refutes its own stated rationale — an omission sitting beside its own counter-example, a
+  description denying what the same commit added — that is evidence any reader can check, and it
+  outranks any amount of reasoning about what someone must have meant.
 - **Anti-patterns:** Reporting the method rather than the proposition — "verified against the repo
   tree, name by name" — where the method's target is not in dispute; citing thoroughness as
   though it substituted for relevance; a self-refuting record written and read in the same sitting,
