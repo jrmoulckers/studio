@@ -266,7 +266,14 @@ Copy the block below for each principle.
   present tense, because a read is not a lock and the value can move while you are still asserting
   it. Report a check as a snapshot, not a state: "clean as of `<sha>`, N sessions active" rather
   than "closed and clean", because durable-sounding language turns a momentary observation into a
-  standing guarantee the observer has no power to make. Pin **both sides** of a comparison: a
+  standing guarantee the observer has no power to make. Re-read at send time rather than think time,
+  because composing a long message is itself an interval during which the state moves — but freshness
+  of the read does not survive a pinned reference: re-resolving a moving branch and re-fetching a
+  recorded revision are different acts, and only the first tells you anything new. A read taken
+  "just now" against a commit named an hour ago is exactly as stale as the commit. The payoff for
+  the notation is that it makes disagreement cheap to settle: when both parties state the revision
+  they read, a contradiction resolves in one lookup instead of another round of crossing claims, so
+  pinning earns its keep precisely on the occasions it turns out to have been wrong. Pin **both sides** of a comparison: a
   fidelity result is only meaningful as "clean as of `<subject sha>` against `<reference sha>`",
   because pinning the subject alone leaves the reference floating and the claim decays in silence —
   strictly worse than the subject moving, since there a fetch shows you, whereas here the artifact
@@ -320,7 +327,11 @@ Copy the block below for each principle.
   weight even when they come from the same person and agree. Receiving is half
   the discipline: a correction that arrives while you are mid-decision reads as commentary on the
   decision rather than as a change of premise, so when a message contradicts a fact you are
-  standing on, stop and re-derive rather than reconcile. Build the cheap artifact _before_ taking
+  standing on, stop and re-derive rather than reconcile. In a channel carrying several sessions,
+  provenance decays faster than content: an argument is retained accurately while the identity of
+  whoever made it is lost, so attributing a position to whoever last relayed it is the default
+  outcome rather than a lapse — quote the claim, not the claimant, and let the author correct the
+  record. Build the cheap artifact _before_ taking
   a position — once one is argued for, the fixture has to overcome the investment as well as the
   question, which is why everyone reaches for it late.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
