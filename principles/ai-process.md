@@ -273,7 +273,10 @@ Copy the block below for each principle.
   you verified is untouched and the verdict has still expired. Suspect this first when the reference
   is itself under active development, and hardest when your own work is what moved it: a shared
   baseline that has been stable for weeks can take several commits in the span of one exercise,
-  making every earlier result in that exercise stale by the exercise's own progress. Never write a test that pins a policy choice: assert schema and internal consistency, since a
+  making every earlier result in that exercise stale by the exercise's own progress. Prefer the
+  tool's own output to a reimplementation of it whenever the tool can be run: a projection built by
+  re-deriving what a generator would do is a model of the generator, and it inherits every
+  assumption the generator's actual inputs have since invalidated. Never write a test that pins a policy choice: assert schema and internal consistency, since a
   test converts a contested inference into a guarded invariant and forces the next person to argue
   with a red suite instead of a config value. Before
   restating an earlier finding, re-read what was actually merged: committed text gets diffed and
@@ -312,7 +315,9 @@ Copy the block below for each principle.
   encodes which option was chosen, and a second test that agrees with it because both were derived
   from the same wrong value; naming a subject's revision while leaving the reference it was compared
   against unnamed; concluding from a tool's disagreement with reality that the tool is broken,
-  without checking whether the reference moved between the two runs.
+  without checking whether the reference moved between the two runs; correcting a number that came
+  out of the real tool with one derived from your own reimplementation of it, when the tool was
+  runnable the whole time.
 
 ## Aligned agent
 
