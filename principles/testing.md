@@ -99,6 +99,14 @@ testing exists to catch breaks at the source, not in downstream apps.
 - **In practice:** Deleting the line under test is the cheapest mutation and usually enough. Assert the complement too — a test that a change is delivered should be paired with one that a local edit is still refused, or both are satisfied by code that stopped checking. Record which mutation kills which test in the PR body so a later reader can re-run it.
 - **Anti-patterns:** Deriving an expected value from the system under test; a timing-sensitive assertion with no wait, so it passes whether or not the code is correct; a fixture teardown that races an async body and makes the second half of the test run against nothing; counting a test as coverage because it names the behavior in its title.
 
+### 9. A test that asserts a fact about the world must read the world
+
+- **Statement:** When a test claims that a recorded value matches external reality, its expected side must come from somewhere the recorded value cannot reach. Comparing a config file to a hand-written copy of that config file validates the registry against itself.
+- **Why:** The two artifacts are then mutually confirming: the fixture matches because it was transcribed from the config, and the config is trusted because the fixture matches. Nothing in the loop has touched the referent, so the pair goes green in exactly the case it exists to catch — a value that was wrong when both were written. Failure is deferred to the moment someone changes one of them, which is drift, not error.
+- **In practice:** Derive the expected value from the referent — the member repo's own workflow file, its lockfile, the directory the names are supposed to describe. Where the suite must run offline, pin a snapshot of the referent with the revision it came from, the date, the method used, and the trigger to re-check; that is a dated observation rather than a second assertion. Assert in the direction where being wrong is an error, and say in a comment why the other direction is allowed.
+- **The ratchet:** A wrong value that acquires a passing test becomes defended. Correcting it now also deletes an assertion that looks deliberate and cites a verification, so the fix reads as the regression. Fixing the value is cheap on the day it lands and expensive the day after — which is the argument for validating recorded fields even when nothing executes them.
+- **Anti-patterns:** `deepEqual` between a config and a literal transcribed from it; a rationale in the assertion message that is true about the repo but does not support the assertion; an inline comment certifying a verification with no revision or date, which outlives the check and discourages the next reader from repeating it.
+
 ## Aligned agent
 
 `qa-tester` — this specialist should treat the principles above as binding practice
