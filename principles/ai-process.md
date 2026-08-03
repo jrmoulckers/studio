@@ -496,6 +496,34 @@ Copy the block below for each principle.
   result for emptiness rather than for its value, so an error message counts as a positive answer —
   many tools print failure bodies to stdout, and every row then reports present.
 
+### 22. Attention is finite and drains toward the last lesson
+
+- **Statement:** After adopting a practice to close a failure you just made, assume the ordinary
+  checks are now weaker, not unchanged. Re-check the parts of a claim that were never in dispute at
+  the same interval as the part that was, and where a protocol has several components, make each
+  one's freshness a separate step rather than trusting the protocol as a unit.
+- **Why:** A newly-learned failure mode is vivid and crowds out the mundane one, so the cost of
+  learning is paid partly out of attention that was already doing useful work elsewhere. Adopting a
+  two-sided check to stop a reference floating does nothing to keep the subject from moving, but it
+  _feels_ like rigour, and the feeling is indexed to the recent lesson rather than to coverage.
+  This is why corrections cluster: the session most recently burned by staleness is the one about
+  to state something stale about a different half of the same comparison.
+- **Prefer executing to reasoning whenever an execution path exists at all.** Long disputes between
+  careful parties are usually about a value that some tool would have printed — and the tool is
+  routinely believed to need credentials, a network, or a deployment it does not need. Establish
+  what the cheapest real run costs before opening the argument; a dry-run or local-checkout mode
+  that needs neither token nor network turns every projection in the thread into an observation.
+- **Attribute a claim to its origin, not to the message you read it in.** Relayed numbers acquire
+  the relayer's name in one hop, which sends corrections to the wrong party, and lets a
+  reconstruction of someone's arithmetic be quoted back as their sentence. Where a report passes a
+  figure through, name whose it was.
+- **When a fix does not take, verify the fix was applied before concluding it does not work.** A
+  remedy that appears to fail is more often an unapplied remedy than a wrong one, and the surprise
+  is the signal to check the plumbing rather than the theory.
+- **Anti-patterns:** Re-verifying the reference five times while the subject moves twice unattended;
+  treating a two-sided protocol as self-updating on both sides because it was adopted deliberately;
+  arguing a projection for hours in a repository whose engine has an offline mode.
+
 ## Aligned agent
 
 `ai-ops-engineer` — this specialist should treat the principles above as binding practice
