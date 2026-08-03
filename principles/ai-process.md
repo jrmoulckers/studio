@@ -415,7 +415,11 @@ Copy the block below for each principle.
   refutation ends up in the one place the framing steered you away from. This is distinct from
   simply believing a congenial premise: the check is genuine, diligent and thorough, and returns a
   confident wrong answer because it was never pointed at the proposition. Before auditing "X does
-  Y", ask where else in the system Y could be true, and go there first.
+  Y", ask where else in the system Y could be true, and go there first. **Diagnose this correctly
+  when it happens**, because it presents exactly like a stale read and the remedies do not overlap:
+  ask whether the refuting bytes were already on disk. If they were, timestamping reads fixes
+  nothing — the file was present and never opened — and filing the incident under freshness buys a
+  discipline that would not have helped.
 - **Partial refutation is more dangerous than none.** Finding a real inaccuracy inside the named
   scope supplies the feeling of a completed correction and stops the search early, where finding
   nothing would have kept it going. The true narrow finding is also what makes the false broad
