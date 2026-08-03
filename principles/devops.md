@@ -209,6 +209,22 @@ green, fast, and trustworthy for every downstream consumer.
   a member repo carrying its own health files because a scaffolding step copied them in;
   documentation that says a file is never written without saying it must never be added.
 
+### 12. Content-addressed comparison normalizes what the platform rewrites
+
+- **Statement:** When a tool decides "changed or unchanged" by hashing file content, hash a
+  normalized form — line endings at minimum — never the raw bytes on disk.
+- **Why:** Git, editors and checkout settings rewrite line endings without changing meaning.
+  A byte hash makes every file on a Windows checkout with `core.autocrlf=true` look modified,
+  so a tool that skips modified files skips _everything_ while reporting success. The blast
+  radius is total and the symptom looks like a catastrophic bug rather than an encoding one.
+- **In practice:** Hashes are computed over LF-normalized content, so the same logical file
+  compares equal regardless of checkout platform. Repos also declare `* text=auto eol=lf` in
+  `.gitattributes` so the on-disk form is stable in the first place — belt and braces, because
+  the normalization is what actually protects the tool.
+- **Anti-patterns:** `sha256(readFileSync(path))` as a change detector; a drift check that has
+  only ever been exercised on Linux CI; assuming `.gitattributes` is present in every consumer
+  repo; reporting "N files locally modified" when the real difference is `\r`.
+
 ## Aligned agent
 
 `devops-engineer` — this specialist should treat the principles above as binding practice
