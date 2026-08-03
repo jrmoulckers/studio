@@ -461,10 +461,17 @@ Copy the block below for each principle.
 - **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
   every state of the world, so consistency checks pass over it silently. Such values need a
   different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.
+- **An aggregate is blind to the errors that preserve it:** a total, a count or a checksum that
+  stays constant under the exact class of mistake it is trusted to detect is worse than no check,
+  because it converts an open question into a closed one. A sum over categories cannot see an item
+  move between categories. Before quoting a reconciliation as reassurance, name a defect it would
+  have caught.
 - **Anti-patterns:** Reporting the method rather than the proposition — "verified against the repo
   tree, name by name" — where the method's target is not in dispute; citing thoroughness as
   though it substituted for relevance; a self-refuting record written and read in the same sitting,
-  because by then the rationale is doing the reading instead of the artifact.
+  because by then the rationale is doing the reading instead of the artifact; testing a probe's
+  result for emptiness rather than for its value, so an error message counts as a positive answer —
+  many tools print failure bodies to stdout, and every row then reports present.
 
 ## Aligned agent
 
