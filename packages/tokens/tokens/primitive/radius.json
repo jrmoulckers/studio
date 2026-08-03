@@ -1,9 +1,21 @@
 {
   "radius": {
     "$description": "Corner radius scale — 9px controls, 14px containers, fully-round pills.",
-    "sm": { "$value": "9px", "$type": "dimension", "$description": "Controls: buttons, inputs, steppers" },
+    "sm": {
+      "$value": "9px",
+      "$type": "dimension",
+      "$description": "Controls: buttons, inputs, steppers"
+    },
     "md": { "$value": "14px", "$type": "dimension", "$description": "Containers: cards, tiles" },
-    "chip": { "$value": "10px", "$type": "dimension", "$description": "Icon buttons and small chips" },
-    "pill": { "$value": "999px", "$type": "dimension", "$description": "Fully-rounded pills and avatars" }
+    "chip": {
+      "$value": "10px",
+      "$type": "dimension",
+      "$description": "Icon buttons and small chips"
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Fully-rounded pills and avatars"
+    }
   }
 }

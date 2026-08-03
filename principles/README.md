@@ -19,28 +19,28 @@ principle short, testable, and specific to its realm.
 
 ## The realm tree
 
-| # | Realm | File | Aligned agent |
-| - | ----- | ---- | ------------- |
-| 1 | Design | [design.md](design.md) | `design-engineer` |
-| 2 | Backend | [backend.md](backend.md) | `backend-engineer` |
-| 3 | Frontend | [frontend.md](frontend.md) | `web-engineer` |
-| 4 | Middleware | [middleware.md](middleware.md) | `architect` |
-| 5 | Project Planning | [project-planning.md](project-planning.md) | `product-manager` |
-| 6 | Business | [business.md](business.md) | `business-analyst` |
-| 7 | Accessibility | [accessibility.md](accessibility.md) | `accessibility-reviewer` |
-| 8 | Process | [process.md](process.md) | `release-manager` |
-| 9 | DevOps | [devops.md](devops.md) | `devops-engineer` |
-| 10 | Testing | [testing.md](testing.md) | `qa-tester` |
-| 11 | Featuring | [featuring.md](featuring.md) | `experimentation-engineer` |
-| 12 | Security | [security.md](security.md) | `security-reviewer` |
-| 13 | Documentation | [documentation.md](documentation.md) | `docs-writer` |
-| 14 | Performance | [performance.md](performance.md) | `performance-engineer` |
-| 15 | Data & Analytics | [data-analytics.md](data-analytics.md) | `data-engineer` |
-| 16 | Architecture | [architecture.md](architecture.md) | `architect` |
-| 17 | Localization | [localization.md](localization.md) | `localization-engineer` |
-| 18 | Compliance | [compliance.md](compliance.md) | `compliance-specialist` |
-| 19 | AI Products | [ai-products.md](ai-products.md) | `ai-ops-engineer` |
-| 20 | AI Process | [ai-process.md](ai-process.md) | `ai-ops-engineer` |
+| #   | Realm            | File                                       | Aligned agent              |
+| --- | ---------------- | ------------------------------------------ | -------------------------- |
+| 1   | Design           | [design.md](design.md)                     | `design-engineer`          |
+| 2   | Backend          | [backend.md](backend.md)                   | `backend-engineer`         |
+| 3   | Frontend         | [frontend.md](frontend.md)                 | `web-engineer`             |
+| 4   | Middleware       | [middleware.md](middleware.md)             | `architect`                |
+| 5   | Project Planning | [project-planning.md](project-planning.md) | `product-manager`          |
+| 6   | Business         | [business.md](business.md)                 | `business-analyst`         |
+| 7   | Accessibility    | [accessibility.md](accessibility.md)       | `accessibility-reviewer`   |
+| 8   | Process          | [process.md](process.md)                   | `release-manager`          |
+| 9   | DevOps           | [devops.md](devops.md)                     | `devops-engineer`          |
+| 10  | Testing          | [testing.md](testing.md)                   | `qa-tester`                |
+| 11  | Featuring        | [featuring.md](featuring.md)               | `experimentation-engineer` |
+| 12  | Security         | [security.md](security.md)                 | `security-reviewer`        |
+| 13  | Documentation    | [documentation.md](documentation.md)       | `docs-writer`              |
+| 14  | Performance      | [performance.md](performance.md)           | `performance-engineer`     |
+| 15  | Data & Analytics | [data-analytics.md](data-analytics.md)     | `data-engineer`            |
+| 16  | Architecture     | [architecture.md](architecture.md)         | `architect`                |
+| 17  | Localization     | [localization.md](localization.md)         | `localization-engineer`    |
+| 18  | Compliance       | [compliance.md](compliance.md)             | `compliance-specialist`    |
+| 19  | AI Products      | [ai-products.md](ai-products.md)           | `ai-ops-engineer`          |
+| 20  | AI Process       | [ai-process.md](ai-process.md)             | `ai-ops-engineer`          |
 
 ## Status
 

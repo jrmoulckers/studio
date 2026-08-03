@@ -40,7 +40,7 @@ when the tokens, presets, or configs change, the docs change in the same PR.
 
 - **Statement:** Document every public export, package subpath, CSS variable group, and shared
   config variant that consumers are meant to use; do not document internals as if they were API.
-- **Why:** The `@jrm` contract *is* the surface: semantic CSS variables, the Tailwind preset,
+- **Why:** The `@jrm` contract _is_ the surface: semantic CSS variables, the Tailwind preset,
   typed token objects, and the `base`/`react`/`svelte`/`node` config variants. Undocumented
   surface gets used by guesswork; documented internals get depended on by mistake.
 - **In practice:** Reference the exported names (`tokens`, `tokensDark`, `themes`), the CSS

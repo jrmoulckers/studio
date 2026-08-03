@@ -231,8 +231,8 @@ when working in this realm.
 
 - **[Middleware](middleware.md)** (`architect`) — shares this agent; the connective/contract
   layer between kernel and products lives here.
-- **[Design](design.md)** (`design-engineer`) — owns the semantic-token *values* and
-  component design; Architecture owns the token *contract* and layering.
+- **[Design](design.md)** (`design-engineer`) — owns the semantic-token _values_ and
+  component design; Architecture owns the token _contract_ and layering.
 - **[Frontend](frontend.md)** (`web-engineer`) — primary consumer of the framework-agnostic
   outputs and the Tailwind preset.
 - **[DevOps](devops.md)** (`devops-engineer`) — owns the Turbo/pnpm build wiring that the

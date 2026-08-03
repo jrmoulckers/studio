@@ -4,7 +4,12 @@
   "private": true,
   "description": "Shared TypeScript configs for JRM Studio (base + react/svelte/node variants).",
   "license": "UNLICENSED",
-  "files": ["base.json", "react.json", "svelte.json", "node.json"],
+  "files": [
+    "base.json",
+    "react.json",
+    "svelte.json",
+    "node.json"
+  ],
   "exports": {
     "./base.json": "./base.json",
     "./react.json": "./react.json",

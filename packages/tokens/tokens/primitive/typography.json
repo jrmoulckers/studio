@@ -31,7 +31,11 @@
       "tight": { "$value": 1.2, "$type": "number" },
       "snug": { "$value": 1.4, "$type": "number" },
       "normal": { "$value": 1.5, "$type": "number" },
-      "relaxed": { "$value": 1.75, "$type": "number", "$description": "Roomy leading — used by cognitive-accessibility mode for improved reading flow." }
+      "relaxed": {
+        "$value": 1.75,
+        "$type": "number",
+        "$description": "Roomy leading — used by cognitive-accessibility mode for improved reading flow."
+      }
     },
     "letterSpacing": {
       "normal": { "$value": "0", "$type": "dimension" },

@@ -35,7 +35,7 @@ Copy the block below for each principle.
 ### 2. Contrast comes from the token theme, never from local overrides
 
 - **Statement:** Take all foreground/background pairings from the `@jrm/tokens` semantic colors, and verify text ≥ 4.5:1 (≥ 3:1 for large text and UI/graphics) in every shipped theme.
-- **Why:** Contrast is a property of a color *pair*, not a single value. Centralizing it in the tokens means one audited palette protects every product; local hex overrides silently reintroduce failures.
+- **Why:** Contrast is a property of a color _pair_, not a single value. Centralizing it in the tokens means one audited palette protects every product; local hex overrides silently reintroduce failures.
 - **In practice:** Use semantic vars (`var(--color-text)` on `var(--color-surface)`), not raw hex. When contrast can't be met in the default palette, the fix lands in the tokens, not the component. Audit each of `:root` (light), `[data-theme="dark"]`, and `[data-theme="high-contrast"]`.
 - **Anti-patterns:** Hard-coded `color: #777` or `opacity` used to dim text below the ratio; "looks fine on my monitor"; passing contrast in light but never checking dark or high-contrast.
 

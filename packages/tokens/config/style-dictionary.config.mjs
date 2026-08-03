@@ -327,7 +327,9 @@ function cssRemapLines(semanticFile, indent = '    ') {
 
 /** Swap the generic chart ramp for its CVD-safe high-contrast variants. */
 const chartHcRemap = (indent = '    ') =>
-  [1, 2, 3, 4, 5, 6].map((n) => `${indent}--color-chart-${n}: var(--color-chart-hc-${n});`).join('\n');
+  [1, 2, 3, 4, 5, 6]
+    .map((n) => `${indent}--color-chart-${n}: var(--color-chart-hc-${n});`)
+    .join('\n');
 
 function writeBarrels() {
   mkdirSync(cssBuildPath, { recursive: true });

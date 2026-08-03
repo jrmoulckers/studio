@@ -2,7 +2,11 @@
   "nav": {
     "$description": "Consistent chrome — the shell never changes game to game.",
     "tabbar": {
-      "bg": { "$value": "{semantic.background.elevated}", "$type": "color", "$description": "Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule." },
+      "bg": {
+        "$value": "{semantic.background.elevated}",
+        "$type": "color",
+        "$description": "Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule."
+      },
       "border": { "$value": "{semantic.border.default}", "$type": "color" },
       "radius": { "$value": "{radius.md}", "$type": "dimension" }
     },

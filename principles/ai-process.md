@@ -28,7 +28,7 @@ Copy the block below for each principle.
   source keeps behavior identical across `jrm-recipes`, `score-king`, `finance`, and future repos.
 - **In practice:** AI-layer files live under `agents/`, `skills/`, `instructions/`, `prompts/`,
   and `evals/` in the backbone. Synced files carry a "generated — do not edit" header; changes
-  go to the backbone and re-sync. A product repo may pin *additional* tooling only in its own
+  go to the backbone and re-sync. A product repo may pin _additional_ tooling only in its own
   `AGENTS.md`.
 - **Anti-patterns:** Editing a synced agent in a product repo; copy-pasting a prompt between
   repos; two files defining the same agent.
@@ -236,8 +236,8 @@ when working in this realm.
 
 ## Related realms
 
-- **[AI Products](ai-products.md)** — the sibling AI realm. That realm governs *user-facing* AI
-  features; this realm governs *AI in how we build*. Model-quality, prompt, and safety practices
+- **[AI Products](ai-products.md)** — the sibling AI realm. That realm governs _user-facing_ AI
+  features; this realm governs _AI in how we build_. Model-quality, prompt, and safety practices
   are shared in spirit, but ownership does not overlap: internal tooling here, shipped AI product
   surfaces there.
 - **[Security](security.md)** — secrets/data boundaries for agent context (Principle 9) inherit

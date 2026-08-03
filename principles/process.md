@@ -65,10 +65,10 @@ is private, unpublished, and pinned at `0.0.0`.
 - **Anti-patterns:** Editing a package version by hand; a PR that changes package behavior with
   no changeset; a summary that just restates the commit subject.
 
-| Change to a package | Bump |
-| ------------------- | ---- |
+| Change to a package                       | Bump    |
+| ----------------------------------------- | ------- |
 | Breaking API / token-name / config change | `major` |
-| New backward-compatible feature or token | `minor` |
+| New backward-compatible feature or token  | `minor` |
 | Bug fix or internal change, no API change | `patch` |
 
 #### 3.1 The `0.0.0` / private phase is explicit

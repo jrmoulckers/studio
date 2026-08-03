@@ -7,28 +7,28 @@ the agent proposes an addition rather than inventing an ad-hoc rule.
 
 ## Realm → agent map
 
-| Realm | File | Aligned agent |
-| ----- | ---- | ------------- |
-| Design | [design.md](design.md) | `design-engineer` |
-| Backend | [backend.md](backend.md) | `backend-engineer` |
-| Frontend | [frontend.md](frontend.md) | `web-engineer` |
-| Middleware | [middleware.md](middleware.md) | `architect` |
-| Project Planning | [project-planning.md](project-planning.md) | `product-manager` |
-| Business | [business.md](business.md) | `business-analyst` |
-| Accessibility | [accessibility.md](accessibility.md) | `accessibility-reviewer` |
-| Process | [process.md](process.md) | `release-manager` |
-| DevOps | [devops.md](devops.md) | `devops-engineer` |
-| Testing | [testing.md](testing.md) | `qa-tester` |
-| Featuring | [featuring.md](featuring.md) | `experimentation-engineer` |
-| Security | [security.md](security.md) | `security-reviewer` |
-| Documentation | [documentation.md](documentation.md) | `docs-writer` |
-| Performance | [performance.md](performance.md) | `performance-engineer` |
-| Data & Analytics | [data-analytics.md](data-analytics.md) | `data-engineer` |
-| Architecture | [architecture.md](architecture.md) | `architect` |
-| Localization | [localization.md](localization.md) | `localization-engineer` |
-| Compliance | [compliance.md](compliance.md) | `compliance-specialist` |
-| AI Products | [ai-products.md](ai-products.md) | `ai-ops-engineer` |
-| AI Process | [ai-process.md](ai-process.md) | `ai-ops-engineer` |
+| Realm            | File                                       | Aligned agent              |
+| ---------------- | ------------------------------------------ | -------------------------- |
+| Design           | [design.md](design.md)                     | `design-engineer`          |
+| Backend          | [backend.md](backend.md)                   | `backend-engineer`         |
+| Frontend         | [frontend.md](frontend.md)                 | `web-engineer`             |
+| Middleware       | [middleware.md](middleware.md)             | `architect`                |
+| Project Planning | [project-planning.md](project-planning.md) | `product-manager`          |
+| Business         | [business.md](business.md)                 | `business-analyst`         |
+| Accessibility    | [accessibility.md](accessibility.md)       | `accessibility-reviewer`   |
+| Process          | [process.md](process.md)                   | `release-manager`          |
+| DevOps           | [devops.md](devops.md)                     | `devops-engineer`          |
+| Testing          | [testing.md](testing.md)                   | `qa-tester`                |
+| Featuring        | [featuring.md](featuring.md)               | `experimentation-engineer` |
+| Security         | [security.md](security.md)                 | `security-reviewer`        |
+| Documentation    | [documentation.md](documentation.md)       | `docs-writer`              |
+| Performance      | [performance.md](performance.md)           | `performance-engineer`     |
+| Data & Analytics | [data-analytics.md](data-analytics.md)     | `data-engineer`            |
+| Architecture     | [architecture.md](architecture.md)         | `architect`                |
+| Localization     | [localization.md](localization.md)         | `localization-engineer`    |
+| Compliance       | [compliance.md](compliance.md)             | `compliance-specialist`    |
+| AI Products      | [ai-products.md](ai-products.md)           | `ai-ops-engineer`          |
+| AI Process       | [ai-process.md](ai-process.md)             | `ai-ops-engineer`          |
 
 ## Shared practice (applies to every agent)
 
