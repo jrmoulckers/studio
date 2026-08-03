@@ -265,7 +265,12 @@ Copy the block below for each principle.
   that enumerates what is present establishes fidelity, never completeness — and remember that
   ruling out one cause does not establish another. When a set looks curated, weigh the null
   hypothesis first: an incomplete set is the ordinary outcome of an interrupted process, so
-  promoting it to a decision needs evidence of a decider, not a story that fits.
+  promoting it to a decision needs evidence of a decider, not a story that fits. Receiving is half
+  the discipline: a correction that arrives while you are mid-decision reads as commentary on the
+  decision rather than as a change of premise, so when a message contradicts a fact you are
+  standing on, stop and re-derive rather than reconcile. Build the cheap artifact _before_ taking
+  a position — once one is argued for, the fixture has to overcome the investment as well as the
+  question, which is why everyone reaches for it late.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
@@ -277,7 +282,9 @@ Copy the block below for each principle.
   fix options stacked on an unchecked premise, so that confidence scales with how much has been
   written rather than how much has been checked; deriving a test's expected value from the system
   under test, which confirms only that the derivation ran; narrating a gap into a decision because
-  the omissions form a pattern, when nobody has been found who made it.
+  the omissions form a pattern, when nobody has been found who made it; reading a correction as
+  an objection to be answered rather than a premise to re-derive from; attributing a claim to
+  whoever relayed it and arguing with them instead of its author.
 
 ## Aligned agent
 
