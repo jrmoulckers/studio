@@ -273,7 +273,12 @@ Copy the block below for each principle.
   you verified is untouched and the verdict has still expired. Suspect this first when the reference
   is itself under active development, and hardest when your own work is what moved it: a shared
   baseline that has been stable for weeks can take several commits in the span of one exercise,
-  making every earlier result in that exercise stale by the exercise's own progress. Prefer the
+  making every earlier result in that exercise stale by the exercise's own progress. Onboarding is
+  the sharpest case: registering a new participant is itself an edit to the shared baseline, so an
+  audit run to authorise the rollout races the very change it exists to authorise. Disclosing a
+  method's blind spot and stating a result at its real durability are two separate disciplines, and
+  volunteering the first does not supply the second — "here is what this cannot see" still leaves
+  the reader to guess how long what it _did_ see remains true. Prefer the
   tool's own output to a reimplementation of it whenever the tool can be run: a projection built by
   re-deriving what a generator would do is a model of the generator, and it inherits every
   assumption the generator's actual inputs have since invalidated. Never write a test that pins a policy choice: assert schema and internal consistency, since a
