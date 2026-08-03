@@ -620,6 +620,13 @@ Copy the block below for each principle.
 - **A wrong invocation that writes is worse than one that reads**, because it manufactures the state
   that makes the next run agree with it. Where a tool both inspects and applies, validate the target
   before the first write, not by warning on a suspicious result afterwards.
+- **A surface read for one purpose is not reviewed for another.** Two readers who had each argued
+  a point can both print the string that contradicts it and both miss it, if they printed it
+  looking for something else — a reader running a query treats everything that is not the answer as
+  chrome, and priming does not fire on material outside the query. This is not insufficient care
+  and more care does not fix it. It is the reason help text and banners are poor homes for guidance
+  that must stay true: nobody ever reads them to read them, so their contents are checked by no
+  one while appearing checked by everyone.
 - **Rigour is rarely the scarce input; noticing the question was executable is.** Careful parties
   arguing in good faith can generate a long catalogue of reasoning errors over a value some tool
   prints in ninety seconds, and no amount of additional care shortens that — only the observation

@@ -107,6 +107,11 @@ green, fast, and trustworthy for every downstream consumer.
   surface — a `--help` string, a preflight error, the comment above the constant — and tightening
   the documented scope in the places you remember leaves the old advice in the most-read one. Grep
   for the superseded wording instead, and treat every copy the tool can print as documentation.
+  **But grepping the wording only finds guidance made of words.** The most-read copy of all is a
+  literal in a copyable example — a token prefix, a URL, a role name — which states no policy, so a
+  sweep for the prose misses it entirely and the reader pastes it without ever reaching the section
+  that would have corrected them. Sweep for the values as well as the sentences, and prefer an
+  example that cannot be run with the wrong one over an example annotated to say which is right.
 - **Name the widening failure mode:** state, at the point of failure, that a permission error on a
   path the tool is not supposed to write is a **bug in the tool**, not a missing scope. Otherwise
   the first such error is "fixed" by granting the scope, and the guarantee is gone permanently in
