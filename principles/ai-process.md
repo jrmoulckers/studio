@@ -605,7 +605,14 @@ Copy the block below for each principle.
   figure through, name whose it was.
 - **When a fix does not take, verify the fix was applied before concluding it does not work.** A
   remedy that appears to fail is more often an unapplied remedy than a wrong one, and the surprise
-  is the signal to check the plumbing rather than the theory.
+  is the signal to check the plumbing rather than the theory. **The harder case is a fix that
+  appears to succeed:** a write can be accepted, report no error, and store something other than
+  what was meant — an interface with sibling forms will take the wrong one silently and persist the
+  argument verbatim. Read the artifact back through a path other than the one that wrote it, and
+  treat "I corrected that" as a claim requiring the same evidence as any other. Two parties can
+  each believe they repaired the same record and neither repair exist, because a correction is
+  reported at the moment of intent and never re-read afterwards — least of all by its author, who
+  has no reason to doubt it.
 - **Before concluding a check found nothing, confirm the check could have found something.** A
   probe aimed at the wrong target, a filter matching nothing, a suite whose fixtures never loaded —
   each returns the output you would expect if there were no problem, and absence of a warning is
