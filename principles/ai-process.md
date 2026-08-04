@@ -612,7 +612,10 @@ Copy the block below for each principle.
   treat "I corrected that" as a claim requiring the same evidence as any other. Two parties can
   each believe they repaired the same record and neither repair exist, because a correction is
   reported at the moment of intent and never re-read afterwards — least of all by its author, who
-  has no reason to doubt it.
+  has no reason to doubt it. **And restating it does not re-check it:** a claim repeated in a
+  second message is generated from the first message, not from the source, so repetition raises
+  confidence on both sides while adding no evidence — which is why the same false report can
+  survive an explicit correction and appear again unchanged.
 - **Before concluding a check found nothing, confirm the check could have found something.** A
   probe aimed at the wrong target, a filter matching nothing, a suite whose fixtures never loaded —
   each returns the output you would expect if there were no problem, and absence of a warning is
