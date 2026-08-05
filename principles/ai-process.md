@@ -350,7 +350,14 @@ Copy the block below for each principle.
   enters the record as though the addressee erred. If a correspondent's message does not sound like
   their position, check whether it was theirs before answering it; and if you are told you said
   something you did not, say so plainly rather than absorbing it, because the real author is the
-  only one who can act on it. The discriminator for when a name was safe to attach at all: **if
+  only one who can act on it. **And a correction delivered in-band cannot repair a channel whose
+  fault is identity:** the message saying "that was not me" is routed by the same broken mechanism
+  as everything else, so it is absorbed, re-attributed and answered as though it came from whoever
+  the channel already believes you are. Restating it more clearly does not help, because clarity
+  was never the failing part. Escalate instead to a discriminator the transport supplies rather
+  than the content — a sender field, a repository, a branch — and ask the correspondent to route on
+  that. When a correction has to survive the fault it is describing, it must not travel by the
+  faulty path. The discriminator for when a name was safe to attach at all: **if
   correcting the
   attribution leaves the conclusion standing, the attribution was decoration.** A clause that
   carries no inferential weight should not carry a name either, because attaching one welds an
@@ -488,7 +495,13 @@ Copy the block below for each principle.
   moving file is where a stale read is indistinguishable from a fresh one:** every quotation from
   it is correct, so re-quoting feels like re-verifying and returns no signal that the surrounding
   artifact has moved. Accuracy of content is not evidence of currency of read — take the revision
-  from the repository, not from the fact that your excerpt still matches.
+  from the repository, not from the fact that your excerpt still matches. **And an exemption from a
+  failure mode, granted because that mode's usual mechanism is absent, is itself unexamined:** _I
+  hold no checkout, so everything I quote must be live_ rules out one route to staleness and treats
+  the conclusion as established, when a re-quoted earlier result, a cached response or a proxy
+  reaches the same end by another road. Such a read carries more authority than a local one
+  precisely because the obvious explanation has been eliminated, so state which call produced a
+  number and when, rather than why it could not have been stale.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
