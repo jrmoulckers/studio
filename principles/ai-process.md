@@ -350,8 +350,14 @@ Copy the block below for each principle.
   enters the record as though the addressee erred. If a correspondent's message does not sound like
   their position, check whether it was theirs before answering it; and if you are told you said
   something you did not, say so plainly rather than absorbing it, because the real author is the
-  only one who can act on it. **And a correction delivered in-band cannot repair a channel whose
-  fault is identity:** the message saying "that was not me" is routed by the same broken mechanism
+  only one who can act on it. **The way out of a disagreement neither side can verify is a command
+  the other party can run, with its expected output stated in advance.** Assertions about state
+  cannot settle a dispute between correspondents who cannot inspect each other's environment, and a
+  fourth restatement is worth less than the first. A reproduction converts the contest into an
+  experiment — and naming the expected value _before_ it is run is what makes it falsifiable rather
+  than merely confirmable, because a prediction that fails is informative to whoever offered it.
+  Prefer handing over the invocation to handing over the conclusion. **And a correction delivered
+  in-band cannot repair a channel whose fault is identity:** the message saying "that was not me" is routed by the same broken mechanism
   as everything else, so it is absorbed, re-attributed and answered as though it came from whoever
   the channel already believes you are. Restating it more clearly does not help, because clarity
   was never the failing part. Escalate instead to a discriminator the transport supplies rather
