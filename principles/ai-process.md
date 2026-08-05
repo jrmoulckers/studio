@@ -681,7 +681,25 @@ Copy the block below for each principle.
   figure as unread, and prefer an endpoint that reports a total over one that returns rows you
   count yourself. This is the sibling of the impossible-output case and the harder one: the
   arithmetic is sound, the command succeeded, and only the coincidence between the answer and the
-  limit distinguishes it.
+  limit distinguishes it. **And a route earns "authoritative" against a population, not for good:**
+  a listing endpoint validated while the collection was small acquires the defect at a threshold
+  nobody is watching, so the very check that established its trustworthiness is what stops it being
+  re-checked. Observed live: `gh pr view --json commits` was correct at 98 and quoted approvingly by
+  both parties for exactly that reason, then returned **100** for a branch of **105** the moment the
+  population crossed the page size — while `git rev-list --count`, `gh api … --paginate` and the
+  pull request's own `.commits` field all agreed on 105. Prefer the field that reports a total to
+  any array whose length you take, and re-apply the equals-the-limit test to trusted routes, not
+  merely to new ones.
+- **Converging derivations verify the derivation and say nothing about the transcription.** Running
+  three independent routes to the same figure discharges the felt sense of having checked, but
+  copying the result into prose is a separate step that no route covers and that inherits the
+  confidence of the ones before it — so the more corroboration you run, the more assured the
+  sentence downstream feels and the less likely anyone is to compare it to the block above it. No
+  amount of re-derivation catches this, because the derivation was right; the check has to be
+  against the **sentence**, not against the repo. The related presentational trap is milder and more
+  common: evidence measured at one revision quoted beside a conclusion measured at another is
+  indistinguishable from a miscopy to every reader, however honest the gap, so pin both to their
+  revisions or quote only one.
 - **A correct value can arrive with wrong reasoning, and adopting the value ratifies the mechanism.**
   A correction that fixes a number while misdiagnosing its cause is the hardest kind to resist,
   because the part you can check is right — so the explanation rides in unexamined and becomes the
