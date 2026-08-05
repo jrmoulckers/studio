@@ -575,7 +575,10 @@ Copy the block below for each principle.
   observers: a pipeline that stops early can short-circuit the program before it exits, so the
   status you read back belongs to your filter rather than to the thing under test. The damage is
   directional — it yields a plausible wrong value, not an obvious one — and it is worst precisely
-  when you are being terse in order to report carefully. Read an exit status from an unpiped
+  when you are being terse in order to report carefully. Make stripping it a rule rather than a
+  habit, because a habit relaxes under exactly the pressure that installs the filter: the
+  apparatus is added _because_ the result matters, so its distortion is heaviest on the findings
+  most likely to be acted on. Read an exit status from an unpiped
   invocation, and when a probe produces a result that would be a serious finding, re-run it stripped
   of every convenience before believing it, because the likeliest explanation for a surprising
   measurement is the apparatus.
