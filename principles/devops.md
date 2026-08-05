@@ -320,7 +320,12 @@ green, fast, and trustworthy for every downstream consumer.
   worth failing closed on, with a named opt-out for the case that genuinely needs it. And **a check
   that cannot determine its answer must also fail closed**: treating "identity could not be
   established" as a pass makes the guard silently absent in precisely the situations it was written
-  for, since the unidentifiable case and the wrong case are the same case from the outside.
+  for, since the unidentifiable case and the wrong case are the same case from the outside. **Watch
+  for the collapse in the return value**: a helper that returns `null` for _verified_ and also
+  `null` for _could not verify_ has spelled the unknown case identically to the pass case, and no
+  caller can tell them apart. Return a verdict with a distinct third state rather than an
+  absence-of-complaint, and be suspicious of a test that pins the collapse as intended behaviour —
+  "a checkout with no remote does not warn" reads as a reasonable invariant and is the bug.
 - **A partial fix retires the ticket.** A defect with several variants gets closed on the strength
   of the one reproduced most vividly, and the remaining variants lose the record that made them
   findable — leaving the surviving half both unfixed and untracked, which is worse for the next
