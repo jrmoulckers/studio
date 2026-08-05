@@ -342,7 +342,14 @@ Copy the block below for each principle.
   provenance decays faster than content: an argument is retained accurately while the identity of
   whoever made it is lost, so attributing a position to whoever last relayed it is the default
   outcome rather than a lapse — quote the claim, not the claimant, and let the author correct the
-  record. **Verify who said it with the same rigour as what was said.** In a channel carrying
+  record. **A record that is wrong and a record that is wrong in a field nobody can amend want
+  different remedies.** A merged commit message, a published release note, a sent message — these
+  cannot be edited, so attempting to correct them in place is not merely hard but unavailable, and
+  the correct response is a pointer from somewhere mutable: a comment on the pull request, a note
+  in the file the message describes. Deciding which case you are in comes first, because effort
+  spent rewriting an immutable field produces nothing, while a pointer costs one comment and is
+  what a later reader following the immutable record will actually encounter. **Verify who said it
+  with the same rigour as what was said.** In a channel carrying
   several senders, a correction can be researched impeccably and delivered to the wrong party —
   timestamps resolved, ancestry proven, counts re-derived — and every one of those checks operates
   on the claim while none touches the attribution, because provenance arrives free with the message
