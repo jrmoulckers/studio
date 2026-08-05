@@ -380,7 +380,13 @@ Copy the block below for each principle.
   on whoever holds it** — a dispute in which one party physically cannot settle the question and the
   other can settle it in a single step is not a disagreement, and continuing to argue it wastes the
   only move available. **The way out of a disagreement neither side can verify is a command
-  the other party can run, with its expected output stated in advance.** Assertions about state
+  the other party can run, with its expected output stated in advance.** **Mark which of your claims
+  were run,** because a verified claim lends its credibility to whatever sits next to it: evidence
+  does not stay attached to the assertion it supports but raises the standing of the whole report,
+  so an unchecked sentence between two measured ones is read as measured. That makes a
+  mostly-executed message a _worse_ place for an assumption than an all-prose one, since the
+  surrounding rigour is what disguises it. The cost of the fix is one word — _inspected_ rather than
+  _measured_ — and it tells the reader which lines are still theirs to prove. Assertions about state
   cannot settle a dispute between correspondents who cannot inspect each other's environment, and a
   fourth restatement is worth less than the first. A reproduction converts the contest into an
   experiment — and naming the expected value _before_ it is run is what makes it falsifiable rather
@@ -581,7 +587,12 @@ Copy the block below for each principle.
   most likely to be acted on. Read an exit status from an unpiped
   invocation, and when a probe produces a result that would be a serious finding, re-run it stripped
   of every convenience before believing it, because the likeliest explanation for a surprising
-  measurement is the apparatus.
+  measurement is the apparatus. That priority has a base rate behind it rather than mere caution:
+  when you probe a system you did not write with a harness you improvised minutes ago, the harness
+  is the younger and far less reviewed component, so it should be the first suspect and not the
+  last. The remedy that follows is to run the probe a second time by a different route, which is a
+  different instruction from resolving to be more careful once — care does not detect a variable
+  collision or a short-circuiting pipeline, and a second route does.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
