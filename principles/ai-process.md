@@ -607,6 +607,15 @@ Copy the block below for each principle.
   because it converts an open question into a closed one. A sum over categories cannot see an item
   move between categories. Before quoting a reconciliation as reassurance, name a defect it would
   have caught.
+- **A truncated listing establishes a lower bound, not a count**, and it announces this only if you
+  look for it: the tell is that the result _equals the limit_. Client tools paginate by default —
+  `gh pr list` returns 30 unless told otherwise — so a count taken from a listing is silently
+  correct until the population crosses the page size and then silently wrong forever, with no error
+  and a plausible number. Treat any total that matches a page size, a default limit or a round
+  figure as unread, and prefer an endpoint that reports a total over one that returns rows you
+  count yourself. This is the sibling of the impossible-output case and the harder one: the
+  arithmetic is sound, the command succeeded, and only the coincidence between the answer and the
+  limit distinguishes it.
 - **An impossible output is a gift:** a result that cannot be true — a negative count, a total
   exceeding the population — announces its own defect and costs nothing to catch. A plausible wrong
   result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode
