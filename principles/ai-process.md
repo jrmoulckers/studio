@@ -664,7 +664,15 @@ Copy the block below for each principle.
   supports, is more expensive than one in which a message was misrouted or a field was misread — yet
   the expensive account is the one that gets adopted, because it flatters the analysis that produced
   it and the cheap one feels like it explains too little. Notice when your explanation requires an
-  actor to be inconsistent, and look for the mundane mechanism before building on it.
+  actor to be inconsistent, and look for the mundane mechanism before building on it. **Apply the
+  same suspicion to a consoling conclusion as to a flattering one.** A setback reinterpreted as
+  secretly beneficial — a delay that "turned out to be load-bearing", an outage that "bought us
+  time" — is adopted without evidence because it converts a cost into a benefit and nobody wants to
+  re-open it. It is also usually checkable: the claim that a defect would have been unrecoverable if
+  shipped is decided by one run of the recovery path, and here that run returned an ordinary
+  `updated: 7`, refuting it. Consolation and flattery recruit the same lapse — an account that
+  improves your position is one you stop interrogating — and the consoling version is the more
+  durable because contradicting it looks like pessimism.
 - **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
   every state of the world, so consistency checks pass over it silently. Such values need a
   different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.

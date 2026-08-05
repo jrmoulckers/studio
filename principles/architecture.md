@@ -284,6 +284,17 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   here". The consequence is worth stating positively: an engine that adopts on byte-equality lets a
   member be seeded by hand and converge without a migration, which is the property that makes the
   first run safe.
+- **A distributed defect is recoverable exactly as far as the channel that delivered it can
+  redeliver.** In a lockfile-backed sync the engine's own files always carry a lock entry, so the
+  adoption path — gated on the _absence_ of one — is unreachable for them by construction, and an
+  installed file the member never touched is not drift but an ordinary update. Shipping a bad
+  artifact to every member is therefore repairable at the source: fix canon, and the next run
+  repairs all of them. Measured, three runs against one work-dir: `added: 52` with seven defective
+  files, then `updated: 7 · unchanged: 45` from the corrected canon with the defect gone, then —
+  after a single local edit — `unchanged: 51` and `locally modified (skipped): 1`. **The one-way
+  door is the member's edit, not the ship.** Locate prevention at the irreversible step, and resist
+  treating a delay before an irreversible-looking event as having averted anything until the
+  recovery path has actually been run.
 - **Fix a defect that recurs per instance where the count is one.** When a member repository's
   state is wrong in a way every future member will reproduce, the remedy that is local to the
   member — edit the file, note it in the runbook, remember it at onboarding — costs once per member
