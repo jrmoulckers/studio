@@ -387,7 +387,14 @@ Copy the block below for each principle.
   look at rather than the claim to accept — a sender identifier, a repository, a branch — because a
   correction phrased as a proposition invites agreement, while one phrased as a lookup invites a
   lookup. Expect this whenever a correspondent concedes a point repeatedly and the behaviour does
-  not change: the concession is real and it is landing somewhere that cannot act on it. The
+  not change: the concession is real and it is landing somewhere that cannot act on it.
+  **Authenticate the sender only for the residue that cannot be executed.** An executable claim needs
+  no provenance: a command paired with its expected output can be run by the recipient, and the run
+  settles it whatever the routing says — which is why disputes that survived many rounds of footers
+  collapsed the moment either side handed over an invocation. Provenance discipline is not a general
+  tax on every message, then, but is load-bearing for exactly two things: credit, and knowing who can
+  answer the next question. Where a claim is runnable, verify the artifact and ignore the routing.
+  The
   discriminator for when a name was safe to attach at all: **if
   correcting the
   attribution leaves the conclusion standing, the attribution was decoration.** A clause that
