@@ -90,6 +90,13 @@ is private, unpublished, and pinned at `0.0.0`.
   merges and the worktree is torn down (see 1.2).
 - **Anti-patterns:** Merging red CI; a "green" pipeline that skips build/typecheck/lint; work
   that reaches `main` without passing the gate.
+- **List the open queue on its own schedule, not only when you expect something in it.** Review
+  discipline aimed at claims — checking each other's reports against the repo's files — leaves the
+  repo's _queue_ unattended, because nobody makes a claim about a PR that is simply sitting there.
+  A correct, green, one-line fix can wait days while the same defect is discussed repeatedly, since
+  every participant is verifying content and none is verifying backlog. `--state open` belongs in
+  the same standing check as `--state merged`: the absence of a reminder is not evidence of an
+  empty queue.
 
 #### 4.1 Squash to a clean, conventional history
 
