@@ -325,7 +325,11 @@ green, fast, and trustworthy for every downstream consumer.
   of the one reproduced most vividly, and the remaining variants lose the record that made them
   findable — leaving the surviving half both unfixed and untracked, which is worse for the next
   person than before the fix. Re-run every case on the issue before closing it and say which ones
-  were checked; if the fixed variant is the rarer one, the close is actively misleading.
+  were checked; if the fixed variant is the rarer one, the close is actively misleading. **A
+  reopen reads as protest rather than as data**, especially to the fix's author, who answers it
+  with the fix's justification instead of by running the case — so put the executed output and the
+  exact invocation in the reopen itself, and say plainly that it was run at current head. Evidence
+  framed as disagreement gets rebutted; evidence framed as a measurement gets reproduced.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
