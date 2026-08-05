@@ -738,7 +738,17 @@ Copy the block below for each principle.
   moment, so two parties can hold contradictory negatives with no error on either side and no way
   to discover it; the natural next move is then to argue about who misread. A timestamp collapses
   that in one step. For a negative result the time of the check is not metadata about the claim, it
-  is the _scope_ of the claim. And when a
+  is the _scope_ of the claim. **Its other scope is where you looked, and a mechanism will paper
+  over a missing one.** "The hazard does not apply here" is a claim about a repository; "nothing in
+  the engine counts rows it fetched" is a claim about the directories actually grepped, and the
+  second is routinely reported as the first. A convincing mechanism is precisely what stops the
+  enumeration, because once the explanation sounds sufficient there seems to be nothing left to
+  search — so a negative with a good mechanism and no stated search space generalises further than
+  its evidence, including for the person who ran it. Observed: seven unbounded `gh pr list` calls in
+  a `prompts/` directory that two clean reports had never grepped, each already sitting beside a
+  bounded `gh issue list --limit 200`, and all of it distributed as canon. State the search space
+  beside the verdict, and treat a bounded call adjacent to an unbounded one as the tell for an
+  oversight rather than a decision. And when a
   negative is impossible given state you can establish independently, **eliminating the environment
   implicates the invocation** — the honest report is then that the command is unrecoverable, not
   that the thing was missing. The reason this is hard to defend against is that it conceals itself
