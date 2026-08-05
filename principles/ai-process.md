@@ -365,7 +365,14 @@ Copy the block below for each principle.
   happens, because over-crediting reads as generosity rather than as an error. Credit the trace and
   the framing as separate contributions and say which part came from where; the cost of getting it
   wrong is not misallocated praise but a misrouted question, since whoever actually did the work is
-  the only one who can answer follow-ups about it. **The way out of a disagreement neither side can verify is a command
+  the only one who can answer follow-ups about it. **Treat a denial from the only party with
+  first-hand knowledge as a correction to apply, not a datum to explain.** When someone says _that
+  wasn't me_, they hold evidence you do not, and folding the denial into your model as one more
+  observation to account for lets you research harder in the same wrong direction while feeling
+  rigorous about it. **Where access to the deciding evidence is asymmetric, the duty to check falls
+  on whoever holds it** — a dispute in which one party physically cannot settle the question and the
+  other can settle it in a single step is not a disagreement, and continuing to argue it wastes the
+  only move available. **The way out of a disagreement neither side can verify is a command
   the other party can run, with its expected output stated in advance.** Assertions about state
   cannot settle a dispute between correspondents who cannot inspect each other's environment, and a
   fourth restatement is worth less than the first. A reproduction converts the contest into an
@@ -621,7 +628,13 @@ Copy the block below for each principle.
   inquiry to end there, and a set of choices can look designed because the omissions happen to form
   a shape no one intended. Before concluding that a pattern was chosen, locate whoever chose it or
   the artifact the choice left behind; where neither exists, the honest finding is that the pattern
-  is unexplained, which is a different claim from the pattern being deliberate.
+  is unexplained, which is a different claim from the pattern being deliberate. **And prefer the
+  hypothesis that requires no one to have behaved strangely.** An account in which a correspondent
+  argued against a position they had already conceded, or a colleague made a choice no rationale
+  supports, is more expensive than one in which a message was misrouted or a field was misread — yet
+  the expensive account is the one that gets adopted, because it flatters the analysis that produced
+  it and the cheap one feels like it explains too little. Notice when your explanation requires an
+  actor to be inconsistent, and look for the mundane mechanism before building on it.
 - **Watch for permissive values:** a wildcard, a default or an empty override is consistent with
   every state of the world, so consistency checks pass over it silently. Such values need a
   different kind of scrutiny than a wrong specific value does — the test suite cannot supply it.
