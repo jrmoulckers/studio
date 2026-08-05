@@ -631,6 +631,14 @@ Copy the block below for each principle.
   count yourself. This is the sibling of the impossible-output case and the harder one: the
   arithmetic is sound, the command succeeded, and only the coincidence between the answer and the
   limit distinguishes it.
+- **A correct value can arrive with wrong reasoning, and adopting the value ratifies the mechanism.**
+  A correction that fixes a number while misdiagnosing its cause is the hardest kind to resist,
+  because the part you can check is right — so the explanation rides in unexamined and becomes the
+  rule you apply next time. Two files reported as 155 and 276 lines are really 154 and 275 _because
+  both end with a newline_ and a naive split counts the empty tail; a correction asserting that
+  neither file ends with a newline reaches the same digits from the opposite premise, and anyone who
+  banks it will mis-measure the next file. Accept the value, re-derive the cause, and say which part
+  you verified.
 - **An impossible output is a gift:** a result that cannot be true — a negative count, a total
   exceeding the population — announces its own defect and costs nothing to catch. A plausible wrong
   result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode

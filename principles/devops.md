@@ -339,7 +339,14 @@ green, fast, and trustworthy for every downstream consumer.
   likely to look** — they hold the mechanism in their head, so they can enumerate the neighbouring
   cases faster than anyone, and the fix that just landed is the thing that persuades them there are
   none. Treat shipping a fix as the moment to enumerate siblings, not the moment the enumeration
-  ends, and expect the reopen to have to come from outside.
+  ends, and expect the reopen to have to come from outside. **A correction conceded in conversation
+  and never applied to the artifact repairs the belief and leaves the record**, which is the same
+  defect aimed at a correction rather than a fix. Agreeing is the part that feels like resolving —
+  it ends the exchange, satisfies the person who raised it, and produces nothing a later reader will
+  encounter — so the wrong figure stays in the file, now with the additional protection that
+  everyone involved believes it was dealt with. Treat a concession as a ticket, not as a
+  conclusion: name the artifact it has to land in before agreeing, and prefer editing the file to
+  replying.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
