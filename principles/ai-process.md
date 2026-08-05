@@ -507,7 +507,15 @@ Copy the block below for each principle.
   the conclusion as established, when a re-quoted earlier result, a cached response or a proxy
   reaches the same end by another road. Such a read carries more authority than a local one
   precisely because the obvious explanation has been eliminated, so state which call produced a
-  number and when, rather than why it could not have been stale.
+  number and when, rather than why it could not have been stale. **And re-running a command does not
+  refresh its arguments.** A count computed live — `git rev-list --count main..HEAD` — carries the
+  authority of a measurement rather than a quotation, yet is wrong whenever a _ref it names_ is
+  stale, because executing it afresh updates the traversal and nothing about the reference. This is
+  the failure that survives "prefer execution to reasoning": the output is genuinely new, genuinely
+  derived, and genuinely wrong, and nothing about it looks quoted. Treat every named ref, tag,
+  branch or path in a command as an input needing its own currency check — fetch before comparing,
+  and prefer the remote-tracking ref to the local branch whenever the local one is not the thing you
+  are actually working on.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
