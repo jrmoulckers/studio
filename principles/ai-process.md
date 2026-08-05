@@ -348,7 +348,14 @@ Copy the block below for each principle.
   the correct response is a pointer from somewhere mutable: a comment on the pull request, a note
   in the file the message describes. Deciding which case you are in comes first, because effort
   spent rewriting an immutable field produces nothing, while a pointer costs one comment and is
-  what a later reader following the immutable record will actually encounter. **Verify who said it
+  what a later reader following the immutable record will actually encounter. The criterion is not
+  mutability but **reachability**: a pointer works only when someone following the wrong record
+  arrives somewhere you can write. A merged commit message qualifies, because its pull request is
+  reachable from it. A sent message does not — nothing a later reader consults leads back to the
+  channel — so for anything conceded in conversation the remedy is not a pointer but carrying the
+  correction into a tracked artifact. This is why a concession can be sincere, immediate and
+  repeated while the wrong figure sits untouched in a file, and why disputes settled in a channel
+  are re-litigated later by the same two parties who already agreed. **Verify who said it
   with the same rigour as what was said.** In a channel carrying
   several senders, a correction can be researched impeccably and delivered to the wrong party —
   timestamps resolved, ancestry proven, counts re-derived — and every one of those checks operates
