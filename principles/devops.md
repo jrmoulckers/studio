@@ -314,6 +314,18 @@ green, fast, and trustworthy for every downstream consumer.
   every other local change in its blast radius. Where the conservative behaviour is per-file, the
   override should be too — and until it is, say so at the place someone goes looking for the remedy,
   because the flag's name will read like the answer.
+- **A check that reports but does not refuse is not a guard.** Warning and proceeding leaves the
+  operator as the only gate, which fails exactly where these defects matter — unattended runs, CI,
+  and anyone who trusts an exit code over a transcript. If a condition is worth detecting it is
+  worth failing closed on, with a named opt-out for the case that genuinely needs it. And **a check
+  that cannot determine its answer must also fail closed**: treating "identity could not be
+  established" as a pass makes the guard silently absent in precisely the situations it was written
+  for, since the unidentifiable case and the wrong case are the same case from the outside.
+- **A partial fix retires the ticket.** A defect with several variants gets closed on the strength
+  of the one reproduced most vividly, and the remaining variants lose the record that made them
+  findable — leaving the surviving half both unfixed and untracked, which is worse for the next
+  person than before the fix. Re-run every case on the issue before closing it and say which ones
+  were checked; if the fixed variant is the rarer one, the close is actively misleading.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
