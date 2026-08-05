@@ -697,7 +697,13 @@ Copy the block below for each principle.
   because the conclusion preserves nothing about what was asked. A negative finding therefore
   becomes unfalsifiable the moment its command is discarded, including by the person who ran it, who
   is left unable to distinguish a real absence from a typo, a wrong working directory or a stale
-  argument. Quote the command beside the result whenever the result is an absence. And when a
+  argument. Quote the command beside the result whenever the result is an absence — **and quote when
+  it ran, because an existence claim is time-indexed and almost never written that way.** "I
+  checked, it is not there" reads as a property of the object when it is only ever a property of a
+  moment, so two parties can hold contradictory negatives with no error on either side and no way
+  to discover it; the natural next move is then to argue about who misread. A timestamp collapses
+  that in one step. For a negative result the time of the check is not metadata about the claim, it
+  is the _scope_ of the claim. And when a
   negative is impossible given state you can establish independently, **eliminating the environment
   implicates the invocation** — the honest report is then that the command is unrecoverable, not
   that the thing was missing. The reason this is hard to defend against is that it conceals itself
