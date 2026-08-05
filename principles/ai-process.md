@@ -379,13 +379,16 @@ Copy the block below for each principle.
   experiment — and naming the expected value _before_ it is run is what makes it falsifiable rather
   than merely confirmable, because a prediction that fails is informative to whoever offered it.
   Prefer handing over the invocation to handing over the conclusion. **And a correction delivered
-  in-band cannot repair a channel whose fault is identity:** the message saying "that was not me" is routed by the same broken mechanism
-  as everything else, so it is absorbed, re-attributed and answered as though it came from whoever
-  the channel already believes you are. Restating it more clearly does not help, because clarity
-  was never the failing part. Escalate instead to a discriminator the transport supplies rather
-  than the content — a sender field, a repository, a branch — and ask the correspondent to route on
-  that. When a correction has to survive the fault it is describing, it must not travel by the
-  faulty path. The discriminator for when a name was safe to attach at all: **if
+  in-band is acknowledged rather than applied when it addresses a layer the recipient is not
+  inspecting:** the message saying "that was not me" arrives intact, is read, is agreed with, and is
+  acted on — in the content layer, where the recipient was already being careful — while the field
+  that would settle it goes unexamined round after round. Restating it more clearly does not help,
+  because clarity was never the failing part, and neither was the path. Name the specific field to
+  look at rather than the claim to accept — a sender identifier, a repository, a branch — because a
+  correction phrased as a proposition invites agreement, while one phrased as a lookup invites a
+  lookup. Expect this whenever a correspondent concedes a point repeatedly and the behaviour does
+  not change: the concession is real and it is landing somewhere that cannot act on it. The
+  discriminator for when a name was safe to attach at all: **if
   correcting the
   attribution leaves the conclusion standing, the attribution was decoration.** A clause that
   carries no inferential weight should not carry a name either, because attaching one welds an
