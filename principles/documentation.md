@@ -60,6 +60,14 @@ when the tokens, presets, or configs change, the docs change in the same PR.
 - **In practice:** Derive examples from actual exports and the built output; when an export,
   subpath, or default value changes, update the example in the same PR. Prefer minimal,
   complete snippets over fragments that omit imports.
+- **Prose is trusted in inverse proportion to the reader's ability to check it.** A documented
+  procedure has no failure mode of its own — it cannot go red — so the only thing standing between
+  a wrong instruction and a wrong outcome is a reader who already knows enough to doubt it. Those
+  readers are exactly the ones who do not need the document. Whoever follows it most literally is
+  newest, has the least context, and will attribute the resulting failure to themselves rather than
+  to the page. So the more procedural a passage is, the stronger the case for making it executable —
+  a script, a fixture, a check in CI — and for keeping anything that stays prose short enough that
+  its staleness is visible rather than plausible.
 - **Anti-patterns:** Import paths that don't resolve; referencing a removed export or a renamed
   subpath; hard-coded token values that no longer match `build/`; examples that assume publishing
   when packages are still `private` + `0.0.0`.

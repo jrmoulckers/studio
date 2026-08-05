@@ -284,6 +284,17 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   here". The consequence is worth stating positively: an engine that adopts on byte-equality lets a
   member be seeded by hand and converge without a migration, which is the property that makes the
   first run safe.
+- **Fix a defect that recurs per instance where the count is one.** When a member repository's
+  state is wrong in a way every future member will reproduce, the remedy that is local to the
+  member — edit the file, note it in the runbook, remember it at onboarding — costs once per member
+  forever, and it is paid by whoever is least equipped to know it was needed. Push the remediation
+  into whatever produced the state, so it is written once and applies to members not yet created.
+  The same reasoning governs assertions: a check that lives in a member scales with members, so it
+  belongs to the engine unless it is genuinely about that member. **What licenses an automatic
+  remediation is provability, not convenience** — rewriting bytes is safe here only because bytes
+  equal to _raw_ canon could not have been authored by the member, so nothing human is discarded.
+  Where the same edit would be merely probably-harmless, it needs an explicit override instead, and
+  the guard that keeps the two apart is the part to mutation-test.
 - **Anti-patterns:** Reimplementing part of a markup grammar to locate your own output; a
   permissive pattern justified by "the strict form might miss something", with no corpus checked
   either way; a marker whose recognition rules differ between the writer and the reader.
