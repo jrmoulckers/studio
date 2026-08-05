@@ -689,7 +689,13 @@ Copy the block below for each principle.
   both end with a newline_ and a naive split counts the empty tail; a correction asserting that
   neither file ends with a newline reaches the same digits from the opposite premise, and anyone who
   banks it will mis-measure the next file. Accept the value, re-derive the cause, and say which part
-  you verified.
+  you verified. This is the exact inverse of a figure that decays, and the two demand opposite
+  responses: a true value going stale is recoverable, because re-deriving it is what catches it,
+  whereas a correct value carrying a wrong premise **never** decays — re-deriving the number
+  confirms it forever while the premise rides along untouched. Verification terminates
+  _successfully_ and ratifies a method that will be wrong on the next input, so the diligence that
+  would catch every other error here installs this one. Re-deriving the cause and re-deriving the
+  value feel like the same act and are not.
 - **An impossible output is a gift:** a result that cannot be true — a negative count, a total
   exceeding the population — announces its own defect and costs nothing to catch. A plausible wrong
   result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode
