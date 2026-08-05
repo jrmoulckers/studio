@@ -598,6 +598,15 @@ Copy the block below for each principle.
   result announces nothing. Prefer probes whose failure mode is absurd to probes whose failure mode
   is a slightly different number, and treat any output you had to reason about before believing as
   the more dangerous of the two.
+- **Record the invocation, not just the verdict — and doubly so for a negative result.** _It
+  resolved to X_ can be re-derived by anyone from the conclusion alone; _it did not resolve_ cannot,
+  because the conclusion preserves nothing about what was asked. A negative finding therefore
+  becomes unfalsifiable the moment its command is discarded, including by the person who ran it, who
+  is left unable to distinguish a real absence from a typo, a wrong working directory or a stale
+  argument. Quote the command beside the result whenever the result is an absence. And when a
+  negative is impossible given state you can establish independently, **eliminating the environment
+  implicates the invocation** — the honest report is then that the command is unrecoverable, not
+  that the thing was missing.
 - **Deliberate in mechanism is not deliberate in substance:** that a value was typed by hand, or
   produced by a step someone ran on purpose, establishes only that nothing was truncated. It says
   nothing about what the value was reasoned from, or whether that premise survived the change it
