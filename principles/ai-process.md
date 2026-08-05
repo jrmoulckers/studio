@@ -357,7 +357,15 @@ Copy the block below for each principle.
   enters the record as though the addressee erred. If a correspondent's message does not sound like
   their position, check whether it was theirs before answering it; and if you are told you said
   something you did not, say so plainly rather than absorbing it, because the real author is the
-  only one who can act on it. **The way out of a disagreement neither side can verify is a command
+  only one who can act on it. **Attribution follows articulation, which systematically over-credits
+  the reviewer and under-credits the trace.** When an incoming message returns your own observation
+  in a sharper framing — naming the ambiguity as the finding, or supplying the clause that reshapes
+  the design — the better phrasing carries the underlying work along with it, and the person who
+  read the code stops being the person the finding is filed under. Nothing flags this while it
+  happens, because over-crediting reads as generosity rather than as an error. Credit the trace and
+  the framing as separate contributions and say which part came from where; the cost of getting it
+  wrong is not misallocated praise but a misrouted question, since whoever actually did the work is
+  the only one who can answer follow-ups about it. **The way out of a disagreement neither side can verify is a command
   the other party can run, with its expected output stated in advance.** Assertions about state
   cannot settle a dispute between correspondents who cannot inspect each other's environment, and a
   fourth restatement is worth less than the first. A reproduction converts the contest into an
