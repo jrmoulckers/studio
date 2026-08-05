@@ -275,6 +275,15 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   one item with bespoke handling ends up the one item with no protection. When you branch out of a
   shared path, enumerate what the shared path was doing for you and re-establish each of them
   deliberately, or assert the exception's own precondition in its place.
+- **"The tool has never run" and "the target is empty" are different claims, and adoption is what
+  separates them.** Any content-addressed sync will adopt a hand-seeded file that already matches
+  what it would have written, so a first run against a repo someone has been maintaining by hand
+  reports those paths as baselined rather than as new. Predict a run by reading the target, never by
+  reasoning from the tool's own history — and expect the mistake specifically on artifacts that
+  originate in a third repository, where "it comes from elsewhere" reads as "it cannot already be
+  here". The consequence is worth stating positively: an engine that adopts on byte-equality lets a
+  member be seeded by hand and converge without a migration, which is the property that makes the
+  first run safe.
 - **Anti-patterns:** Reimplementing part of a markup grammar to locate your own output; a
   permissive pattern justified by "the strict form might miss something", with no corpus checked
   either way; a marker whose recognition rules differ between the writer and the reader.

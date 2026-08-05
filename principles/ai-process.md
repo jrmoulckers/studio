@@ -368,6 +368,12 @@ Copy the block below for each principle.
   actually buys: **naming one confers the vocabulary to describe your own instance, not immunity
   from it.** The taxonomy is retrieved after the error, by grep, from a written record — which is
   the argument for writing principles down rather than expecting them to be recalled in flight.
+  **The exception you authored is the one you forget to apply**, and it is skipped where two
+  descriptions of the same item compete: a file that is both _hand-vendored from elsewhere_ and
+  _delivered by this tool_ gets whichever description is salient, so the caveat is applied where you
+  were thinking about it rather than everywhere it holds. Having written a rule, argued it and
+  defended it is not coverage of it — check the items that belong to two categories first, because
+  those are where a correctly-held rule silently fails to fire.
 - **Anti-patterns:** Reporting a green CI run as a landed change; sending a correction as an
   increment that reads as additive; treating agreement between two code reads as verification;
   inferring a consequence from what an identifier sounds like it does rather than from what reads
