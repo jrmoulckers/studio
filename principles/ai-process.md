@@ -378,6 +378,11 @@ Copy the block below for each principle.
   fourth restatement is worth less than the first. A reproduction converts the contest into an
   experiment — and naming the expected value _before_ it is run is what makes it falsifiable rather
   than merely confirmable, because a prediction that fails is informative to whoever offered it.
+  What gives it force is precisely that it is expensive to the offering party: it is decisive only
+  because the other outcome would have been equally decisive _against_ them, which is why genuine
+  predictions are rare and why one that costs its author nothing is a demonstration wearing a
+  test's clothes. Ask what result would have embarrassed whoever proposed the check; if there
+  isn't one, it was never an experiment.
   Prefer handing over the invocation to handing over the conclusion. **And a correction delivered
   in-band is acknowledged rather than applied when it addresses a layer the recipient is not
   inspecting:** the message saying "that was not me" arrives intact, is read, is agreed with, and is
