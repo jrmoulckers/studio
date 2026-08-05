@@ -699,7 +699,15 @@ Copy the block below for each principle.
   against the **sentence**, not against the repo. The related presentational trap is milder and more
   common: evidence measured at one revision quoted beside a conclusion measured at another is
   indistinguishable from a miscopy to every reader, however honest the gap, so pin both to their
-  revisions or quote only one.
+  revisions or quote only one. That remedy is necessary and insufficient, and the reader's half is
+  the one that failed here: **two figures are comparable only if they share a revision, and a
+  difference between figures pinned to different revisions is not a discrepancy but the diff.** Both
+  SHAs were labelled and attached to their numbers, and the pairing was read as noise by someone
+  holding a hypothesis that a mismatch would confirm. So the failure mode of good instrumentation is
+  a reader who reads the value and skips the label — the pinning that makes a number checkable makes
+  it mis-checkable by exactly that reader. Before reporting two numbers as inconsistent, verify they
+  were taken at the same point; a hypothesis formed before the comparison will find the shape it
+  came for.
 - **A correct value can arrive with wrong reasoning, and adopting the value ratifies the mechanism.**
   A correction that fixes a number while misdiagnosing its cause is the hardest kind to resist,
   because the part you can check is right — so the explanation rides in unexamined and becomes the
