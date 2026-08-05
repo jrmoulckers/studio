@@ -10,7 +10,7 @@
 This realm governs **user-facing AI features shipped inside JRM Studio products** — anything
 where a model's output reaches an end user (generation, ranking, assistants, summaries,
 recommendations). It exists to keep those features reliable, safe, honest, affordable, and
-respectful of user data. It is *not* about AI used to build the studio (see
+respectful of user data. It is _not_ about AI used to build the studio (see
 [ai-process.md](ai-process.md)).
 
 ## Principles
@@ -135,7 +135,7 @@ when working in this realm.
 
 ## Related realms
 
-- **[AI Process](ai-process.md)** — the sibling realm for AI used to *build* the studio (agents,
+- **[AI Process](ai-process.md)** — the sibling realm for AI used to _build_ the studio (agents,
   prompts, and tooling in the dev workflow). This realm stops at user-facing product features;
   hand off internal-tooling questions there.
 - **[Security](security.md)** — prompt injection, output handling, and tool-execution guardrails

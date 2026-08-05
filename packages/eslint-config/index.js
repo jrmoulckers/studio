@@ -14,13 +14,7 @@ import globals from 'globals';
  */
 export const base = [
   {
-    ignores: [
-      '**/build/**',
-      '**/dist/**',
-      '**/node_modules/**',
-      '**/.turbo/**',
-      '**/coverage/**',
-    ],
+    ignores: ['**/build/**', '**/dist/**', '**/node_modules/**', '**/.turbo/**', '**/coverage/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -36,12 +30,7 @@ export const base = [
   },
   {
     // Config, tooling and CommonJS files: allow logging + require().
-    files: [
-      '**/*.config.{js,mjs,cjs,ts}',
-      '**/*.cjs',
-      '**/scripts/**',
-      '**/tools/**',
-    ],
+    files: ['**/*.config.{js,mjs,cjs,ts}', '**/*.cjs', '**/scripts/**', '**/tools/**'],
     languageOptions: {
       globals: { ...globals.node },
     },

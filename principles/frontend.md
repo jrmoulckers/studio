@@ -104,6 +104,36 @@ so a theme swap re-flows the whole product with no rebuild and no per-app drift.
 - **Anti-patterns:** API keys in the bundle or `localStorage`; injecting unsanitized HTML;
   inline `<script>` that forces a loosened CSP.
 
+### 8. Capability-detect optional platform APIs and degrade to a silent no-op
+
+- **Statement:** Feature-detect every non-universal browser API before use, and when it is
+  missing fall back silently to a working path — never to an error, and never to a visible
+  broken control.
+- **Why:** Browser support for platform APIs varies by engine, version, and context (many are
+  secure-context or install-only). Assuming availability turns a progressive enhancement into a
+  hard crash for a subset of users, on exactly the devices least likely to be tested.
+- **In practice:** Check for the API on its host object before calling it, and prefer hiding or
+  substituting the affordance over surfacing an error the user can do nothing about. Enhancement
+  is additive: the core task must remain completable without the API.
+- **Anti-patterns:** Calling an optional API behind a user-agent sniff; a button that throws on
+  an unsupported browser; an "unsupported" error toast for a purely optional nicety; gating a
+  core flow behind an API that may not exist.
+
+### 9. Application updates are offered, never forced mid-session
+
+- **Statement:** When a new version of an installed or cached app is available, surface it and
+  let the user choose when to take it; never swap assets underneath a running session.
+- **Why:** A precached app that silently activates a new version mid-session mixes old running
+  code with newly fetched chunks — producing missing-module errors, broken navigations, and lost
+  in-progress work. The user experiences it as random corruption, and it is nearly impossible to
+  reproduce.
+- **In practice:** A new build is detected and waits; the user is prompted and the update is
+  applied on an explicit reload, so activation happens at a safe boundary. Unsaved work is
+  committed to durable local storage first — see [Local-First](local-first.md) principle 1.
+- **Anti-patterns:** Immediately claiming clients and activating a new service worker; forcing a
+  reload out from under the user; treating the update prompt as optional polish on an offline
+  app.
+
 ## Aligned agent
 
 `web-engineer` — this specialist should treat the principles above as binding practice
@@ -119,3 +149,5 @@ when working in this realm.
 - **[Security](security.md)** — owns the CSP and browser-security posture principle 7 upholds.
 - **[Backend](backend.md)** — owns the data contracts this UI orchestrates; coordinate changes
   there rather than reshaping them in the client.
+- **[Local-First](local-first.md)** — shares this agent; owns what the client stores and how
+  it syncs, while this realm owns how it renders.

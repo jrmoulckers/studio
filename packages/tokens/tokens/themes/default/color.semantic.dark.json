@@ -2,16 +2,36 @@
   "$description": "score-king DARK semantic palette — the canonical mode (the app boots data-theme=\"dark\"). Restructured into the shared studio --semantic-* taxonomy. Emitted under [data-theme=\"dark\"]. Brand stays JRM Studio: interactive = Royal Violet (lightened to the 300–400 steps for contrast on dark), accent = Crown Gold (pure).",
   "semantic": {
     "background": {
-      "primary": { "$value": "{color.ink.midnight}", "$type": "color", "$description": "Midnight Court — app background." },
+      "primary": {
+        "$value": "{color.ink.midnight}",
+        "$type": "color",
+        "$description": "Midnight Court — app background."
+      },
       "secondary": { "$value": "{color.ink.raised-slate}", "$type": "color" },
-      "elevated": { "$value": "{color.ink.indigo-slate}", "$type": "color", "$description": "Elevated surface — cards, popovers, inputs." },
-      "raised": { "$value": "{color.ink.lifted-slate}", "$type": "color", "$description": "JRM extension (deepest chrome) — legacy --color-surface-3 alias." }
+      "elevated": {
+        "$value": "{color.ink.indigo-slate}",
+        "$type": "color",
+        "$description": "Elevated surface — cards, popovers, inputs."
+      },
+      "raised": {
+        "$value": "{color.ink.lifted-slate}",
+        "$type": "color",
+        "$description": "JRM extension (deepest chrome) — legacy --color-surface-3 alias."
+      }
     },
     "text": {
       "primary": { "$value": "{color.ink.moonlight}", "$type": "color" },
       "secondary": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
-      "disabled": { "$value": "{color.ink.court-line}", "$type": "color", "$description": "Disabled text — WCAG-exempt." },
-      "inverse": { "$value": "{color.ink.midnight}", "$type": "color", "$description": "Text on interactive/brand fills." }
+      "disabled": {
+        "$value": "{color.ink.court-line}",
+        "$type": "color",
+        "$description": "Disabled text — WCAG-exempt."
+      },
+      "inverse": {
+        "$value": "{color.ink.midnight}",
+        "$type": "color",
+        "$description": "Text on interactive/brand fills."
+      }
     },
     "border": {
       "default": { "$value": "{color.ink.court-line}", "$type": "color" },
@@ -19,14 +39,30 @@
       "error": { "$value": "{color.loss.400}", "$type": "color" }
     },
     "interactive": {
-      "default": { "$value": "{color.royal-violet.400}", "$type": "color", "$description": "Royal Violet lightened for contrast on dark surfaces." },
+      "default": {
+        "$value": "{color.royal-violet.400}",
+        "$type": "color",
+        "$description": "Royal Violet lightened for contrast on dark surfaces."
+      },
       "hover": { "$value": "{color.royal-violet.300}", "$type": "color" },
       "pressed": { "$value": "{color.royal-violet.200}", "$type": "color" },
-      "disabled": { "$value": "{color.ink.lifted-slate}", "$type": "color", "$description": "Disabled interactive fill — WCAG-exempt." }
+      "disabled": {
+        "$value": "{color.ink.lifted-slate}",
+        "$type": "color",
+        "$description": "Disabled interactive fill — WCAG-exempt."
+      }
     },
     "accent": {
-      "default": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Crown Gold fills/washes." },
-      "ink": { "$value": "{color.crown-gold.500}", "$type": "color", "$description": "Gold text on dark surfaces keeps pure Crown Gold." }
+      "default": {
+        "$value": "{color.crown-gold.500}",
+        "$type": "color",
+        "$description": "Crown Gold fills/washes."
+      },
+      "ink": {
+        "$value": "{color.crown-gold.500}",
+        "$type": "color",
+        "$description": "Gold text on dark surfaces keeps pure Crown Gold."
+      }
     },
     "status": {
       "positive": { "$value": "{color.win.500}", "$type": "color" },

@@ -222,6 +222,94 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
   contrast handling bolted on per product instead of guaranteed by the kernel; a baseline
   that assumes the best device or network.
 
+### 14. Put third-party credentials behind a minimal first-party proxy
+
+- **Statement:** When a client-owned product must reach a third-party API that requires a
+  secret, route it through a first-party service that holds the credential, stores no user
+  data, and admits only known origins. Never ship the secret to the client, and never let the
+  proxy grow into a user-data tier.
+- **Why:** A browser cannot keep a secret ([Frontend](frontend.md) #7), but adding a
+  conventional backend to a local-first product would relocate the user's data off their
+  device and break the trust contract ([Local-First](local-first.md) #1). A stateless
+  credential proxy resolves both: it is the simplest boundary that satisfies the constraint
+  (#6) and carries the least data possible (#7). A client-side product is therefore not
+  automatically a product with no server tier — these are two distinct, sanctioned shapes,
+  and which one applies depends on whether a third-party secret is in play.
+- **In practice:** The proxy holds only the vendor credential, injected as a deployment
+  secret and never committed to the tree. It caches only vendor responses keyed by public
+  inputs — never anything user-specific. Callers are restricted by an exact-match origin
+  allowlist with no wildcard. The user's library, history, and preferences stay in
+  client-owned storage. `cartridge`'s `bridge/` Worker is the reference implementation: it
+  holds the IGDB/Twitch credentials, caches only lookups keyed by search term or game id, and
+  never stores a user's library.
+- **Anti-patterns:** Embedding an API key in client code or a public build-time variable;
+  letting the proxy accumulate user accounts or libraries "while we're here"; a wildcard CORS
+  origin; caching per-user responses in a shared cache; concluding that a client-rendered
+  product may therefore hold third-party secrets in the browser.
+
+### 15. Constrain the format you emit rather than parsing the format you might receive
+
+- **Statement:** When the same system writes and later re-reads a marked region of a file, put the
+  requirement on the writer. A narrow, mechanically checkable shape — a fixed sentinel at a fixed
+  column, a delimiter that cannot occur in content — replaces a general parser for the surrounding
+  language.
+- **Why:** Recognising a construct in a rich format usually needs the whole grammar. Distinguishing
+  an indented code block from ordinary indented prose in Markdown requires blank-line precedence,
+  list continuation and lazy continuation; distinguishing a real marker from a quoted one requires
+  fence tracking. That is a parser's worth of machinery, and every gap in it is a silent
+  misclassification rather than an error. An anchor the emitter always satisfies gets the same
+  guarantee for free and fails visibly when it is wrong.
+- **In practice:** Anchor sentinels at column 0 because the writer always emits them there. Prefer
+  offset-preserving masking to stripping when a region must be ignored, so positions stay usable.
+  Before narrowing a pattern, check the real corpus for a legitimate case the stricter form would
+  exclude — over-strict matching fails in the opposite direction, by not finding an existing region
+  and appending a duplicate. Assert the post-condition too: exactly one region after a merge.
+  **Absence of the region cannot tell you whether the file is yours.** A file with no managed block
+  is exactly what a first sync looks like, so "never synced" and "belongs to someone else" are the
+  same observation — which means a merge-on-absence path can never derive consent from content the
+  way a whole-file copy derives it from a hash comparison. Establish that the _target_ is the
+  intended one, by identity, before any write that appends rather than replaces.
+- **An exception to a general path inherits none of the general path's guards.** Special-casing one
+  file by name gives it a code route that quietly lacks whatever the ordinary route checked, and
+  the special case is usually special because it is the most common or most sensitive file — so the
+  one item with bespoke handling ends up the one item with no protection. When you branch out of a
+  shared path, enumerate what the shared path was doing for you and re-establish each of them
+  deliberately, or assert the exception's own precondition in its place.
+- **"The tool has never run" and "the target is empty" are different claims, and adoption is what
+  separates them.** Any content-addressed sync will adopt a hand-seeded file that already matches
+  what it would have written, so a first run against a repo someone has been maintaining by hand
+  reports those paths as baselined rather than as new. Predict a run by reading the target, never by
+  reasoning from the tool's own history — and expect the mistake specifically on artifacts that
+  originate in a third repository, where "it comes from elsewhere" reads as "it cannot already be
+  here". The consequence is worth stating positively: an engine that adopts on byte-equality lets a
+  member be seeded by hand and converge without a migration, which is the property that makes the
+  first run safe.
+- **A distributed defect is recoverable exactly as far as the channel that delivered it can
+  redeliver.** In a lockfile-backed sync the engine's own files always carry a lock entry, so the
+  adoption path — gated on the _absence_ of one — is unreachable for them by construction, and an
+  installed file the member never touched is not drift but an ordinary update. Shipping a bad
+  artifact to every member is therefore repairable at the source: fix canon, and the next run
+  repairs all of them. Measured, three runs against one work-dir: `added: 52` with seven defective
+  files, then `updated: 7 · unchanged: 45` from the corrected canon with the defect gone, then —
+  after a single local edit — `unchanged: 51` and `locally modified (skipped): 1`. **The one-way
+  door is the member's edit, not the ship.** Locate prevention at the irreversible step, and resist
+  treating a delay before an irreversible-looking event as having averted anything until the
+  recovery path has actually been run.
+- **Fix a defect that recurs per instance where the count is one.** When a member repository's
+  state is wrong in a way every future member will reproduce, the remedy that is local to the
+  member — edit the file, note it in the runbook, remember it at onboarding — costs once per member
+  forever, and it is paid by whoever is least equipped to know it was needed. Push the remediation
+  into whatever produced the state, so it is written once and applies to members not yet created.
+  The same reasoning governs assertions: a check that lives in a member scales with members, so it
+  belongs to the engine unless it is genuinely about that member. **What licenses an automatic
+  remediation is provability, not convenience** — rewriting bytes is safe here only because bytes
+  equal to _raw_ canon could not have been authored by the member, so nothing human is discarded.
+  Where the same edit would be merely probably-harmless, it needs an explicit override instead, and
+  the guard that keeps the two apart is the part to mutation-test.
+- **Anti-patterns:** Reimplementing part of a markup grammar to locate your own output; a
+  permissive pattern justified by "the strict form might miss something", with no corpus checked
+  either way; a marker whose recognition rules differ between the writer and the reader.
+
 ## Aligned agent
 
 `architect` — this specialist should treat the principles above as binding practice
@@ -231,8 +319,8 @@ when working in this realm.
 
 - **[Middleware](middleware.md)** (`architect`) — shares this agent; the connective/contract
   layer between kernel and products lives here.
-- **[Design](design.md)** (`design-engineer`) — owns the semantic-token *values* and
-  component design; Architecture owns the token *contract* and layering.
+- **[Design](design.md)** (`design-engineer`) — owns the semantic-token _values_ and
+  component design; Architecture owns the token _contract_ and layering.
 - **[Frontend](frontend.md)** (`web-engineer`) — primary consumer of the framework-agnostic
   outputs and the Tailwind preset.
 - **[DevOps](devops.md)** (`devops-engineer`) — owns the Turbo/pnpm build wiring that the
@@ -245,3 +333,5 @@ when working in this realm.
   guarantees (reduced-motion, high-contrast) are owned jointly with this realm.
 - **[Testing](testing.md)** (`qa-tester`) — reproducible builds and platform parity are what
   the test suite verifies.
+- **[Local-First](local-first.md)** (`web-engineer`) — owns the client-owned data tier of the
+  products; Architecture owns the shape of the kernel they consume.

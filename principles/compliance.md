@@ -93,6 +93,20 @@ app) stay defensible without slowing delivery.
 - **Why:** Obligations that don't bind private packages (attribution, source offers) activate the
   moment a package is published.
 
+#### 5.2 Mark first-party source with a machine-readable license header
+
+- **Statement:** Every first-party source file begins with an SPDX identifier
+  (`SPDX-License-Identifier: <id>`) declaring that file's license.
+- **Why:** Principle 5 inventories licenses coming _in_; this is the counterpart going _out_.
+  A file-level identifier makes the codebase's own licensing unambiguous and greppable by
+  tooling, instead of resting on a root `LICENSE` that says nothing about vendored, generated,
+  or differently-licensed files sitting beside it.
+- **In practice:** The header is line 1 of each source file, and the identifier used is a
+  per-repo choice. Generated output inherits the header from its generator template so it isn't
+  stripped on every rebuild.
+- **Anti-patterns:** Source files with no header at all; assuming the root `LICENSE` covers
+  files that were copied in from elsewhere; a header convention with nothing checking it.
+
 ### 6. Build for audit-readiness continuously
 
 - **Statement:** Keep compliance evidence current as work lands, not assembled in a scramble before

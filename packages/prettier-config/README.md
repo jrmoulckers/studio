@@ -10,7 +10,7 @@ Reference it from `package.json`:
 
 ```jsonc
 {
-  "prettier": "@jrm/prettier-config"
+  "prettier": "@jrm/prettier-config",
 }
 ```
 

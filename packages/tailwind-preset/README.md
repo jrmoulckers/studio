@@ -21,14 +21,14 @@ Import the CSS variables once (from `@jrm/tokens`) and apply the preset:
 ```js
 // tailwind.config.js (or .cjs)
 module.exports = {
-  presets: [require("@jrm/tailwind-preset")],
-  content: ["./src/**/*.{js,ts,jsx,tsx,svelte,mdx,html}"],
+  presets: [require('@jrm/tailwind-preset')],
+  content: ['./src/**/*.{js,ts,jsx,tsx,svelte,mdx,html}'],
 };
 ```
 
 ```css
 /* app entry CSS */
-@import "@jrm/tokens/css";      /* defines the --… variables the preset references */
+@import '@jrm/tokens/css'; /* defines the --… variables the preset references */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,6 +1,10 @@
 {
   "color": {
-    "bg": { "$value": "{semantic.background.primary}", "$type": "color", "$description": "Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var." },
+    "bg": {
+      "$value": "{semantic.background.primary}",
+      "$type": "color",
+      "$description": "Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var."
+    },
     "surface": { "$value": "{semantic.background.elevated}", "$type": "color" },
     "surface-2": { "$value": "{semantic.background.secondary}", "$type": "color" },
     "surface-3": { "$value": "{semantic.background.raised}", "$type": "color" },

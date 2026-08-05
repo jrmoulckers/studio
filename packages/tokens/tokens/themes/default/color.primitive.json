@@ -6,8 +6,16 @@
       "200": { "$value": "oklch(0.94 0.04 285)", "$type": "color" },
       "300": { "$value": "oklch(0.83 0.10 285)", "$type": "color" },
       "400": { "$value": "oklch(0.71 0.16 285)", "$type": "color" },
-      "500": { "$value": "#7c5cff", "$type": "color", "$description": "Royal Violet — canonical brand action color" },
-      "600": { "$value": "#6b46f0", "$type": "color", "$description": "Deep Violet — pressed/hover echo of the primary action" },
+      "500": {
+        "$value": "#7c5cff",
+        "$type": "color",
+        "$description": "Royal Violet — canonical brand action color"
+      },
+      "600": {
+        "$value": "#6b46f0",
+        "$type": "color",
+        "$description": "Deep Violet — pressed/hover echo of the primary action"
+      },
       "700": { "$value": "oklch(0.38 0.14 285)", "$type": "color" },
       "800": { "$value": "oklch(0.28 0.10 285)", "$type": "color" },
       "900": { "$value": "oklch(0.18 0.06 285)", "$type": "color" }
@@ -66,7 +74,11 @@
       "200": { "$value": "oklch(0.95 0.03 230)", "$type": "color" },
       "300": { "$value": "oklch(0.88 0.07 230)", "$type": "color" },
       "400": { "$value": "oklch(0.80 0.11 230)", "$type": "color" },
-      "500": { "$value": "#38bdf8", "$type": "color", "$description": "Info Sky — canonical (seeded from score-king player-5)." },
+      "500": {
+        "$value": "#38bdf8",
+        "$type": "color",
+        "$description": "Info Sky — canonical (seeded from score-king player-5)."
+      },
       "600": { "$value": "oklch(0.62 0.13 230)", "$type": "color" },
       "700": { "$value": "oklch(0.52 0.12 230)", "$type": "color" },
       "800": { "$value": "oklch(0.42 0.10 230)", "$type": "color" },
@@ -74,23 +86,63 @@
     },
     "ink": {
       "$description": "Dark neutral ramp — Midnight Court through Moonlight (canonical hexes).",
-      "midnight": { "$value": "#0f1020", "$type": "color", "$description": "Midnight Court — app background" },
-      "indigo-slate": { "$value": "#1a1b2e", "$type": "color", "$description": "Indigo Slate — surface" },
-      "raised-slate": { "$value": "#24263f", "$type": "color", "$description": "Raised Slate — surface-2" },
-      "lifted-slate": { "$value": "#2c2e4d", "$type": "color", "$description": "Lifted Slate — surface-3" },
-      "court-line": { "$value": "#313357", "$type": "color", "$description": "Court Line — borders, dividers" },
-      "moonlight": { "$value": "#e9e9f4", "$type": "color", "$description": "Moonlight — primary text" },
-      "lavender-gray": { "$value": "#a3a6cb", "$type": "color", "$description": "Lavender Gray — muted text" }
+      "midnight": {
+        "$value": "#0f1020",
+        "$type": "color",
+        "$description": "Midnight Court — app background"
+      },
+      "indigo-slate": {
+        "$value": "#1a1b2e",
+        "$type": "color",
+        "$description": "Indigo Slate — surface"
+      },
+      "raised-slate": {
+        "$value": "#24263f",
+        "$type": "color",
+        "$description": "Raised Slate — surface-2"
+      },
+      "lifted-slate": {
+        "$value": "#2c2e4d",
+        "$type": "color",
+        "$description": "Lifted Slate — surface-3"
+      },
+      "court-line": {
+        "$value": "#313357",
+        "$type": "color",
+        "$description": "Court Line — borders, dividers"
+      },
+      "moonlight": {
+        "$value": "#e9e9f4",
+        "$type": "color",
+        "$description": "Moonlight — primary text"
+      },
+      "lavender-gray": {
+        "$value": "#a3a6cb",
+        "$type": "color",
+        "$description": "Lavender Gray — muted text"
+      }
     },
     "paper": {
       "$description": "Light neutral ramp — Lilac Mist through Ink (canonical hexes).",
-      "lilac-mist": { "$value": "#f4f4fb", "$type": "color", "$description": "Lilac Mist — app background" },
+      "lilac-mist": {
+        "$value": "#f4f4fb",
+        "$type": "color",
+        "$description": "Lilac Mist — app background"
+      },
       "white": { "$value": "#ffffff", "$type": "color", "$description": "White — surface" },
       "frost": { "$value": "#f1f1f9", "$type": "color", "$description": "Frost — surface-2" },
       "haze": { "$value": "#e7e7f4", "$type": "color", "$description": "Haze — surface-3" },
-      "cloud-line": { "$value": "#dcdcea", "$type": "color", "$description": "Cloud Line — borders" },
+      "cloud-line": {
+        "$value": "#dcdcea",
+        "$type": "color",
+        "$description": "Cloud Line — borders"
+      },
       "ink": { "$value": "#1c1d2e", "$type": "color", "$description": "Ink — primary text" },
-      "slate-gray": { "$value": "#5b5e7e", "$type": "color", "$description": "Slate Gray — muted text" }
+      "slate-gray": {
+        "$value": "#5b5e7e",
+        "$type": "color",
+        "$description": "Slate Gray — muted text"
+      }
     },
     "base": {
       "white": { "$value": "#ffffff", "$type": "color" },
@@ -98,9 +150,21 @@
     },
     "oled": {
       "$description": "True-black surface set for the dark-oled mode — AMOLED pixel-off battery savings. Structural pattern ported from finance; hues stay studio-neutral.",
-      "black": { "$value": "#000000", "$type": "color", "$description": "True black — OLED pixels off (0,0,0), the app background." },
-      "surface": { "$value": "#0a0a0a", "$type": "color", "$description": "Near-black secondary surface." },
-      "elevated": { "$value": "#111111", "$type": "color", "$description": "Elevated surface for cards, modals, panels." }
+      "black": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "True black — OLED pixels off (0,0,0), the app background."
+      },
+      "surface": {
+        "$value": "#0a0a0a",
+        "$type": "color",
+        "$description": "Near-black secondary surface."
+      },
+      "elevated": {
+        "$value": "#111111",
+        "$type": "color",
+        "$description": "Elevated surface for cards, modals, panels."
+      }
     },
     "chart": {
       "$description": "Generic 6-color data-viz ramp — IBM CVD-safe palette (shared studio standard, structure ported from finance). Charts MUST never convey meaning by color alone; always pair with labels/patterns/icons.",
@@ -112,12 +176,36 @@
       "6": { "$value": "#009e73", "$type": "color", "$description": "CVD-safe teal" },
       "hc": {
         "$description": "High-contrast chart variants — darker CVD-safe hues that clear WCAG AA (>=4.5:1) on white. Swapped in under high-contrast / prefers-contrast: more.",
-        "1": { "$value": "#0043ce", "$type": "color", "$description": "HC blue — 7.8:1 vs white (AAA)" },
-        "2": { "$value": "#6929c4", "$type": "color", "$description": "HC purple — 6.0:1 vs white (AA)" },
-        "3": { "$value": "#9f1853", "$type": "color", "$description": "HC magenta — 8.0:1 vs white (AAA)" },
-        "4": { "$value": "#ba4e00", "$type": "color", "$description": "HC orange — 5.0:1 vs white (AA)" },
-        "5": { "$value": "#8e6a00", "$type": "color", "$description": "HC gold — 5.0:1 vs white (AA)" },
-        "6": { "$value": "#005d5d", "$type": "color", "$description": "HC teal — 6.5:1 vs white (AA)" }
+        "1": {
+          "$value": "#0043ce",
+          "$type": "color",
+          "$description": "HC blue — 7.8:1 vs white (AAA)"
+        },
+        "2": {
+          "$value": "#6929c4",
+          "$type": "color",
+          "$description": "HC purple — 6.0:1 vs white (AA)"
+        },
+        "3": {
+          "$value": "#9f1853",
+          "$type": "color",
+          "$description": "HC magenta — 8.0:1 vs white (AAA)"
+        },
+        "4": {
+          "$value": "#ba4e00",
+          "$type": "color",
+          "$description": "HC orange — 5.0:1 vs white (AA)"
+        },
+        "5": {
+          "$value": "#8e6a00",
+          "$type": "color",
+          "$description": "HC gold — 5.0:1 vs white (AA)"
+        },
+        "6": {
+          "$value": "#005d5d",
+          "$type": "color",
+          "$description": "HC teal — 6.5:1 vs white (AA)"
+        }
       }
     },
     "player": {
