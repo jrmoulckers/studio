@@ -528,7 +528,15 @@ Copy the block below for each principle.
   derived, and genuinely wrong, and nothing about it looks quoted. Treat every named ref, tag,
   branch or path in a command as an input needing its own currency check — fetch before comparing,
   and prefer the remote-tracking ref to the local branch whenever the local one is not the thing you
-  are actually working on.
+  are actually working on. **And the convenience you wrap around a probe becomes part of the
+  probe.** Truncation, filtering and formatting added to keep output readable are not neutral
+  observers: a pipeline that stops early can short-circuit the program before it exits, so the
+  status you read back belongs to your filter rather than to the thing under test. The damage is
+  directional — it yields a plausible wrong value, not an obvious one — and it is worst precisely
+  when you are being terse in order to report carefully. Read an exit status from an unpiped
+  invocation, and when a probe produces a result that would be a serious finding, re-run it stripped
+  of every convenience before believing it, because the likeliest explanation for a surprising
+  measurement is the apparatus.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file

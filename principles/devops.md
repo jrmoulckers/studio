@@ -334,7 +334,12 @@ green, fast, and trustworthy for every downstream consumer.
   reopen reads as protest rather than as data**, especially to the fix's author, who answers it
   with the fix's justification instead of by running the case — so put the executed output and the
   exact invocation in the reopen itself, and say plainly that it was run at current head. Evidence
-  framed as disagreement gets rebutted; evidence framed as a measurement gets reproduced.
+  framed as disagreement gets rebutted; evidence framed as a measurement gets reproduced. **And the
+  person best placed to find the surviving variants is the one who fixed the first, who is the least
+  likely to look** — they hold the mechanism in their head, so they can enumerate the neighbouring
+  cases faster than anyone, and the fix that just landed is the thing that persuades them there are
+  none. Treat shipping a fix as the moment to enumerate siblings, not the moment the enumeration
+  ends, and expect the reopen to have to come from outside.
 - **Anti-patterns:** A skip counted in a summary line and never named; treating "no failures" as
   "everything delivered"; `--force` as the documented remedy for single-file drift; a warning whose
   only home is stdout of a scheduled job.
