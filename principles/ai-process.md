@@ -342,7 +342,16 @@ Copy the block below for each principle.
   provenance decays faster than content: an argument is retained accurately while the identity of
   whoever made it is lost, so attributing a position to whoever last relayed it is the default
   outcome rather than a lapse — quote the claim, not the claimant, and let the author correct the
-  record. The discriminator for when a name was safe to attach at all: **if correcting the
+  record. **Verify who said it with the same rigour as what was said.** In a channel carrying
+  several senders, a correction can be researched impeccably and delivered to the wrong party —
+  timestamps resolved, ancestry proven, counts re-derived — and every one of those checks operates
+  on the claim while none touches the attribution, because provenance arrives free with the message
+  and never looks like an input. The result is confident, well-evidenced, useless work that also
+  enters the record as though the addressee erred. If a correspondent's message does not sound like
+  their position, check whether it was theirs before answering it; and if you are told you said
+  something you did not, say so plainly rather than absorbing it, because the real author is the
+  only one who can act on it. The discriminator for when a name was safe to attach at all: **if
+  correcting the
   attribution leaves the conclusion standing, the attribution was decoration.** A clause that
   carries no inferential weight should not carry a name either, because attaching one welds an
   independent claim to an argument that never depended on it and makes both fail together. Build
@@ -475,7 +484,11 @@ Copy the block below for each principle.
   the reference you are least likely to re-read is the one you own** — your own repository, branch
   or figure feels like the fixed side of a comparison while the other side is what moves, so it
   goes unchecked for exactly as long as you are being careful about everything else. Re-resolve
-  your own pins on the same schedule as the ones you are auditing.
+  your own pins on the same schedule as the ones you are auditing. **And an unchanged region of a
+  moving file is where a stale read is indistinguishable from a fresh one:** every quotation from
+  it is correct, so re-quoting feels like re-verifying and returns no signal that the surrounding
+  artifact has moved. Accuracy of content is not evidence of currency of read — take the revision
+  from the repository, not from the fact that your excerpt still matches.
 - **Write locators that resolve from outside the conversation.** A bare `resolve.mjs:58` has the
   syntax of a resolvable reference while carrying context only the participants hold, and the reader
   who follows it gets one failure that is consistent with three different conclusions — the file
