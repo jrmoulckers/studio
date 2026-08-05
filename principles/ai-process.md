@@ -683,7 +683,12 @@ Copy the block below for each principle.
   argument. Quote the command beside the result whenever the result is an absence. And when a
   negative is impossible given state you can establish independently, **eliminating the environment
   implicates the invocation** — the honest report is then that the command is unrecoverable, not
-  that the thing was missing.
+  that the thing was missing. The reason this is hard to defend against is that it conceals itself
+  at exactly the moment of choice: a negative result _feels complete_ in a way a positive one does
+  not, since there is no object in hand to prompt a second look and nothing left to inspect, so the
+  one artifact that could later overturn it is discarded precisely because the finding seems
+  finished. Preserve the command while the answer still feels settled, or it will not be preserved
+  at all.
 - **Deliberate in mechanism is not deliberate in substance:** that a value was typed by hand, or
   produced by a step someone ran on purpose, establishes only that nothing was truncated. It says
   nothing about what the value was reasoned from, or whether that premise survived the change it
