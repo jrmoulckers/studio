@@ -1,12 +1,9 @@
-# Copilot Instructions — JRM Studio
+# Copilot Instructions - JRM Studio
 
-This repo follows a standard **principles practice** in [`../principles/`](../principles/),
-organized as a tree by realm. Treat these principles as **binding practice**.
+Use [`../AGENTS.md`](../AGENTS.md) as the portable repository entry point and
+[`../principles/AGENTS.md`](../principles/AGENTS.md) as the authoritative local dispatch
+map. Read every applicable realm file before acting.
 
-- Before working in a realm, read that realm's file in `principles/` and follow it.
-- Each specialist agent is aligned to a realm — see
-  [`../principles/AGENTS.md`](../principles/AGENTS.md).
-- Cite the principle behind a decision. If one is missing or unclear, propose an addition
-  in the realm file rather than inventing an ad-hoc rule.
-
-See [`../principles/README.md`](../principles/README.md) for the full realm tree.
+Studio's local constraints take precedence over canonical generic role guidance.
+Provider-ready `.github/agents/*.agent.md` files are future sync-owned outputs, not files
+to author locally.

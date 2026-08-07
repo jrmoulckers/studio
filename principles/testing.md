@@ -54,8 +54,14 @@ testing exists to catch breaks at the source, not in downstream apps.
 
 - **Statement:** Lock the generated token surface and rendered appearance behind regression checks.
 - **Why:** Tokens feed CSS variables, a Tailwind preset, and typed JS — a silent shift in a value or name re-flows every consuming app with no compile error to catch it.
-- **In practice:** Regression-test the built `css/`, `tailwind/`, and `js/` outputs for the semantic contract (names present, three theme layers, reduced-motion block). Add visual snapshots for representative components across light, dark, and high-contrast. Review and re-baseline diffs deliberately.
-- **Anti-patterns:** Blindly re-approving visual/token snapshots to make CI green; no coverage of dark or high-contrast modes; treating a token-value change as invisible because types still pass.
+- **In practice:** Regression-test the built `css/`, `tailwind/`, and `js/` outputs for the
+  semantic contract (names present, four color modes, orthogonal cognitive mode,
+  reduced-motion block). Add visual snapshots for representative components across light,
+  dark, dark-OLED, and high-contrast, plus cognitive states where affected. Review and
+  re-baseline diffs deliberately.
+- **Anti-patterns:** Blindly re-approving visual/token snapshots to make CI green; no
+  coverage of dark-OLED, high-contrast, or cognitive behavior; treating a token-value
+  change as invisible because types still pass.
 
 ### 4. Typecheck and lint are gates, not substitutes for tests
 
@@ -73,10 +79,15 @@ testing exists to catch breaks at the source, not in downstream apps.
 
 ### 5. Build must be green and reproducible
 
-- **Statement:** `pnpm build` (and `pnpm -r build`) must succeed from a clean install, and generated output must not be committed.
+- **Statement:** `pnpm build` (and `pnpm -r build`) must succeed from a clean install; raw
+  `build/` output stays ignored, and the committed `dist/` distribution must match source.
 - **Why:** The build is the artifact consumers get. A build that only works with stale local `build/` dirs hides breakage until a downstream repo pulls the package.
-- **In practice:** Validate on a clean checkout with `pnpm install` then `pnpm build`; keep `packages/tokens/build/` git-ignored and regenerated. CI treats a build failure as a blocking defect.
-- **Anti-patterns:** Committing regenerated `build/` artifacts; tests that pass only against a hand-edited build dir; "works on my machine" builds that skip a clean install.
+- **In practice:** Validate on a clean checkout with `pnpm install` then `pnpm build`; keep
+  `packages/tokens/build/` git-ignored and regenerated, and run
+  `pnpm tokens:dist:check` against committed `packages/tokens/dist/`. CI treats either a
+  build failure or stale distribution bytes as a blocking defect.
+- **Anti-patterns:** Committing `build/`; hand-editing `build/` or `dist/`; tests that pass
+  only against stale local output; "works on my machine" builds that skip a clean install.
 
 ### 6. Set coverage expectations that mean something
 
