@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  verify_ubuntu:
+    name: verify-ubuntu
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
@@ -49,7 +50,8 @@ jobs:
       - name: Tokens dist freshness
         run: pnpm tokens:dist:check
 
-  format-windows:
+  format_windows:
+    name: format-windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
@@ -70,3 +72,19 @@ jobs:
 
       - name: Format check
         run: pnpm format:check
+
+  build:
+    name: build
+    if: ${{ always() }}
+    needs: [verify_ubuntu, format_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require successful CI jobs
+        env:
+          UBUNTU_RESULT: ${{ needs.verify_ubuntu.result }}
+          WINDOWS_RESULT: ${{ needs.format_windows.result }}
+        run: |
+          if [[ "$UBUNTU_RESULT" != "success" || "$WINDOWS_RESULT" != "success" ]]; then
+            echo "Required CI job failed: verify-ubuntu=$UBUNTU_RESULT, format-windows=$WINDOWS_RESULT"
+            exit 1
+          fi
