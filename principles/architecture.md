@@ -173,16 +173,19 @@ and framework-agnostic as products (`jrm-recipes`, `score-king`, `finance`, …)
 
 ### 10. Builds are deterministic and reproducible
 
-- **Statement:** Generated outputs are produced only by the build (`pnpm build`), kept
-  git-ignored, and regenerated from source — never hand-edited or committed.
+- **Statement:** Generated outputs are produced only by the build and regenerated from
+  source; raw `build/` output stays ignored, while the distribution `dist/` interface is
+  committed only through the deterministic dist task.
 - **Why:** The tokens → tailwind-preset pipeline only stays trustworthy if the source is the
-  single input. A hand-tweaked or committed artifact drifts from its source and makes builds
-  irreproducible across machines and consumers.
+  single input. A hand-tweaked artifact or stale committed distribution drifts from its
+  source and makes builds irreproducible across machines and consumers.
 - **In practice:** `packages/tokens/build/` stays git-ignored and is rebuilt from DTCG
-  sources via Style Dictionary. The same `pnpm build` yields the same CSS, preset, and typed
-  outputs anywhere. Fixes go into sources or the build config, not the emitted files.
-- **Anti-patterns:** Editing `build/` by hand; committing generated CSS/JS; a build whose
-  output depends on machine state, install order, or a manual post-step.
+  sources via Style Dictionary. `pnpm tokens:dist` refreshes the committed, text-only
+  `packages/tokens/dist/` sync interface, and `pnpm tokens:dist:check` proves it matches the
+  sources. Fixes go into sources or build config, never emitted files.
+- **Anti-patterns:** Editing `build/` or `dist/` by hand; committing stale or
+  non-deterministic distribution bytes; a build whose output depends on machine state,
+  install order, or a manual post-step.
 
 ### 11. Guard the dependency supply chain
 

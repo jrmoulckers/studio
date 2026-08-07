@@ -1,8 +1,9 @@
 # JRM Studio — Principles
 
 A single, standard practice for how we build JRM Studio, organized as a **tree by realm**.
-Each realm below is authored in its own dedicated worktree session and is bound to a
-specialist agent that must follow it (see [`AGENTS.md`](AGENTS.md)).
+Each realm below is authored in its own dedicated worktree session. The authoritative
+canonical-agent mapping, local paths, risks, and handoffs live in
+[`AGENTS.md`](AGENTS.md).
 
 ## How this is organized
 
@@ -27,29 +28,29 @@ when it fires outranks one that only says what went wrong.
 
 ## The realm tree
 
-| #   | Realm            | File                                       | Aligned agent              |
-| --- | ---------------- | ------------------------------------------ | -------------------------- |
-| 1   | Design           | [design.md](design.md)                     | `design-engineer`          |
-| 2   | Backend          | [backend.md](backend.md)                   | `backend-engineer`         |
-| 3   | Frontend         | [frontend.md](frontend.md)                 | `web-engineer`             |
-| 4   | Middleware       | [middleware.md](middleware.md)             | `architect`                |
-| 5   | Project Planning | [project-planning.md](project-planning.md) | `product-manager`          |
-| 6   | Business         | [business.md](business.md)                 | `business-analyst`         |
-| 7   | Accessibility    | [accessibility.md](accessibility.md)       | `accessibility-reviewer`   |
-| 8   | Process          | [process.md](process.md)                   | `release-manager`          |
-| 9   | DevOps           | [devops.md](devops.md)                     | `devops-engineer`          |
-| 10  | Testing          | [testing.md](testing.md)                   | `qa-tester`                |
-| 11  | Featuring        | [featuring.md](featuring.md)               | `experimentation-engineer` |
-| 12  | Security         | [security.md](security.md)                 | `security-reviewer`        |
-| 13  | Documentation    | [documentation.md](documentation.md)       | `docs-writer`              |
-| 14  | Performance      | [performance.md](performance.md)           | `performance-engineer`     |
-| 15  | Data & Analytics | [data-analytics.md](data-analytics.md)     | `data-engineer`            |
-| 16  | Architecture     | [architecture.md](architecture.md)         | `architect`                |
-| 17  | Localization     | [localization.md](localization.md)         | `localization-engineer`    |
-| 18  | Compliance       | [compliance.md](compliance.md)             | `compliance-specialist`    |
-| 19  | AI Products      | [ai-products.md](ai-products.md)           | `ai-ops-engineer`          |
-| 20  | AI Process       | [ai-process.md](ai-process.md)             | `ai-ops-engineer`          |
-| 21  | Local-First      | [local-first.md](local-first.md)           | `web-engineer`             |
+| #   | Realm            | File                                       |
+| --- | ---------------- | ------------------------------------------ |
+| 1   | Design           | [design.md](design.md)                     |
+| 2   | Backend          | [backend.md](backend.md)                   |
+| 3   | Frontend         | [frontend.md](frontend.md)                 |
+| 4   | Middleware       | [middleware.md](middleware.md)             |
+| 5   | Project Planning | [project-planning.md](project-planning.md) |
+| 6   | Business         | [business.md](business.md)                 |
+| 7   | Accessibility    | [accessibility.md](accessibility.md)       |
+| 8   | Process          | [process.md](process.md)                   |
+| 9   | DevOps           | [devops.md](devops.md)                     |
+| 10  | Testing          | [testing.md](testing.md)                   |
+| 11  | Featuring        | [featuring.md](featuring.md)               |
+| 12  | Security         | [security.md](security.md)                 |
+| 13  | Documentation    | [documentation.md](documentation.md)       |
+| 14  | Performance      | [performance.md](performance.md)           |
+| 15  | Data & Analytics | [data-analytics.md](data-analytics.md)     |
+| 16  | Architecture     | [architecture.md](architecture.md)         |
+| 17  | Localization     | [localization.md](localization.md)         |
+| 18  | Compliance       | [compliance.md](compliance.md)             |
+| 19  | AI Products      | [ai-products.md](ai-products.md)           |
+| 20  | AI Process       | [ai-process.md](ai-process.md)             |
+| 21  | Local-First      | [local-first.md](local-first.md)           |
 
 ## Status
 

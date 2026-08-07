@@ -62,20 +62,21 @@ fragmenting. Per-product identity is a palette swap, never a fork.
 
 ### 4. Runtime mode swaps, no rebuild
 
-- **Statement:** Light, dark, and high-contrast modes switch at runtime via `data-theme` on
-  the root element; each mode restates only its semantic colors.
+- **Statement:** Light, dark, dark-OLED, and high-contrast modes switch at runtime via
+  `data-theme` on the root element; each mode restates only its semantic colors.
 - **Why:** Users toggle modes live. Rebuild-per-mode or class-forking every component makes
   modes expensive and inconsistent.
-- **In practice:** `:root` holds light + all vars; `[data-theme="dark"]` and
-  `[data-theme="high-contrast"]` override the ~16 semantic colors only. Set the mode by
-  toggling `document.documentElement.dataset.theme`.
+- **In practice:** `:root` holds light + all vars; `[data-theme="dark"]`,
+  `[data-theme="dark-oled"]`, and `[data-theme="high-contrast"]` override the semantic
+  colors only. Set the mode by toggling `document.documentElement.dataset.theme`.
 - **Anti-patterns:** Separate stylesheets per mode; restating component vars inside a theme
   block; conditionally rendering styles in JS to fake a mode.
 
 ### 5. Meet WCAG AA in every mode
 
 - **Statement:** Semantic color pairings meet 4.5:1 for text and 3:1 for large text and UI
-  in light, dark, and high-contrast; information is never carried by color alone.
+  in light, dark, dark-OLED, and high-contrast; information is never carried by color
+  alone.
 - **Why:** Accessibility is a floor, not a theme. A palette that passes in light but fails in
   dark ships a broken mode.
 - **In practice:** Derive AA-safe ink roles when a fill fails on a surface (e.g.

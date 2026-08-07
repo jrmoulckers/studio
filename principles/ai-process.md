@@ -54,8 +54,9 @@ Copy the block below for each principle.
   able to write; one that never runs commands should not hold `shell`.
 - **In practice:** Map each tool grant to a concrete workflow step in the agent definition.
   `write_scope` and `primary_paths` together bound what the agent can change.
-- **Anti-patterns:** Granting `full` write "to be safe"; `shell` on a read-only reviewer;
-  broadening permissions without a documented rationale in the PR.
+- **Anti-patterns:** Granting `full` write "to be safe"; `shell` on a read-only reviewer
+  with no required validation action; broadening permissions without a documented
+  rationale in the PR.
 
 ### 3. Non-overlapping ownership boundaries
 
