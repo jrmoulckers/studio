@@ -1,3 +1,7 @@
+# Keep tracked text LF-normalized in both the index and working tree while
+# leaving binary detection to Git.
+* text=auto eol=lf
+
 # The committed @jrm/tokens distribution is copied verbatim into member repos by
 # the registry-free sync engine, so its bytes must be deterministic (LF) on every
 # platform regardless of core.autocrlf. Keep the whole dist tree LF.

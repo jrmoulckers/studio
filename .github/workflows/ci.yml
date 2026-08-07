@@ -48,3 +48,25 @@ jobs:
       # sources (regenerates dist, then asserts no git diff).
       - name: Tokens dist freshness
         run: pnpm tokens:dist:check
+
+  format-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0 (verified 2026-08-03)
+        with:
+          version: 10.16.1
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0 (verified 2026-08-03)
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm format:check
