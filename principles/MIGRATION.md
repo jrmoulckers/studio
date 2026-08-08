@@ -60,17 +60,18 @@ Successor IDs must be stable canonical identifiers, not headings or copied prose
 Only the repository owner may move an entry to `ratified`. Agents may add or revise
 `proposed` entries and collect evidence.
 
-Each JSON entry records:
+The `entries` object is keyed by the stable `legacyId`. This makes duplicate IDs
+structurally impossible after JSON parsing and lets the schema reject IDs outside the
+frozen 192-principle inventory. Each keyed entry records:
 
-- `legacyId`
 - one `disposition`
 - one or more `successors` when required, each with `authority` and canonical `id`
 - `status`
 - at least one durable `evidence` URL or repository identifier
 - an accountable `owner`
 
-The ledger must contain at most one entry per `legacyId`. A pull request that introduces a
-duplicate ID, an unknown legacy ID, the wrong successor cardinality, or a status transition
+The ledger must contain at most one value for each `legacyId` key. A pull request that
+introduces an unknown legacy ID, the wrong successor cardinality, or a status transition
 without evidence is invalid.
 
 ## Removal gate

@@ -18,8 +18,7 @@
       "required": ["repository", "commit", "realmFiles", "topLevelPrinciples", "idFormat"],
       "properties": {
         "repository": {
-          "type": "string",
-          "format": "uri"
+          "const": "https://github.com/jrmoulckers/studio"
         },
         "commit": {
           "type": "string",
@@ -37,13 +36,21 @@
       }
     },
     "entries": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "maxProperties": 192,
+      "propertyNames": {
+        "$ref": "#/$defs/legacyId"
+      },
+      "additionalProperties": {
         "$ref": "#/$defs/entry"
       }
     }
   },
   "$defs": {
+    "legacyId": {
+      "type": "string",
+      "pattern": "^studio-legacy:(?:accessibility:[1-7]|ai-process:(?:[1-9]|1[0-9]|2[0-2])|ai-products:[1-8]|architecture:(?:[1-9]|1[0-5])|backend:[1-7]|business:[1-6]|compliance:[1-8]|data-analytics:[1-7]|design:(?:[1-9]|1[0-3])|devops:(?:[1-9]|1[0-5])|documentation:[1-7]|featuring:[1-7]|frontend:[1-9]|local-first:[1-4]|localization:[1-9]|middleware:[1-7]|performance:[1-9]|process:[1-7]|project-planning:[1-7]|security:[1-8]|testing:(?:[1-9]|10))$"
+    },
     "successor": {
       "type": "object",
       "additionalProperties": false,
@@ -61,12 +68,8 @@
     "entry": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["legacyId", "disposition", "successors", "status", "evidence", "owner"],
+      "required": ["disposition", "successors", "status", "evidence", "owner"],
       "properties": {
-        "legacyId": {
-          "type": "string",
-          "pattern": "^studio-legacy:[a-z0-9]+(?:-[a-z0-9]+)*:[1-9][0-9]*$"
-        },
         "disposition": {
           "enum": ["rewrite", "split", "reference", "retire"]
         },
@@ -106,6 +109,7 @@
           "then": {
             "properties": {
               "successors": {
+                "type": "array",
                 "minItems": 1,
                 "maxItems": 1
               }
@@ -123,6 +127,7 @@
           "then": {
             "properties": {
               "successors": {
+                "type": "array",
                 "minItems": 2
               }
             }
@@ -139,6 +144,7 @@
           "then": {
             "properties": {
               "successors": {
+                "type": "array",
                 "maxItems": 0
               }
             }

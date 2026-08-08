@@ -8,5 +8,5 @@
     "topLevelPrinciples": 192,
     "idFormat": "studio-legacy:<realm-file-slug>:<top-level-number>"
   },
-  "entries": []
+  "entries": {}
 }
