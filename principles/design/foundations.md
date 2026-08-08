@@ -17,9 +17,9 @@ consumers. Token, theme, component, and experience principles build on these.
 ### STUDIO-FND-001 — Design decisions are a framework-neutral contract
 
 - **Status:** Draft
-- **Statement:** Express every design decision as a named entry in the Studio design contract — tokens and component specs consumed through generated, framework-neutral outputs — never as a value or theming layer that lives inside one framework or product.
+- **Statement:** Express every reusable, cross-product design decision as a named entry in the Studio design contract — tokens and component specs consumed through generated, framework-neutral outputs — never as a shared value or theming layer that lives inside one framework or product.
 - **Rationale:** Studio spans multiple frameworks and platforms; a single portable contract is the only thing that keeps one system consistent, while framework-locked source of truth fragments it and forces per-consumer divergence.
-- **Verification:** No literal color, size, radius, elevation, or duration value appears in a consuming surface; every consumer reads the same generated CSS-variable / preset / typed-token contract, and no framework wrapper restates token values as its own source of truth.
+- **Verification:** No reusable color, size, radius, elevation, or duration covered by the shared contract is duplicated as a literal in a consuming surface; every consumer reads the same generated CSS-variable / preset / typed-token contract, and no framework wrapper restates token values as its own source of truth.
 - **Ratification owner:** repository owner
 - **Implementation owner:** design-engineer
 - **Handoffs:** Build pipeline, package layering, and general TypeScript/bundling mechanisms are Engineering; distribution and sync of generated artifacts are `.github`.

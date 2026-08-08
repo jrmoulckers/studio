@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Dependency-free validator for the Studio Draft principle tree.
 // Scope: only the seven new files under principles/design and principles/experience.
-// Checks: unique stable IDs, file-to-area ID prefixes, presence and non-emptiness of every
+// Checks: pinned unique IDs, file-to-area ID prefixes, presence and non-emptiness of every
 // required machine-checkable field, exact Draft status, exact "repository owner" ratification
-// owner, and well-formed Legacy inputs. Uses only built-in Node modules.
+// owner, and valid Legacy inputs. Uses only built-in Node modules.
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -14,13 +14,41 @@ const repoRoot = join(__dirname, '..');
 
 // Each new file is pinned to exactly one area prefix. This is the file-to-area contract.
 const FILES = [
-  { path: 'principles/design/foundations.md', area: 'FND' },
-  { path: 'principles/design/tokens-and-themes.md', area: 'TOK' },
-  { path: 'principles/design/components.md', area: 'CMP' },
-  { path: 'principles/experience/interaction.md', area: 'INT' },
-  { path: 'principles/experience/accessibility.md', area: 'A11Y' },
-  { path: 'principles/experience/localization.md', area: 'L10N' },
-  { path: 'principles/experience/ux.md', area: 'UX' },
+  {
+    path: 'principles/design/foundations.md',
+    area: 'FND',
+    ids: ['STUDIO-FND-001', 'STUDIO-FND-002', 'STUDIO-FND-003'],
+  },
+  {
+    path: 'principles/design/tokens-and-themes.md',
+    area: 'TOK',
+    ids: ['STUDIO-TOK-001', 'STUDIO-TOK-002', 'STUDIO-TOK-003', 'STUDIO-TOK-004'],
+  },
+  {
+    path: 'principles/design/components.md',
+    area: 'CMP',
+    ids: ['STUDIO-CMP-001', 'STUDIO-CMP-002', 'STUDIO-CMP-003'],
+  },
+  {
+    path: 'principles/experience/interaction.md',
+    area: 'INT',
+    ids: ['STUDIO-INT-001', 'STUDIO-INT-002', 'STUDIO-INT-003', 'STUDIO-INT-004', 'STUDIO-INT-005'],
+  },
+  {
+    path: 'principles/experience/accessibility.md',
+    area: 'A11Y',
+    ids: ['STUDIO-A11Y-001', 'STUDIO-A11Y-002', 'STUDIO-A11Y-003'],
+  },
+  {
+    path: 'principles/experience/localization.md',
+    area: 'L10N',
+    ids: ['STUDIO-L10N-001', 'STUDIO-L10N-002', 'STUDIO-L10N-003'],
+  },
+  {
+    path: 'principles/experience/ux.md',
+    area: 'UX',
+    ids: ['STUDIO-UX-001', 'STUDIO-UX-002', 'STUDIO-UX-003', 'STUDIO-UX-004'],
+  },
 ];
 
 const REQUIRED_FIELDS = [
@@ -66,7 +94,7 @@ const errors = [];
 const seenIds = new Map(); // id -> file where first seen
 const principles = [];
 
-for (const { path: relPath, area } of FILES) {
+for (const { path: relPath, area, ids: expectedIds } of FILES) {
   const abs = join(repoRoot, relPath);
   let text;
   try {
@@ -79,11 +107,13 @@ for (const { path: relPath, area } of FILES) {
   const lines = text.split(/\r?\n/);
   let current = null;
   let filePrincipleCount = 0;
+  const fileIds = [];
 
   const closeBlock = () => {
     if (!current) return;
     validateBlock(current, relPath, area, errors, seenIds);
     principles.push(current);
+    fileIds.push(current.id);
     filePrincipleCount += 1;
     current = null;
   };
@@ -124,6 +154,16 @@ for (const { path: relPath, area } of FILES) {
   closeBlock();
   if (filePrincipleCount === 0) {
     errors.push(`${relPath}: no valid principles found`);
+  }
+  for (const id of expectedIds) {
+    if (!fileIds.includes(id)) {
+      errors.push(`${relPath}: missing stable principle ID ${id}`);
+    }
+  }
+  for (const id of fileIds) {
+    if (!expectedIds.includes(id)) {
+      errors.push(`${relPath}: unexpected principle ID ${id}; stable IDs must not be renumbered`);
+    }
   }
 }
 
@@ -207,7 +247,7 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Principle validation passed: ${principles.length} principle(s) across ${FILES.length} file(s), all IDs unique and fields well-formed.`,
+  `Principle validation passed: ${principles.length} principle(s) across ${FILES.length} file(s), all stable IDs present and fields well-formed.`,
 );
 for (const { area } of FILES) {
   const count = principles.filter((p) => p.area === area).length;

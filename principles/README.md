@@ -67,8 +67,9 @@ This Draft tree adds no ledger disposition: it does not remove, supersede, or re
 principle, and [`migration-ledger.json`](migration-ledger.json) stays at 0 of 192. A legacy file
 is removed only through the ratified disposition and evidence gate below. The tree is validated by
 [`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
-`pnpm principles:check`, and chained after the token suite in `pnpm test`), which checks unique
-IDs, file-to-area prefixes, required fields, and the exact `Draft` / `repository owner` values.
+`pnpm principles:check`, and chained after the token suite in `pnpm test`), which checks the pinned
+stable ID set, file-to-area prefixes, required fields, and the exact `Draft` / `repository owner`
+values.
 
 ## Precedence during migration
 
