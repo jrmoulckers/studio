@@ -7,6 +7,14 @@
 packages/tokens/dist/
 build/
 
+# Canonical AI assets are provenance-stamped, hash-locked generated output.
+# Formatting consumer copies would create drift from jrmoulckers/.github.
+.github/agents/
+.github/instructions/
+.github/prompts/
+.github/skills/
+.studio-sync.lock.json
+
 # Lockfile — owned by pnpm.
 pnpm-lock.yaml
 
