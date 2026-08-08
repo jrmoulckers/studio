@@ -160,6 +160,14 @@ pnpm tokens:dist:check    # regenerates dist, then `git diff --exit-code -- pack
 
 If it fails, run `pnpm tokens:dist` and commit the updated `dist/`.
 
+### Contract tests
+
+From the repository root, `pnpm test` builds the token package and runs the Node test suite.
+The suite validates authored DTCG references and theme parity, loads every generated entry
+point, checks compatibility aliases and required theme/preferences selectors, and regenerates
+the declared text-only `dist/` contract twice to prove byte determinism and stale-file removal.
+Negative fixtures exercise each validator so a constant-success guard cannot satisfy the suite.
+
 ## Consume
 
 **CSS / Svelte / React (plain vars):**
