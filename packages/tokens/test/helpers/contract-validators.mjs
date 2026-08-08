@@ -82,7 +82,52 @@ export function tokenRecords({ file, document }) {
 }
 
 export function validateDtcgDocuments(documents) {
+  if (documents.length === 0) fail('No token documents were provided.');
   for (const document of documents) tokenRecords(document);
+}
+
+export function assertDocumentSet(documents, expectedFiles) {
+  const actual = documents.map(({ file }) => file).sort();
+  const expected = [...expectedFiles].sort();
+  const missing = expected.filter((file) => !actual.includes(file));
+  const unexpected = actual.filter((file) => !expected.includes(file));
+  if (missing.length > 0 || unexpected.length > 0) {
+    fail(
+      [
+        'Authored token document set differs from the contract.',
+        `Missing: ${missing.join(', ') || 'none'}.`,
+        `Unexpected: ${unexpected.join(', ') || 'none'}.`,
+      ].join(' '),
+    );
+  }
+}
+
+export function assertTokenContract(source, expectedTokens) {
+  const actual = new Map(
+    tokenRecords(source).map(({ path, type, value }) => [path.join('.'), { type, value }]),
+  );
+  const expected = new Map(expectedTokens.map((token) => [token.path, token]));
+  const missing = [...expected.keys()].filter((path) => !actual.has(path));
+  const unexpected = [...actual.keys()].filter((path) => !expected.has(path));
+  const mismatches = [...expected].flatMap(([path, contract]) => {
+    const token = actual.get(path);
+    if (!token) return [];
+    if (token.type !== contract.type) return [`${path} has type ${token.type}`];
+    if (Object.hasOwn(contract, 'value') && token.value !== contract.value) {
+      return [`${path} has value ${JSON.stringify(token.value)}`];
+    }
+    return [];
+  });
+  if (missing.length > 0 || unexpected.length > 0 || mismatches.length > 0) {
+    fail(
+      [
+        `${source.file} differs from the explicit token contract.`,
+        `Missing: ${missing.join(', ') || 'none'}.`,
+        `Unexpected: ${unexpected.join(', ') || 'none'}.`,
+        `Mismatches: ${mismatches.join(', ') || 'none'}.`,
+      ].join(' '),
+    );
+  }
 }
 
 function referencesIn(value) {
@@ -102,6 +147,7 @@ function referencesIn(value) {
 
 export function validateReferenceGraph(documents) {
   const records = documents.flatMap(tokenRecords);
+  if (records.length === 0) fail('Token reference graph has no tokens.');
   const byPath = new Map();
   for (const record of records) {
     const path = record.path.join('.');
@@ -133,7 +179,10 @@ export function validateReferenceGraph(documents) {
   for (const path of byPath.keys()) visit(path, []);
 }
 
-export function assertThemeParity(themes) {
+export function assertThemeParity(themes, requiredTokens) {
+  if (themes.length === 0) fail('No themes were provided for parity validation.');
+  for (const { document } of themes) assertTokenContract(document, requiredTokens);
+
   const [baseline, ...rest] = themes.map(({ name, document }) => ({
     name,
     tokens: new Map(tokenRecords(document).map(({ path, type }) => [path.join('.'), type])),
@@ -299,7 +348,11 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
     "@import './tokens-dark-oled.css';",
     "@import './tokens-high-contrast.css';",
   ]) {
-    if (!indexCss.includes(cssImport)) fail(`CSS index entry point is missing "${cssImport}".`);
+    const remaining = indexCss.trimStart();
+    if (!remaining.startsWith(cssImport)) {
+      fail(`CSS index entry point must begin with "${cssImport}".`);
+    }
+    indexCss = remaining.slice(cssImport.length);
   }
 
   const chartDeclarations = Array.from({ length: 6 }, (_, index) => [
