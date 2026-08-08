@@ -21,7 +21,7 @@ green, fast, and trustworthy for every downstream consumer.
 - **Why:** Product repos consume this kernel directly — an unverified merge breaks every
   downstream app at once. The pipeline is the contract that says a change is safe.
 - **In practice:** `.github/workflows/ci.yml` runs on `push` to all branches and on
-  `pull_request`, executing install → build → typecheck → lint → format check → tokens
+  `pull_request`, executing install → build → typecheck → lint → test → format check → tokens
   freshness in order. Branch protection requires the `build` job on `main`.
 - **Anti-patterns:** Merging on a red or skipped run; "fixing" CI by deleting a check;
   verification steps that only exist on a developer's machine.
