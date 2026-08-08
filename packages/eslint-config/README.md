@@ -3,6 +3,10 @@
 Shared flat [ESLint](https://eslint.org/) config for JRM Studio, seeded from the finance
 app's `eslint.config.mjs` (minus finance-specific rules). Requires ESLint 9+ (flat config).
 
+> **Transitional ownership:** this package remains workspace-internal in Studio pending an
+> additive migration to Engineering. It has not moved and is not published, synced, or
+> otherwise downstream-consumable. The usage below applies inside this monorepo only.
+
 | Entry | Import                     | Use for                                                |
 | ----- | -------------------------- | ------------------------------------------------------ |
 | base  | `@jrm/eslint-config`       | Any TS/JS package (JS + typescript-eslint recommended) |

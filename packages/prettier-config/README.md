@@ -4,6 +4,10 @@ Shared [Prettier](https://prettier.io/) config for JRM Studio. Formatting defaul
 seeded from the finance app; Tailwind class sorting (with `cn`/`cva` awareness) is seeded
 from jrm-recipes.
 
+> **Transitional ownership:** this package remains workspace-internal in Studio pending an
+> additive migration to Engineering. It has not moved and is not published, synced, or
+> otherwise downstream-consumable. The usage below applies inside this monorepo only.
+
 ## Usage
 
 Reference it from `package.json`:

@@ -1,58 +1,79 @@
-# JRM Studio — Principles
+# JRM Studio - Principles transition
 
-A single, standard practice for how we build JRM Studio, organized as a **tree by realm**.
-Each realm below is authored in its own dedicated worktree session. The authoritative
-canonical-agent mapping, local paths, risks, and handoffs live in
-[`AGENTS.md`](AGENTS.md).
+Studio's local principle authority is design and UI: visual design, interaction,
+accessibility, localization UX, semantic tokens and themes, UI contracts, reusable
+platform implementations, UI presets and examples, and visual validation.
 
-## How this is organized
+The repository-wide authority boundary is canonical in
+[ADR-0003: Four-authority repository topology](https://github.com/jrmoulckers/.github/blob/main/docs/architecture/0003-four-authority-topology.md).
+This directory references that decision and applies it to Studio; it does not duplicate
+the ADR or define Engineering, Product, or `.github` policy.
 
-```
-principles/
-├── README.md        ← you are here (index + tree)
-├── AGENTS.md        ← realm → agent alignment + shared practice
-├── _template.md     ← the authoring template each realm follows
-└── <realm>.md       ← one file per realm (the principle tree for that realm)
-```
+## Current status
 
-Each realm file is a tree: top-level principles with optional sub-principles. Keep each
-principle short, testable, and specific to its realm.
+The existing realm tree is **legacy, Draft, and transitional**. It predates the
+four-authority topology and mixes Studio design/UI material with Engineering, Product, and
+`.github` concerns. The files remain useful migration input, but they are not a claim that
+Studio owns every realm they describe.
 
-**Write principles that instruct, not principles that diagnose.** A principle naming a failure
-mode explains an incident; a principle naming what to do instead survives contact with the next
-one. Where a finding is stated as a diagnosis, convert it before recording it — "a checksum
-invariant under the error class it is trusted to catch is worse than none" becomes "before quoting
-a reconciliation as reassurance, name a defect it would have caught." Both are true and only the
-second tells a reader what to do. The same rule applies to guards: a check that says what to do
-when it fires outranks one that only says what went wrong.
+All 21 realm files are preserved for Milestone 2. At the migration baseline they contain
+192 top-level legacy principles. Nested sub-principles travel with their top-level parent.
+The inventory below records coverage only; it does not assign a successor or disposition.
 
-## The realm tree
+| Legacy realm                            | Stable ID range                       |   Count |
+| --------------------------------------- | ------------------------------------- | ------: |
+| [Accessibility](accessibility.md)       | `studio-legacy:accessibility:1..7`    |       7 |
+| [AI Process](ai-process.md)             | `studio-legacy:ai-process:1..22`      |      22 |
+| [AI Products](ai-products.md)           | `studio-legacy:ai-products:1..8`      |       8 |
+| [Architecture](architecture.md)         | `studio-legacy:architecture:1..15`    |      15 |
+| [Backend](backend.md)                   | `studio-legacy:backend:1..7`          |       7 |
+| [Business](business.md)                 | `studio-legacy:business:1..6`         |       6 |
+| [Compliance](compliance.md)             | `studio-legacy:compliance:1..8`       |       8 |
+| [Data & Analytics](data-analytics.md)   | `studio-legacy:data-analytics:1..7`   |       7 |
+| [Design](design.md)                     | `studio-legacy:design:1..13`          |      13 |
+| [DevOps](devops.md)                     | `studio-legacy:devops:1..15`          |      15 |
+| [Documentation](documentation.md)       | `studio-legacy:documentation:1..7`    |       7 |
+| [Featuring](featuring.md)               | `studio-legacy:featuring:1..7`        |       7 |
+| [Frontend](frontend.md)                 | `studio-legacy:frontend:1..9`         |       9 |
+| [Local-First](local-first.md)           | `studio-legacy:local-first:1..4`      |       4 |
+| [Localization](localization.md)         | `studio-legacy:localization:1..9`     |       9 |
+| [Middleware](middleware.md)             | `studio-legacy:middleware:1..7`       |       7 |
+| [Performance](performance.md)           | `studio-legacy:performance:1..9`      |       9 |
+| [Process](process.md)                   | `studio-legacy:process:1..7`          |       7 |
+| [Project Planning](project-planning.md) | `studio-legacy:project-planning:1..7` |       7 |
+| [Security](security.md)                 | `studio-legacy:security:1..8`         |       8 |
+| [Testing](testing.md)                   | `studio-legacy:testing:1..10`         |      10 |
+| **Total**                               |                                       | **192** |
 
-| #   | Realm            | File                                       |
-| --- | ---------------- | ------------------------------------------ |
-| 1   | Design           | [design.md](design.md)                     |
-| 2   | Backend          | [backend.md](backend.md)                   |
-| 3   | Frontend         | [frontend.md](frontend.md)                 |
-| 4   | Middleware       | [middleware.md](middleware.md)             |
-| 5   | Project Planning | [project-planning.md](project-planning.md) |
-| 6   | Business         | [business.md](business.md)                 |
-| 7   | Accessibility    | [accessibility.md](accessibility.md)       |
-| 8   | Process          | [process.md](process.md)                   |
-| 9   | DevOps           | [devops.md](devops.md)                     |
-| 10  | Testing          | [testing.md](testing.md)                   |
-| 11  | Featuring        | [featuring.md](featuring.md)               |
-| 12  | Security         | [security.md](security.md)                 |
-| 13  | Documentation    | [documentation.md](documentation.md)       |
-| 14  | Performance      | [performance.md](performance.md)           |
-| 15  | Data & Analytics | [data-analytics.md](data-analytics.md)     |
-| 16  | Architecture     | [architecture.md](architecture.md)         |
-| 17  | Localization     | [localization.md](localization.md)         |
-| 18  | Compliance       | [compliance.md](compliance.md)             |
-| 19  | AI Products      | [ai-products.md](ai-products.md)           |
-| 20  | AI Process       | [ai-process.md](ai-process.md)             |
-| 21  | Local-First      | [local-first.md](local-first.md)           |
+## Precedence during migration
 
-## Status
+1. An owner-ratified principle in the correct canonical authority supersedes conflicting
+   legacy text.
+2. ADR-0003 decides which authority may own a successor; generated copies and distribution
+   paths do not transfer ownership.
+3. An unmapped legacy principle is transitional input only. It may inform a proposal, but
+   it cannot establish authority outside Studio or override a ratified successor.
 
-All realm files start as **Draft** and are authored in dedicated worktree sessions.
-A realm is **Ratified** once its principle tree is filled in and reviewed.
+Cross-authority references use durable repository links or stable IDs. Private Engineering
+and Product sources must not be copied into Studio merely to make a link locally
+convenient. `.github` remains canonical for GitHub governance, Actions, Copilot and AI
+principles and implementations, agents, skills, prompts, instructions, evaluations,
+registry, sync, and provenance.
+
+Only the repository owner may ratify a principle or a migration disposition. Agents may
+propose either, but proposals remain non-normative.
+
+## Migration and removal gate
+
+[`MIGRATION.md`](MIGRATION.md) defines the ledger schema and workflow. Its machine-readable
+scaffold is [`migration-ledger.json`](migration-ledger.json), validated by
+[`migration-ledger.schema.json`](migration-ledger.schema.json).
+
+No legacy top-level principle may be removed until its stable ID has **exactly one**
+owner-ratified disposition (`rewrite`, `split`, `reference`, or `retire`) and reaches
+`verified` with evidence. A realm file may be deleted only after every stable ID in its
+range passes that gate and all inbound references have been updated. Until then, all 21
+realm files remain in place.
+
+The repository-local canonical-role mapping is in [`AGENTS.md`](AGENTS.md). It is a path
+overlay, not a copy of the canonical agent definitions.
