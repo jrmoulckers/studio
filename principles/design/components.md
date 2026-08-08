@@ -33,7 +33,7 @@ consumes the token tier in [tokens and themes](tokens-and-themes.md).
 - **Ratification owner:** repository owner
 - **Implementation owner:** web-engineer and native-app-engineer
 - **Handoffs:** Browser-security and runtime-performance mechanisms of an implementation are Engineering; capability detection of optional platform APIs is an Engineering implementation concern that must not break the core contract.
-- **Legacy inputs:** frontend#2, frontend#8
+- **Legacy inputs:** frontend#2, frontend#8, architecture#8, architecture#9
 
 ### STUDIO-CMP-003 — Validate the visual, interaction, and token contract
 

@@ -55,7 +55,7 @@ user-facing interaction contract that component implementations must meet.
 - **Ratification owner:** repository owner
 - **Implementation owner:** design-engineer
 - **Handoffs:** Error and status wording that carries legal/compliance meaning is Product/Compliance; localized message assembly is [localization](localization.md) and its i18n owners.
-- **Legacy inputs:** accessibility#6, design#9, frontend#5
+- **Legacy inputs:** accessibility#6, design#9, frontend#5, performance#6, local-first#1
 
 ### STUDIO-INT-005 — Motion honors reduced-motion, including imperative animation
 

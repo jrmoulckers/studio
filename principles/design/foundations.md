@@ -23,7 +23,7 @@ consumers. Token, theme, component, and experience principles build on these.
 - **Ratification owner:** repository owner
 - **Implementation owner:** design-engineer
 - **Handoffs:** Build pipeline, package layering, and general TypeScript/bundling mechanisms are Engineering; distribution and sync of generated artifacts are `.github`.
-- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3
+- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3, architecture#12
 
 ### STUDIO-FND-002 — Evolve the contract additively and keep migrations compatible
 
@@ -34,7 +34,7 @@ consumers. Token, theme, component, and experience principles build on these.
 - **Ratification owner:** repository owner
 - **Implementation owner:** design-engineer
 - **Handoffs:** The legacy-principle migration ledger and disposition workflow are recorded under `principles/MIGRATION.md`; owner ratification governs any legacy removal.
-- **Legacy inputs:** design#12, architecture#2
+- **Legacy inputs:** design#12, architecture#2, architecture#4
 
 ### STUDIO-FND-003 — Ground design in current best practice and reference other authorities
 

@@ -44,7 +44,7 @@ chain enables. It is the mechanism behind Studio's framework-neutral design cont
 - **Ratification owner:** repository owner
 - **Implementation owner:** design-engineer
 - **Handoffs:** The runtime cost budget of a mode swap is measured by Engineering (performance mechanisms/evidence); WCAG conformance of each mode is verified in [accessibility](../experience/accessibility.md).
-- **Legacy inputs:** design#4, design#8, frontend#3
+- **Legacy inputs:** design#4, design#8, frontend#3, performance#5
 
 ### STUDIO-TOK-004 — Component tokens capture a reusable semantic role
 

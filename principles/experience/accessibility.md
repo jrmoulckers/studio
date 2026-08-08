@@ -33,7 +33,7 @@ gap between the ratifiable standard and the current implementation.
 - **Ratification owner:** repository owner
 - **Implementation owner:** accessibility-reviewer
 - **Handoffs:** Persistence storage mechanisms are Engineering; the runtime mechanism that swaps modes is the token attribute model in [tokens and themes](../design/tokens-and-themes.md).
-- **Legacy inputs:** accessibility#2, accessibility#3
+- **Legacy inputs:** accessibility#2, accessibility#3, architecture#13
 
 ### STUDIO-A11Y-003 — Cognitive mode remaps the full role set; the current gap is explicit
 
