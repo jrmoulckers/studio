@@ -8,5 +8,3338 @@
     "topLevelPrinciples": 192,
     "idFormat": "studio-legacy:<realm-file-slug>:<top-level-number>"
   },
-  "entries": {}
+  "entries": {
+    "studio-legacy:accessibility:1": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-A11Y-001 preserves the durable “WCAG 2.2 AA is the floor, not the goal” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:2": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Contrast comes from the token theme, never from local overrides” rule combined separable concerns now owned by Studio STUDIO-A11Y-001, Studio STUDIO-A11Y-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:3": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Motion respects `prefers-reduced-motion`” rule combined separable concerns now owned by Studio STUDIO-A11Y-002, Studio STUDIO-INT-005.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:4": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Everything works from the keyboard and switch” rule combined separable concerns now owned by Studio STUDIO-INT-002, Studio STUDIO-INT-003.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:5": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-INT-001 preserves the durable “Markup is semantic and named for assistive technology” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:6": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-INT-004 preserves the durable “Errors and recovery are clear and inclusive” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:accessibility:7": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-A11Y-003 preserves the durable “Cognitive accessibility is a first-class, tokenized mode” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-001"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “One canonical source for AI configuration” rule combined separable concerns now owned by .github GH-AIOPS-001, .github GH-AIOPS-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-003 owns the durable “Least-privilege tools and write scope” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-004 owns the durable “Non-overlapping ownership boundaries” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-002 owns the durable “Capability manifest is the source of truth for the roster” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-005 owns the durable “Prompt engineering is explicit, structured, and testable” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-006 owns the durable “Every internal agent has evals and a quality gate” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-007 owns the durable “Human-in-the-loop review of agent output” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-008 owns the durable “Reproducible, versioned prompts and configs” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-009"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-009 owns the durable “Strict secrets and data boundaries for agent context” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:10": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-010"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-010 owns the durable “Explicit, staged agent workflows” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:11": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-011"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-011 owns the durable “Skills are composable and single-responsibility” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:12": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-012"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-012 owns the durable “Deterministic agent dispatch” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:13": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-013"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Isolated sessions with a single owning agent” rule combined separable concerns now owned by .github GH-AIOPS-013, .github GH-REPO-007.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:14": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-014"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-014 owns the durable “Vetted, pinned, least-privilege MCP servers” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:15": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire the unsupported repository AI-brain proposal: no merged authority adopted it as a durable principle, and the original proposal remains available in the immutable legacy snapshot and Git history.",
+      "evidence": [
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/ai-process.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "unsupported-proposal"
+    },
+    "studio-legacy:ai-process:16": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIOPS-015"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIOPS-015 owns the durable “Every artifact type has a mandatory template” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/agent-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:17": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-001 owns the durable “Cross-session reports carry verified facts, and corrections supersede explicitly” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:18": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-002 owns the durable “Route a decision to whoever has standing to judge it, not whoever owns the file” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:19": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-003 owns the durable “Verify congenial inputs first” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:20": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-004 owns the durable “Your tools are inputs, and a local checkout is a cache that looks like an authority” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:21": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-005 owns the durable “Check what the check establishes” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-process:22": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIEVAL-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIEVAL-006 owns the durable “Attention is finite and drains toward the last lesson” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/evidence-and-evals.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-001 owns the durable “Choose the smallest model that passes the eval, and always have a fallback” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-002 owns the durable “Design prompts and AI UX for the end user, not the model” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-003 owns the durable “Guardrail every model input and output” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-004 owns the durable “Ship product AI behind evals, not vibes” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:5": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-005"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Hold production AI to explicit cost and latency budgets” rule combined separable concerns now owned by .github GH-AIP-005, Product PROD-BUS-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-006 owns the durable “Be honest that it's AI, and about its limits” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-007 owns the durable “Protect user inputs sent to models” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:ai-products:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-AIP-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-AIP-008 owns the durable “Keep AI optional and swappable — degrade, don't block” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/ai/product-ai.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-001"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy package-layering rule separates the acyclic dependency boundary owned by ENG-ARCH-001 from the declared deterministic build graph owned by ENG-BUILD-001; the token-tier chain is a downstream specialization, not a second owner of this rule.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:2": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-002 preserves the durable “The semantic-token contract is the boundary” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:3": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-FND-001 preserves the durable “Outputs stay framework-agnostic” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:4": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Contracts are explicit, stable, and typed” rule combined separable concerns now owned by Engineering ENG-ARCH-002, Studio STUDIO-FND-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-ARCH-003 owns the durable “Record architectural decisions as ADRs” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-ARCH-001 owns the durable “Prefer the simplest boundary that works” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-ARCH-001 owns the durable “Minimize data and surface by default” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:8": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-CMP-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Design for platform parity” rule combined separable concerns now owned by Engineering ENG-ARCH-002, Studio STUDIO-CMP-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/components.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-ARCH-001 owns the durable “Stay DRY across platforms” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:10": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-ARCH-004 owns the durable “Builds are deterministic and reproducible” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:11": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-002 owns the durable “Guard the dependency supply chain” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:12": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Enforce a single source of truth per concern” rule combined separable concerns now owned by Engineering ENG-ARCH-001, Studio STUDIO-FND-001.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:13": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Enhance progressively from a safe baseline” rule combined separable concerns now owned by Engineering ENG-WEB-002, Studio STUDIO-A11Y-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:14": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-005 owns the durable “Put third-party credentials behind a minimal first-party proxy” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:architecture:15": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire the implementation-specific Markdown sentinel and parser case study; durable sync safeguards are handled by separately mapped distribution principles, while the forensic narrative remains in the immutable legacy snapshot and Git history.",
+      "evidence": [
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/architecture.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "incident-specific"
+    },
+    "studio-legacy:backend:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-API-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-API-001 owns the durable “Every API is a versioned, typed contract” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/api-backend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-DATA-001 owns the durable “Persistence is explicit and owned by the service” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:3": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-001"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Migrations are versioned, reviewed, and forward-only” rule combined separable concerns now owned by Engineering ENG-DATA-001, Engineering ENG-BUILD-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-API-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-API-003 owns the durable “Auth is explicit, least-privilege, and enforced server-side” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/api-backend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-API-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-API-004 owns the durable “Writes are idempotent and safe to retry” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/api-backend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:6": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-API-004"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-OBS-001"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-OBS-003"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-OBS-004"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-OBS-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy service-operations rule separates retry-safe dependency behavior, structured signals, bounded checks, correlation, and explicit fail-closed/fail-soft degradation across ENG-API-004, ENG-OBS-001, ENG-OBS-003, ENG-OBS-004, and ENG-OBS-007.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/api-backend.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/observability.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:backend:7": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-003"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Privacy is built into the data lifecycle” rule combined separable concerns now owned by Engineering ENG-DATA-003, Engineering ENG-SEC-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-BUS-001 owns the durable “Charge for realized value, not for effort” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:2": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-002"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-MET-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Model revenue with ranges and named assumptions” rule combined separable concerns now owned by Product PROD-BUS-002, Product PROD-MET-001.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/metrics.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-BUS-002 owns the durable “Ship only unit economics that can pay back” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-BUS-003 owns the durable “Benchmark competitors on evidence, not vibes” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-BUS-003 owns the durable “Business decisions constrain via specs, not code” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:business:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-BUS-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-BUS-001 owns the durable “User value and trust outrank revenue” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/business.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-COMP-001 owns the durable “Every obligation is traceable to an owner and evidence” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:2": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-003"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Map privacy rights to concrete product behavior (GDPR / CCPA)” rule combined separable concerns now owned by Product PROD-COMP-003, Engineering ENG-SEC-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:3": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-004"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Know where data lives and why it may move (residency & transfer)” rule combined separable concerns now owned by Product PROD-COMP-004, Engineering ENG-SEC-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:4": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-005"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Retention is bounded, deletion is enforced” rule combined separable concerns now owned by Product PROD-COMP-005, Engineering ENG-SEC-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:5": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-006"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “OSS licenses are inventoried and compatible” rule combined separable concerns now owned by Product PROD-COMP-006, Engineering ENG-SEC-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-COMP-007 owns the durable “Build for audit-readiness continuously” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:7": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-008"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Consent and disclosures are recorded, specific, and revocable” rule combined separable concerns now owned by Product PROD-COMP-008, Engineering ENG-SEC-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:compliance:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-009"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-COMP-009 owns the durable “Use data categories and synthetic examples — never real PII” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-003"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-MET-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Privacy is the default, not a feature” rule combined separable concerns now owned by Engineering ENG-DATA-003, Product PROD-MET-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/metrics.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:2": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-003"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-MET-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Consent gates every event” rule combined separable concerns now owned by Engineering ENG-DATA-003, Product PROD-MET-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/metrics.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-DATA-002 owns the durable “Events follow the taxonomy” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-DATA-002 owns the durable “Schemas are versioned contracts” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-MET-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-MET-001 owns the durable “Every metric has one definition” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/metrics.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:6": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-003"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-COMP-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Retention is bounded and documented” rule combined separable concerns now owned by Engineering ENG-DATA-003, Product PROD-COMP-005.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/compliance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:data-analytics:7": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-DATA-002"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-MET-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Instrumentation is reviewed like data, not like logging” rule combined separable concerns now owned by Engineering ENG-DATA-002, Product PROD-MET-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/data-systems.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/metrics.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Tokens are the single source of truth” rule combined separable concerns now owned by Studio STUDIO-FND-001, Studio STUDIO-TOK-001.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:2": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-002 preserves the durable “Theme by semantic palette, keep the system fixed” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:3": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-FND-001 preserves the durable “Ship framework-agnostic outputs” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:4": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-003 preserves the durable “Runtime mode swaps, no rebuild” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:5": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-A11Y-001 preserves the durable “Meet WCAG AA in every mode” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:6": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-INT-005 preserves the durable “Pair motion with a reduced-motion path” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:7": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-004 preserves the durable “Component tokens define a spec, not a one-off” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:8": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-A11Y-003 preserves the durable “Support the cognitive-accessibility contract” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/accessibility.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:9": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-UX-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-UX-002"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-UX-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Optimize for ease of use first” rule combined separable concerns now owned by Studio STUDIO-UX-001, Studio STUDIO-UX-002, Studio STUDIO-UX-003.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/ux.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:10": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-UX-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-UX-004 preserves the durable “Consolidate before adding” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/ux.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:11": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-CMP-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-CMP-001 preserves the durable “Standardize shared components” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/components.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:12": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-FND-002 preserves the durable “Future-proof the contract” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:design:13": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-FND-003 preserves the durable “Track current design best practice” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-001"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-ACT-002"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-ACT-003"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-ACT-004"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-ACT-007"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-002"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “CI is the single source of truth for \"it works\"” rule combined separable concerns now owned by .github GH-ACT-001, .github GH-ACT-002, .github GH-ACT-003, .github GH-ACT-004, .github GH-ACT-007, .github GH-REPO-002, Engineering ENG-BUILD-005.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-ACT-005 owns the durable “Reusable workflows over copy-paste” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-ACT-003 owns the durable “Least-privilege, explicitly scoped permissions” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-004 owns the durable “Cache the deterministic, rebuild the rest” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-BUILD-001 owns the durable “Honor the build graph — tokens before tailwind-preset” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-002 owns the durable “Automate dependency and supply-chain hygiene” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-004 owns security checks as distinct blocking static signals; .github executes the authority-owned scanners without redefining their policy, so Studio should reference Engineering rather than retain pipeline-specific wording.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md"
+      ],
+      "owner": "repository owner",
+      "citationException": {
+        "kind": "externally-verified-ownership",
+        "reason": "ENG-TEST-004 is the verified Engineering owner for classifying security checks as independent blocking signals, and GH-ACT-001 confirms that .github only schedules authority-owned checks. Neither merged Legacy inputs field cites devops:7, so this reference is allowed only as an independently verified ownership exception.",
+        "evidence": [
+          "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md",
+          "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md"
+        ]
+      }
+    },
+    "studio-legacy:devops:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-ACT-006 owns the durable “Release automation prepares; humans publish” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-OBS-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-OBS-002 owns the durable “A deployed service reports its own health and identity” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/observability.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:10": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire the duplicated diagnostic narrative about unvalidated descriptive configuration; the durable registry-fact rule is separately mapped from devops:15 to GH-REPO-004, and this narrative remains in Git history.",
+      "evidence": [
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/devops.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "duplicated"
+    },
+    "studio-legacy:devops:11": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-005"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “A local copy of an inherited default silently opts you out” rule combined separable concerns now owned by .github GH-ACT-005, .github GH-REPO-003.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:12": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-REPO-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-REPO-006 owns the durable “Content-addressed comparison normalizes what the platform rewrites” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:13": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-REPO-005"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Audit a generated file against what the generator would emit, not against its source” rule combined separable concerns now owned by .github GH-REPO-005, .github GH-REPO-006.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:14": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-ACT-007"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “A tool that refuses to clobber must report what it refused, where a human will look” rule combined separable concerns now owned by .github GH-ACT-007, .github GH-REPO-005.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/actions-and-delivery.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:devops:15": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-REPO-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-REPO-004 owns the durable “A config format must show which fields the tool executes and which it merely records” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:documentation:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-001 owns the durable “Every package documents its own contract” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:documentation:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-002 owns the durable requirement to enumerate every public surface and its required documentation; Studio should reference that outcome instead of retaining a package-specific inventory.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner",
+      "citationException": {
+        "kind": "externally-verified-ownership",
+        "reason": "PROD-CONTENT-002 is the verified Product owner whose statement directly preserves public-surface enumeration. Its merged Legacy inputs cites documentation:3 rather than documentation:2, so this reference is allowed only as an independently verified ownership exception.",
+        "evidence": [
+          "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+        ]
+      }
+    },
+    "studio-legacy:documentation:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-003 owns the durable “Examples are runnable and match the current code” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner",
+      "citationException": {
+        "kind": "externally-verified-ownership",
+        "reason": "PROD-CONTENT-003 is the verified Product owner for executable and current examples. Its merged Legacy inputs cite adjacent documentation sections rather than documentation:3; semantic review of its statement establishes the ownership match.",
+        "evidence": [
+          "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+        ]
+      }
+    },
+    "studio-legacy:documentation:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-004 owns the durable “Docs change in the same PR as the code they describe” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:documentation:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-006 owns the durable “Diagrams clarify architecture and flow” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner",
+      "citationException": {
+        "kind": "externally-verified-ownership",
+        "reason": "PROD-CONTENT-006 is the verified Product owner for diagram decisions. Its merged Legacy inputs cite adjacent documentation sections rather than documentation:5; semantic review of its statement establishes the ownership match.",
+        "evidence": [
+          "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+        ]
+      }
+    },
+    "studio-legacy:documentation:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-007 owns the durable “Cross-references are relative and resolve” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:documentation:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Docs are reviewed for accuracy, clarity, and accessibility” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-002 owns the durable “Every flag is a declared, owned, expiring asset” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-003 owns the durable “Roll out in stages, never all at once” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-003 owns the durable “Bucketing is deterministic and privacy-first” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-002 owns the durable “No experiment without a hypothesis and guardrails” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-004 owns the durable “Read experiments honestly, then decide” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-003 owns the durable “Every risky feature ships with a tested kill switch” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:featuring:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-DISC-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-DISC-004 owns the durable “Retire flags and pay down the debt” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/discovery-and-experiments.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:1": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-002 preserves the durable “Consume tokens through their published interfaces — never hardcode values” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:2": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-FND-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-FND-001 preserves the durable “Keep UI framework-agnostic at the token boundary” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/foundations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:3": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-003 preserves the durable “Drive theming and color modes off `data-theme` — no rebuild, no flash” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:4": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Prefer native HTML semantics; add ARIA only to fill real gaps” rule combined separable concerns now owned by Studio STUDIO-INT-001, Studio STUDIO-INT-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:5": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-004"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Respect user preferences and all UI states” rule combined separable concerns now owned by Engineering ENG-WEB-004, Studio STUDIO-INT-004.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-WEB-003 owns the durable “Guard the client budget — bundle size and Core Web Vitals” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-WEB-001 owns the durable “Keep the browser surface secure” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-WEB-002 owns the durable “Capability-detect optional platform APIs and degrade to a silent no-op” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:frontend:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-WEB-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-WEB-004 owns the durable “Application updates are offered, never forced mid-session” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/browser-frontend.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:local-first:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-LOCAL-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Local-first is a trust contract, not a cache strategy” rule combined separable concerns now owned by Engineering ENG-LOCAL-001, Studio STUDIO-INT-004.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/local-first.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:local-first:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-LOCAL-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-LOCAL-002 owns the durable “Sync is optional and layers onto owned data behind a seam” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/local-first.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:local-first:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-LOCAL-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-LOCAL-003 owns the durable “Conflict resolution is an explicit, written-down merge model” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/local-first.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:local-first:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-LOCAL-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-LOCAL-004 owns the durable “Optional external services degrade to a no-op, and the app boots with zero config” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/local-first.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “No user-facing string is hardcoded” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “One source-of-truth catalog per locale” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Explicit fallback, never a silent blank” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Plurals and gender use ICU MessageFormat, not code” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Placeholders are named, typed, and preserved” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:6": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire the API-specific Intl/CLDR and ISO 4217 mechanism wording rather than restating it as Studio policy. STUDIO-L10N-003 records the Engineering handoff but intentionally does not adopt the rule; the immutable legacy snapshot and Git history preserve the guidance pending any future Engineering principle.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/localization.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/localization.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "over-specific-mechanism"
+    },
+    "studio-legacy:localization:7": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-L10N-001"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-L10N-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Layout is direction-agnostic and RTL-verified” rule combined separable concerns now owned by Studio STUDIO-L10N-001, Studio STUDIO-L10N-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/localization.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Terminology is glossary-governed across locales” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:localization:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-008 owns the durable “Translation ships through a reviewed workflow” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-001 owns the durable “The boundary is a contract, not a convenience” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-001 owns the durable “Middleware is thin, ordered, and single-purpose” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-001 owns the durable “Adapters isolate the outside world” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-002 owns the durable “Caching is explicit, keyed, and invalidatable” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-003 owns the durable “Errors propagate as typed, safe, and observable results” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-003 owns the durable “The boundary is stateless and idempotent where it counts” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:middleware:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-INT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-INT-004 owns the durable “The seam is observable by default” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/platforms/integration-boundaries.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-001 owns the durable “Every performance claim is backed by a reproducible measurement” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-002 owns the durable “Performance budgets are explicit, versioned, and enforced” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-003 owns the durable “Shared packages ship the smallest surface a consumer needs” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-004 owns the durable “Turbo cache is treated as load-bearing infrastructure” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:5": {
+      "disposition": "rewrite",
+      "successors": [
+        {
+          "authority": "Studio",
+          "id": "STUDIO-TOK-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "STUDIO-TOK-003 preserves the durable “Runtime theming stays a no-rebuild, no-reflow-storm operation” rule in Studio's design and UI authority.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/tokens-and-themes.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:6": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-005"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-006"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-INT-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Foreground responsiveness has priority, and no work hangs the user silently” rule combined separable concerns now owned by Engineering ENG-PERF-005, Engineering ENG-PERF-006, Studio STUDIO-INT-004.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/experience/interaction.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-007 owns the durable “Profiling is systematic and uses the platform's native stack” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-008 owns the durable “Regressions are triaged with a deterministic bisect-and-route flow” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:performance:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-PERF-009"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-PERF-009 owns the durable “Performance never overrides correctness, accessibility, privacy, or security” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/performance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-REPO-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": ".github GH-REPO-007 owns the durable “Every change moves through a disposable worktree branched off `main`” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:2": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire Conventional Commit and atomic-commit wording from the principle layer as an operational delivery convention; canonical workflow instructions retain the active convention and the immutable legacy snapshot retains its history.",
+      "evidence": [
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/process.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "operational-convention"
+    },
+    "studio-legacy:process:3": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-003"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Semver intent is captured by a changeset, not guessed at release time” rule combined separable concerns now owned by Engineering ENG-BUILD-003, Engineering ENG-BUILD-004.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:4": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": ".github",
+          "id": "GH-REPO-002"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-REL-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Green CI is the merge gate” rule combined separable concerns now owned by .github GH-REPO-002, Product PROD-REL-001.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/release-decisions.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:5": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-004"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-007"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-REL-001"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-REL-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Releases capture what is on `main`” rule combined separable concerns now owned by Engineering ENG-BUILD-004, Engineering ENG-BUILD-007, Product PROD-REL-001, Product PROD-REL-002.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/release-decisions.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:6": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-BUILD-007"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-REL-003"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-REL-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Release cadence is on-demand and traceable” rule combined separable concerns now owned by Engineering ENG-BUILD-007, Product PROD-REL-003, Product PROD-REL-004.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/operations/build-and-release.md",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/release-decisions.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:process:7": {
+      "disposition": "retire",
+      "successors": [],
+      "status": "proposed",
+      "rationale": "Retire primary-checkout refresh behavior as local worktree housekeeping rather than a durable cross-authority principle; workflow instructions and Git history retain the operational evidence.",
+      "evidence": [
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/process.md"
+      ],
+      "owner": "repository owner",
+      "retirementCategory": "operational-housekeeping"
+    },
+    "studio-legacy:project-planning:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-STRAT-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-STRAT-003 owns the durable “Plan the roadmap around the kernel's contract, not features” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/strategy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:2": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-001"
+        },
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Decompose sprints into independently shippable, ordered slices” rule combined separable concerns now owned by Product PROD-PLAN-001, Product PROD-PLAN-003.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/planning-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-PLAN-002 owns the durable “Triage every issue with a priority and an owner” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/planning-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-PLAN-004 owns the durable “Groom the backlog on a regular cadence” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/planning-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-PLAN-002 owns the durable “Hold scope with an explicit definition of done” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/planning-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-PLAN-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-PLAN-003 owns the durable “Coordinate cross-team work through explicit dependencies and parity” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/planning-and-delivery.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:project-planning:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-REL-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-REL-001 owns the durable “Gate releases on an explicit go/no-go” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/release-decisions.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:1": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-001 owns the durable “No secrets in the repo, ever” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-002 owns the durable “Pin and verify the supply chain” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:3": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-003 owns the durable “Threat-model before you build” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-004 owns the durable “Least privilege by default” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-005 owns the durable “Validate and sanitize every untrusted input” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-006 owns the durable “Review against OWASP, gated in CI” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-SEC-007"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-SEC-007 owns the durable “Fail securely and never leak internals” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/security-and-privacy.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:security:8": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Product",
+          "id": "PROD-CONTENT-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Product PROD-CONTENT-002 owns the durable “Publish a disclosure policy and answer reports on a stated clock” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:1": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-ARCH-002"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-001"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Shape the suite like a pyramid” rule combined separable concerns now owned by Engineering ENG-ARCH-002, Engineering ENG-TEST-001.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/architecture/boundaries-and-contracts.md",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:2": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-002"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-002 preserves the durable rule to test stable public behavior and producer-consumer contracts rather than implementation structure; Studio-specific visual and token regression coverage belongs to the separately mapped testing:3 rule.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:3": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-003"
+        },
+        {
+          "authority": "Studio",
+          "id": "STUDIO-CMP-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Guard token and visual output with regression tests” rule combined separable concerns now owned by Engineering ENG-TEST-003, Studio STUDIO-CMP-003.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md",
+        "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/design/components.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:4": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-004"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-004 owns the durable “Typecheck and lint are gates, not substitutes for tests” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:5": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-005"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-005 owns the durable “Build must be green and reproducible” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:6": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-006"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-006 owns the durable “Set coverage expectations that mean something” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:7": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-003"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-003 owns the durable “Require tests where risk lives” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:8": {
+      "disposition": "split",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-007"
+        },
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-008"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "The legacy “Show a test can fail before trusting that it passes” rule combined separable concerns now owned by Engineering ENG-TEST-007, Engineering ENG-TEST-008.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:9": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-009"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-009 owns the durable “A test that asserts a fact about the world must read the world” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    },
+    "studio-legacy:testing:10": {
+      "disposition": "reference",
+      "successors": [
+        {
+          "authority": "Engineering",
+          "id": "ENG-TEST-010"
+        }
+      ],
+      "status": "proposed",
+      "rationale": "Engineering ENG-TEST-010 owns the durable “A documented procedure has no failure mode — encode it as an assertion” rule; Studio should reference that authority instead of restating it.",
+      "evidence": [
+        "principles/migration-verification-receipt.json",
+        "https://github.com/jrmoulckers/engineering/blob/ea1ad771b46612a62d54b66e8077df4e5af6f16a/principles/assurance/testing.md"
+      ],
+      "owner": "repository owner"
+    }
+  }
 }

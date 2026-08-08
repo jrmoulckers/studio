@@ -16,6 +16,7 @@
     "format:check": "prettier --check .",
     "test": "turbo run test && pnpm run principles:check",
     "principles:check": "node scripts/validate-principles.mjs",
+    "principles:verify-live": "node scripts/validate-principles.mjs --live",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "tokens:dist": "pnpm --filter @jrm/tokens dist",
     "tokens:dist:check": "pnpm --filter @jrm/tokens dist && git diff --exit-code -- packages/tokens/dist",

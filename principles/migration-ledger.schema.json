@@ -37,6 +37,7 @@
     },
     "entries": {
       "type": "object",
+      "minProperties": 192,
       "maxProperties": 192,
       "propertyNames": {
         "$ref": "#/$defs/legacyId"
@@ -65,10 +66,33 @@
         }
       }
     },
+    "citationException": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reason", "evidence"],
+      "properties": {
+        "kind": {
+          "const": "externally-verified-ownership"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
     "entry": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["disposition", "successors", "status", "evidence", "owner"],
+      "required": ["disposition", "successors", "status", "rationale", "evidence", "owner"],
       "properties": {
         "disposition": {
           "enum": ["rewrite", "split", "reference", "retire"]
@@ -83,6 +107,10 @@
         "status": {
           "enum": ["proposed", "ratified", "implemented", "verified"]
         },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
         "evidence": {
           "type": "array",
           "minItems": 1,
@@ -95,6 +123,19 @@
         "owner": {
           "type": "string",
           "minLength": 1
+        },
+        "retirementCategory": {
+          "enum": [
+            "duplicated",
+            "incident-specific",
+            "operational-convention",
+            "operational-housekeeping",
+            "over-specific-mechanism",
+            "unsupported-proposal"
+          ]
+        },
+        "citationException": {
+          "$ref": "#/$defs/citationException"
         }
       },
       "allOf": [
@@ -142,10 +183,40 @@
             }
           },
           "then": {
+            "required": ["retirementCategory"],
             "properties": {
               "successors": {
                 "type": "array",
                 "maxItems": 0
+              }
+            },
+            "not": {
+              "required": ["citationException"]
+            }
+          },
+          "else": {
+            "not": {
+              "required": ["retirementCategory"]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["citationException"]
+          },
+          "then": {
+            "properties": {
+              "disposition": {
+                "const": "reference"
+              },
+              "successors": {
+                "items": {
+                  "properties": {
+                    "authority": {
+                      "enum": ["Engineering", "Product", ".github"]
+                    }
+                  }
+                }
               }
             }
           }

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "name": "unknown legacy ID",
+      "mutation": {
+        "operation": "add-unknown-ledger-entry",
+        "legacyId": "studio-legacy:unknown:1",
+        "cloneFrom": "studio-legacy:accessibility:1"
+      },
+      "expectedError": "unknown legacy ID"
+    },
+    {
+      "name": "duplicate ledger key",
+      "mutation": {
+        "operation": "duplicate-ledger-key",
+        "legacyId": "studio-legacy:accessibility:1"
+      },
+      "expectedError": "duplicate JSON key"
+    },
+    {
+      "name": "wrong authority commit",
+      "mutation": {
+        "operation": "set-authority-field",
+        "authority": "Engineering",
+        "field": "commit",
+        "value": "0000000000000000000000000000000000000000"
+      },
+      "expectedError": "Engineering commit"
+    },
+    {
+      "name": "wrong principle digest",
+      "mutation": {
+        "operation": "set-principle-field",
+        "authority": "Product",
+        "id": "PROD-CONTENT-002",
+        "field": "blockSha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expectedError": "catalog digest"
+    },
+    {
+      "name": "deleted or renumbered successor",
+      "mutation": {
+        "operation": "set-principle-field",
+        "authority": "Studio",
+        "id": "STUDIO-A11Y-001",
+        "field": "id",
+        "value": "STUDIO-A11Y-999"
+      },
+      "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
+    },
+    {
+      "name": "bad disposition cardinality",
+      "mutation": {
+        "operation": "append-successor",
+        "legacyId": "studio-legacy:accessibility:1",
+        "successor": {
+          "authority": "Studio",
+          "id": "STUDIO-A11Y-002"
+        }
+      },
+      "expectedError": "rewrite requires exactly one successor"
+    },
+    {
+      "name": "Draft successor cannot imply Ratification",
+      "mutation": {
+        "operation": "set-ledger-field",
+        "legacyId": "studio-legacy:accessibility:1",
+        "field": "status",
+        "value": "ratified"
+      },
+      "expectedError": "a Draft successor cannot advance the disposition past proposed"
+    },
+    {
+      "name": "self-authoritative receipt",
+      "mutation": {
+        "operation": "set-receipt-field",
+        "path": ["verification", "ledgerWasNotInput"],
+        "value": false
+      },
+      "expectedError": "must be independent of the ledger"
+    },
+    {
+      "name": "receipt claims ratification",
+      "mutation": {
+        "operation": "set-receipt-field",
+        "path": ["claims", "provesRatification"],
+        "value": true
+      },
+      "expectedError": "cannot prove Ratification"
+    }
+  ]
+}
