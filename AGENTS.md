@@ -2,8 +2,10 @@
 
 This file supplies repository-local context for work in Studio. Canonical agent, skill,
 prompt, and instruction definitions are owned by
-[`jrmoulckers/.github`](https://github.com/jrmoulckers/.github); do not copy or redefine
-them here. The local overlay in [`principles/AGENTS.md`](principles/AGENTS.md) maps those
+[`jrmoulckers/.github`](https://github.com/jrmoulckers/.github). Materialized files under
+this repository's `.github/agents/`, `.github/skills/`, `.github/prompts/`, and
+`.github/instructions/` trees are generated sync outputs; do not edit or redefine them
+here. The local overlay in [`principles/AGENTS.md`](principles/AGENTS.md) maps those
 canonical roles onto this repository's paths.
 
 ## Authority and precedence
@@ -46,6 +48,9 @@ owner review.
   `packages/tokens/dist/` is the committed, deterministic, text-only sync interface.
   Hand-edit neither.
 - Preserve the `@jrm/tokens` -> `@jrm/tailwind-preset` dependency direction.
+- Preserve the executable token contract baseline. `pnpm test` validates authored token
+  structure, generated entry points, compatibility aliases, scoped theme/preference
+  behavior, distribution determinism, and failure-path fixtures.
 - All packages remain private and `0.0.0`; do not publish them.
 - Documentation-only governance changes require no Changeset.
 

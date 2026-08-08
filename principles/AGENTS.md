@@ -1,9 +1,10 @@
 # Studio canonical-role overlay
 
 Canonical agent, skill, prompt, and instruction definitions live in
-[`jrmoulckers/.github`](https://github.com/jrmoulckers/.github). Studio does not copy those
-definitions. This file only maps canonical roles to local paths and records handoff
-boundaries, as allowed by
+[`jrmoulckers/.github`](https://github.com/jrmoulckers/.github). Studio does not author or
+redefine them. Generated materializations under this repository's `.github/` tree are sync
+outputs, not local authority. This file only maps canonical roles to local paths and
+records handoff boundaries, as allowed by
 [ADR-0001](https://github.com/jrmoulckers/.github/blob/main/docs/architecture/0001-canonical-agent-overlays.md).
 
 The authority assignment itself is canonical in
