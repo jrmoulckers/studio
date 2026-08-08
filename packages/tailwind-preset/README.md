@@ -14,6 +14,11 @@ the token-generated preset from [`@jrm/tokens`](../tokens) — where every value
 Because the colors/spacing/radius/shadow/typography all resolve to CSS variables, a runtime
 theme or mode swap (changing `data-theme`) re-flows every utility with **no rebuild**.
 
+> **Current availability:** this wrapper is workspace-internal. It is not published or
+> synced to product repositories. Products receive the generated token preset and consume
+> it by vendored path; see
+> [`@jrm/tokens` product-repository usage](../tokens/README.md#product-repositories-synced-dist).
+
 ## Usage
 
 Import the CSS variables once (from `@jrm/tokens`) and apply the preset:

@@ -1,0 +1,12 @@
+{
+  "$schema": "./migration-ledger.schema.json",
+  "schemaVersion": 1,
+  "baseline": {
+    "repository": "https://github.com/jrmoulckers/studio",
+    "commit": "efe6aa3b5ad020331a91f533844b0b9f70d70b76",
+    "realmFiles": 21,
+    "topLevelPrinciples": 192,
+    "idFormat": "studio-legacy:<realm-file-slug>:<top-level-number>"
+  },
+  "entries": []
+}

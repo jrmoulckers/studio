@@ -3,6 +3,10 @@
 Shared [TypeScript](https://www.typescriptlang.org/) configs for JRM Studio. A strict
 base seeded from the jrm-recipes app config, plus framework variants.
 
+> **Transitional ownership:** this package remains workspace-internal in Studio pending an
+> additive migration to Engineering. It has not moved and is not published, synced, or
+> otherwise downstream-consumable. The usage below applies inside this monorepo only.
+
 | Config        | Extend with                 | Use for                                                      |
 | ------------- | --------------------------- | ------------------------------------------------------------ |
 | `base.json`   | `@jrm/tsconfig/base.json`   | Framework-agnostic base (strict, ES2022, bundler resolution) |

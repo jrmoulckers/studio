@@ -170,6 +170,40 @@ Negative fixtures exercise each validator so a constant-success guard cannot sat
 
 ## Consume
 
+### Product repositories (synced `dist/`)
+
+The sync engine copies this package's committed `dist/` contents to
+`vendor/@jrm/tokens/` by default. A product repository consumes those files by path, not
+through an `@jrm/tokens` package specifier. Adjust the relative prefix for the consuming
+file:
+
+```css
+/* app/globals.css or src/app.css */
+@import '../vendor/@jrm/tokens/css/default/index.css';
+```
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [require('./vendor/@jrm/tokens/tailwind/default.cjs')],
+  content: ['./src/**/*.{js,ts,jsx,tsx,svelte,html}'],
+};
+```
+
+```ts
+import { tokens, tokensDark } from '../vendor/@jrm/tokens/js/index.js';
+```
+
+Some repositories configure a different target (for example,
+`apps/web/vendor/@jrm/tokens/`); their imports follow that configured location. Never
+hand-edit the vendored files: provenance and drift checks treat the synced bytes as the
+interface.
+
+The generated Tailwind preset contains token-backed theme values. It does not include the
+workspace-only `@jrm/tailwind-preset` wrapper's container defaults, animations, or plugin.
+
+### This workspace
+
 **CSS / Svelte / React (plain vars):**
 
 ```css
