@@ -34,6 +34,11 @@ owner review.
 
 - The 21 legacy realm files and their 192 top-level principles remain intact for Milestone 2. Use the stable IDs and process in
   [`principles/MIGRATION.md`](principles/MIGRATION.md).
+- Studio's design/UI authority is authored as a concise Draft tree under
+  [`principles/design/`](principles/design) and [`principles/experience/`](principles/experience)
+  with stable `STUDIO-<AREA>-NNN` IDs. Every entry stays `Draft` and non-normative until the
+  repository owner ratifies it; the tree supersedes no legacy file and the migration ledger
+  stays at 0/192. `pnpm principles:check` (chained into `pnpm test`) validates it.
 - A legacy principle cannot be deleted until it has exactly one owner-ratified disposition
   and the ledger records verified evidence. Do not create empty successor realm files.
 - `@jrm/eslint-config`, `@jrm/tsconfig`, and `@jrm/prettier-config` remain here unchanged

@@ -45,6 +45,31 @@ The inventory below records coverage only; it does not assign a successor or dis
 | [Testing](testing.md)                   | `studio-legacy:testing:1..10`         |      10 |
 | **Total**                               |                                       | **192** |
 
+## Studio Draft principle tree
+
+Alongside the transitional legacy realm files, Studio authors its design and UI authority as a
+concise Draft tree under [`design/`](design) and [`experience/`](experience). Each principle has
+a stable `STUDIO-<AREA>-NNN` ID, a testable verification, repository-owner ratification
+accountability, an implementation owner, explicit cross-authority handoffs, and exact legacy
+inputs. Every principle is **Draft** and non-normative until the repository owner ratifies it.
+
+| File                                                         | Area prefix   | Scope                                                      |
+| ------------------------------------------------------------ | ------------- | ---------------------------------------------------------- |
+| [`design/foundations.md`](design/foundations.md)             | `STUDIO-FND`  | Framework-neutral design contract; additive evolution      |
+| [`design/tokens-and-themes.md`](design/tokens-and-themes.md) | `STUDIO-TOK`  | primitive→semantic→component chain; runtime themes/modes   |
+| [`design/components.md`](design/components.md)               | `STUDIO-CMP`  | Behavioral component contracts; native parity; validation  |
+| [`experience/interaction.md`](experience/interaction.md)     | `STUDIO-INT`  | Native semantics, keyboard/switch, focus, targets, motion  |
+| [`experience/accessibility.md`](experience/accessibility.md) | `STUDIO-A11Y` | WCAG floor, accessibility modes, cognitive mode + gap      |
+| [`experience/localization.md`](experience/localization.md)   | `STUDIO-L10N` | Text expansion, RTL/bidi UX; mechanism handoffs            |
+| [`experience/ux.md`](experience/ux.md)                       | `STUDIO-UX`   | Ease of use, visible state, tabular figures, consolidation |
+
+This Draft tree adds no ledger disposition: it does not remove, supersede, or reassign any legacy
+principle, and [`migration-ledger.json`](migration-ledger.json) stays at 0 of 192. A legacy file
+is removed only through the ratified disposition and evidence gate below. The tree is validated by
+[`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
+`pnpm principles:check`, and chained after the token suite in `pnpm test`), which checks unique
+IDs, file-to-area prefixes, required fields, and the exact `Draft` / `repository owner` values.
+
 ## Precedence during migration
 
 1. An owner-ratified principle in the correct canonical authority supersedes conflicting
@@ -53,6 +78,9 @@ The inventory below records coverage only; it does not assign a successor or dis
    paths do not transfer ownership.
 3. An unmapped legacy principle is transitional input only. It may inform a proposal, but
    it cannot establish authority outside Studio or override a ratified successor.
+4. The Studio Draft principle tree is a proposed successor set. Until the repository owner
+   ratifies a given principle, it is non-normative and does not supersede the legacy realm
+   text it draws from; both remain in place.
 
 Cross-authority references use durable repository links or stable IDs. Private Engineering
 and Product sources must not be copied into Studio merely to make a link locally
