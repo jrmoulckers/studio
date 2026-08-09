@@ -1,0 +1,718 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jrmoulckers/studio/blob/main/principles/migration-finalization-receipt.schema.json",
+  "title": "JRM Studio principle migration finalization receipt",
+  "description": "Dated, non-normative evidence that the owner-ratified successor catalogs satisfy the technical gate for removing the frozen legacy realm files. The four authority repositories and the repository-owner merge of the finalization pull request remain the normative sources.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "receiptType",
+    "verifiedAt",
+    "purpose",
+    "claims",
+    "verification",
+    "historicalEvidence",
+    "authorities",
+    "migration",
+    "deletion",
+    "integrity"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./migration-finalization-receipt.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "receiptType": {
+      "const": "dated-finalization-verification-evidence"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["normativeSource", "provesRatification", "authorizesLegacyDeletion", "meaning"],
+      "properties": {
+        "normativeSource": {
+          "const": false
+        },
+        "provesRatification": {
+          "const": true,
+          "description": "Authenticated owner-effective merged decisions were matched against the pinned catalogs. This is evidence about past merges, not an act of Ratification."
+        },
+        "authorizesLegacyDeletion": {
+          "const": true,
+          "description": "The technical deletion preconditions passed for exactly the frozen 21 paths. Only repository-owner merge of the finalization pull request performs the deletion."
+        },
+        "meaning": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "repository-owner merge of the finalization pull request is the effective supersession and deletion act"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceKind",
+        "retrieval",
+        "digestMethod",
+        "ledgerWasNotAuthorityInput",
+        "liveCommand",
+        "offlineLimit"
+      ],
+      "properties": {
+        "sourceKind": {
+          "const": "pinned-authority-and-owner-merge-evidence"
+        },
+        "retrieval": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digestMethod": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ledgerWasNotAuthorityInput": {
+          "const": true
+        },
+        "liveCommand": {
+          "const": "pnpm principles:verify-live"
+        },
+        "offlineLimit": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "historicalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "draftReceipt",
+        "legacyCatalogBaseline",
+        "legacySourceSnapshot",
+        "reconciliationLedger"
+      ],
+      "properties": {
+        "draftReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "verifiedAt", "integritySha256"],
+          "properties": {
+            "path": {
+              "const": "principles/migration-verification-receipt.json"
+            },
+            "verifiedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "integritySha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "legacyCatalogBaseline": {
+          "$ref": "#/$defs/legacyCatalog"
+        },
+        "legacySourceSnapshot": {
+          "$ref": "#/$defs/legacySnapshot"
+        },
+        "reconciliationLedger": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "commit", "path", "blobSha", "sha256", "mappingSha256"],
+          "properties": {
+            "repository": {
+              "const": "jrmoulckers/studio"
+            },
+            "commit": {
+              "$ref": "#/$defs/sha1"
+            },
+            "path": {
+              "const": "principles/migration-ledger.json"
+            },
+            "blobSha": {
+              "$ref": "#/$defs/sha1"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "mappingSha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      }
+    },
+    "authorities": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/authority"
+      }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ledgerPath",
+        "entryCount",
+        "requiredEntryStatus",
+        "mappingSha256",
+        "dispositionCounts",
+        "destinationLinks",
+        "successorLinks",
+        "uniqueMappedSuccessors",
+        "citationExceptions",
+        "retirements"
+      ],
+      "properties": {
+        "ledgerPath": {
+          "const": "principles/migration-ledger.json"
+        },
+        "entryCount": {
+          "const": 192
+        },
+        "requiredEntryStatus": {
+          "const": "verified"
+        },
+        "mappingSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dispositionCounts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rewrite", "split", "reference", "retire"],
+          "properties": {
+            "rewrite": { "const": 21 },
+            "split": { "const": 43 },
+            "reference": { "const": 122 },
+            "retire": { "const": 6 }
+          }
+        },
+        "destinationLinks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Studio", "Engineering", "Product", ".github"],
+          "properties": {
+            "Studio": { "const": 44 },
+            "Engineering": { "const": 92 },
+            "Product": { "const": 56 },
+            ".github": { "const": 50 }
+          }
+        },
+        "successorLinks": {
+          "const": 242
+        },
+        "uniqueMappedSuccessors": {
+          "const": 159
+        },
+        "citationExceptions": {
+          "const": 4
+        },
+        "retirements": {
+          "const": 6
+        }
+      }
+    },
+    "deletion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frozenLegacyPaths", "pathCount", "effectiveAct"],
+      "properties": {
+        "frozenLegacyPaths": {
+          "type": "array",
+          "minItems": 21,
+          "maxItems": 21,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sourcePath"
+          }
+        },
+        "pathCount": {
+          "const": 21
+        },
+        "effectiveAct": {
+          "const": "repository-owner merge of the finalization pull request"
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "digest"],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "legacyId": {
+      "type": "string",
+      "pattern": "^studio-legacy:[a-z0-9-]+:[1-9][0-9]*$"
+    },
+    "sourcePath": {
+      "type": "string",
+      "pattern": "^principles/.+\\.md$"
+    },
+    "repositoryPath": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._/-]+\\.md$"
+    },
+    "principleId": {
+      "type": "string",
+      "pattern": "^(?:STUDIO|ENG|PROD|GH)-[A-Z0-9]+-[0-9]{3}$"
+    },
+    "legacyCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "realmFiles", "topLevelPrinciples", "ids"],
+      "properties": {
+        "repository": {
+          "const": "jrmoulckers/studio"
+        },
+        "commit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "realmFiles": {
+          "const": 21
+        },
+        "topLevelPrinciples": {
+          "const": 192
+        },
+        "ids": {
+          "type": "array",
+          "minItems": 192,
+          "maxItems": 192,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/legacyId"
+          }
+        }
+      }
+    },
+    "legacySnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "realmFiles", "topLevelPrinciples", "files"],
+      "properties": {
+        "repository": {
+          "const": "jrmoulckers/studio"
+        },
+        "commit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "realmFiles": {
+          "const": 21
+        },
+        "topLevelPrinciples": {
+          "const": 192
+        },
+        "files": {
+          "type": "array",
+          "minItems": 21,
+          "maxItems": 21,
+          "items": {
+            "$ref": "#/$defs/legacyFile"
+          }
+        }
+      }
+    },
+    "legacyFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "blobSha", "sha256", "topLevelIds"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/sourcePath"
+        },
+        "blobSha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "topLevelIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/legacyId"
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "repository",
+        "ratifiedCatalogCommit",
+        "currentMainCommitAtVerification",
+        "principleCount",
+        "ratifiedCount",
+        "files",
+        "principles",
+        "catalogSha256",
+        "semanticCatalogSha256",
+        "historicalComparison",
+        "decision"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "authority": { "const": ".github" } },
+            "required": ["authority"]
+          },
+          "then": {
+            "required": ["protection"],
+            "description": "The merged .github decision record makes owner Ratification effective only after the required CI gate succeeds, so its protected-branch rule and head check results are Ratification evidence."
+          },
+          "else": {
+            "not": { "required": ["protection"] }
+          }
+        }
+      ],
+      "properties": {
+        "authority": {
+          "enum": ["Studio", "Engineering", "Product", ".github"]
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^jrmoulckers/(?:studio|engineering|product|\\.github)$"
+        },
+        "ratifiedCatalogCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "currentMainCommitAtVerification": {
+          "$ref": "#/$defs/sha1"
+        },
+        "principleCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ratifiedCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/authorityFile"
+          }
+        },
+        "principles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/principle"
+          }
+        },
+        "catalogSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "semanticCatalogSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "historicalComparison": {
+          "$ref": "#/$defs/historicalComparison"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "protection": {
+          "$ref": "#/$defs/protection"
+        }
+      }
+    },
+    "authorityFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "blobSha", "sha256", "principleCount"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/sourcePath"
+        },
+        "blobSha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "principleCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "principle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "title",
+        "status",
+        "legacyInputs",
+        "blobSha",
+        "fileSha256",
+        "blockSha256",
+        "semanticSha256"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/principleId"
+        },
+        "path": {
+          "$ref": "#/$defs/sourcePath"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "const": "Ratified"
+        },
+        "legacyInputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/legacyId"
+          }
+        },
+        "blobSha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "fileSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "blockSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "semanticSha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the principle block with only its Status metadata line normalized."
+        }
+      }
+    },
+    "historicalComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["draftCommit", "draftSemanticCatalogSha256", "changedPrinciples"],
+      "properties": {
+        "draftCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "draftSemanticCatalogSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "changedPrinciples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "historicalSemanticSha256", "ratifiedSemanticSha256", "rationale"],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/principleId"
+              },
+              "historicalSemanticSha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "ratifiedSemanticSha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "blobSha",
+        "sha256",
+        "scopeIds",
+        "scopeSha256",
+        "pullRequest",
+        "state",
+        "merged",
+        "mergedAt",
+        "mergeCommit",
+        "headCommit",
+        "baseRef",
+        "authorAssociation",
+        "mergedBy"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        },
+        "blobSha": {
+          "$ref": "#/$defs/sha1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scopeIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/principleId"
+          }
+        },
+        "scopeSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "pullRequest": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "const": "closed"
+        },
+        "merged": {
+          "const": true
+        },
+        "mergedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "mergeCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "headCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "baseRef": {
+          "const": "main"
+        },
+        "authorAssociation": {
+          "const": "OWNER"
+        },
+        "mergedBy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["login", "id"],
+          "properties": {
+            "login": {
+              "const": "jrmoulckers"
+            },
+            "id": {
+              "const": 43014188
+            }
+          }
+        }
+      }
+    },
+    "protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Protected-branch rule in force for the authority whose merged decision record conditions Ratification on a required check, plus that check's result on the reviewed Ratification head.",
+      "required": [
+        "branch",
+        "strictRequiredStatusChecks",
+        "requiredChecks",
+        "allowForcePushes",
+        "allowDeletions",
+        "ratificationHeadChecks"
+      ],
+      "properties": {
+        "branch": {
+          "const": "main"
+        },
+        "strictRequiredStatusChecks": {
+          "const": true
+        },
+        "requiredChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["context", "appId"],
+            "properties": {
+              "context": {
+                "type": "string",
+                "minLength": 1
+              },
+              "appId": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "allowForcePushes": {
+          "const": false
+        },
+        "allowDeletions": {
+          "const": false
+        },
+        "ratificationHeadChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "required", "status", "conclusion", "detailsUrl"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "status": {
+                "const": "completed"
+              },
+              "conclusion": {
+                "const": "success"
+              },
+              "detailsUrl": {
+                "type": "string",
+                "pattern": "^https://github\\.com/[A-Za-z0-9._/-]+/actions/runs/[0-9]+/job/[0-9]+$"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

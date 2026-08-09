@@ -17,24 +17,27 @@ into user-facing expression. GitHub governance, Actions, Copilot and AI configur
 agents, skills, prompts, instructions, evaluations, registry, sync, and provenance remain
 owned by `.github`.
 
-Cross-authority documents link to their canonical source instead of copying normative
-rules. Only the repository owner may ratify a principle. Agents and other contributors may
-research, draft, and propose principles, but a proposal remains non-normative until the
-owner accepts it through review.
+Cross-authority documents link to the canonical
+[Engineering principles](https://github.com/jrmoulckers/engineering/tree/main/principles),
+[Product principles](https://github.com/jrmoulckers/product/tree/main/principles), and
+[GitHub and AI principles](https://github.com/jrmoulckers/.github/tree/main/principles)
+instead of copying normative rules. Only the repository owner may ratify a principle.
+Agents and other contributors may research, draft, and propose principles, but a proposal
+remains non-normative until the owner accepts it through review.
 
 ## Repository map
 
-This repository is partway through the authority transition. Its current contents are:
+Its current contents are:
 
-| Surface                                                                           | Current role and availability                                                                                                                                                                                           |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@jrm/tokens`](packages/tokens)                                                  | Active Studio-owned DTCG tokens, themes, CSS custom properties, generated Tailwind data, and typed JS/TS token objects. Its committed `dist/` is synced to opted-in product repositories.                               |
-| [`@jrm/tailwind-preset`](packages/tailwind-preset)                                | Active Studio-owned UI preset layered on the token output. The wrapper package is workspace-internal today; product repositories receive only the generated token preset inside `@jrm/tokens/dist`.                     |
-| [`@jrm/eslint-config`](packages/eslint-config)                                    | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                   |
-| [`@jrm/tsconfig`](packages/tsconfig)                                              | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                   |
-| [`@jrm/prettier-config`](packages/prettier-config)                                | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                   |
-| [`principles/`](principles)                                                       | A transitional 21-realm, 192-principle legacy tree retained as migration input. It is not the target authority model; see the [principles index](principles/README.md) and [migration ledger](principles/MIGRATION.md). |
-| `.github/agents/`, `.github/skills/`, `.github/prompts/`, `.github/instructions/` | Generated materializations synced from `jrmoulckers/.github`. Their presence here does not transfer authority to Studio; edit their canonical source, not the generated copies.                                         |
+| Surface                                                                           | Current role and availability                                                                                                                                                                                                                                                 |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@jrm/tokens`](packages/tokens)                                                  | Active Studio-owned DTCG tokens, themes, CSS custom properties, generated Tailwind data, and typed JS/TS token objects. Its committed `dist/` is synced to opted-in product repositories.                                                                                     |
+| [`@jrm/tailwind-preset`](packages/tailwind-preset)                                | Active Studio-owned UI preset layered on the token output. The wrapper package is workspace-internal today; product repositories receive only the generated token preset inside `@jrm/tokens/dist`.                                                                           |
+| [`@jrm/eslint-config`](packages/eslint-config)                                    | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                                                                         |
+| [`@jrm/tsconfig`](packages/tsconfig)                                              | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                                                                         |
+| [`@jrm/prettier-config`](packages/prettier-config)                                | **Transitional.** It remains workspace-internal here pending an additive migration to Engineering. It has not moved and is not synced, published, or otherwise downstream-consumable.                                                                                         |
+| [`principles/`](principles)                                                       | The authoritative 25-principle Studio design/UI tree plus the final 192-entry migration ledger, historical Draft evidence, Ratification evidence, and deletion audit trail. See the [principles index](principles/README.md) and [migration record](principles/MIGRATION.md). |
+| `.github/agents/`, `.github/skills/`, `.github/prompts/`, `.github/instructions/` | Generated materializations synced from `jrmoulckers/.github`. Their presence here does not transfer authority to Studio; edit their canonical source, not the generated copies.                                                                                               |
 
 All packages remain `private` and `0.0.0`. Nothing in this repository is published to a
 package registry.
@@ -94,7 +97,7 @@ exercised by `pnpm test`. Run `pnpm workflows:check` to validate this wiring sta
 - [`AGENTS.md`](AGENTS.md) is the repository-local operating context. Canonical agent,
   skill, prompt, and instruction definitions remain owned by `jrmoulckers/.github`;
   synchronized files under this repository's `.github/` tree are generated materializations.
-- [`principles/README.md`](principles/README.md) explains the local design/UI authority and
-  the transitional legacy tree.
+- [`principles/README.md`](principles/README.md) indexes the owner-ratified local design/UI
+  authority and its cross-authority handoffs.
 - [`principles/MIGRATION.md`](principles/MIGRATION.md) defines the stable legacy IDs,
-  disposition vocabulary, evidence requirements, and deletion gate for Milestone 2.
+  final dispositions, immutable evidence, and the completed legacy deletion audit trail.

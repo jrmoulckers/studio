@@ -4,9 +4,11 @@
 > merges the covering Ratification decision record; before that merge, the candidate change is
 > proposed and non-normative.
 >
-> These principles are Studio's design-authority successor to parts of the transitional
-> legacy realm tree. They do not remove or supersede any legacy file, and the migration
-> ledger stays at 0/192. Legacy inputs are cited by their stable `<realm>#<n>` migration ID.
+> These principles are Studio's owner-ratified design-authority successor to part of the
+> superseded legacy realm tree. The 21 legacy realm files were removed by the final
+> owner-review change; every disposition stays traceable in the final
+> [migration ledger](../migration-ledger.json). Legacy inputs are cited by their stable
+> `<realm>#<n>` migration ID.
 
 ## Purpose
 

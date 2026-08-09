@@ -4,8 +4,9 @@
 > merges the covering Ratification decision record; before that merge, the candidate change is
 > proposed and non-normative.
 >
-> Studio design-authority successor to legacy UX guidance. It removes no legacy file; the
-> migration ledger stays at 0/192. Legacy inputs are cited by stable `<realm>#<n>` ID.
+> Owner-ratified Studio design authority superseding the removed legacy UX guidance. Every
+> disposition stays traceable in the final [migration ledger](../migration-ledger.json).
+> Legacy inputs are cited by stable `<realm>#<n>` ID.
 
 ## Purpose
 

@@ -19,237 +19,777 @@
       "expectedError": "duplicate JSON key"
     },
     {
-      "name": "wrong authority commit",
-      "mutation": {
-        "operation": "set-authority-field",
-        "authority": "Engineering",
-        "field": "commit",
-        "value": "0000000000000000000000000000000000000000"
-      },
-      "expectedError": "Engineering commit"
-    },
-    {
-      "name": "wrong principle digest",
-      "mutation": {
-        "operation": "set-principle-field",
-        "authority": "Product",
-        "id": "PROD-CONTENT-002",
-        "field": "blockSha256",
-        "value": "0000000000000000000000000000000000000000000000000000000000000000"
-      },
-      "expectedError": "catalog digest"
-    },
-    {
-      "name": "renumbered successor",
-      "mutation": {
-        "operation": "set-principle-field",
-        "authority": "Studio",
-        "id": "STUDIO-A11Y-001",
-        "field": "id",
-        "value": "STUDIO-A11Y-999"
-      },
-      "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
-    },
-    {
-      "name": "deleted successor",
-      "mutation": {
-        "operation": "delete-principle",
-        "authority": "Studio",
-        "id": "STUDIO-A11Y-001"
-      },
-      "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
-    },
-    {
-      "name": "bad disposition cardinality",
-      "mutation": {
-        "operation": "append-successor",
-        "legacyId": "studio-legacy:accessibility:1",
-        "successor": {
-          "authority": "Studio",
-          "id": "STUDIO-A11Y-002"
-        }
-      },
-      "expectedError": "rewrite requires exactly one successor"
-    },
-    {
-      "name": "Draft successor cannot imply Ratification",
+      "name": "a ledger entry that is not verified",
       "mutation": {
         "operation": "set-ledger-field",
         "legacyId": "studio-legacy:accessibility:1",
         "field": "status",
-        "value": "ratified"
+        "value": "implemented"
       },
-      "expectedError": "a Draft successor cannot advance the disposition past proposed"
+      "expectedError": "every finalized ledger entry must be \"verified\""
+    },
+    {
+      "name": "a Draft successor cannot satisfy the finalization gate",
+      "mutation": {
+        "operation": "set-final-principle-field",
+        "authority": "Studio",
+        "id": "STUDIO-A11Y-001",
+        "field": "status",
+        "value": "Draft",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "STUDIO-A11Y-001 must be Ratified in the final catalog"
+    },
+    {
+      "name": "missing successor record",
+      "mutation": {
+        "operation": "delete-final-principle",
+        "authority": "Studio",
+        "id": "STUDIO-A11Y-001",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
+    },
+    {
+      "name": "renumbered successor record",
+      "mutation": {
+        "operation": "set-final-principle-field",
+        "authority": "Product",
+        "id": "PROD-CONTENT-002",
+        "field": "id",
+        "value": "PROD-CONTENT-999",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "unknown successor Product:PROD-CONTENT-002"
+    },
+    {
+      "name": "changed semantic digest",
+      "mutation": {
+        "operation": "set-final-principle-field",
+        "authority": "Engineering",
+        "id": "ENG-TEST-004",
+        "field": "semanticSha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "semantic catalog digest does not match receipt records"
+    },
+    {
+      "name": "changed block digest",
+      "mutation": {
+        "operation": "set-final-principle-field",
+        "authority": "Studio",
+        "id": "STUDIO-FND-001",
+        "field": "blockSha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "STUDIO-FND-001: principle block does not match the Ratified receipt bytes"
+    },
+    {
+      "name": "changed file digest",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["authorities", 0, "files", 0, "sha256"],
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "file digests do not match"
+    },
+    {
+      "name": "changed Git blob digest",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["authorities", 0, "files", 0, "blobSha"],
+        "value": "0000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "file digests do not match"
+    },
+    {
+      "name": "changed catalog digest with a recomputed receipt integrity digest",
+      "mutation": {
+        "operation": "set-final-authority-field",
+        "authority": "Product",
+        "field": "catalogSha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "catalog digest does not match the independent pin"
+    },
+    {
+      "name": "changed semantic catalog digest with a recomputed receipt integrity digest",
+      "mutation": {
+        "operation": "set-final-authority-field",
+        "authority": ".github",
+        "field": "semanticCatalogSha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "semantic catalog digest does not match the independent pin"
+    },
+    {
+      "name": "wrong or stale authority commit",
+      "mutation": {
+        "operation": "set-final-authority-field",
+        "authority": "Engineering",
+        "field": "ratifiedCatalogCommit",
+        "value": "ea1ad771b46612a62d54b66e8077df4e5af6f16a",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "ratified catalog commit does not match the independent pin"
+    },
+    {
+      "name": "missing decision record",
+      "mutation": {
+        "operation": "remove-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md"
+      },
+      "expectedError": "requires an owner-effective Ratification record"
+    },
+    {
+      "name": "changed decision record digest",
+      "mutation": {
+        "operation": "set-final-decision-field",
+        "authority": "Product",
+        "field": "sha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "digest does not match the pinned decision record"
+    },
+    {
+      "name": "changed decision record scope",
+      "mutation": {
+        "operation": "set-final-decision-field",
+        "authority": ".github",
+        "field": "scopeIds",
+        "value": ["GH-ACT-001"],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "scope must list exactly the 43 Ratified successor IDs"
+    },
+    {
+      "name": "non-owner merger",
+      "mutation": {
+        "operation": "set-final-decision-field",
+        "authority": "Studio",
+        "field": "mergedBy",
+        "value": { "login": "not-the-owner", "id": 1 },
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "only the repository owner merge is an effective Ratification"
+    },
+    {
+      "name": "unmerged decision",
+      "mutation": {
+        "operation": "set-final-decision-field",
+        "authority": "Engineering",
+        "field": "merged",
+        "value": false,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "an unmerged decision cannot ratify a catalog"
+    },
+    {
+      "name": "decision merged by a non-owner association",
+      "mutation": {
+        "operation": "set-final-decision-field",
+        "authority": "Product",
+        "field": "authorAssociation",
+        "value": "CONTRIBUTOR",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "authorAssociation must be OWNER"
+    },
+    {
+      "name": "changed mapping even with a recomputed receipt mapping and integrity digest",
+      "mutation": {
+        "operation": "set-ledger-successor-id",
+        "legacyId": "studio-legacy:accessibility:1",
+        "index": 0,
+        "value": "STUDIO-A11Y-002",
+        "syncFinalMapping": true,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "does not match the independent PR #21 mapping pin"
+    },
+    {
+      "name": "wrong disposition cardinality",
+      "mutation": {
+        "operation": "append-successor",
+        "legacyId": "studio-legacy:accessibility:1",
+        "successor": { "authority": "Studio", "id": "STUDIO-A11Y-002" },
+        "syncFinalMapping": true,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "rewrite requires exactly one successor"
+    },
+    {
+      "name": "missing citation exception",
+      "mutation": {
+        "operation": "delete-ledger-citation-exception",
+        "legacyId": "studio-legacy:documentation:2",
+        "syncFinalMapping": true,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "studio-legacy:documentation:2: Product:PROD-CONTENT-002 does not cite the legacy ID"
     },
     {
       "name": "nonreciprocal successor",
       "mutation": {
-        "operation": "remove-principle-legacy-input",
+        "operation": "set-final-principle-field",
         "authority": "Studio",
         "id": "STUDIO-A11Y-001",
-        "legacyId": "studio-legacy:accessibility:1"
+        "field": "legacyInputs",
+        "value": ["studio-legacy:accessibility:2"],
+        "recomputeFinalIntegrity": true
       },
-      "expectedError": "Studio:STUDIO-A11Y-001 does not cite the legacy ID"
+      "expectedError": "studio-legacy:accessibility:1: Studio:STUDIO-A11Y-001 does not cite the legacy ID"
     },
     {
-      "name": "circular receipt",
+      "name": "dropped final receipt evidence",
       "mutation": {
-        "operation": "set-receipt-field",
-        "path": ["verification", "ledgerWasNotInput"],
-        "value": false
+        "operation": "remove-ledger-evidence",
+        "legacyId": "studio-legacy:accessibility:1",
+        "value": "principles/migration-finalization-receipt.json"
       },
-      "expectedError": "must be independent of the ledger"
+      "expectedError": "evidence must include the final finalization receipt"
     },
     {
-      "name": "self-authoritative receipt",
+      "name": "dropped historical evidence",
       "mutation": {
-        "operation": "set-receipt-field",
-        "path": ["claims", "normativeSource"],
-        "value": true
+        "operation": "remove-ledger-evidence",
+        "legacyId": "studio-legacy:accessibility:1",
+        "value": "principles/migration-verification-receipt.json"
       },
-      "expectedError": "cannot be a normative source"
+      "expectedError": "evidence must preserve the historical Draft receipt"
     },
     {
-      "name": "receipt claims ratification",
+      "name": "dropped retirement source evidence",
       "mutation": {
-        "operation": "set-receipt-field",
+        "operation": "remove-ledger-evidence",
+        "legacyId": "studio-legacy:ai-process:15",
+        "value": "https://github.com/jrmoulckers/studio/blob/20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0/principles/ai-process.md"
+      },
+      "expectedError": "retirement must preserve its frozen legacy source evidence"
+    },
+    {
+      "name": "shrunken deletion inventory",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["deletion", "pathCount"],
+        "value": 20,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "pathCount must be 21"
+    },
+    {
+      "name": "extra deletion inventory path",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["deletion", "frozenLegacyPaths"],
+        "value": [
+          "principles/accessibility.md",
+          "principles/ai-process.md",
+          "principles/ai-products.md",
+          "principles/architecture.md",
+          "principles/backend.md",
+          "principles/business.md",
+          "principles/compliance.md",
+          "principles/data-analytics.md",
+          "principles/design.md",
+          "principles/design/foundations.md",
+          "principles/devops.md",
+          "principles/documentation.md",
+          "principles/featuring.md",
+          "principles/frontend.md",
+          "principles/local-first.md",
+          "principles/localization.md",
+          "principles/middleware.md",
+          "principles/performance.md",
+          "principles/process.md",
+          "principles/project-planning.md",
+          "principles/security.md",
+          "principles/testing.md"
+        ],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "frozen deletion inventory does not match the independent 21-path pin"
+    },
+    {
+      "name": "partial deletion leaves a frozen legacy file present",
+      "mutation": {
+        "operation": "write-source-file",
+        "path": "principles/design.md",
+        "content": "# Principles — Design\n\n### 1. Legacy rule\n\n- **Statement:** Restored.\n"
+      },
+      "expectedError": "principles/design.md: a frozen legacy realm file must be absent after finalization"
+    },
+    {
+      "name": "reintroduced legacy realm file",
+      "mutation": {
+        "operation": "write-source-file",
+        "path": "principles/testing.md",
+        "content": "# Principles — Testing\n\n### 1. Legacy rule\n\n- **Statement:** Reintroduced.\n"
+      },
+      "expectedError": "principles/testing.md: a frozen legacy realm file must be absent after finalization"
+    },
+    {
+      "name": "deleted protected evidence file",
+      "mutation": {
+        "operation": "remove-source-file",
+        "path": "principles/migration-verification-receipt.json"
+      },
+      "expectedError": "a protected successor or evidence file must remain present"
+    },
+    {
+      "name": "live Markdown link to a deleted legacy path",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/MIGRATION.md",
+        "find": "## Exact deletion inventory",
+        "replace": "## Exact deletion inventory\n\nSee [design](design.md) for the current rule.\n"
+      },
+      "expectedError": "Markdown link resolves to the deleted legacy path principles/design.md"
+    },
+    {
+      "name": "live branch URL to a deleted legacy path",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/MIGRATION.md",
+        "find": "## Exact deletion inventory",
+        "replace": "## Exact deletion inventory\n\nhttps://github.com/jrmoulckers/studio/blob/main/principles/security.md\n"
+      },
+      "expectedError": "a live branch URL still resolves to the deleted principles/security.md"
+    },
+    {
+      "name": "instruction pointing at a deleted legacy path",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/MIGRATION.md",
+        "find": "## Validation",
+        "replace": "## Validation\n\nAgents must read `principles/devops.md` before changing delivery.\n"
+      },
+      "expectedError": "live reference to the deleted legacy path principles/devops.md"
+    },
+    {
+      "name": "final receipt denies the required Ratification claim",
+      "mutation": {
+        "operation": "set-final-field",
         "path": ["claims", "provesRatification"],
-        "value": true
+        "value": false,
+        "recomputeFinalIntegrity": true
       },
-      "expectedError": "cannot prove Ratification"
+      "expectedError": "must record provesRatification: true"
     },
     {
-      "name": "Draft receipt authorizes deletion",
+      "name": "final receipt denies the required deletion-gate claim",
       "mutation": {
-        "operation": "set-receipt-field",
+        "operation": "set-final-field",
         "path": ["claims", "authorizesLegacyDeletion"],
-        "value": true
+        "value": false,
+        "recomputeFinalIntegrity": true
       },
-      "expectedError": "cannot authorize legacy deletion"
+      "expectedError": "must record authorizesLegacyDeletion: true"
     },
     {
-      "name": "Ratified status without an owner-effective Ratification record",
+      "name": "final receipt claims to be a normative source",
       "mutation": {
-        "operation": "delete-ratification-record"
+        "operation": "set-final-field",
+        "path": ["claims", "normativeSource"],
+        "value": true,
+        "recomputeFinalIntegrity": true
       },
-      "checkLocalSources": true,
-      "expectedError": "requires an owner-effective Ratification record"
+      "expectedError": "a receipt cannot be a normative source"
+    },
+    {
+      "name": "final receipt drops the owner-merge meaning",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["claims", "meaning"],
+        "value": "The receipt proves successor Ratification and authorizes the 21-path deletion.",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "meaning must state \"repository-owner merge of the finalization pull request is the effective supersession and deletion act\""
+    },
+    {
+      "name": "final receipt claims deletion without the owner merge",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["claims", "meaning"],
+        "value": "The receipt authorizes the 21-path deletion only as a verified technical precondition; repository-owner merge of the finalization pull request is the effective supersession and deletion act, so deletion is complete without an owner merge decision.",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "deletion cannot be effective without the owner merge"
+    },
+    {
+      "name": "final receipt claims the ledger was an authority input",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["verification", "ledgerWasNotAuthorityInput"],
+        "value": false,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "authority evidence must be independent of the ledger"
+    },
+    {
+      "name": "final receipt integrity digest no longer matches its content",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["integrity", "digest"],
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expectedError": "integrity digest does not match receipt content"
+    },
+    {
+      "name": "historical Draft receipt claims Ratification",
+      "mutation": {
+        "operation": "set-historical-field",
+        "path": ["claims", "provesRatification"],
+        "value": true,
+        "recomputeHistoricalIntegrity": true
+      },
+      "expectedError": "historical Draft receipt cannot prove Ratification"
+    },
+    {
+      "name": "historical Draft receipt authorizes deletion",
+      "mutation": {
+        "operation": "set-historical-field",
+        "path": ["claims", "authorizesLegacyDeletion"],
+        "value": true,
+        "recomputeHistoricalIntegrity": true
+      },
+      "expectedError": "historical Draft receipt cannot authorize legacy deletion"
+    },
+    {
+      "name": "historical Draft receipt refreshed to Ratified",
+      "mutation": {
+        "operation": "set-historical-field",
+        "path": ["authorities", 0, "principles", 0, "status"],
+        "value": "Ratified",
+        "recomputeHistoricalIntegrity": true
+      },
+      "expectedError": "must stay Draft in the preserved historical receipt"
+    },
+    {
+      "name": "historical Draft receipt integrity rewritten",
+      "mutation": {
+        "operation": "set-historical-field",
+        "path": ["verifiedAt"],
+        "value": "2026-08-09T18:05:32.870Z",
+        "recomputeHistoricalIntegrity": true
+      },
+      "expectedError": "historical evidence must stay byte-preserved"
+    },
+    {
+      "name": "the two receipts disagree about the deleted legacy bytes",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["historicalEvidence", "legacySourceSnapshot", "files", 0, "sha256"],
+        "value": "0000000000000000000000000000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "legacy source snapshot disagrees with the preserved historical receipt"
+    },
+    {
+      "name": "reconciliation ledger pin rewritten",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["historicalEvidence", "reconciliationLedger", "commit"],
+        "value": "0000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "reconciliationLedger.commit does not match the PR #21 pin"
+    },
+    {
+      "name": "undeclared semantic change between the Draft evidence and Ratification",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["authorities", 3, "historicalComparison", "changedPrinciples"],
+        "value": [],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "recorded semantic changes do not match the independently pinned set"
+    },
+    {
+      "name": "local Studio Status drift",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
+        "replace": "- **Status:** Draft\n- **Statement:** Express every reusable, cross-product design decision"
+      },
+      "expectedError": "Studio successor statuses are mixed"
+    },
+    {
+      "name": "local Studio content drift",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "Studio spans multiple frameworks and platforms; a single portable contract is the only",
+        "replace": "Studio spans multiple frameworks and platforms; a single TAMPERED portable contract is the only"
+      },
+      "expectedError": "content changed beyond the Status field"
+    },
+    {
+      "name": "local Studio Legacy inputs drift",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3, architecture#12",
+        "replace": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3"
+      },
+      "expectedError": "STUDIO-FND-001: Legacy inputs do not match the Ratified receipt"
+    },
+    {
+      "name": "local Studio ID renumbering",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "### STUDIO-FND-001 — Design decisions are a framework-neutral contract",
+        "replace": "### STUDIO-FND-999 — Design decisions are a framework-neutral contract"
+      },
+      "expectedError": "missing stable principle ID STUDIO-FND-001"
+    },
+    {
+      "name": "unexpected local Studio Status value",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
+        "replace": "- **Status:** Approved\n- **Statement:** Express every reusable, cross-product design decision"
+      },
+      "expectedError": "Status must be exactly \"Draft\" or \"Ratified\""
+    },
+    {
+      "name": "Studio preamble still claims the legacy tree survives",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/experience/ux.md",
+        "find": "> Owner-ratified Studio design authority superseding the removed legacy UX guidance. Every",
+        "replace": "> Studio design-authority successor to legacy UX guidance. It removes no legacy file. Every"
+      },
+      "expectedError": "preamble makes a superseded migration claim"
+    },
+    {
+      "name": "Studio preamble content changed beyond the Ratification banner",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/design/foundations.md",
+        "find": "Foundations govern the shape of Studio's design contract as a whole",
+        "replace": "TAMPERED foundations govern the shape of Studio's design contract as a whole"
+      },
+      "expectedError": "preamble content changed beyond the Ratification banner"
+    },
+    {
+      "name": "an extra file smuggled into the Studio principle tree",
+      "mutation": {
+        "operation": "write-source-file",
+        "path": "principles/design/extra.md",
+        "content": "# Extra\n\n### STUDIO-FND-004 — Smuggled\n\n- **Status:** Ratified\n"
+      },
+      "expectedError": "principles/design: must contain exactly the pinned Studio principle files"
+    },
+    {
+      "name": "a top-level legacy realm authoring surface is reintroduced",
+      "mutation": {
+        "operation": "write-source-file",
+        "path": "principles/new-realm.md",
+        "content": "# Principles — New realm\n\n### 1. Reintroduced legacy shape\n"
+      },
+      "expectedError": "top-level realm files are forbidden"
+    },
+    {
+      "name": "a nested undeclared realm surface is introduced",
+      "mutation": {
+        "operation": "write-source-file",
+        "path": "principles/motion/tokens.md",
+        "content": "# Unratified motion realm\n\n### STUDIO-MOTION-001 — Smuggled\n"
+      },
+      "expectedError": "undeclared realm surfaces are forbidden"
+    },
+    {
+      "name": "the proposal template delegates Ratification away from the owner",
+      "mutation": {
+        "operation": "mutate-source-file",
+        "path": "principles/_template.md",
+        "find": "- **Ratification owner:** repository owner",
+        "replace": "- **Ratification owner:** contributor"
+      },
+      "expectedError": "missing required authoring rule \"- **Ratification owner:** repository owner\""
+    },
+    {
+      "name": "missing .github branch-protection evidence",
+      "mutation": {
+        "operation": "delete-final-protection",
+        "authority": ".github",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": ".github Ratification requires branch-protection and required-check evidence"
+    },
+    {
+      "name": "protection evidence generalized to another authority",
+      "mutation": {
+        "operation": "copy-final-protection",
+        "from": ".github",
+        "to": "Studio",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "protection evidence is recorded only for .github"
+    },
+    {
+      "name": "required status checks are no longer strict",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "strictRequiredStatusChecks",
+        "value": false,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "required status checks must be strict"
+    },
+    {
+      "name": "the CI gate is no longer a required check",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "requiredChecks",
+        "value": [{ "context": "Some other gate", "appId": 15368 }],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "required checks do not match the independent pin"
+    },
+    {
+      "name": "force pushes re-enabled on the protected branch",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "allowForcePushes",
+        "value": true,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "force pushes must be disabled on the protected branch"
+    },
+    {
+      "name": "branch deletion re-enabled on the protected branch",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "allowDeletions",
+        "value": true,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "branch deletion must be disabled on the protected branch"
+    },
+    {
+      "name": "the CI gate did not succeed on the Ratification head",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "ratificationHeadChecks",
+        "value": [
+          {
+            "name": "CI gate",
+            "required": true,
+            "status": "completed",
+            "conclusion": "failure",
+            "detailsUrl": "https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221951923"
+          },
+          {
+            "name": "Principle metadata tests",
+            "required": false,
+            "status": "completed",
+            "conclusion": "success",
+            "detailsUrl": "https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925400"
+          },
+          {
+            "name": "Sync engine tests",
+            "required": false,
+            "status": "completed",
+            "conclusion": "success",
+            "detailsUrl": "https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925426"
+          }
+        ],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "Ratification head checks do not match the independent pin"
+    },
+    {
+      "name": "the required CI gate result is missing from the Ratification head",
+      "mutation": {
+        "operation": "set-final-protection-field",
+        "authority": ".github",
+        "field": "ratificationHeadChecks",
+        "value": [
+          {
+            "name": "Principle metadata tests",
+            "required": false,
+            "status": "completed",
+            "conclusion": "success",
+            "detailsUrl": "https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925400"
+          },
+          {
+            "name": "Sync engine tests",
+            "required": false,
+            "status": "completed",
+            "conclusion": "success",
+            "detailsUrl": "https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925426"
+          }
+        ],
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "Ratification head checks do not match the independent pin"
     },
     {
       "name": "Ratification record falsely claims the pinned receipt proves Ratification",
       "mutation": {
-        "operation": "mutate-ratification-record",
+        "operation": "mutate-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md",
         "find": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion.",
         "replace": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion. The pinned receipt proves Ratification."
       },
-      "checkLocalSources": true,
       "expectedError": "forbidden claim: the pinned receipt cannot prove Ratification"
     },
     {
       "name": "Ratification record falsely claims the pinned receipt authorizes legacy deletion",
       "mutation": {
-        "operation": "mutate-ratification-record",
+        "operation": "mutate-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md",
         "find": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion.",
         "replace": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion. The pinned receipt authorizes legacy deletion."
       },
-      "checkLocalSources": true,
       "expectedError": "forbidden claim: the pinned receipt cannot authorize legacy deletion"
     },
     {
       "name": "Ratification record omits the not-yet-approved-before-merge disclaimer",
       "mutation": {
-        "operation": "mutate-ratification-record",
+        "operation": "mutate-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md",
         "find": "This record does not itself ratify anything and does not claim owner approval before\nmerge.",
         "replace": "This record does not itself ratify anything and does not claim owner approval before\nmerge. Owner approval already occurred before merge."
       },
-      "checkLocalSources": true,
       "expectedError": "forbidden claim: Ratification cannot be effective before repository-owner merge"
     },
     {
-      "name": "Ratification record cannot delegate approval to a non-owner",
+      "name": "Ratification record delegates approval to a non-owner",
       "mutation": {
-        "operation": "mutate-ratification-record",
+        "operation": "mutate-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md",
         "find": "The repository owner alone may ratify a Studio principle;",
         "replace": "The repository owner alone may ratify a Studio principle; a contributor can ratify these principles without owner merge;"
       },
-      "checkLocalSources": true,
       "expectedError": "forbidden claim: a non-owner cannot approve Ratification"
     },
     {
       "name": "Ratification record scope missing an ID",
       "mutation": {
-        "operation": "mutate-ratification-record",
+        "operation": "mutate-source-file",
+        "path": "principles/RATIFICATION-DESIGN-EXPERIENCE.md",
         "find": "STUDIO-UX-004\n```",
         "replace": "```"
       },
-      "checkLocalSources": true,
       "expectedError": "scope must list exactly the 25 Studio successor IDs"
-    },
-    {
-      "name": "mixed Studio successor statuses",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
-        "replace": "- **Status:** Draft\n- **Statement:** Express every reusable, cross-product design decision"
-      },
-      "checkLocalSources": true,
-      "expectedError": "Studio successor statuses are mixed"
-    },
-    {
-      "name": "wording change beyond the Status field fails the content pin",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "Studio spans multiple frameworks and platforms; a single portable contract is the only",
-        "replace": "Studio spans multiple frameworks and platforms; a single TAMPERED portable contract is the only"
-      },
-      "checkLocalSources": true,
-      "expectedError": "content changed beyond the Status field"
-    },
-    {
-      "name": "Legacy inputs change beyond the Status field fails the content pin",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3, architecture#12",
-        "replace": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3"
-      },
-      "checkLocalSources": true,
-      "expectedError": "content changed beyond the Status field"
-    },
-    {
-      "name": "ID renumbering a Ratified Studio principle still fails",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "### STUDIO-FND-001 — Design decisions are a framework-neutral contract",
-        "replace": "### STUDIO-FND-999 — Design decisions are a framework-neutral contract"
-      },
-      "checkLocalSources": true,
-      "expectedError": "missing stable principle ID STUDIO-FND-001"
-    },
-    {
-      "name": "Studio principle file preamble change fails the content pin",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "Foundations govern the shape of Studio's design contract as a whole",
-        "replace": "TAMPERED foundations govern the shape of Studio's design contract as a whole"
-      },
-      "checkLocalSources": true,
-      "expectedError": "preamble content changed beyond the Ratification banner"
-    },
-    {
-      "name": "unexpected Studio Status value fails",
-      "mutation": {
-        "operation": "mutate-studio-file",
-        "path": "principles/design/foundations.md",
-        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
-        "replace": "- **Status:** Approved\n- **Statement:** Express every reusable, cross-product design decision"
-      },
-      "checkLocalSources": true,
-      "expectedError": "Status must be exactly \"Draft\" or \"Ratified\""
     }
   ]
 }

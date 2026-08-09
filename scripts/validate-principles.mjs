@@ -1,14 +1,29 @@
 #!/usr/bin/env node
 
+/**
+ * Offline and authenticated validation for the completed Studio legacy principle migration.
+ *
+ * Offline (`pnpm principles:check`) proves committed structure only. Every authority fact is
+ * pinned here independently of the ledger and of both receipts, so a receipt cannot bootstrap
+ * its own authority. Authenticated verification (`pnpm principles:verify-live`) re-reads the
+ * remote bytes, owner merge metadata, immutable historical ledger, and deleted legacy blobs.
+ */
+
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { dirname, join, posix } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
+
+// ---------------------------------------------------------------------------
+// Independent pins. None of these values is read from the ledger or a receipt.
+// ---------------------------------------------------------------------------
+
+const OWNER = { login: 'jrmoulckers', id: 43014188 };
 
 const STUDIO_FILES = [
   {
@@ -70,11 +85,7 @@ const LEGACY_REALMS = [
   ['project-planning', 7],
   ['security', 8],
   ['testing', 10],
-].map(([slug, count]) => ({
-  slug,
-  count,
-  path: `principles/${slug}.md`,
-}));
+].map(([slug, count]) => ({ slug, count, path: `principles/${slug}.md` }));
 
 const LEGACY_RANGES = new Map(LEGACY_REALMS.map(({ slug, count }) => [slug, count]));
 const EXPECTED_LEGACY_IDS = LEGACY_REALMS.flatMap(({ slug, count }) =>
@@ -82,19 +93,106 @@ const EXPECTED_LEGACY_IDS = LEGACY_REALMS.flatMap(({ slug, count }) =>
 );
 const EXPECTED_LEGACY_ID_SET = new Set(EXPECTED_LEGACY_IDS);
 
-const AUTHORITY_PINS = {
+// The exact, frozen deletion set. Nothing else may be removed and none of these may return.
+const FROZEN_LEGACY_PATHS = LEGACY_REALMS.map(({ path }) => path).sort();
+const FROZEN_LEGACY_PATH_SET = new Set(FROZEN_LEGACY_PATHS);
+
+const LEGACY_BASELINE_COMMIT = 'efe6aa3b5ad020331a91f533844b0b9f70d70b76';
+const LEGACY_SNAPSHOT = {
+  repository: 'jrmoulckers/studio',
+  commit: '20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0',
+  realmFiles: 21,
+  topLevelPrinciples: 192,
+  totalBytes: 321943,
+};
+
+const RECONCILIATION_LEDGER = {
+  repository: 'jrmoulckers/studio',
+  commit: '63a5adb46d12fa22dc1ff9c6f1b3dd95a376cea5',
+  path: 'principles/migration-ledger.json',
+  blobSha: '9996f8c4bdddc6cef4fdfdd5476eda1daf16f20d',
+  sha256: '9856852bd9bab8707582f94a4e64d78a4cdecacbb622638902c38e0e1a680de3',
+  mappingSha256: '887e11e27b97cdbcf12a0b914e8af685dbc14cda14ee6301ceb35282277d5c75',
+};
+
+const HISTORICAL_RECEIPT_PATH = 'principles/migration-verification-receipt.json';
+const HISTORICAL_RECEIPT_PIN = {
+  verifiedAt: '2026-08-08T23:14:56.835Z',
+  integritySha256: 'b103a2d6a18b21b0b18e47c884f535d19a48100f294fc9a8d55d5e43656f2863',
+};
+
+const FINAL_RECEIPT_PATH = 'principles/migration-finalization-receipt.json';
+// Recomputed when the mandatory `.github` branch-protection and CI gate evidence was added to the
+// receipt. The pin stays independent: a tampered receipt that recomputes its own integrity digest
+// still fails every authority, mapping, semantic, and protection pin below.
+const FINAL_RECEIPT_INTEGRITY_PIN =
+  '6484e6815170cdc103920fdb6c6ed032975f6f00f0bd9400be09783244a9a14e';
+
+const LEDGER_PATH = 'principles/migration-ledger.json';
+const LEDGER_SCHEMA_PATH = 'principles/migration-ledger.schema.json';
+const HISTORICAL_RECEIPT_SCHEMA_PATH = 'principles/migration-verification-receipt.schema.json';
+const FINAL_RECEIPT_SCHEMA_PATH = 'principles/migration-finalization-receipt.schema.json';
+const FIXTURES_PATH = 'scripts/fixtures/principles/migration-negative-mutations.json';
+const RATIFICATION_RECORD_PATH = 'principles/RATIFICATION-DESIGN-EXPERIENCE.md';
+const PRINCIPLE_TEMPLATE_PATH = 'principles/_template.md';
+
+// Pre-ratification (Draft) authority state. Pinned so the preserved historical receipt can be
+// validated on its own terms and so the live verifier can prove what changed before Ratification.
+const DRAFT_AUTHORITY_PINS = {
   Studio: {
     repository: 'jrmoulckers/studio',
     commit: '20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0',
     principleCount: 25,
     catalogSha256: 'fb76743ca159e80cc6ab16e84724b5f3352b455c8c591d290de304f065768976',
-    paths: STUDIO_FILES.map(({ path }) => path).sort(),
+    semanticCatalogSha256: '20974e95649ffb2f995b52edac091581128edae6511541120a79f753e73cb5b4',
   },
   Engineering: {
     repository: 'jrmoulckers/engineering',
     commit: 'ea1ad771b46612a62d54b66e8077df4e5af6f16a',
     principleCount: 66,
     catalogSha256: '95b9bc8539ebc7f650fdf7f8085dd2de0302802f70a47e266d8654bbd7c304bf',
+    semanticCatalogSha256: '71734ec3c72cbe031b533c5da281247b49e42e3731bc19d030da2797fd1f0407',
+  },
+  Product: {
+    repository: 'jrmoulckers/product',
+    commit: 'b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5',
+    principleCount: 40,
+    catalogSha256: 'd2e36737dc83b4fc028e764658ed66c9a621bf41b4e1ce4aadf7c97f00a76c69',
+    semanticCatalogSha256: 'b7347e3bfe8fa5bc992a68d47cac1047404901fe176c50ba62ed3ef855593c75',
+  },
+  '.github': {
+    repository: 'jrmoulckers/.github',
+    commit: '3036d5d1ed882a4c5acffe1ccfa0b49165538eef',
+    principleCount: 43,
+    catalogSha256: '6d73bff5689daff029268b495c2effc0c043eebad43a73ce6cca175915b7aab6',
+    semanticCatalogSha256: 'b40c5a0a1f8b99045a2682d0917f93bb11a8e75129533443e448b7563af93724',
+  },
+};
+
+// Owner-ratified authority state. Every value is an independent pin of an immutable merged commit.
+const FINAL_AUTHORITY_PINS = {
+  Studio: {
+    repository: 'jrmoulckers/studio',
+    commit: 'e077d700b07dd63be93de22a8f4e3c3b9fa79093',
+    principleCount: 25,
+    catalogSha256: '919928fbe252d94a01f827f7365601c73f72fdda78aeef945f1681c3a28e60f1',
+    semanticCatalogSha256: '20974e95649ffb2f995b52edac091581128edae6511541120a79f753e73cb5b4',
+    decisionPath: RATIFICATION_RECORD_PATH,
+    decisionBlobSha: 'bd870d37593c6b5075cfd3a41a55bd7c870b3646',
+    decisionSha256: '1c02d889d81fb8f52dba09c83d7c6e783dd0877e7a6c99cf40132d41e707319e',
+    pullRequest: 25,
+    paths: STUDIO_FILES.map(({ path }) => path).sort(),
+  },
+  Engineering: {
+    repository: 'jrmoulckers/engineering',
+    commit: '60ff2e43da40b8177b7b8bc591f7193d58af617a',
+    principleCount: 66,
+    catalogSha256: '1066ad8510609f0d982339b2e92938a2a170171963f413015aa8bc1ac8ada7b6',
+    semanticCatalogSha256: '71734ec3c72cbe031b533c5da281247b49e42e3731bc19d030da2797fd1f0407',
+    decisionPath: 'docs/ratification/2026-08-09-engineering-principles.md',
+    decisionBlobSha: 'b2428fbf2424898d290206eba63ce114e0e29e78',
+    decisionSha256: '9b542dbb36f771d9ea5da38d8a42e685683492dbdafb9556f3e75c002ff90552',
+    pullRequest: 5,
     paths: [
       'principles/architecture/boundaries-and-contracts.md',
       'principles/assurance/performance.md',
@@ -111,9 +209,14 @@ const AUTHORITY_PINS = {
   },
   Product: {
     repository: 'jrmoulckers/product',
-    commit: 'b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5',
+    commit: '3a752c11856515a74eb204675d5d5198cac1e48e',
     principleCount: 40,
-    catalogSha256: 'd2e36737dc83b4fc028e764658ed66c9a621bf41b4e1ce4aadf7c97f00a76c69',
+    catalogSha256: '874054da77cdb46eeda916cda10eddd30aa4e5442f211609ebfe1c62b707cf0f',
+    semanticCatalogSha256: 'b7347e3bfe8fa5bc992a68d47cac1047404901fe176c50ba62ed3ef855593c75',
+    decisionPath: 'docs/architecture/0001-ratify-product-principles.md',
+    decisionBlobSha: 'ccc67b2160f38ea77fbf750599c51b2bb3096b9f',
+    decisionSha256: 'c6187a35ef55a15a6a34c9b48557d78ca9197969c42f57508e358f8c71ba21f0',
+    pullRequest: 5,
     paths: [
       'principles/business.md',
       'principles/compliance.md',
@@ -127,9 +230,14 @@ const AUTHORITY_PINS = {
   },
   '.github': {
     repository: 'jrmoulckers/.github',
-    commit: '3036d5d1ed882a4c5acffe1ccfa0b49165538eef',
+    commit: 'a7be84b20737f9d404ea53213dec159dd59d5747',
     principleCount: 43,
-    catalogSha256: '6d73bff5689daff029268b495c2effc0c043eebad43a73ce6cca175915b7aab6',
+    catalogSha256: '7c8164ffc418209d6bfe32de4d9d312dcfe0e4d554ac2a3b6cdca687058d648e',
+    semanticCatalogSha256: 'b614b927bca40b2c19fbd0a08a05d8c7eb6038943354b71e5b93c4861a3d5a78',
+    decisionPath: 'principles/decisions/0001-github-ai-owner-ratification.md',
+    decisionBlobSha: '1dc4702b5d357c43f15e241816480e34d3a7798d',
+    decisionSha256: 'f9ebc479ac14f7eeb7d167d2467586a0fb6c33cb654a67c4d50f53fcc9746a84',
+    pullRequest: 99,
     paths: [
       'principles/ai/agent-operations.md',
       'principles/ai/evidence-and-evals.md',
@@ -140,18 +248,67 @@ const AUTHORITY_PINS = {
   },
 };
 
-const BASELINE_COMMIT = 'efe6aa3b5ad020331a91f533844b0b9f70d70b76';
-const RECEIPT_INTEGRITY_PIN = 'b103a2d6a18b21b0b18e47c884f535d19a48100f294fc9a8d55d5e43656f2863';
+// The only reviewed semantic refinement between the Draft evidence and Ratification.
+const EXPECTED_SEMANTIC_CHANGES = [
+  {
+    authority: '.github',
+    id: 'GH-ACT-005',
+    historicalSemanticSha256: '42dddba03f87cb55805c891c1a7679cc4454ac4abac7cb08a880de955c80cd57',
+    ratifiedSemanticSha256: 'a6c2ce81397f1c94604cefd515f1fb18ceb0ec1d7be8336f82199288f6e7d53d',
+  },
+];
 
-// Studio local principle Status is allowed to move from the receipt-pinned historical "Draft"
-// to "Ratified" only through an owner-effective Ratification decision record. Each pin below is
-// an independent, hardcoded status-excluded content digest for one Studio successor block: the
-// exact block bytes at the receipt-pinned commit with only the "- **Status:** <value>" line
-// normalized to a fixed placeholder. It is unaffected by a Draft <-> Ratified status edit and
-// changes if any other field (Statement, Rationale, Verification, owners, Handoffs, Legacy
-// inputs, or the ID/title heading) changes. It is never written into the pinned receipt, which
-// stays historical and unrefreshed.
-const STUDIO_STATUS_CONTENT_PIN = {
+// The `.github` decision record makes Ratification effective only when the owner merges "after the
+// required `CI gate` succeeds", so the protected-branch rule and the gate result on the reviewed
+// head are part of that authority's Ratification evidence, not just its decision prose. This pin is
+// independent of the receipt and is re-read from the GitHub API by `--live`.
+const PROTECTION_AUTHORITY = '.github';
+const PROTECTION_PIN = {
+  branch: 'main',
+  strictRequiredStatusChecks: true,
+  requiredChecks: [{ context: 'CI gate', appId: 15368 }],
+  allowForcePushes: false,
+  allowDeletions: false,
+  ratificationHeadChecks: [
+    {
+      name: 'CI gate',
+      required: true,
+      status: 'completed',
+      conclusion: 'success',
+      detailsUrl: 'https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221951923',
+    },
+    {
+      name: 'Principle metadata tests',
+      required: false,
+      status: 'completed',
+      conclusion: 'success',
+      detailsUrl: 'https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925400',
+    },
+    {
+      name: 'Sync engine tests',
+      required: false,
+      status: 'completed',
+      conclusion: 'success',
+      detailsUrl: 'https://github.com/jrmoulckers/.github/actions/runs/31304248864/job/93221925426',
+    },
+  ],
+};
+
+const LEDGER_TOTALS = {
+  entries: 192,
+  status: 'verified',
+  dispositions: { rewrite: 21, split: 43, reference: 122, retire: 6 },
+  destinations: { Studio: 44, Engineering: 92, Product: 56, '.github': 50 },
+  links: 242,
+  uniqueMappedSuccessors: 159,
+  citationExceptions: 4,
+  retirements: 6,
+};
+
+// Independent, status-excluded content digests for the 25 Studio blocks, taken from the reviewed
+// pre-Ratification source. They are unaffected by a Draft -> Ratified Status edit and change if any
+// other field moves, so local content continuity is provable without trusting either receipt.
+const STUDIO_SEMANTIC_CONTENT_PIN = {
   'STUDIO-A11Y-001': '6b17617fb6f8f7f15490b7a640d331b7d8e912d68338840a86f6148419ccc2fb',
   'STUDIO-A11Y-002': '1cf31ea51e312ca26f5b91e0aeeb802a94c8f9f4fe1847adae5598eea37672ff',
   'STUDIO-A11Y-003': 'cd5aaf501f94179a201bb860b5348b02d3d2da5a65b1f0f4da8bf1cfc10f44ab',
@@ -178,38 +335,98 @@ const STUDIO_STATUS_CONTENT_PIN = {
   'STUDIO-UX-003': 'e33b988df5585393b0dffa5704b84418668774d2e3ce2ed713456fbe3963e808',
   'STUDIO-UX-004': 'f7e6ada8b8d7dcc351f80bd1d6a61b43939b4eac38587c206693f393a34e069b',
 };
-const STUDIO_DRAFT_BANNER =
-  '> **Status:** Draft (proposed, non-normative). Only the repository owner may ratify.';
+
 const STUDIO_RATIFICATION_BANNER = [
   "> **Ratification:** Each principle's `Status` becomes effective only when the repository owner",
   '> merges the covering Ratification decision record; before that merge, the candidate change is',
   '> proposed and non-normative.',
 ].join('\n');
+
+// Independent digests of each Studio file preamble with only the Ratification banner normalized.
+// The 25 principle blocks are pinned by the final receipt, so preamble pin + receipt blocks
+// together pin every byte of all seven files while allowing the finalization preamble update.
 const STUDIO_PREAMBLE_CONTENT_PIN = {
   'principles/design/foundations.md':
-    '8ad429a989eb308e8d68ae7b05703e7868d235754740042cb80fe56424cb45ba',
+    '6a3880f79066c0db06ff50e83d2728858a6f7c00e1221ae3ff09b9ab04c693a5',
   'principles/design/tokens-and-themes.md':
-    '5e0e49942e990711bc4cc01a401f7ca9515e2214aeac33dc36735bddbfa19e3b',
+    '3ea718db7bf2fe51d555811b4c36145ed24df2bc097b540e5c491507e79e0237',
   'principles/design/components.md':
-    '0fba9e2ea871de09fc9914a40050f1da3855e225847324f0815c21b5c7f3afc1',
+    '0daed62d04dfe7c3140b2eea17098d587f935d91c30fdba8e7cb041cacb71dc6',
   'principles/experience/interaction.md':
-    'c9ed50d25d6477bbb2fc4c24f26810495ca76e0d535d44b0c6d99c9a0db3839d',
+    '96a43c3461073c91711fea5f557c61a8602547f74c5bd7de1a363156c6aead35',
   'principles/experience/accessibility.md':
-    '23515405247b48d30922433723461a9d90964547cb911114c9a8fa948511e14b',
+    'ef25f9ad9ef456beb8f4460d9e8c4f10f68cabfabdb914d543d3fca5bd64a0e3',
   'principles/experience/localization.md':
-    '4d049093f112e2739b3d1a891f819801a12f8fd8a2a94579ba9ff7e0abaa8fc7',
-  'principles/experience/ux.md': 'd6004b888f77f01ea35d90d8f8cca83efdd462b9ea0cbb293120e26ef9e314de',
+    'f261f498e073d92173585f12ec09a2857adc74904a197856727a434a6d7fdec7',
+  'principles/experience/ux.md': 'f365c88cae0f71ac4505e020f5f994afb8305519d426f7ac5f523113641a5f3f',
 };
-const ALLOWED_STUDIO_STATUSES = new Set(['Draft', 'Ratified']);
-const RATIFICATION_RECORD_PATH = 'principles/RATIFICATION-DESIGN-EXPERIENCE.md';
+
+// A finalized preamble may not keep telling readers the legacy tree survives.
+const STUDIO_PREAMBLE_FORBIDDEN_CLAIMS = [
+  { pattern: /ledger stays at 0\/192/i, message: 'the migration ledger is no longer 0/192' },
+  {
+    pattern: /\b(?:it )?removes no legacy file\b/i,
+    message: 'the 21 legacy realm files are removed',
+  },
+  {
+    pattern: /\bdo(?:es)? not (?:remove|supersede)\b[^.]{0,60}\blegacy file\b/i,
+    message: 'the 21 legacy realm files are superseded and removed',
+  },
+];
+
+// The complete finalized authority/evidence inventory. New principle surfaces require an explicit
+// owner-reviewed catalog change; they cannot appear in an unvalidated nested directory.
+const PRINCIPLES_FILE_INVENTORY = [
+  ...STUDIO_FILES.map(({ path }) => path),
+  RATIFICATION_RECORD_PATH,
+  LEDGER_PATH,
+  LEDGER_SCHEMA_PATH,
+  HISTORICAL_RECEIPT_PATH,
+  HISTORICAL_RECEIPT_SCHEMA_PATH,
+  FINAL_RECEIPT_PATH,
+  FINAL_RECEIPT_SCHEMA_PATH,
+  PRINCIPLE_TEMPLATE_PATH,
+  'principles/README.md',
+  'principles/AGENTS.md',
+  'principles/MIGRATION.md',
+].sort();
+
+// Files that must survive the finalization: successors, decisions, evidence, and their contracts.
+const PROTECTED_PATHS = [
+  ...PRINCIPLES_FILE_INVENTORY,
+  'scripts/validate-principles.mjs',
+  FIXTURES_PATH,
+].sort();
+
+const PRINCIPLES_ROOT_MARKDOWN = [
+  'principles/AGENTS.md',
+  'principles/MIGRATION.md',
+  'principles/RATIFICATION-DESIGN-EXPERIENCE.md',
+  'principles/README.md',
+  PRINCIPLE_TEMPLATE_PATH,
+].sort();
+const PRINCIPLE_TEMPLATE_REQUIRED_PHRASES = [
+  'Non-normative until the repository owner merges an explicit Ratification decision.',
+  'Use this template in an issue or pull request description;',
+  'do not create a new realm file or insert an unpinned block into the Ratified tree.',
+  'the implementation must update the declared catalog, owner decision record, finalization receipt, independent semantic pins, and negative fixtures together.',
+  'pnpm principles:check` intentionally rejects an incomplete or self-baselined catalog change.',
+  '### STUDIO-<AREA>-<NNN> — <Principle title>',
+  '- **Status:** Draft',
+  '- **Statement:**',
+  '- **Rationale:**',
+  '- **Verification:**',
+  '- **Ratification owner:** repository owner',
+  '- **Implementation owner:**',
+  '- **Handoffs:**',
+  '- **Legacy inputs:**',
+];
+
 const RATIFICATION_REQUIRED_PHRASES = [
   'Content, ownership, IDs, and legacy inputs are unchanged.',
   'Merging this pull request by the repository owner is the effective Ratification approval event.',
   'This record does not itself ratify anything and does not claim owner approval before merge.',
   'remains historical, non-normative evidence; it proves no Ratification and authorizes no deletion.',
-  'Downstream finalization remains blocked on Ratification by Engineering, Product, and `.github` plus refreshed live evidence.',
-  'PR #15',
-  'PR #21',
 ];
 const RATIFICATION_FORBIDDEN_CLAIMS = [
   {
@@ -231,6 +448,26 @@ const RATIFICATION_FORBIDDEN_CLAIMS = [
     message: 'a non-owner cannot approve Ratification',
   },
 ];
+
+const FINAL_MEANING_REQUIRED_PHRASES = [
+  'only as a verified technical precondition',
+  'repository-owner merge of the finalization pull request is the effective supersession and deletion act',
+];
+const FINAL_MEANING_FORBIDDEN_CLAIMS = [
+  {
+    pattern: /\breplaces?\b.{0,60}\bowner\b.{0,40}\b(?:merge|decision|approval)\b/i,
+    message: 'a receipt cannot replace the owner merge decision',
+  },
+  {
+    pattern: /\bwithout\b.{0,60}\bowner\b.{0,40}\b(?:merge|decision|approval)\b/i,
+    message: 'deletion cannot be effective without the owner merge',
+  },
+  {
+    pattern: /\b(?:is|becomes) normative\b/i,
+    message: 'a receipt cannot become normative',
+  },
+];
+
 const REQUIRED_FIELDS = [
   'Status',
   'Statement',
@@ -251,7 +488,7 @@ const RETIREMENT_CATEGORIES = new Set([
 ]);
 const DISPOSITIONS = new Set(['rewrite', 'split', 'reference', 'retire']);
 const LEDGER_STATUSES = new Set(['proposed', 'ratified', 'implemented', 'verified']);
-const AUTHORITIES = Object.keys(AUTHORITY_PINS);
+const AUTHORITIES = Object.keys(FINAL_AUTHORITY_PINS);
 const AUTHORITY_SET = new Set(AUTHORITIES);
 const AUTHORITY_ID = {
   Studio: /^STUDIO-[A-Z0-9]+-\d{3}$/,
@@ -259,13 +496,49 @@ const AUTHORITY_ID = {
   Product: /^PROD-[A-Z0-9]+-\d{3}$/,
   '.github': /^GH-[A-Z0-9]+-\d{3}$/,
 };
+const AUTHORITY_ID_PREFIX = {
+  Studio: 'STUDIO',
+  Engineering: 'ENG',
+  Product: 'PROD',
+  '.github': 'GH',
+};
 const SHA1 = /^[0-9a-f]{40}$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 const ID_HEADING = /^###\s+(STUDIO-([A-Z0-9]+)-(\d{3}))\b/;
 const STUDIO_HEADING = /^###\s+STUDIO-/;
 const FIELD_LINE = /^-\s+\*\*([^:*]+):\*\*\s*(.*)$/;
 const LEGACY_TOKEN = /^[a-z0-9-]+#\d+$/;
-const RECEIPT_PATH = 'principles/migration-verification-receipt.json';
+const ALLOWED_STUDIO_STATUSES = new Set(['Draft', 'Ratified']);
+
+const SCANNED_EXTENSIONS = new Set([
+  '.md',
+  '.mdx',
+  '.json',
+  '.mjs',
+  '.cjs',
+  '.js',
+  '.jsx',
+  '.ts',
+  '.tsx',
+  '.yml',
+  '.yaml',
+  '.txt',
+  '.ps1',
+]);
+const SKIPPED_DIRECTORIES = new Set([
+  '.git',
+  'node_modules',
+  'dist',
+  'build',
+  '.turbo',
+  '.next',
+  'coverage',
+  '.pnpm-store',
+]);
+
+// ---------------------------------------------------------------------------
+// Small helpers
+// ---------------------------------------------------------------------------
 
 const filePath = (relativePath) => join(repoRoot, ...relativePath.split('/'));
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
@@ -273,78 +546,65 @@ const gitBlobSha = (buffer) =>
   createHash('sha1').update(`blob ${buffer.length}\0`).update(buffer).digest('hex');
 const sortedUnique = (values) => [...new Set(values)].sort();
 const arraysEqual = (left, right) =>
-  left.length === right.length && left.every((value, index) => value === right[index]);
+  Array.isArray(left) &&
+  Array.isArray(right) &&
+  left.length === right.length &&
+  left.every((value, index) => value === right[index]);
+const deepEqual = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
-const STATUS_FIELD_LINE = /^- \*\*Status:\*\* .*$/m;
-const normalizeStatusField = (block) =>
-  STATUS_FIELD_LINE.test(block)
-    ? block.replace(STATUS_FIELD_LINE, '- **Status:** <normalized>')
-    : block;
 
-function extractScopeIds(text) {
-  const scopeHeadingIndex = text.indexOf('## Scope');
-  if (scopeHeadingIndex === -1) return null;
-  const fenceMatch = text.slice(scopeHeadingIndex).match(/```text\r?\n([\s\S]*?)```/);
-  if (!fenceMatch) return null;
-  return fenceMatch[1]
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
+const statusFieldPattern = (authority) =>
+  authority === 'Engineering' ? /^- Status: .*$/m : /^- \*\*Status:\*\* .*$/m;
+const statusFieldPlaceholder = (authority) =>
+  authority === 'Engineering' ? '- Status: <normalized>' : '- **Status:** <normalized>';
+
+/** Digest of a principle block with only its Status metadata line normalized. */
+function semanticBlockSha256(block, authority) {
+  const pattern = statusFieldPattern(authority);
+  return sha256(
+    pattern.test(block) ? block.replace(pattern, statusFieldPlaceholder(authority)) : block,
+  );
 }
 
-function validateRatificationRecord(errors, expectedIds, overrideText) {
-  if (overrideText === null) return { exists: false, scopeIds: new Set() }; // Simulated deletion.
-  let text = overrideText;
-  if (text === undefined) {
-    try {
-      text = readFileSync(filePath(RATIFICATION_RECORD_PATH), 'utf8');
-    } catch {
-      return { exists: false, scopeIds: new Set() };
+function checkExactKeys(value, required, optional, label, errors) {
+  if (!isObject(value)) {
+    errors.push(`${label} must be an object`);
+    return false;
+  }
+  const allowed = new Set([...required, ...optional]);
+  let complete = true;
+  for (const key of required) {
+    if (!(key in value)) {
+      errors.push(`${label} is missing "${key}"`);
+      complete = false;
     }
   }
-
-  const normalized = normalizeWhitespace(text);
-  for (const phrase of RATIFICATION_REQUIRED_PHRASES) {
-    if (!normalized.includes(normalizeWhitespace(phrase))) {
-      errors.push(`${RATIFICATION_RECORD_PATH}: missing required statement "${phrase}"`);
-    }
+  for (const key of Object.keys(value)) {
+    if (!allowed.has(key)) errors.push(`${label} has unknown property "${key}"`);
   }
-  for (const { pattern, message } of RATIFICATION_FORBIDDEN_CLAIMS) {
-    if (pattern.test(normalized)) {
-      errors.push(`${RATIFICATION_RECORD_PATH}: forbidden claim: ${message}`);
-    }
-  }
-
-  const scopeIds = extractScopeIds(text);
-  if (!scopeIds) {
-    errors.push(`${RATIFICATION_RECORD_PATH}: missing a parseable "## Scope" fenced ID list`);
-    return { exists: true, scopeIds: new Set() };
-  }
-  const malformed = scopeIds.find((id) => !AUTHORITY_ID.Studio.test(id));
-  if (malformed) {
-    errors.push(`${RATIFICATION_RECORD_PATH}: scope contains a malformed ID "${malformed}"`);
-  }
-  if (new Set(scopeIds).size !== scopeIds.length) {
-    errors.push(`${RATIFICATION_RECORD_PATH}: scope contains duplicate IDs`);
-  }
-  if (!arraysEqual([...scopeIds].sort(), [...expectedIds].sort())) {
-    errors.push(
-      `${RATIFICATION_RECORD_PATH}: scope must list exactly the ${expectedIds.length} Studio successor IDs, no more, no fewer`,
-    );
-  }
-  return { exists: true, scopeIds: new Set(scopeIds) };
+  return complete;
 }
 
-function readJson(relativePath, errors) {
-  const raw = readFileSync(filePath(relativePath), 'utf8');
-  errors.push(...findDuplicateJsonKeys(raw, relativePath));
-  try {
-    return { raw, value: JSON.parse(raw) };
-  } catch (error) {
-    errors.push(`${relativePath}: invalid JSON (${error.message})`);
-    return { raw, value: null };
+function checkNonEmptyString(value, label, errors) {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    errors.push(`${label} must be a non-empty string`);
+    return false;
   }
+  return true;
+}
+
+function checkStringArray(value, label, errors, { allowEmpty = false } = {}) {
+  if (!Array.isArray(value)) {
+    errors.push(`${label} must be an array`);
+    return false;
+  }
+  if (!allowEmpty && value.length === 0) errors.push(`${label} must not be empty`);
+  if (value.some((item) => typeof item !== 'string' || item.length === 0)) {
+    errors.push(`${label} must contain only non-empty strings`);
+  }
+  if (new Set(value).size !== value.length) errors.push(`${label} must not contain duplicates`);
+  return true;
 }
 
 function findDuplicateJsonKeys(raw, label) {
@@ -384,73 +644,1455 @@ function findDuplicateJsonKeys(raw, label) {
   return errors;
 }
 
-function checkExactKeys(value, required, optional, label, errors) {
-  if (!isObject(value)) {
-    errors.push(`${label} must be an object`);
-    return false;
+function readJson(relativePath, errors) {
+  let raw;
+  try {
+    raw = readFileSync(filePath(relativePath), 'utf8');
+  } catch (error) {
+    errors.push(`${relativePath}: cannot be read (${error.message})`);
+    return { raw: '', value: null };
   }
-  const allowed = new Set([...required, ...optional]);
-  for (const key of required) {
-    if (!(key in value)) errors.push(`${label} is missing "${key}"`);
+  errors.push(...findDuplicateJsonKeys(raw, relativePath));
+  try {
+    return { raw, value: JSON.parse(raw) };
+  } catch (error) {
+    errors.push(`${relativePath}: invalid JSON (${error.message})`);
+    return { raw, value: null };
   }
-  for (const key of Object.keys(value)) {
-    if (!allowed.has(key)) errors.push(`${label} has unknown property "${key}"`);
-  }
-  return true;
 }
 
-function checkNonEmptyString(value, label, errors) {
-  if (typeof value !== 'string' || value.trim().length === 0) {
-    errors.push(`${label} must be a non-empty string`);
-    return false;
-  }
-  return true;
+// ---------------------------------------------------------------------------
+// Working-tree view. Negative fixtures inject virtual files without touching disk.
+// ---------------------------------------------------------------------------
+
+function createSourceView(overrides = new Map()) {
+  return {
+    overrides,
+    exists(relativePath) {
+      if (overrides.has(relativePath)) return overrides.get(relativePath) !== null;
+      return existsSync(filePath(relativePath));
+    },
+    read(relativePath) {
+      if (overrides.has(relativePath)) return overrides.get(relativePath);
+      try {
+        const absolute = filePath(relativePath);
+        if (!statSync(absolute).isFile()) return null;
+        return readFileSync(absolute);
+      } catch {
+        return null;
+      }
+    },
+    listFiles() {
+      const found = new Set();
+      const walk = (relativeDirectory) => {
+        const absolute = relativeDirectory ? filePath(relativeDirectory) : repoRoot;
+        for (const entry of readdirSync(absolute, { withFileTypes: true })) {
+          const child = relativeDirectory ? `${relativeDirectory}/${entry.name}` : entry.name;
+          if (entry.isDirectory()) {
+            if (!SKIPPED_DIRECTORIES.has(entry.name)) walk(child);
+          } else if (entry.isFile()) {
+            found.add(child);
+          }
+        }
+      };
+      walk('');
+      for (const [path, value] of overrides) {
+        if (value === null) found.delete(path);
+        else found.add(path);
+      }
+      return [...found].sort();
+    },
+  };
 }
 
-function checkStringArray(value, label, errors, { allowEmpty = false } = {}) {
-  if (!Array.isArray(value)) {
-    errors.push(`${label} must be an array`);
-    return false;
-  }
-  if (!allowEmpty && value.length === 0) errors.push(`${label} must not be empty`);
-  if (value.some((item) => typeof item !== 'string' || item.length === 0)) {
-    errors.push(`${label} must contain only non-empty strings`);
-  }
-  if (new Set(value).size !== value.length) errors.push(`${label} must not contain duplicates`);
-  return true;
+// ---------------------------------------------------------------------------
+// Authority catalog parsing (identical rules for local files and remote bytes)
+// ---------------------------------------------------------------------------
+
+function authorityHeadingPattern(authority) {
+  if (authority === 'Studio') return /^### (STUDIO-[A-Z0-9]+-\d{3}) — (.+)$/gm;
+  if (authority === 'Engineering') return /^## (.+)$/gm;
+  if (authority === 'Product') return /^## (PROD-[A-Z0-9]+-\d{3}): (.+)$/gm;
+  return /^## (GH-[A-Z0-9]+-\d{3}) — (.+)$/gm;
 }
 
-function validateSchemaFiles(ledgerSchema, receiptSchema, errors) {
-  for (const [label, schema] of [
-    ['principles/migration-ledger.schema.json', ledgerSchema],
-    ['principles/migration-verification-receipt.schema.json', receiptSchema],
-  ]) {
-    if (!isObject(schema)) continue;
-    if (schema.$schema !== 'https://json-schema.org/draft/2020-12/schema') {
-      errors.push(`${label}: must use JSON Schema draft 2020-12`);
+function metadataValue(block, authority, field) {
+  const marker = authority === 'Engineering' ? `- ${field}:` : `- **${field}:**`;
+  const lines = block.split(/\r?\n/);
+  const index = lines.findIndex((line) => line.startsWith(marker));
+  if (index === -1) return '';
+  const chunks = [lines[index].slice(marker.length).trim()];
+  for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+    const line = lines[cursor];
+    if (!/^\s{2,}\S/.test(line) || /^\s*-\s/.test(line)) break;
+    chunks.push(line.trim());
+  }
+  return chunks.filter(Boolean).join(' ');
+}
+
+function normalizeLegacyInputs(authority, raw) {
+  if (!raw || raw === 'none') return [];
+  const ids = [];
+  if (authority === 'Studio') {
+    for (const match of raw.matchAll(/([a-z0-9-]+)#(\d+)/g)) {
+      ids.push(`studio-legacy:${match[1]}:${Number(match[2])}`);
     }
-    if (schema.type !== 'object' || !isObject(schema.properties) || !isObject(schema.$defs)) {
-      errors.push(`${label}: root object contract is incomplete`);
+  } else if (authority === '.github') {
+    for (const match of raw.matchAll(/([a-z0-9-]+)\.md\s+§(\d+)(?:\.\d+)*/g)) {
+      ids.push(`studio-legacy:${match[1]}:${Number(match[2])}`);
+    }
+  } else {
+    ids.push(...(raw.match(/studio-legacy:[a-z0-9-]+:\d+/g) ?? []));
+  }
+  return sortedUnique(ids);
+}
+
+function parseAuthorityPrinciples(authority, text, path, blobSha, fileSha256, includeSemantic) {
+  const matches = [...text.matchAll(authorityHeadingPattern(authority))];
+  return matches.map((match, index) => {
+    const block = text.slice(match.index, matches[index + 1]?.index ?? text.length);
+    const id =
+      authority === 'Engineering' ? metadataValue(block, authority, 'ID') : match[1].trim();
+    const title = authority === 'Engineering' ? match[1].trim() : match[2].trim();
+    const record = {
+      id,
+      path,
+      title,
+      status: metadataValue(block, authority, 'Status'),
+      legacyInputs: normalizeLegacyInputs(
+        authority,
+        metadataValue(block, authority, 'Legacy inputs'),
+      ),
+      blobSha,
+      fileSha256,
+      blockSha256: sha256(block),
+    };
+    if (includeSemantic) record.semanticSha256 = semanticBlockSha256(block, authority);
+    return record;
+  });
+}
+
+/**
+ * Builds the catalog exactly as a receipt records it. `includeSemantic` selects the final
+ * (Ratified) record shape; the preserved historical receipt predates the semantic field.
+ */
+function buildCatalogFromSources(authority, sourceFiles, { includeSemantic = true } = {}) {
+  const files = [];
+  const principles = [];
+  const ordered = [...sourceFiles].sort((left, right) => left.path.localeCompare(right.path));
+  for (const { path, buffer, blobSha: suppliedBlobSha } of ordered) {
+    const blobSha = suppliedBlobSha ?? gitBlobSha(buffer);
+    const fileSha256 = sha256(buffer);
+    const parsed = parseAuthorityPrinciples(
+      authority,
+      buffer.toString('utf8'),
+      path,
+      blobSha,
+      fileSha256,
+      includeSemantic,
+    );
+    files.push({ path, blobSha, sha256: fileSha256, principleCount: parsed.length });
+    principles.push(...parsed);
+  }
+  return {
+    files,
+    principles,
+    catalogSha256: sha256(JSON.stringify({ files, principles })),
+    semanticCatalogSha256: includeSemantic ? semanticCatalogSha256(principles) : null,
+  };
+}
+
+function semanticCatalogSha256(principles) {
+  return sha256(
+    JSON.stringify(
+      principles.map(({ id, path, title, legacyInputs, semanticSha256 }) => ({
+        id,
+        path,
+        title,
+        legacyInputs,
+        semanticSha256,
+      })),
+    ),
+  );
+}
+
+/** Catalog identity that survives a non-principle edit such as a file preamble update. */
+function contentCatalogSha256(principles) {
+  return sha256(
+    JSON.stringify(
+      principles.map(({ blobSha: _blobSha, fileSha256: _fileSha256, ...rest }) => rest),
+    ),
+  );
+}
+
+/**
+ * Expands a decision record scope: explicit IDs plus inclusive `A through B` / `A–B` ranges.
+ * Only IDs belonging to the decision's own authority are collected.
+ */
+function extractDecisionScopeIds(text, authority) {
+  const prefix = AUTHORITY_ID_PREFIX[authority];
+  const idSource = `${prefix}-[A-Z0-9]+-\\d{3}`;
+  const ids = new Set();
+  const ranges = new RegExp(
+    '`?(' + idSource + ')`?\\s*(?:through|to|–|—|-)\\s*`?(' + idSource + ')`?',
+    'g',
+  );
+  for (const [, start, end] of text.matchAll(ranges)) {
+    const startArea = start.slice(0, start.lastIndexOf('-'));
+    const endArea = end.slice(0, end.lastIndexOf('-'));
+    if (startArea !== endArea) continue;
+    const first = Number(start.slice(-3));
+    const last = Number(end.slice(-3));
+    if (last < first) continue;
+    for (let number = first; number <= last; number += 1) {
+      ids.add(`${startArea}-${String(number).padStart(3, '0')}`);
+    }
+  }
+  for (const [id] of text.matchAll(new RegExp(idSource, 'g'))) ids.add(id);
+  return [...ids].sort();
+}
+
+/** Document-order projection of every ledger entry minus its mutable status and evidence. */
+function ledgerMappingSha256(ledger) {
+  const entries = Object.entries(ledger?.entries ?? {}).map(([legacyId, entry]) => {
+    const projection = {};
+    for (const key of Object.keys(entry ?? {})) {
+      if (key === 'status' || key === 'evidence') continue;
+      projection[key] = entry[key];
+    }
+    return [legacyId, projection];
+  });
+  return sha256(JSON.stringify(Object.fromEntries(entries)));
+}
+
+// ---------------------------------------------------------------------------
+// Preserved historical Draft receipt
+// ---------------------------------------------------------------------------
+
+function validateHistoricalReceipt(receipt, errors) {
+  const label = HISTORICAL_RECEIPT_PATH;
+  const index = new Map();
+  if (
+    !checkExactKeys(
+      receipt,
+      [
+        '$schema',
+        'schemaVersion',
+        'receiptType',
+        'verifiedAt',
+        'purpose',
+        'claims',
+        'verification',
+        'refresh',
+        'legacyCatalogBaseline',
+        'legacySourceSnapshot',
+        'authorities',
+        'integrity',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return index;
+  }
+
+  if (receipt.$schema !== './migration-verification-receipt.schema.json') {
+    errors.push(`${label}: wrong schema reference`);
+  }
+  if (receipt.schemaVersion !== 1) errors.push(`${label}: schemaVersion must be 1`);
+  if (receipt.receiptType !== 'dated-verification-evidence') {
+    errors.push(`${label}: receiptType must label dated verification evidence`);
+  }
+  if (receipt.verifiedAt !== HISTORICAL_RECEIPT_PIN.verifiedAt) {
+    errors.push(`${label}: verifiedAt was rewritten; historical evidence must stay byte-preserved`);
+  }
+  checkNonEmptyString(receipt.purpose, `${label}: purpose`, errors);
+
+  if (
+    checkExactKeys(
+      receipt.claims,
+      ['normativeSource', 'provesRatification', 'authorizesLegacyDeletion'],
+      [],
+      `${label}: claims`,
+      errors,
+    )
+  ) {
+    if (receipt.claims.normativeSource !== false) {
+      errors.push(`${label}: historical receipt cannot be a normative source`);
+    }
+    if (receipt.claims.provesRatification !== false) {
+      errors.push(`${label}: historical Draft receipt cannot prove Ratification`);
+    }
+    if (receipt.claims.authorizesLegacyDeletion !== false) {
+      errors.push(`${label}: historical Draft receipt cannot authorize legacy deletion`);
+    }
+  }
+
+  if (
+    checkExactKeys(
+      receipt.verification,
+      ['sourceKind', 'retrieval', 'digestMethod', 'ledgerWasNotInput', 'liveCommand'],
+      [],
+      `${label}: verification`,
+      errors,
+    )
+  ) {
+    if (receipt.verification.sourceKind !== 'pinned-authority-bytes') {
+      errors.push(`${label}: verification must use pinned authority bytes`);
+    }
+    if (receipt.verification.ledgerWasNotInput !== true) {
+      errors.push(`${label}: verification must be independent of the ledger`);
+    }
+    if (receipt.verification.liveCommand !== 'pnpm principles:verify-live') {
+      errors.push(`${label}: live verification command is incorrect`);
+    }
+    checkNonEmptyString(receipt.verification.retrieval, `${label}: retrieval`, errors);
+    checkNonEmptyString(receipt.verification.digestMethod, `${label}: digestMethod`, errors);
+  }
+
+  if (
+    checkExactKeys(
+      receipt.refresh,
+      ['requiredWhen', 'procedure', 'offlineLimit'],
+      [],
+      `${label}: refresh`,
+      errors,
+    )
+  ) {
+    for (const field of ['requiredWhen', 'procedure', 'offlineLimit']) {
+      checkNonEmptyString(receipt.refresh[field], `${label}: refresh.${field}`, errors);
+    }
+  }
+
+  validateLegacyCatalogBaseline(receipt.legacyCatalogBaseline, label, errors);
+  validateLegacySourceSnapshot(receipt.legacySourceSnapshot, label, errors);
+
+  if (!Array.isArray(receipt.authorities)) {
+    errors.push(`${label}: authorities must be an array`);
+  } else {
+    const seen = new Set();
+    for (const record of receipt.authorities) {
+      validateHistoricalAuthorityRecord(record, index, errors);
+      if (seen.has(record?.authority)) {
+        errors.push(`${label}: duplicate authority "${record.authority}"`);
+      }
+      seen.add(record?.authority);
+    }
+    if (!arraysEqual([...seen].sort(), [...AUTHORITIES].sort())) {
+      errors.push(`${label}: must contain exactly Studio, Engineering, Product, and .github`);
+    }
+  }
+
+  validateIntegrity(receipt, label, HISTORICAL_RECEIPT_PIN.integritySha256, errors);
+  return index;
+}
+
+function validateLegacyCatalogBaseline(baseline, label, errors) {
+  if (
+    !checkExactKeys(
+      baseline,
+      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'ids'],
+      [],
+      `${label}: legacyCatalogBaseline`,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (baseline.repository !== LEGACY_SNAPSHOT.repository) {
+    errors.push(`${label}: legacy baseline repository is incorrect`);
+  }
+  if (baseline.commit !== LEGACY_BASELINE_COMMIT) {
+    errors.push(`${label}: legacy baseline commit is incorrect`);
+  }
+  if (baseline.realmFiles !== 21 || baseline.topLevelPrinciples !== 192) {
+    errors.push(`${label}: legacy baseline counts must be 21 files and 192 principles`);
+  }
+  if (!arraysEqual(baseline.ids, EXPECTED_LEGACY_IDS)) {
+    errors.push(`${label}: legacy baseline is not the exact frozen 192-ID inventory`);
+  }
+}
+
+function validateLegacySourceSnapshot(snapshot, label, errors) {
+  if (
+    !checkExactKeys(
+      snapshot,
+      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'files'],
+      [],
+      `${label}: legacySourceSnapshot`,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (snapshot.repository !== LEGACY_SNAPSHOT.repository) {
+    errors.push(`${label}: legacy source repository is incorrect`);
+  }
+  if (snapshot.commit !== LEGACY_SNAPSHOT.commit) {
+    errors.push(`${label}: legacy source snapshot commit is incorrect`);
+  }
+  if (snapshot.realmFiles !== 21 || snapshot.topLevelPrinciples !== 192) {
+    errors.push(`${label}: legacy snapshot counts must be 21 files and 192 principles`);
+  }
+  if (!Array.isArray(snapshot.files) || snapshot.files.length !== 21) {
+    errors.push(`${label}: legacy snapshot must contain 21 file records`);
+    return;
+  }
+  const expectedIdsByPath = new Map(
+    LEGACY_REALMS.map(({ slug, count, path }) => [
+      path,
+      Array.from({ length: count }, (_, index) => `studio-legacy:${slug}:${index + 1}`),
+    ]),
+  );
+  for (const record of snapshot.files) {
+    checkExactKeys(
+      record,
+      ['path', 'blobSha', 'sha256', 'topLevelIds'],
+      [],
+      `${label}: legacy file`,
+      errors,
+    );
+    if (!SHA1.test(record.blobSha ?? '')) {
+      errors.push(`${label}: ${record.path} has an invalid Git blob SHA`);
+    }
+    if (!SHA256.test(record.sha256 ?? '')) {
+      errors.push(`${label}: ${record.path} has an invalid SHA-256`);
+    }
+    if (!arraysEqual(record.topLevelIds, expectedIdsByPath.get(record.path))) {
+      errors.push(`${label}: ${record.path} does not carry its frozen top-level ID inventory`);
+    }
+  }
+  if (!arraysEqual(snapshot.files.map(({ path }) => path).sort(), FROZEN_LEGACY_PATHS)) {
+    errors.push(`${label}: legacy snapshot must contain exactly the 21 frozen realm files`);
+  }
+}
+
+function validateHistoricalAuthorityRecord(record, index, errors) {
+  const authority = record?.authority;
+  const label = `${HISTORICAL_RECEIPT_PATH}: ${authority ?? 'unknown authority'}`;
+  if (
+    !checkExactKeys(
+      record,
+      [
+        'authority',
+        'repository',
+        'commit',
+        'principleCount',
+        'draftCount',
+        'files',
+        'principles',
+        'catalogSha256',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  const pin = DRAFT_AUTHORITY_PINS[authority];
+  if (!pin) {
+    errors.push(`${label}: unknown authority`);
+    return;
+  }
+  if (record.repository !== pin.repository) errors.push(`${label}: repository does not match pin`);
+  if (record.commit !== pin.commit) {
+    errors.push(`${label}: historical ${authority} commit does not match pin`);
+  }
+  if (record.principleCount !== pin.principleCount || record.draftCount !== pin.principleCount) {
+    errors.push(`${label}: all ${pin.principleCount} historical successors must remain Draft`);
+  }
+  const files = Array.isArray(record.files) ? record.files : [];
+  const principles = Array.isArray(record.principles) ? record.principles : [];
+  for (const principle of principles) {
+    if (principle.status !== 'Draft') {
+      errors.push(`${label}: ${principle.id} must stay Draft in the preserved historical receipt`);
+    }
+    if ('semanticSha256' in principle) {
+      errors.push(`${label}: ${principle.id} was refreshed with post-Ratification fields`);
+    }
+    index.set(`${authority}:${principle.id}`, {
+      ...principle,
+      authority,
+      repository: record.repository,
+      commit: record.commit,
+    });
+  }
+  if (principles.length !== pin.principleCount) {
+    errors.push(`${label}: historical catalog count does not match its records`);
+  }
+  const digest = sha256(JSON.stringify({ files, principles }));
+  if (record.catalogSha256 !== digest) {
+    errors.push(`${label}: historical catalog digest does not match its records`);
+  }
+  if (record.catalogSha256 !== pin.catalogSha256) {
+    errors.push(`${label}: historical catalog digest does not match the independent pin`);
+  }
+}
+
+function validateIntegrity(receipt, label, pin, errors) {
+  if (
+    !checkExactKeys(receipt.integrity, ['algorithm', 'digest'], [], `${label}: integrity`, errors)
+  ) {
+    return;
+  }
+  if (receipt.integrity.algorithm !== 'sha256') {
+    errors.push(`${label}: integrity algorithm must be sha256`);
+  }
+  const unsigned = structuredClone(receipt);
+  delete unsigned.integrity;
+  if (receipt.integrity.digest !== sha256(JSON.stringify(unsigned))) {
+    errors.push(`${label}: integrity digest does not match receipt content`);
+  }
+  if (receipt.integrity.digest !== pin) {
+    errors.push(`${label}: integrity digest does not match the independent pin`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Final finalization receipt
+// ---------------------------------------------------------------------------
+
+function validateFinalReceipt(receipt, historicalReceipt, errors) {
+  const label = FINAL_RECEIPT_PATH;
+  const index = new Map();
+  if (
+    !checkExactKeys(
+      receipt,
+      [
+        '$schema',
+        'schemaVersion',
+        'receiptType',
+        'verifiedAt',
+        'purpose',
+        'claims',
+        'verification',
+        'historicalEvidence',
+        'authorities',
+        'migration',
+        'deletion',
+        'integrity',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return index;
+  }
+
+  if (receipt.$schema !== './migration-finalization-receipt.schema.json') {
+    errors.push(`${label}: wrong schema reference`);
+  }
+  if (receipt.schemaVersion !== 1) errors.push(`${label}: schemaVersion must be 1`);
+  if (receipt.receiptType !== 'dated-finalization-verification-evidence') {
+    errors.push(`${label}: receiptType must label dated finalization evidence`);
+  }
+  if (Number.isNaN(Date.parse(receipt.verifiedAt))) {
+    errors.push(`${label}: verifiedAt must be an ISO date-time`);
+  }
+  checkNonEmptyString(receipt.purpose, `${label}: purpose`, errors);
+
+  validateFinalClaims(receipt.claims, errors);
+  validateFinalVerification(receipt.verification, errors);
+  validateFinalHistoricalEvidence(receipt.historicalEvidence, historicalReceipt, errors);
+
+  if (!Array.isArray(receipt.authorities)) {
+    errors.push(`${label}: authorities must be an array`);
+  } else {
+    const seen = new Set();
+    const seenIds = new Set();
+    const changes = [];
+    for (const record of receipt.authorities) {
+      validateFinalAuthorityRecord(record, index, seenIds, changes, errors);
+      if (seen.has(record?.authority)) {
+        errors.push(`${label}: duplicate authority "${record.authority}"`);
+      }
+      seen.add(record?.authority);
+    }
+    if (!arraysEqual([...seen].sort(), [...AUTHORITIES].sort())) {
+      errors.push(`${label}: must contain exactly Studio, Engineering, Product, and .github`);
+    }
+    const expected = EXPECTED_SEMANTIC_CHANGES.map(
+      ({ authority, id, historicalSemanticSha256, ratifiedSemanticSha256 }) =>
+        `${authority}:${id}:${historicalSemanticSha256}:${ratifiedSemanticSha256}`,
+    ).sort();
+    if (!arraysEqual(changes.sort(), expected)) {
+      errors.push(
+        `${label}: recorded semantic changes do not match the independently pinned set (${expected.join(', ')})`,
+      );
+    }
+  }
+
+  validateFinalMigration(receipt.migration, errors);
+  validateFinalDeletion(receipt.deletion, errors);
+  validateIntegrity(receipt, label, FINAL_RECEIPT_INTEGRITY_PIN, errors);
+  return index;
+}
+
+function validateFinalClaims(claims, errors) {
+  const label = `${FINAL_RECEIPT_PATH}: claims`;
+  if (
+    !checkExactKeys(
+      claims,
+      ['normativeSource', 'provesRatification', 'authorizesLegacyDeletion', 'meaning'],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (claims.normativeSource !== false) {
+    errors.push(`${label}: a receipt cannot be a normative source`);
+  }
+  if (claims.provesRatification !== true) {
+    errors.push(`${label}: the finalization receipt must record provesRatification: true`);
+  }
+  if (claims.authorizesLegacyDeletion !== true) {
+    errors.push(`${label}: the finalization receipt must record authorizesLegacyDeletion: true`);
+  }
+  if (!checkNonEmptyString(claims.meaning, `${label}: meaning`, errors)) return;
+  const normalized = normalizeWhitespace(claims.meaning);
+  for (const phrase of FINAL_MEANING_REQUIRED_PHRASES) {
+    if (!normalized.includes(normalizeWhitespace(phrase))) {
+      errors.push(`${label}: meaning must state "${phrase}"`);
+    }
+  }
+  for (const { pattern, message } of FINAL_MEANING_FORBIDDEN_CLAIMS) {
+    if (pattern.test(normalized)) errors.push(`${label}: forbidden meaning: ${message}`);
+  }
+}
+
+function validateFinalVerification(verification, errors) {
+  const label = `${FINAL_RECEIPT_PATH}: verification`;
+  if (
+    !checkExactKeys(
+      verification,
+      [
+        'sourceKind',
+        'retrieval',
+        'digestMethod',
+        'ledgerWasNotAuthorityInput',
+        'liveCommand',
+        'offlineLimit',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (verification.sourceKind !== 'pinned-authority-and-owner-merge-evidence') {
+    errors.push(`${label}: verification must use pinned authority and owner merge evidence`);
+  }
+  if (verification.ledgerWasNotAuthorityInput !== true) {
+    errors.push(`${label}: authority evidence must be independent of the ledger`);
+  }
+  if (verification.liveCommand !== 'pnpm principles:verify-live') {
+    errors.push(`${label}: live verification command is incorrect`);
+  }
+  for (const field of ['retrieval', 'digestMethod', 'offlineLimit']) {
+    checkNonEmptyString(verification[field], `${label}: ${field}`, errors);
+  }
+  if (
+    typeof verification.retrieval === 'string' &&
+    !normalizeWhitespace(verification.retrieval).includes(
+      'no authority evidence was constructed from the migration ledger',
+    )
+  ) {
+    errors.push(`${label}: retrieval must state that no authority evidence came from the ledger`);
+  }
+}
+
+function validateFinalHistoricalEvidence(evidence, historicalReceipt, errors) {
+  const label = `${FINAL_RECEIPT_PATH}: historicalEvidence`;
+  if (
+    !checkExactKeys(
+      evidence,
+      ['draftReceipt', 'legacyCatalogBaseline', 'legacySourceSnapshot', 'reconciliationLedger'],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+
+  if (
+    checkExactKeys(
+      evidence.draftReceipt,
+      ['path', 'verifiedAt', 'integritySha256'],
+      [],
+      `${label}: draftReceipt`,
+      errors,
+    )
+  ) {
+    if (evidence.draftReceipt.path !== HISTORICAL_RECEIPT_PATH) {
+      errors.push(`${label}: draftReceipt.path must point at the preserved historical receipt`);
+    }
+    if (evidence.draftReceipt.verifiedAt !== HISTORICAL_RECEIPT_PIN.verifiedAt) {
+      errors.push(`${label}: draftReceipt.verifiedAt does not match the historical receipt`);
+    }
+    if (evidence.draftReceipt.integritySha256 !== HISTORICAL_RECEIPT_PIN.integritySha256) {
+      errors.push(`${label}: draftReceipt integrity does not match the independent pin`);
+    }
+  }
+
+  validateLegacyCatalogBaseline(evidence.legacyCatalogBaseline, label, errors);
+  validateLegacySourceSnapshot(evidence.legacySourceSnapshot, label, errors);
+  if (!deepEqual(evidence.legacyCatalogBaseline, historicalReceipt?.legacyCatalogBaseline)) {
+    errors.push(`${label}: legacy baseline disagrees with the preserved historical receipt`);
+  }
+  if (!deepEqual(evidence.legacySourceSnapshot, historicalReceipt?.legacySourceSnapshot)) {
+    errors.push(`${label}: legacy source snapshot disagrees with the preserved historical receipt`);
+  }
+
+  if (
+    checkExactKeys(
+      evidence.reconciliationLedger,
+      ['repository', 'commit', 'path', 'blobSha', 'sha256', 'mappingSha256'],
+      [],
+      `${label}: reconciliationLedger`,
+      errors,
+    )
+  ) {
+    for (const [field, expected] of Object.entries(RECONCILIATION_LEDGER)) {
+      if (evidence.reconciliationLedger[field] !== expected) {
+        errors.push(`${label}: reconciliationLedger.${field} does not match the PR #21 pin`);
+      }
     }
   }
 }
 
-function validateStudioTree(errors, { fileOverrides = new Map(), ratificationOverrideText } = {}) {
+function validateFinalMigration(migration, errors) {
+  const label = `${FINAL_RECEIPT_PATH}: migration`;
+  if (
+    !checkExactKeys(
+      migration,
+      [
+        'ledgerPath',
+        'entryCount',
+        'requiredEntryStatus',
+        'mappingSha256',
+        'dispositionCounts',
+        'destinationLinks',
+        'successorLinks',
+        'uniqueMappedSuccessors',
+        'citationExceptions',
+        'retirements',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (migration.ledgerPath !== LEDGER_PATH) errors.push(`${label}: ledgerPath is incorrect`);
+  if (migration.entryCount !== LEDGER_TOTALS.entries) {
+    errors.push(`${label}: entryCount must be ${LEDGER_TOTALS.entries}`);
+  }
+  if (migration.requiredEntryStatus !== LEDGER_TOTALS.status) {
+    errors.push(`${label}: requiredEntryStatus must be "${LEDGER_TOTALS.status}"`);
+  }
+  if (migration.mappingSha256 !== RECONCILIATION_LEDGER.mappingSha256) {
+    errors.push(`${label}: mapping digest does not match the independent PR #21 mapping pin`);
+  }
+  if (!deepEqual(migration.dispositionCounts, LEDGER_TOTALS.dispositions)) {
+    errors.push(`${label}: disposition counts do not match the independent pin`);
+  }
+  if (!deepEqual(migration.destinationLinks, LEDGER_TOTALS.destinations)) {
+    errors.push(`${label}: destination link counts do not match the independent pin`);
+  }
+  if (migration.successorLinks !== LEDGER_TOTALS.links) {
+    errors.push(`${label}: successorLinks must be ${LEDGER_TOTALS.links}`);
+  }
+  if (migration.uniqueMappedSuccessors !== LEDGER_TOTALS.uniqueMappedSuccessors) {
+    errors.push(`${label}: uniqueMappedSuccessors must be ${LEDGER_TOTALS.uniqueMappedSuccessors}`);
+  }
+  if (migration.citationExceptions !== LEDGER_TOTALS.citationExceptions) {
+    errors.push(`${label}: citationExceptions must be ${LEDGER_TOTALS.citationExceptions}`);
+  }
+  if (migration.retirements !== LEDGER_TOTALS.retirements) {
+    errors.push(`${label}: retirements must be ${LEDGER_TOTALS.retirements}`);
+  }
+}
+
+function validateFinalDeletion(deletion, errors) {
+  const label = `${FINAL_RECEIPT_PATH}: deletion`;
+  if (
+    !checkExactKeys(deletion, ['frozenLegacyPaths', 'pathCount', 'effectiveAct'], [], label, errors)
+  ) {
+    return;
+  }
+  if (!arraysEqual(deletion.frozenLegacyPaths, FROZEN_LEGACY_PATHS)) {
+    errors.push(`${label}: frozen deletion inventory does not match the independent 21-path pin`);
+  }
+  if (deletion.pathCount !== 21) errors.push(`${label}: pathCount must be 21`);
+  if (deletion.effectiveAct !== 'repository-owner merge of the finalization pull request') {
+    errors.push(`${label}: the effective act must remain the repository-owner merge`);
+  }
+}
+
+function validateFinalAuthorityRecord(record, index, seenIds, changes, errors) {
+  const authority = record?.authority;
+  const label = `${FINAL_RECEIPT_PATH}: ${authority ?? 'unknown authority'}`;
+  if (
+    !checkExactKeys(
+      record,
+      [
+        'authority',
+        'repository',
+        'ratifiedCatalogCommit',
+        'currentMainCommitAtVerification',
+        'principleCount',
+        'ratifiedCount',
+        'files',
+        'principles',
+        'catalogSha256',
+        'semanticCatalogSha256',
+        'historicalComparison',
+        'decision',
+      ],
+      ['protection'],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  const pin = FINAL_AUTHORITY_PINS[authority];
+  if (!pin) {
+    errors.push(`${label}: unknown authority`);
+    return;
+  }
+  if (record.repository !== pin.repository) errors.push(`${label}: repository does not match pin`);
+  if (record.ratifiedCatalogCommit !== pin.commit) {
+    errors.push(`${label}: ratified catalog commit does not match the independent pin`);
+  }
+  if (!SHA1.test(record.currentMainCommitAtVerification ?? '')) {
+    errors.push(`${label}: currentMainCommitAtVerification must be a commit SHA`);
+  }
+  if (record.principleCount !== pin.principleCount) {
+    errors.push(`${label}: principleCount must be ${pin.principleCount}`);
+  }
+  if (record.ratifiedCount !== pin.principleCount) {
+    errors.push(`${label}: all ${pin.principleCount} successors must be Ratified`);
+  }
+
+  const files = Array.isArray(record.files) ? record.files : [];
+  const principles = Array.isArray(record.principles) ? record.principles : [];
+  if (!Array.isArray(record.files)) errors.push(`${label}: files must be an array`);
+  if (!Array.isArray(record.principles)) errors.push(`${label}: principles must be an array`);
+
+  const receiptPaths = files.map(({ path }) => path);
+  if (!arraysEqual(receiptPaths, [...receiptPaths].sort())) {
+    errors.push(`${label}: file records must be sorted by path`);
+  }
+  if (!arraysEqual(receiptPaths, pin.paths)) {
+    errors.push(`${label}: file paths do not match the pinned authority catalog`);
+  }
+
+  const fileIndex = new Map();
+  for (const file of files) {
+    checkExactKeys(
+      file,
+      ['path', 'blobSha', 'sha256', 'principleCount'],
+      [],
+      `${label}: file record`,
+      errors,
+    );
+    if (fileIndex.has(file.path)) errors.push(`${label}: duplicate file path ${file.path}`);
+    fileIndex.set(file.path, file);
+    if (!SHA1.test(file.blobSha ?? '')) errors.push(`${label}: ${file.path} invalid Git blob SHA`);
+    if (!SHA256.test(file.sha256 ?? '')) errors.push(`${label}: ${file.path} invalid SHA-256`);
+    if (!Number.isInteger(file.principleCount) || file.principleCount < 1) {
+      errors.push(`${label}: ${file.path} principleCount must be a positive integer`);
+    }
+  }
+
+  for (const principle of principles) {
+    checkExactKeys(
+      principle,
+      [
+        'id',
+        'path',
+        'title',
+        'status',
+        'legacyInputs',
+        'blobSha',
+        'fileSha256',
+        'blockSha256',
+        'semanticSha256',
+      ],
+      [],
+      `${label}: principle record`,
+      errors,
+    );
+    if (!AUTHORITY_ID[authority].test(principle.id ?? '')) {
+      errors.push(`${label}: malformed successor ID ${principle.id}`);
+    }
+    if (seenIds.has(principle.id)) errors.push(`${label}: duplicate successor ID ${principle.id}`);
+    seenIds.add(principle.id);
+    checkNonEmptyString(principle.title, `${label}: ${principle.id} title`, errors);
+    if (principle.status !== 'Ratified') {
+      errors.push(`${label}: ${principle.id} must be Ratified in the final catalog`);
+    }
+    if (!SHA1.test(principle.blobSha ?? '')) {
+      errors.push(`${label}: ${principle.id} invalid Git blob SHA`);
+    }
+    for (const field of ['fileSha256', 'blockSha256', 'semanticSha256']) {
+      if (!SHA256.test(principle[field] ?? '')) {
+        errors.push(`${label}: ${principle.id} invalid ${field}`);
+      }
+    }
+    checkStringArray(principle.legacyInputs, `${label}: ${principle.id} Legacy inputs`, errors, {
+      allowEmpty: true,
+    });
+    if (!arraysEqual(principle.legacyInputs ?? [], [...(principle.legacyInputs ?? [])].sort())) {
+      errors.push(`${label}: ${principle.id} Legacy inputs must be sorted`);
+    }
+    for (const legacyId of principle.legacyInputs ?? []) {
+      if (!EXPECTED_LEGACY_ID_SET.has(legacyId)) {
+        errors.push(`${label}: ${principle.id} cites unknown legacy ID ${legacyId}`);
+      }
+    }
+    const file = fileIndex.get(principle.path);
+    if (!file) {
+      errors.push(`${label}: ${principle.id} references unknown path ${principle.path}`);
+    } else if (principle.blobSha !== file.blobSha || principle.fileSha256 !== file.sha256) {
+      errors.push(`${label}: ${principle.id} file digests do not match ${principle.path}`);
+    }
+    index.set(`${authority}:${principle.id}`, {
+      ...principle,
+      authority,
+      repository: record.repository,
+      commit: record.ratifiedCatalogCommit,
+    });
+  }
+
+  for (const file of files) {
+    const actual = principles.filter(({ path }) => path === file.path).length;
+    if (file.principleCount !== actual) {
+      errors.push(`${label}: ${file.path} principleCount does not match its records`);
+    }
+  }
+  if (principles.length !== pin.principleCount) {
+    errors.push(`${label}: successor catalog count does not match its records`);
+  }
+  if (record.ratifiedCount !== principles.filter(({ status }) => status === 'Ratified').length) {
+    errors.push(`${label}: ratifiedCount does not match successor statuses`);
+  }
+  if (record.catalogSha256 !== sha256(JSON.stringify({ files, principles }))) {
+    errors.push(`${label}: catalog digest does not match receipt records`);
+  }
+  if (record.catalogSha256 !== pin.catalogSha256) {
+    errors.push(`${label}: catalog digest does not match the independent pin`);
+  }
+  if (record.semanticCatalogSha256 !== semanticCatalogSha256(principles)) {
+    errors.push(`${label}: semantic catalog digest does not match receipt records`);
+  }
+  if (record.semanticCatalogSha256 !== pin.semanticCatalogSha256) {
+    errors.push(`${label}: semantic catalog digest does not match the independent pin`);
+  }
+
+  validateHistoricalComparison(record, pin, changes, label, errors);
+  validateFinalDecision(record, pin, principles, label, errors);
+  validateAuthorityProtection(record, label, errors);
+}
+
+/**
+ * Branch-protection and required-check evidence for the authority whose merged decision record
+ * conditions Ratification on a required check. It is recorded for exactly that authority so the
+ * receipt cannot silently generalize a protection claim to repositories it did not verify.
+ */
+function validateAuthorityProtection(record, label, errors) {
+  const protectionLabel = `${label}: protection`;
+  if (record.authority !== PROTECTION_AUTHORITY) {
+    if ('protection' in record) {
+      errors.push(
+        `${protectionLabel}: protection evidence is recorded only for ${PROTECTION_AUTHORITY}`,
+      );
+    }
+    return;
+  }
+  if (!('protection' in record)) {
+    errors.push(
+      `${protectionLabel}: ${PROTECTION_AUTHORITY} Ratification requires branch-protection and required-check evidence`,
+    );
+    return;
+  }
+  const protection = record.protection;
+  if (
+    !checkExactKeys(
+      protection,
+      [
+        'branch',
+        'strictRequiredStatusChecks',
+        'requiredChecks',
+        'allowForcePushes',
+        'allowDeletions',
+        'ratificationHeadChecks',
+      ],
+      [],
+      protectionLabel,
+      errors,
+    )
+  ) {
+    return;
+  }
+
+  if (protection.branch !== PROTECTION_PIN.branch) {
+    errors.push(`${protectionLabel}: protection must cover the "${PROTECTION_PIN.branch}" branch`);
+  }
+  if (protection.strictRequiredStatusChecks !== true) {
+    errors.push(`${protectionLabel}: required status checks must be strict`);
+  }
+  if (protection.allowForcePushes !== false) {
+    errors.push(`${protectionLabel}: force pushes must be disabled on the protected branch`);
+  }
+  if (protection.allowDeletions !== false) {
+    errors.push(`${protectionLabel}: branch deletion must be disabled on the protected branch`);
+  }
+  if (!deepEqual(protection.requiredChecks, PROTECTION_PIN.requiredChecks)) {
+    errors.push(`${protectionLabel}: required checks do not match the independent pin`);
+  }
+  if (!deepEqual(protection.ratificationHeadChecks, PROTECTION_PIN.ratificationHeadChecks)) {
+    errors.push(`${protectionLabel}: Ratification head checks do not match the independent pin`);
+    return;
+  }
+
+  const byName = new Map(protection.ratificationHeadChecks.map((check) => [check.name, check]));
+  for (const { context } of protection.requiredChecks) {
+    const check = byName.get(context);
+    if (!check) {
+      errors.push(`${protectionLabel}: required check "${context}" has no result on the head`);
+      continue;
+    }
+    if (check.required !== true) {
+      errors.push(`${protectionLabel}: "${context}" is protected but not marked required`);
+    }
+    if (check.status !== 'completed' || check.conclusion !== 'success') {
+      errors.push(
+        `${protectionLabel}: required check "${context}" did not succeed on the Ratification head`,
+      );
+    }
+  }
+  for (const check of protection.ratificationHeadChecks) {
+    if (check.conclusion !== 'success') {
+      errors.push(`${protectionLabel}: "${check.name}" did not succeed on the Ratification head`);
+    }
+  }
+}
+
+function validateHistoricalComparison(record, pin, changes, label, errors) {
+  const comparison = record.historicalComparison;
+  if (
+    !checkExactKeys(
+      comparison,
+      ['draftCommit', 'draftSemanticCatalogSha256', 'changedPrinciples'],
+      [],
+      `${label}: historicalComparison`,
+      errors,
+    )
+  ) {
+    return;
+  }
+  const draftPin = DRAFT_AUTHORITY_PINS[record.authority];
+  if (comparison.draftCommit !== draftPin.commit) {
+    errors.push(`${label}: historicalComparison.draftCommit does not match the Draft pin`);
+  }
+  if (comparison.draftSemanticCatalogSha256 !== draftPin.semanticCatalogSha256) {
+    errors.push(
+      `${label}: historical semantic catalog digest does not match the independent Draft pin`,
+    );
+  }
+  if (!Array.isArray(comparison.changedPrinciples)) {
+    errors.push(`${label}: changedPrinciples must be an array`);
+    return;
+  }
+  const unchanged = comparison.changedPrinciples.length === 0;
+  const identical = comparison.draftSemanticCatalogSha256 === record.semanticCatalogSha256;
+  if (unchanged !== identical) {
+    errors.push(`${label}: changedPrinciples and the historical semantic catalog digest disagree`);
+  }
+  const byId = new Map((record.principles ?? []).map((principle) => [principle.id, principle]));
+  for (const change of comparison.changedPrinciples) {
+    if (
+      !checkExactKeys(
+        change,
+        ['id', 'historicalSemanticSha256', 'ratifiedSemanticSha256', 'rationale'],
+        [],
+        `${label}: changedPrinciple`,
+        errors,
+      )
+    ) {
+      continue;
+    }
+    checkNonEmptyString(change.rationale, `${label}: ${change.id} rationale`, errors);
+    const principle = byId.get(change.id);
+    if (!principle) {
+      errors.push(`${label}: changed principle ${change.id} is not in the catalog`);
+      continue;
+    }
+    if (change.ratifiedSemanticSha256 !== principle.semanticSha256) {
+      errors.push(`${label}: ${change.id} ratified semantic digest disagrees with its record`);
+    }
+    if (change.historicalSemanticSha256 === change.ratifiedSemanticSha256) {
+      errors.push(`${label}: ${change.id} is recorded as changed but both digests are equal`);
+    }
+    changes.push(
+      `${record.authority}:${change.id}:${change.historicalSemanticSha256}:${change.ratifiedSemanticSha256}`,
+    );
+  }
+}
+
+function validateFinalDecision(record, pin, principles, label, errors) {
+  const decision = record.decision;
+  if (
+    !checkExactKeys(
+      decision,
+      [
+        'path',
+        'blobSha',
+        'sha256',
+        'scopeIds',
+        'scopeSha256',
+        'pullRequest',
+        'state',
+        'merged',
+        'mergedAt',
+        'mergeCommit',
+        'headCommit',
+        'baseRef',
+        'authorAssociation',
+        'mergedBy',
+      ],
+      [],
+      `${label}: decision`,
+      errors,
+    )
+  ) {
+    return;
+  }
+  const decisionLabel = `${label}: decision`;
+  if (decision.path !== pin.decisionPath) {
+    errors.push(`${decisionLabel}: path does not match the pinned decision record`);
+  }
+  if (decision.blobSha !== pin.decisionBlobSha) {
+    errors.push(`${decisionLabel}: blob does not match the pinned decision record`);
+  }
+  if (decision.sha256 !== pin.decisionSha256) {
+    errors.push(`${decisionLabel}: digest does not match the pinned decision record`);
+  }
+  if (decision.pullRequest !== pin.pullRequest) {
+    errors.push(`${decisionLabel}: pull request number does not match the independent pin`);
+  }
+  if (decision.state !== 'closed') errors.push(`${decisionLabel}: state must be closed`);
+  if (decision.merged !== true) {
+    errors.push(`${decisionLabel}: an unmerged decision cannot ratify a catalog`);
+  }
+  if (decision.mergeCommit !== pin.commit) {
+    errors.push(`${decisionLabel}: merge commit does not match the ratified catalog commit`);
+  }
+  if (!SHA1.test(decision.headCommit ?? '') || decision.headCommit === decision.mergeCommit) {
+    errors.push(`${decisionLabel}: headCommit must be the distinct reviewed head SHA`);
+  }
+  if (decision.baseRef !== 'main') errors.push(`${decisionLabel}: baseRef must be main`);
+  if (decision.authorAssociation !== 'OWNER') {
+    errors.push(`${decisionLabel}: authorAssociation must be OWNER`);
+  }
+  if (Number.isNaN(Date.parse(decision.mergedAt))) {
+    errors.push(`${decisionLabel}: mergedAt must be an ISO date-time`);
+  }
+  if (
+    checkExactKeys(decision.mergedBy, ['login', 'id'], [], `${decisionLabel}: mergedBy`, errors)
+  ) {
+    if (decision.mergedBy.login !== OWNER.login || decision.mergedBy.id !== OWNER.id) {
+      errors.push(`${decisionLabel}: only the repository owner merge is an effective Ratification`);
+    }
+  }
+  if (!checkStringArray(decision.scopeIds, `${decisionLabel}: scopeIds`, errors)) return;
+  const malformed = decision.scopeIds.find((id) => !AUTHORITY_ID[record.authority].test(id));
+  if (malformed) errors.push(`${decisionLabel}: scope contains a malformed ID "${malformed}"`);
+  const catalogIds = principles.map(({ id }) => id).sort();
+  if (!arraysEqual([...decision.scopeIds].sort(), catalogIds)) {
+    errors.push(
+      `${decisionLabel}: scope must list exactly the ${catalogIds.length} Ratified successor IDs`,
+    );
+  }
+  if (decision.scopeSha256 !== sha256(JSON.stringify(decision.scopeIds))) {
+    errors.push(`${decisionLabel}: scope digest does not match the recorded scope`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Final migration ledger
+// ---------------------------------------------------------------------------
+
+function validateLedger(ledger, errors) {
+  if (
+    !checkExactKeys(
+      ledger,
+      ['$schema', 'schemaVersion', 'baseline', 'entries'],
+      [],
+      LEDGER_PATH,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (ledger.$schema !== './migration-ledger.schema.json') {
+    errors.push(`${LEDGER_PATH}: wrong schema reference`);
+  }
+  if (ledger.schemaVersion !== 1) errors.push(`${LEDGER_PATH}: schemaVersion must be 1`);
+
+  if (
+    checkExactKeys(
+      ledger.baseline,
+      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'idFormat'],
+      [],
+      'ledger baseline',
+      errors,
+    )
+  ) {
+    if (ledger.baseline.repository !== 'https://github.com/jrmoulckers/studio') {
+      errors.push('ledger baseline repository is incorrect');
+    }
+    if (ledger.baseline.commit !== LEGACY_BASELINE_COMMIT) {
+      errors.push('ledger baseline commit is incorrect');
+    }
+    if (ledger.baseline.realmFiles !== 21 || ledger.baseline.topLevelPrinciples !== 192) {
+      errors.push('ledger baseline counts must be 21 files and 192 principles');
+    }
+    if (ledger.baseline.idFormat !== 'studio-legacy:<realm-file-slug>:<top-level-number>') {
+      errors.push('ledger baseline ID format is incorrect');
+    }
+  }
+
+  if (!isObject(ledger.entries)) {
+    errors.push(`${LEDGER_PATH}: entries must be an object`);
+    return;
+  }
+
+  const entryIds = Object.keys(ledger.entries);
+  if (entryIds.length !== LEDGER_TOTALS.entries) {
+    errors.push(`ledger must contain exactly 192 entries (found ${entryIds.length})`);
+  }
+  for (const legacyId of entryIds) {
+    if (!EXPECTED_LEGACY_ID_SET.has(legacyId)) {
+      errors.push(`ledger contains unknown legacy ID ${legacyId}`);
+    }
+  }
+  for (const legacyId of EXPECTED_LEGACY_IDS) {
+    if (!(legacyId in ledger.entries)) errors.push(`ledger is missing legacy ID ${legacyId}`);
+  }
+
+  for (const [legacyId, entry] of Object.entries(ledger.entries)) {
+    validateLedgerEntry(legacyId, entry, errors);
+  }
+
+  const mapping = ledgerMappingSha256(ledger);
+  if (mapping !== RECONCILIATION_LEDGER.mappingSha256) {
+    errors.push(
+      `${LEDGER_PATH}: normalized mapping digest ${mapping} does not match the independent PR #21 mapping pin`,
+    );
+  }
+}
+
+function validateLedgerEntry(legacyId, entry, errors) {
+  const label = `ledger ${legacyId}`;
+  if (
+    !checkExactKeys(
+      entry,
+      ['disposition', 'successors', 'status', 'rationale', 'evidence', 'owner'],
+      ['retirementCategory', 'citationException'],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (!DISPOSITIONS.has(entry.disposition)) {
+    errors.push(`${label}: unknown disposition "${entry.disposition}"`);
+  }
+  if (!LEDGER_STATUSES.has(entry.status)) errors.push(`${label}: unknown status "${entry.status}"`);
+  if (entry.status !== LEDGER_TOTALS.status) {
+    errors.push(`${label}: every finalized ledger entry must be "${LEDGER_TOTALS.status}"`);
+  }
+  checkNonEmptyString(entry.rationale, `${label}: rationale`, errors);
+  checkStringArray(entry.evidence, `${label}: evidence`, errors);
+  if (entry.owner !== 'repository owner') errors.push(`${label}: owner must be repository owner`);
+  if (!Array.isArray(entry.successors)) {
+    errors.push(`${label}: successors must be an array`);
+    return;
+  }
+
+  const successorKeys = new Set();
+  for (const successor of entry.successors) {
+    if (!checkExactKeys(successor, ['authority', 'id'], [], `${label}: successor`, errors))
+      continue;
+    if (!AUTHORITY_SET.has(successor.authority)) {
+      errors.push(`${label}: unknown successor authority "${successor.authority}"`);
+      continue;
+    }
+    if (!AUTHORITY_ID[successor.authority].test(successor.id ?? '')) {
+      errors.push(`${label}: malformed ${successor.authority} successor ID "${successor.id}"`);
+    }
+    const key = `${successor.authority}:${successor.id}`;
+    if (successorKeys.has(key)) errors.push(`${label}: duplicate successor ${key}`);
+    successorKeys.add(key);
+  }
+
+  if (['rewrite', 'reference'].includes(entry.disposition) && entry.successors.length !== 1) {
+    errors.push(`${label}: ${entry.disposition} requires exactly one successor`);
+  }
+  if (entry.disposition === 'split' && entry.successors.length < 2) {
+    errors.push(`${label}: split requires at least two successors`);
+  }
+  if (entry.disposition === 'retire' && entry.successors.length !== 0) {
+    errors.push(`${label}: retire requires zero successors`);
+  }
+
+  if (entry.disposition === 'retire') {
+    if (!RETIREMENT_CATEGORIES.has(entry.retirementCategory)) {
+      errors.push(`${label}: retire requires a recognized retirementCategory`);
+    }
+    if ('citationException' in entry) {
+      errors.push(`${label}: retire cannot have a citationException`);
+    }
+    const realm = legacyId.split(':')[1];
+    const snapshotUrl = `https://github.com/${LEGACY_SNAPSHOT.repository}/blob/${LEGACY_SNAPSHOT.commit}/principles/${realm}.md`;
+    if (!(entry.evidence ?? []).includes(snapshotUrl)) {
+      errors.push(`${label}: retirement must preserve its frozen legacy source evidence`);
+    }
+  } else if ('retirementCategory' in entry) {
+    errors.push(`${label}: only retire may set retirementCategory`);
+  }
+
+  if (!(entry.evidence ?? []).includes(HISTORICAL_RECEIPT_PATH) && entry.disposition !== 'retire') {
+    errors.push(`${label}: evidence must preserve the historical Draft receipt`);
+  }
+  if (!(entry.evidence ?? []).includes(FINAL_RECEIPT_PATH)) {
+    errors.push(`${label}: evidence must include the final finalization receipt`);
+  }
+
+  if ('citationException' in entry) validateCitationException(legacyId, entry, errors);
+}
+
+function validateCitationException(legacyId, entry, errors) {
+  const label = `ledger ${legacyId}: citationException`;
+  const exception = entry.citationException;
+  if (!checkExactKeys(exception, ['kind', 'reason', 'evidence'], [], label, errors)) return;
+  if (entry.disposition !== 'reference' || entry.successors.length !== 1) {
+    errors.push(`${label}: allowed only for a single-successor reference`);
+  }
+  if (entry.successors[0]?.authority === 'Studio') {
+    errors.push(`${label}: allowed only for externally verified ownership`);
+  }
+  if (exception.kind !== 'externally-verified-ownership') {
+    errors.push(`${label}: kind must be externally-verified-ownership`);
+  }
+  checkNonEmptyString(exception.reason, `${label}: reason`, errors);
+  checkStringArray(exception.evidence, `${label}: evidence`, errors);
+}
+
+/**
+ * Reciprocity between the ledger and both receipts. Authority facts come only from the receipts;
+ * the ledger is never allowed to introduce a successor the authorities do not carry.
+ */
+function validateReciprocity(ledger, finalIndex, historicalIndex, errors) {
+  const mappedSuccessors = new Set();
+  for (const [legacyId, entry] of Object.entries(ledger?.entries ?? {})) {
+    for (const successor of entry.successors ?? []) {
+      const key = `${successor.authority}:${successor.id}`;
+      const principle = finalIndex.get(key);
+      if (!principle) {
+        errors.push(`${legacyId}: unknown successor ${key}`);
+        continue;
+      }
+      mappedSuccessors.add(key);
+      if (principle.status !== 'Ratified') {
+        errors.push(`${legacyId}: ${key} is not Ratified in the final receipt`);
+      }
+      const citesLegacy = (principle.legacyInputs ?? []).includes(legacyId);
+      if (!citesLegacy && !entry.citationException) {
+        errors.push(`${legacyId}: ${key} does not cite the legacy ID`);
+      }
+      if (citesLegacy && entry.citationException) {
+        errors.push(`${legacyId}: citationException is unnecessary because ${key} cites it`);
+      }
+
+      const finalUrl = `https://github.com/${principle.repository}/blob/${principle.commit}/${principle.path}`;
+      const evidence = entry.evidence ?? [];
+      if (!evidence.includes(FINAL_RECEIPT_PATH) || !evidence.includes(finalUrl)) {
+        errors.push(
+          `${legacyId}: evidence must include the final receipt and the Ratified source for ${key}`,
+        );
+      }
+      const historical = historicalIndex.get(key);
+      if (historical) {
+        const historicalUrl = `https://github.com/${historical.repository}/blob/${historical.commit}/${historical.path}`;
+        if (!evidence.includes(HISTORICAL_RECEIPT_PATH) || !evidence.includes(historicalUrl)) {
+          errors.push(
+            `${legacyId}: historical evidence for ${key} must be preserved, not replaced`,
+          );
+        }
+        if (entry.citationException && !entry.citationException.evidence.includes(historicalUrl)) {
+          errors.push(`${legacyId}: citationException must keep its reviewed source for ${key}`);
+        }
+      } else {
+        errors.push(`${legacyId}: ${key} has no preserved historical evidence record`);
+      }
+    }
+  }
+
+  for (const principle of finalIndex.values()) {
+    for (const legacyId of principle.legacyInputs ?? []) {
+      if (!(legacyId in (ledger?.entries ?? {}))) {
+        errors.push(
+          `${principle.authority}:${principle.id} cites legacy ID ${legacyId} without a disposition`,
+        );
+      }
+    }
+  }
+  return mappedSuccessors;
+}
+
+// ---------------------------------------------------------------------------
+// Local Studio tree
+// ---------------------------------------------------------------------------
+
+function validateStudioTree(sources, finalReceipt, errors) {
   const seenIds = new Map();
   const statusById = new Map();
   const sourceFiles = [];
 
+  const expectedDirectories = new Map([
+    ['principles/design', []],
+    ['principles/experience', []],
+  ]);
+  for (const { path } of STUDIO_FILES) {
+    expectedDirectories.get(path.slice(0, path.lastIndexOf('/'))).push(path);
+  }
+  for (const [directory, expected] of expectedDirectories) {
+    const actual = sources
+      .listFiles()
+      .filter((path) => path.startsWith(`${directory}/`) && path.endsWith('.md'))
+      .sort();
+    if (!arraysEqual(actual, [...expected].sort())) {
+      errors.push(`${directory}: must contain exactly the pinned Studio principle files`);
+    }
+  }
+
   for (const { path, area, ids: expectedIds } of STUDIO_FILES) {
-    let buffer;
-    if (fileOverrides.has(path)) {
-      buffer = fileOverrides.get(path);
-    } else {
-      try {
-        buffer = readFileSync(filePath(path));
-      } catch {
-        errors.push(`${path}: file is missing`);
-        continue;
-      }
+    const buffer = sources.read(path);
+    if (buffer === null) {
+      errors.push(`${path}: file is missing`);
+      continue;
     }
 
     const text = buffer.toString('utf8');
@@ -469,11 +2111,7 @@ function validateStudioTree(errors, { fileOverrides = new Map(), ratificationOve
       const idMatch = line.match(ID_HEADING);
       if (idMatch) {
         closeBlock();
-        current = {
-          id: idMatch[1],
-          area: idMatch[2],
-          fields: new Map(),
-        };
+        current = { id: idMatch[1], area: idMatch[2], fields: new Map() };
         continue;
       }
       if (STUDIO_HEADING.test(line)) {
@@ -497,10 +2135,10 @@ function validateStudioTree(errors, { fileOverrides = new Map(), ratificationOve
     closeBlock();
 
     if (!arraysEqual(fileIds, expectedIds)) {
-      for (const id of expectedIds.filter((id) => !fileIds.includes(id))) {
+      for (const id of expectedIds.filter((value) => !fileIds.includes(value))) {
         errors.push(`${path}: missing stable principle ID ${id}`);
       }
-      for (const id of fileIds.filter((id) => !expectedIds.includes(id))) {
+      for (const id of fileIds.filter((value) => !expectedIds.includes(value))) {
         errors.push(`${path}: unexpected principle ID ${id}; stable IDs must not be renumbered`);
       }
       if (fileIds.length === expectedIds.length) {
@@ -512,88 +2150,27 @@ function validateStudioTree(errors, { fileOverrides = new Map(), ratificationOve
   }
 
   const localCatalog = buildCatalogFromSources('Studio', sourceFiles);
-  const contentHashesById = computeStudioStatusExcludedHashes(sourceFiles);
-  validateStudioStatuses(statusById, contentHashesById, errors, ratificationOverrideText);
-  const distinctLocalStatuses = new Set(statusById.values());
-  const localStatus = distinctLocalStatuses.size === 1 ? [...distinctLocalStatuses][0] : 'mixed';
+  const statuses = new Set(statusById.values());
+  const localStatus = statuses.size === 1 ? [...statuses][0] : 'mixed';
+
+  if (statusById.size === 25 && localStatus === 'mixed') {
+    errors.push(
+      'Studio successor statuses are mixed; all 25 successors must share exactly one Status',
+    );
+  }
+  if (statusById.size === 25 && localStatus !== 'mixed' && localStatus !== 'Ratified') {
+    errors.push('the finalized Studio tree must carry Status: Ratified for all 25 successors');
+  }
+
+  validateStudioSemanticContinuity(localCatalog.principles, errors);
   validateStudioPreambles(sourceFiles, localStatus, errors);
-  return { ...localCatalog, localStatus };
-}
-
-function computeStudioStatusExcludedHashes(sourceFiles) {
-  const hashesById = new Map();
-  for (const { buffer } of sourceFiles) {
-    const text = buffer.toString('utf8');
-    const matches = [...text.matchAll(/^### (STUDIO-[A-Z0-9]+-\d{3}) — .+$/gm)];
-    matches.forEach((match, index) => {
-      const block = text.slice(match.index, matches[index + 1]?.index ?? text.length);
-      hashesById.set(match[1], sha256(normalizeStatusField(block)));
-    });
-  }
-  return hashesById;
-}
-
-function validateStudioPreambles(sourceFiles, localStatus, errors) {
-  if (localStatus === 'mixed') return;
-  const expectedBanner =
-    localStatus === 'Ratified' ? STUDIO_RATIFICATION_BANNER : STUDIO_DRAFT_BANNER;
-  for (const { path, buffer } of sourceFiles) {
-    const text = buffer.toString('utf8');
-    const firstHeading = text.search(/^### STUDIO-/m);
-    const preamble = firstHeading === -1 ? text : text.slice(0, firstHeading);
-    if (!preamble.includes(expectedBanner)) {
-      errors.push(`${path}: preamble does not match the ${localStatus} Ratification state`);
-      continue;
-    }
-    const normalized = preamble.replace(expectedBanner, '> **Ratification:** <normalized>');
-    if (sha256(normalized) !== STUDIO_PREAMBLE_CONTENT_PIN[path]) {
-      errors.push(`${path}: preamble content changed beyond the Ratification banner`);
-    }
-  }
-}
-
-function validateStudioStatuses(statusById, contentHashesById, errors, ratificationOverrideText) {
-  const allExpectedIds = STUDIO_FILES.flatMap(({ ids }) => ids);
-  const statuses = allExpectedIds.map((id) => statusById.get(id)).filter(Boolean);
-  if (statuses.length !== allExpectedIds.length) return; // missing IDs are already reported.
-
-  const distinctStatuses = new Set(statuses);
-  if (distinctStatuses.size > 1) {
-    errors.push(
-      'Studio successor statuses are mixed; all 25 successors must share exactly one Status ("Draft" or "Ratified")',
-    );
-    return;
-  }
-
-  const [status] = distinctStatuses;
-  if (status !== 'Ratified') return; // An all-Draft tree needs no Ratification record.
-
-  const record = validateRatificationRecord(errors, allExpectedIds, ratificationOverrideText);
-  if (!record.exists) {
-    errors.push(
-      `Status: Ratified requires an owner-effective Ratification record at ${RATIFICATION_RECORD_PATH}`,
-    );
-    return;
-  }
-  for (const id of allExpectedIds) {
-    if (!record.scopeIds.has(id)) {
-      errors.push(
-        `${id}: Ratified status has no covering entry in the Ratification decision record scope`,
-      );
-    }
-  }
-
-  for (const id of allExpectedIds) {
-    const pin = STUDIO_STATUS_CONTENT_PIN[id];
-    const actual = contentHashesById.get(id);
-    if (!pin) {
-      errors.push(`${id}: no independent status-excluded content pin is recorded`);
-    } else if (actual !== pin) {
-      errors.push(
-        `${id}: content changed beyond the Status field (status-excluded content digest mismatch)`,
-      );
-    }
-  }
+  validateRatificationRecord(sources, finalReceipt, errors);
+  const preambleUpdatedFiles = validateLocalStudioAgainstReceipt(
+    localCatalog,
+    finalReceipt,
+    errors,
+  );
+  return { ...localCatalog, localStatus, preambleUpdatedFiles };
 }
 
 function validateStudioBlock(block, path, expectedArea, errors, seenIds, statusById) {
@@ -641,884 +2218,606 @@ function validateStudioBlock(block, path, expectedArea, errors, seenIds, statusB
   }
 }
 
-function validateLegacyCatalog(receipt, errors) {
-  const snapshot = receipt?.legacySourceSnapshot;
-  const snapshotFiles = new Map(
-    Array.isArray(snapshot?.files) ? snapshot.files.map((record) => [record.path, record]) : [],
-  );
-  const actualIds = [];
-
-  for (const realm of LEGACY_REALMS) {
-    let buffer;
-    try {
-      buffer = readFileSync(filePath(realm.path));
-    } catch {
-      errors.push(`${realm.path}: legacy realm file is missing`);
-      continue;
-    }
-    const numbers = [...buffer.toString('utf8').matchAll(/^###\s+(\d+)\.\s+/gm)].map((match) =>
-      Number(match[1]),
-    );
-    const expectedNumbers = Array.from({ length: realm.count }, (_, index) => index + 1);
-    if (!arraysEqual(numbers, expectedNumbers)) {
-      errors.push(
-        `${realm.path}: top-level legacy headings must remain exactly 1..${realm.count} (found ${numbers.join(', ')})`,
-      );
-    }
-    const ids = numbers.map((number) => `studio-legacy:${realm.slug}:${number}`);
-    actualIds.push(...ids);
-
-    const record = snapshotFiles.get(realm.path);
-    if (!record) {
-      errors.push(`${realm.path}: missing from legacy source snapshot`);
-      continue;
-    }
-    if (!arraysEqual(record.topLevelIds ?? [], ids)) {
-      errors.push(`${realm.path}: receipt top-level ID inventory does not match current headings`);
-    }
-    const actualSha256 = sha256(buffer);
-    const actualBlobSha = gitBlobSha(buffer);
-    if (record.sha256 !== actualSha256) {
-      errors.push(`${realm.path}: legacy file SHA-256 changed from the pinned source snapshot`);
-    }
-    if (record.blobSha !== actualBlobSha) {
-      errors.push(`${realm.path}: legacy Git blob changed from the pinned source snapshot`);
-    }
-  }
-
-  if (!arraysEqual(actualIds, EXPECTED_LEGACY_IDS)) {
-    errors.push('legacy catalog is not the exact frozen 192-ID inventory');
-  }
-  const receiptIds = receipt?.legacyCatalogBaseline?.ids ?? [];
-  if (!arraysEqual(receiptIds, EXPECTED_LEGACY_IDS)) {
-    errors.push('receipt legacy baseline is not the exact frozen 192-ID inventory');
-  }
-  const snapshotPaths = Array.isArray(snapshot?.files)
-    ? snapshot.files.map(({ path }) => path).sort()
-    : [];
-  const expectedPaths = LEGACY_REALMS.map(({ path }) => path).sort();
-  if (!arraysEqual(snapshotPaths, expectedPaths)) {
-    errors.push('legacy source snapshot must contain exactly the 21 legacy realm files');
-  }
-
-  return actualIds;
-}
-
-function validateReceipt(receipt, errors) {
-  const successorIndex = new Map();
-  if (
-    !checkExactKeys(
-      receipt,
-      [
-        '$schema',
-        'schemaVersion',
-        'receiptType',
-        'verifiedAt',
-        'purpose',
-        'claims',
-        'verification',
-        'refresh',
-        'legacyCatalogBaseline',
-        'legacySourceSnapshot',
-        'authorities',
-        'integrity',
-      ],
-      [],
-      RECEIPT_PATH,
-      errors,
-    )
-  ) {
-    return successorIndex;
-  }
-
-  if (receipt.$schema !== './migration-verification-receipt.schema.json') {
-    errors.push(`${RECEIPT_PATH}: wrong schema reference`);
-  }
-  if (receipt.schemaVersion !== 1) errors.push(`${RECEIPT_PATH}: schemaVersion must be 1`);
-  if (receipt.receiptType !== 'dated-verification-evidence') {
-    errors.push(`${RECEIPT_PATH}: receiptType must label dated verification evidence`);
-  }
-  if (Number.isNaN(Date.parse(receipt.verifiedAt))) {
-    errors.push(`${RECEIPT_PATH}: verifiedAt must be an ISO date-time`);
-  }
-  checkNonEmptyString(receipt.purpose, `${RECEIPT_PATH}: purpose`, errors);
-
-  validateReceiptClaims(receipt.claims, errors);
-  validateReceiptVerification(receipt.verification, errors);
-  validateReceiptRefresh(receipt.refresh, errors);
-  validateLegacyReceiptSections(receipt, errors);
-
-  if (!Array.isArray(receipt.authorities)) {
-    errors.push(`${RECEIPT_PATH}: authorities must be an array`);
-  } else {
-    const seenAuthorities = new Set();
-    const seenSuccessorIds = new Set();
-    for (const authorityRecord of receipt.authorities) {
-      validateAuthorityRecord(authorityRecord, successorIndex, seenSuccessorIds, errors);
-      if (seenAuthorities.has(authorityRecord?.authority)) {
-        errors.push(`${RECEIPT_PATH}: duplicate authority "${authorityRecord.authority}"`);
-      }
-      seenAuthorities.add(authorityRecord?.authority);
-    }
-    if (!arraysEqual([...seenAuthorities].sort(), [...AUTHORITIES].sort())) {
-      errors.push(
-        `${RECEIPT_PATH}: must contain exactly Studio, Engineering, Product, and .github`,
-      );
-    }
-  }
-
-  validateReceiptIntegrity(receipt, errors);
-  return successorIndex;
-}
-
-function validateReceiptClaims(claims, errors) {
-  if (
-    !checkExactKeys(
-      claims,
-      ['normativeSource', 'provesRatification', 'authorizesLegacyDeletion'],
-      [],
-      `${RECEIPT_PATH}: claims`,
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (claims.normativeSource !== false) {
-    errors.push(`${RECEIPT_PATH}: receipt cannot be a normative source`);
-  }
-  if (claims.provesRatification !== false) {
-    errors.push(`${RECEIPT_PATH}: receipt cannot prove Ratification`);
-  }
-  if (claims.authorizesLegacyDeletion !== false) {
-    errors.push(`${RECEIPT_PATH}: receipt cannot authorize legacy deletion`);
-  }
-}
-
-function validateReceiptVerification(verification, errors) {
-  if (
-    !checkExactKeys(
-      verification,
-      ['sourceKind', 'retrieval', 'digestMethod', 'ledgerWasNotInput', 'liveCommand'],
-      [],
-      `${RECEIPT_PATH}: verification`,
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (verification.sourceKind !== 'pinned-authority-bytes') {
-    errors.push(`${RECEIPT_PATH}: verification must use pinned authority bytes`);
-  }
-  if (verification.ledgerWasNotInput !== true) {
-    errors.push(`${RECEIPT_PATH}: verification must be independent of the ledger`);
-  }
-  if (verification.liveCommand !== 'pnpm principles:verify-live') {
-    errors.push(`${RECEIPT_PATH}: live verification command is incorrect`);
-  }
-  checkNonEmptyString(verification.retrieval, `${RECEIPT_PATH}: retrieval`, errors);
-  checkNonEmptyString(verification.digestMethod, `${RECEIPT_PATH}: digestMethod`, errors);
-}
-
-function validateReceiptRefresh(refresh, errors) {
-  if (
-    !checkExactKeys(
-      refresh,
-      ['requiredWhen', 'procedure', 'offlineLimit'],
-      [],
-      `${RECEIPT_PATH}: refresh`,
-      errors,
-    )
-  ) {
-    return;
-  }
-  for (const field of ['requiredWhen', 'procedure', 'offlineLimit']) {
-    checkNonEmptyString(refresh[field], `${RECEIPT_PATH}: refresh.${field}`, errors);
-  }
-}
-
-function validateLegacyReceiptSections(receipt, errors) {
-  const baseline = receipt.legacyCatalogBaseline;
-  if (
-    checkExactKeys(
-      baseline,
-      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'ids'],
-      [],
-      `${RECEIPT_PATH}: legacyCatalogBaseline`,
-      errors,
-    )
-  ) {
-    if (baseline.repository !== 'jrmoulckers/studio') {
-      errors.push(`${RECEIPT_PATH}: legacy baseline repository is incorrect`);
-    }
-    if (baseline.commit !== BASELINE_COMMIT) {
-      errors.push(`${RECEIPT_PATH}: legacy baseline commit is incorrect`);
-    }
-    if (baseline.realmFiles !== 21 || baseline.topLevelPrinciples !== 192) {
-      errors.push(`${RECEIPT_PATH}: legacy baseline counts must be 21 files and 192 principles`);
-    }
-    checkStringArray(baseline.ids, `${RECEIPT_PATH}: legacy baseline IDs`, errors);
-  }
-
-  const snapshot = receipt.legacySourceSnapshot;
-  if (
-    checkExactKeys(
-      snapshot,
-      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'files'],
-      [],
-      `${RECEIPT_PATH}: legacySourceSnapshot`,
-      errors,
-    )
-  ) {
-    if (snapshot.repository !== 'jrmoulckers/studio') {
-      errors.push(`${RECEIPT_PATH}: legacy source repository is incorrect`);
-    }
-    if (snapshot.commit !== AUTHORITY_PINS.Studio.commit) {
-      errors.push(`${RECEIPT_PATH}: legacy source snapshot commit is incorrect`);
-    }
-    if (snapshot.realmFiles !== 21 || snapshot.topLevelPrinciples !== 192) {
-      errors.push(`${RECEIPT_PATH}: legacy snapshot counts must be 21 files and 192 principles`);
-    }
-    if (!Array.isArray(snapshot.files) || snapshot.files.length !== 21) {
-      errors.push(`${RECEIPT_PATH}: legacy snapshot must contain 21 file records`);
-    } else {
-      for (const record of snapshot.files) {
-        checkExactKeys(
-          record,
-          ['path', 'blobSha', 'sha256', 'topLevelIds'],
-          [],
-          `${RECEIPT_PATH}: legacy file`,
-          errors,
-        );
-        if (!SHA1.test(record.blobSha ?? '')) {
-          errors.push(`${RECEIPT_PATH}: ${record.path} has an invalid Git blob SHA`);
-        }
-        if (!SHA256.test(record.sha256 ?? '')) {
-          errors.push(`${RECEIPT_PATH}: ${record.path} has an invalid SHA-256`);
-        }
-        checkStringArray(record.topLevelIds, `${RECEIPT_PATH}: ${record.path} topLevelIds`, errors);
-      }
-    }
-  }
-}
-
-function validateAuthorityRecord(record, successorIndex, seenSuccessorIds, errors) {
-  const authority = record?.authority;
-  const label = `${RECEIPT_PATH}: ${authority ?? 'unknown authority'}`;
-  if (
-    !checkExactKeys(
-      record,
-      [
-        'authority',
-        'repository',
-        'commit',
-        'principleCount',
-        'draftCount',
-        'files',
-        'principles',
-        'catalogSha256',
-      ],
-      [],
-      label,
-      errors,
-    )
-  ) {
-    return;
-  }
-  const pin = AUTHORITY_PINS[authority];
-  if (!pin) {
-    errors.push(`${label}: unknown authority`);
-    return;
-  }
-  if (record.repository !== pin.repository) errors.push(`${label}: repository does not match pin`);
-  if (record.commit !== pin.commit) errors.push(`${label}: ${authority} commit does not match pin`);
-  if (record.principleCount !== pin.principleCount) {
-    errors.push(`${label}: principleCount must be ${pin.principleCount}`);
-  }
-  if (record.draftCount !== pin.principleCount) {
-    errors.push(`${label}: all ${pin.principleCount} successors must remain Draft`);
-  }
-  if (!SHA256.test(record.catalogSha256 ?? '')) {
-    errors.push(`${label}: invalid catalog digest`);
-  }
-
-  const files = Array.isArray(record.files) ? record.files : [];
-  const principles = Array.isArray(record.principles) ? record.principles : [];
-  if (!Array.isArray(record.files)) errors.push(`${label}: files must be an array`);
-  if (!Array.isArray(record.principles)) errors.push(`${label}: principles must be an array`);
-  const receiptPaths = files.map(({ path }) => path);
-  if (!arraysEqual(receiptPaths, [...receiptPaths].sort())) {
-    errors.push(`${label}: file records must be sorted by path`);
-  }
-  if (!arraysEqual(receiptPaths, pin.paths)) {
-    errors.push(`${label}: file paths do not match the pinned authority catalog`);
-  }
-
-  const fileIndex = new Map();
-  for (const file of files) {
-    checkExactKeys(
-      file,
-      ['path', 'blobSha', 'sha256', 'principleCount'],
-      [],
-      `${label}: file record`,
-      errors,
-    );
-    if (fileIndex.has(file.path)) errors.push(`${label}: duplicate file path ${file.path}`);
-    fileIndex.set(file.path, file);
-    if (!SHA1.test(file.blobSha ?? '')) errors.push(`${label}: ${file.path} invalid Git blob SHA`);
-    if (!SHA256.test(file.sha256 ?? '')) errors.push(`${label}: ${file.path} invalid SHA-256`);
-    if (!Number.isInteger(file.principleCount) || file.principleCount < 1) {
-      errors.push(`${label}: ${file.path} principleCount must be a positive integer`);
-    }
-  }
-
+function validateStudioSemanticContinuity(principles, errors) {
   for (const principle of principles) {
-    checkExactKeys(
-      principle,
-      ['id', 'path', 'title', 'status', 'legacyInputs', 'blobSha', 'fileSha256', 'blockSha256'],
-      [],
-      `${label}: principle record`,
-      errors,
-    );
-    if (!AUTHORITY_ID[authority].test(principle.id ?? '')) {
-      errors.push(`${label}: malformed successor ID ${principle.id}`);
-    }
-    if (seenSuccessorIds.has(principle.id)) {
-      errors.push(`${label}: duplicate successor ID ${principle.id}`);
-    }
-    seenSuccessorIds.add(principle.id);
-    checkNonEmptyString(principle.title, `${label}: ${principle.id} title`, errors);
-    if (principle.status !== 'Draft') {
-      errors.push(`${label}: ${principle.id} must remain Draft`);
-    }
-    if (!SHA1.test(principle.blobSha ?? '')) {
-      errors.push(`${label}: ${principle.id} invalid Git blob SHA`);
-    }
-    if (!SHA256.test(principle.fileSha256 ?? '')) {
-      errors.push(`${label}: ${principle.id} invalid file SHA-256`);
-    }
-    if (!SHA256.test(principle.blockSha256 ?? '')) {
-      errors.push(`${label}: ${principle.id} invalid block SHA-256`);
-    }
-    checkStringArray(principle.legacyInputs, `${label}: ${principle.id} Legacy inputs`, errors, {
-      allowEmpty: true,
-    });
-    if (!arraysEqual(principle.legacyInputs ?? [], [...(principle.legacyInputs ?? [])].sort())) {
-      errors.push(`${label}: ${principle.id} Legacy inputs must be sorted`);
-    }
-    for (const legacyId of principle.legacyInputs ?? []) {
-      if (!EXPECTED_LEGACY_ID_SET.has(legacyId)) {
-        errors.push(`${label}: ${principle.id} cites unknown legacy ID ${legacyId}`);
-      }
-    }
-    const file = fileIndex.get(principle.path);
-    if (!file) {
-      errors.push(`${label}: ${principle.id} references unknown path ${principle.path}`);
-    } else if (principle.blobSha !== file.blobSha || principle.fileSha256 !== file.sha256) {
-      errors.push(`${label}: ${principle.id} file digests do not match ${principle.path}`);
-    }
-    successorIndex.set(`${authority}:${principle.id}`, {
-      ...principle,
-      authority,
-      repository: record.repository,
-      commit: record.commit,
-    });
-  }
-
-  for (const file of files) {
-    const actualCount = principles.filter(({ path }) => path === file.path).length;
-    if (file.principleCount !== actualCount) {
-      errors.push(`${label}: ${file.path} principleCount does not match its records`);
-    }
-  }
-  if (principles.length !== pin.principleCount || record.principleCount !== principles.length) {
-    errors.push(`${label}: successor catalog count does not match its records`);
-  }
-  if (record.draftCount !== principles.filter(({ status }) => status === 'Draft').length) {
-    errors.push(`${label}: draftCount does not match successor statuses`);
-  }
-  const catalogDigest = sha256(JSON.stringify({ files, principles }));
-  if (record.catalogSha256 !== catalogDigest) {
-    errors.push(`${label}: catalog digest does not match receipt records`);
-  }
-  if (record.catalogSha256 !== pin.catalogSha256) {
-    errors.push(`${label}: catalog digest does not match the independent pin`);
-  }
-}
-
-function validateReceiptIntegrity(receipt, errors) {
-  if (
-    !checkExactKeys(
-      receipt.integrity,
-      ['algorithm', 'digest'],
-      [],
-      `${RECEIPT_PATH}: integrity`,
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (receipt.integrity.algorithm !== 'sha256') {
-    errors.push(`${RECEIPT_PATH}: integrity algorithm must be sha256`);
-  }
-  const unsigned = structuredClone(receipt);
-  delete unsigned.integrity;
-  const actualDigest = sha256(JSON.stringify(unsigned));
-  if (receipt.integrity.digest !== actualDigest) {
-    errors.push(`${RECEIPT_PATH}: integrity digest does not match receipt content`);
-  }
-  if (receipt.integrity.digest !== RECEIPT_INTEGRITY_PIN) {
-    errors.push(`${RECEIPT_PATH}: integrity digest does not match the independent pin`);
-  }
-}
-
-function validateLedger(ledger, legacyIds, errors) {
-  const legacyIdSet = new Set(legacyIds);
-  if (
-    !checkExactKeys(
-      ledger,
-      ['$schema', 'schemaVersion', 'baseline', 'entries'],
-      [],
-      'principles/migration-ledger.json',
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (ledger.$schema !== './migration-ledger.schema.json') {
-    errors.push('principles/migration-ledger.json: wrong schema reference');
-  }
-  if (ledger.schemaVersion !== 1) {
-    errors.push('principles/migration-ledger.json: schemaVersion must be 1');
-  }
-  validateLedgerBaseline(ledger.baseline, errors);
-  if (!isObject(ledger.entries)) {
-    errors.push('principles/migration-ledger.json: entries must be an object');
-    return;
-  }
-
-  const entryIds = Object.keys(ledger.entries);
-  if (entryIds.length !== 192) {
-    errors.push(`ledger must contain exactly 192 entries (found ${entryIds.length})`);
-  }
-  for (const legacyId of entryIds) {
-    if (!legacyIdSet.has(legacyId)) errors.push(`ledger contains unknown legacy ID ${legacyId}`);
-  }
-  for (const legacyId of legacyIds) {
-    if (!(legacyId in ledger.entries)) errors.push(`ledger is missing legacy ID ${legacyId}`);
-  }
-
-  for (const [legacyId, entry] of Object.entries(ledger.entries)) {
-    validateLedgerEntry(legacyId, entry, errors);
-  }
-}
-
-function validateLedgerBaseline(baseline, errors) {
-  if (
-    !checkExactKeys(
-      baseline,
-      ['repository', 'commit', 'realmFiles', 'topLevelPrinciples', 'idFormat'],
-      [],
-      'ledger baseline',
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (baseline.repository !== 'https://github.com/jrmoulckers/studio') {
-    errors.push('ledger baseline repository is incorrect');
-  }
-  if (baseline.commit !== BASELINE_COMMIT) errors.push('ledger baseline commit is incorrect');
-  if (baseline.realmFiles !== 21 || baseline.topLevelPrinciples !== 192) {
-    errors.push('ledger baseline counts must be 21 files and 192 principles');
-  }
-  if (baseline.idFormat !== 'studio-legacy:<realm-file-slug>:<top-level-number>') {
-    errors.push('ledger baseline ID format is incorrect');
-  }
-}
-
-function validateLedgerEntry(legacyId, entry, errors) {
-  const label = `ledger ${legacyId}`;
-  if (
-    !checkExactKeys(
-      entry,
-      ['disposition', 'successors', 'status', 'rationale', 'evidence', 'owner'],
-      ['retirementCategory', 'citationException'],
-      label,
-      errors,
-    )
-  ) {
-    return;
-  }
-  if (!DISPOSITIONS.has(entry.disposition)) {
-    errors.push(`${label}: unknown disposition "${entry.disposition}"`);
-  }
-  if (!LEDGER_STATUSES.has(entry.status)) errors.push(`${label}: unknown status "${entry.status}"`);
-  checkNonEmptyString(entry.rationale, `${label}: rationale`, errors);
-  checkStringArray(entry.evidence, `${label}: evidence`, errors);
-  if (entry.owner !== 'repository owner') errors.push(`${label}: owner must be repository owner`);
-  if (!Array.isArray(entry.successors)) {
-    errors.push(`${label}: successors must be an array`);
-    return;
-  }
-
-  const successorKeys = new Set();
-  for (const successor of entry.successors) {
-    if (!checkExactKeys(successor, ['authority', 'id'], [], `${label}: successor`, errors)) {
-      continue;
-    }
-    if (!AUTHORITY_SET.has(successor.authority)) {
-      errors.push(`${label}: unknown successor authority "${successor.authority}"`);
-      continue;
-    }
-    if (!AUTHORITY_ID[successor.authority].test(successor.id ?? '')) {
-      errors.push(`${label}: malformed ${successor.authority} successor ID "${successor.id}"`);
-    }
-    const key = `${successor.authority}:${successor.id}`;
-    if (successorKeys.has(key)) errors.push(`${label}: duplicate successor ${key}`);
-    successorKeys.add(key);
-  }
-
-  if (['rewrite', 'reference'].includes(entry.disposition) && entry.successors.length !== 1) {
-    errors.push(`${label}: ${entry.disposition} requires exactly one successor`);
-  }
-  if (entry.disposition === 'split' && entry.successors.length < 2) {
-    errors.push(`${label}: split requires at least two successors`);
-  }
-  if (entry.disposition === 'retire' && entry.successors.length !== 0) {
-    errors.push(`${label}: retire requires zero successors`);
-  }
-
-  if (entry.disposition === 'retire') {
-    if (!RETIREMENT_CATEGORIES.has(entry.retirementCategory)) {
-      errors.push(`${label}: retire requires a recognized retirementCategory`);
-    }
-    if ('citationException' in entry) {
-      errors.push(`${label}: retire cannot have a citationException`);
-    }
-    const sourceEvidence = entry.evidence.some((value) =>
-      value.includes(`/studio/blob/${AUTHORITY_PINS.Studio.commit}/principles/`),
-    );
-    if (!sourceEvidence) errors.push(`${label}: retirement must preserve pinned source evidence`);
-  } else if ('retirementCategory' in entry) {
-    errors.push(`${label}: only retire may set retirementCategory`);
-  }
-
-  if ('citationException' in entry) validateCitationException(legacyId, entry, errors);
-}
-
-function validateCitationException(legacyId, entry, errors) {
-  const label = `ledger ${legacyId}: citationException`;
-  const exception = entry.citationException;
-  if (!checkExactKeys(exception, ['kind', 'reason', 'evidence'], [], label, errors)) {
-    return;
-  }
-  if (entry.disposition !== 'reference' || entry.successors.length !== 1) {
-    errors.push(`${label}: allowed only for a single-successor reference`);
-  }
-  if (entry.successors[0]?.authority === 'Studio') {
-    errors.push(`${label}: allowed only for externally verified ownership`);
-  }
-  if (exception.kind !== 'externally-verified-ownership') {
-    errors.push(`${label}: kind must be externally-verified-ownership`);
-  }
-  checkNonEmptyString(exception.reason, `${label}: reason`, errors);
-  checkStringArray(exception.evidence, `${label}: evidence`, errors);
-}
-
-function validateReciprocity(ledger, successorIndex, errors) {
-  const mappedSuccessors = new Set();
-  for (const [legacyId, entry] of Object.entries(ledger.entries ?? {})) {
-    for (const successor of entry.successors ?? []) {
-      const successorKey = `${successor.authority}:${successor.id}`;
-      const principle = successorIndex.get(successorKey);
-      if (!principle) {
-        errors.push(`${legacyId}: unknown successor ${successorKey}`);
-        continue;
-      }
-      mappedSuccessors.add(successorKey);
-      const citesLegacy = principle.legacyInputs.includes(legacyId);
-      if (!citesLegacy && !entry.citationException) {
-        errors.push(`${legacyId}: ${successorKey} does not cite the legacy ID`);
-      }
-      if (citesLegacy && entry.citationException) {
-        errors.push(
-          `${legacyId}: citationException is unnecessary because ${successorKey} cites it`,
-        );
-      }
-      const sourceUrl = `https://github.com/${principle.repository}/blob/${principle.commit}/${principle.path}`;
-      if (!entry.evidence.includes(RECEIPT_PATH) || !entry.evidence.includes(sourceUrl)) {
-        errors.push(
-          `${legacyId}: evidence must include the receipt and pinned source for ${successorKey}`,
-        );
-      }
-      if (entry.citationException && !entry.citationException.evidence.includes(sourceUrl)) {
-        errors.push(
-          `${legacyId}: citationException must cite the pinned source for ${successorKey}`,
-        );
-      }
-      if (principle.status === 'Draft' && entry.status !== 'proposed') {
-        errors.push(`${legacyId}: a Draft successor cannot advance the disposition past proposed`);
-      }
-    }
-  }
-
-  for (const principle of successorIndex.values()) {
-    for (const legacyId of principle.legacyInputs) {
-      if (!(legacyId in (ledger.entries ?? {}))) {
-        errors.push(
-          `${principle.authority}:${principle.id} cites legacy ID ${legacyId} without a disposition`,
-        );
-      }
-    }
-  }
-  return mappedSuccessors;
-}
-
-function validateLocalStudioReceipt(localCatalog, receipt, errors) {
-  const studio = receipt.authorities?.find(({ authority }) => authority === 'Studio');
-  if (!studio) return;
-
-  const receiptPrinciples = new Map(
-    studio.principles.map((principle) => [principle.id, principle]),
-  );
-  const localPrinciples = new Map(
-    localCatalog.principles.map((principle) => [principle.id, principle]),
-  );
-
-  if (!arraysEqual([...receiptPrinciples.keys()].sort(), [...localPrinciples.keys()].sort())) {
-    errors.push('local Studio successor IDs do not match the pinned receipt catalog');
-    return;
-  }
-
-  for (const [id, receiptPrinciple] of receiptPrinciples) {
-    const localPrinciple = localPrinciples.get(id);
-    if (localPrinciple.path !== receiptPrinciple.path) {
-      errors.push(`${id}: path "${localPrinciple.path}" does not match the pinned receipt`);
-    }
-    if (localPrinciple.title !== receiptPrinciple.title) {
-      errors.push(`${id}: title does not match the pinned receipt`);
-    }
-    if (!arraysEqual(localPrinciple.legacyInputs, receiptPrinciple.legacyInputs)) {
-      errors.push(`${id}: Legacy inputs do not match the pinned receipt`);
-    }
-
-    const receiptStatus = receiptPrinciple.status; // always "Draft": the receipt is unrefreshed.
-    const localStatus = localPrinciple.status;
-    if (localStatus === receiptStatus) {
-      // Nothing is claimed to have changed for this principle: its own block must be identical.
-      if (localPrinciple.blockSha256 !== receiptPrinciple.blockSha256) {
-        errors.push(`${id}: content changed from the pinned receipt with no Status transition`);
-      }
-    } else if (receiptStatus === 'Draft' && localStatus === 'Ratified') {
-      // The only permitted transition. Content equivalence (besides Status) is proven by the
-      // independent status-excluded content pin, cross-checked in validateStudioStatuses;
-      // nothing further to compare against the (intentionally unrefreshed) receipt bytes here.
-      continue;
-    } else {
+    const pin = STUDIO_SEMANTIC_CONTENT_PIN[principle.id];
+    if (!pin) {
+      errors.push(`${principle.id}: no independent status-excluded content pin is recorded`);
+    } else if (principle.semanticSha256 !== pin) {
       errors.push(
-        `${id}: Status transition from receipt-pinned "${receiptStatus}" to local "${localStatus}" is not permitted`,
+        `${principle.id}: content changed beyond the Status field (status-excluded content digest mismatch)`,
       );
     }
   }
 }
 
-function buildCatalogFromSources(authority, sourceFiles) {
-  const files = [];
-  const principles = [];
-  const orderedSources = [...sourceFiles].sort((left, right) =>
-    left.path.localeCompare(right.path),
-  );
-  for (const { path, buffer, blobSha: suppliedBlobSha } of orderedSources) {
-    const blobSha = suppliedBlobSha ?? gitBlobSha(buffer);
-    const fileSha256 = sha256(buffer);
-    const parsed = parseAuthorityPrinciples(
-      authority,
-      buffer.toString('utf8'),
-      path,
-      blobSha,
-      fileSha256,
-    );
-    files.push({
-      path,
-      blobSha,
-      sha256: fileSha256,
-      principleCount: parsed.length,
-    });
-    principles.push(...parsed);
-  }
-  return {
-    files,
-    principles,
-    catalogSha256: sha256(JSON.stringify({ files, principles })),
-  };
-}
-
-function parseAuthorityPrinciples(authority, text, path, blobSha, fileSha256) {
-  let heading;
-  if (authority === 'Studio') {
-    heading = /^### (STUDIO-[A-Z0-9]+-\d{3}) — (.+)$/gm;
-  } else if (authority === 'Engineering') {
-    heading = /^## (.+)$/gm;
-  } else if (authority === 'Product') {
-    heading = /^## (PROD-[A-Z0-9]+-\d{3}): (.+)$/gm;
-  } else {
-    heading = /^## (GH-[A-Z0-9]+-\d{3}) — (.+)$/gm;
-  }
-
-  const matches = [...text.matchAll(heading)];
-  return matches.map((match, index) => {
-    const block = text.slice(match.index, matches[index + 1]?.index ?? text.length);
-    const id =
-      authority === 'Engineering' ? metadataValue(block, authority, 'ID') : match[1].trim();
-    const title = authority === 'Engineering' ? match[1].trim() : match[2].trim();
-    const status = metadataValue(block, authority, 'Status');
-    const legacyInputs = normalizeLegacyInputs(
-      authority,
-      metadataValue(block, authority, 'Legacy inputs'),
-    );
-    return {
-      id,
-      path,
-      title,
-      status,
-      legacyInputs,
-      blobSha,
-      fileSha256,
-      blockSha256: sha256(block),
-    };
-  });
-}
-
-function metadataValue(block, authority, field) {
-  const marker = authority === 'Engineering' ? `- ${field}:` : `- **${field}:**`;
-  const lines = block.split(/\r?\n/);
-  const index = lines.findIndex((line) => line.startsWith(marker));
-  if (index === -1) return '';
-  const chunks = [lines[index].slice(marker.length).trim()];
-  for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
-    const line = lines[cursor];
-    if (!/^\s{2,}\S/.test(line) || /^\s*-\s/.test(line)) break;
-    chunks.push(line.trim());
-  }
-  return chunks.filter(Boolean).join(' ');
-}
-
-function normalizeLegacyInputs(authority, raw) {
-  if (!raw || raw === 'none') return [];
-  const ids = [];
-  let matcher;
-  if (authority === 'Studio') {
-    matcher = /([a-z0-9-]+)#(\d+)/g;
-    for (const match of raw.matchAll(matcher)) {
-      ids.push(`studio-legacy:${match[1]}:${Number(match[2])}`);
+function validateStudioPreambles(sourceFiles, localStatus, errors) {
+  for (const { path, buffer } of sourceFiles) {
+    const text = buffer.toString('utf8');
+    const firstHeading = text.search(/^### STUDIO-/m);
+    const preamble = firstHeading === -1 ? text : text.slice(0, firstHeading);
+    if (localStatus !== 'mixed' && !preamble.includes(STUDIO_RATIFICATION_BANNER)) {
+      errors.push(`${path}: preamble does not carry the Ratification banner`);
+      continue;
     }
-  } else if (authority === '.github') {
-    matcher = /([a-z0-9-]+)\.md\s+§(\d+)(?:\.\d+)*/g;
-    for (const match of raw.matchAll(matcher)) {
-      ids.push(`studio-legacy:${match[1]}:${Number(match[2])}`);
+    for (const { pattern, message } of STUDIO_PREAMBLE_FORBIDDEN_CLAIMS) {
+      if (pattern.test(preamble)) {
+        errors.push(`${path}: preamble makes a superseded migration claim: ${message}`);
+      }
     }
-  } else {
-    matcher = /studio-legacy:[a-z0-9-]+:\d+/g;
-    ids.push(...(raw.match(matcher) ?? []));
+    const normalized = preamble.replace(
+      STUDIO_RATIFICATION_BANNER,
+      '> **Ratification:** <normalized>',
+    );
+    if (sha256(normalized) !== STUDIO_PREAMBLE_CONTENT_PIN[path]) {
+      errors.push(`${path}: preamble content changed beyond the Ratification banner`);
+    }
   }
-  return sortedUnique(ids);
 }
 
-function validateState({
-  ledger,
-  receipt,
-  ledgerRaw,
-  receiptRaw,
-  checkLocalSources,
-  studioFileOverrides = new Map(),
-  ratificationOverrideText,
-}) {
-  const errors = [
-    ...findDuplicateJsonKeys(ledgerRaw, 'principles/migration-ledger.json'),
-    ...findDuplicateJsonKeys(receiptRaw, RECEIPT_PATH),
+function validateRatificationRecord(sources, finalReceipt, errors) {
+  const buffer = sources.read(RATIFICATION_RECORD_PATH);
+  if (buffer === null) {
+    errors.push(
+      `Status: Ratified requires an owner-effective Ratification record at ${RATIFICATION_RECORD_PATH}`,
+    );
+    return;
+  }
+  const text = buffer.toString('utf8');
+  const normalized = normalizeWhitespace(text);
+  for (const phrase of RATIFICATION_REQUIRED_PHRASES) {
+    if (!normalized.includes(normalizeWhitespace(phrase))) {
+      errors.push(`${RATIFICATION_RECORD_PATH}: missing required statement "${phrase}"`);
+    }
+  }
+  for (const { pattern, message } of RATIFICATION_FORBIDDEN_CLAIMS) {
+    if (pattern.test(normalized)) {
+      errors.push(`${RATIFICATION_RECORD_PATH}: forbidden claim: ${message}`);
+    }
+  }
+
+  const pin = FINAL_AUTHORITY_PINS.Studio;
+  if (gitBlobSha(buffer) !== pin.decisionBlobSha || sha256(buffer) !== pin.decisionSha256) {
+    errors.push(
+      `${RATIFICATION_RECORD_PATH}: bytes differ from the owner-merged decision record pinned at ${pin.commit}`,
+    );
+  }
+
+  const scopeIds = extractDecisionScopeIds(text, 'Studio');
+  const expected = STUDIO_FILES.flatMap(({ ids }) => ids).sort();
+  if (!arraysEqual(scopeIds, expected)) {
+    errors.push(
+      `${RATIFICATION_RECORD_PATH}: scope must list exactly the ${expected.length} Studio successor IDs, no more, no fewer`,
+    );
+  }
+  const decision = finalReceipt?.authorities?.find(
+    ({ authority }) => authority === 'Studio',
+  )?.decision;
+  if (decision && !arraysEqual(scopeIds, [...(decision.scopeIds ?? [])].sort())) {
+    errors.push(
+      `${RATIFICATION_RECORD_PATH}: scope disagrees with the authenticated receipt scope`,
+    );
+  }
+}
+
+function validateLocalStudioAgainstReceipt(localCatalog, finalReceipt, errors) {
+  const studio = finalReceipt?.authorities?.find(({ authority }) => authority === 'Studio');
+  if (!studio || !Array.isArray(studio.principles)) return 0;
+
+  const receiptById = new Map(studio.principles.map((principle) => [principle.id, principle]));
+  const localById = new Map(localCatalog.principles.map((principle) => [principle.id, principle]));
+  if (!arraysEqual([...localById.keys()].sort(), [...receiptById.keys()].sort())) {
+    errors.push('local Studio successor IDs do not match the Ratified receipt catalog');
+    return 0;
+  }
+
+  for (const [id, receiptPrinciple] of receiptById) {
+    const local = localById.get(id);
+    if (local.path !== receiptPrinciple.path) {
+      errors.push(`${id}: path "${local.path}" does not match the Ratified receipt`);
+    }
+    if (local.title !== receiptPrinciple.title) {
+      errors.push(`${id}: title does not match the Ratified receipt`);
+    }
+    if (local.status !== receiptPrinciple.status) {
+      errors.push(`${id}: local Status "${local.status}" does not match the Ratified receipt`);
+    }
+    if (!arraysEqual(local.legacyInputs, receiptPrinciple.legacyInputs)) {
+      errors.push(`${id}: Legacy inputs do not match the Ratified receipt`);
+    }
+    if (local.blockSha256 !== receiptPrinciple.blockSha256) {
+      errors.push(`${id}: principle block does not match the Ratified receipt bytes`);
+    }
+    if (local.semanticSha256 !== receiptPrinciple.semanticSha256) {
+      errors.push(`${id}: status-normalized semantics do not match the Ratified receipt`);
+    }
+  }
+
+  if (contentCatalogSha256(localCatalog.principles) !== contentCatalogSha256(studio.principles)) {
+    errors.push('local Studio catalog records do not match the Ratified receipt catalog');
+  }
+  if (localCatalog.semanticCatalogSha256 !== studio.semanticCatalogSha256) {
+    errors.push('local Studio semantic catalog digest does not match the Ratified receipt');
+  }
+  for (const file of studio.files) {
+    const localFile = localCatalog.files.find(({ path }) => path === file.path);
+    if (localFile?.principleCount !== file.principleCount) {
+      errors.push(`${file.path}: local principle count does not match the Ratified receipt`);
+    }
+  }
+  // A local file may differ from the pinned commit only outside its principle blocks: every block
+  // digest above is pinned by the receipt and every preamble is pinned independently, so the two
+  // pins together cover every byte of all seven files.
+  return studio.files.filter(
+    (file) => localCatalog.files.find(({ path }) => path === file.path)?.sha256 !== file.sha256,
+  ).length;
+}
+
+// ---------------------------------------------------------------------------
+// Deletion state and link safety
+// ---------------------------------------------------------------------------
+
+function validateDeletionState(sources, historicalReceipt, finalReceipt, errors) {
+  for (const path of FROZEN_LEGACY_PATHS) {
+    if (sources.exists(path)) {
+      errors.push(`${path}: a frozen legacy realm file must be absent after finalization`);
+    }
+  }
+  for (const path of PROTECTED_PATHS) {
+    if (!sources.exists(path)) {
+      errors.push(`${path}: a protected successor or evidence file must remain present`);
+    }
+  }
+
+  const inventories = [
+    [`${FINAL_RECEIPT_PATH}: deletion inventory`, finalReceipt?.deletion?.frozenLegacyPaths],
+    [
+      `${FINAL_RECEIPT_PATH}: legacy source snapshot`,
+      finalReceipt?.historicalEvidence?.legacySourceSnapshot?.files?.map(({ path }) => path).sort(),
+    ],
+    [
+      `${HISTORICAL_RECEIPT_PATH}: legacy source snapshot`,
+      historicalReceipt?.legacySourceSnapshot?.files?.map(({ path }) => path).sort(),
+    ],
   ];
-  const legacyIds = checkLocalSources
-    ? validateLegacyCatalog(receipt, errors)
-    : EXPECTED_LEGACY_IDS;
-  const localStudio = checkLocalSources
-    ? validateStudioTree(errors, { fileOverrides: studioFileOverrides, ratificationOverrideText })
-    : null;
-  const successorIndex = validateReceipt(receipt, errors);
-  validateLedger(ledger, legacyIds, errors);
-  const mappedSuccessors = validateReciprocity(ledger, successorIndex, errors);
-  if (localStudio) validateLocalStudioReceipt(localStudio, receipt, errors);
-  return {
-    errors,
-    summary: summarizeLedger(ledger, successorIndex, mappedSuccessors),
-    localStudioStatus: localStudio?.localStatus ?? null,
-  };
+  for (const [label, inventory] of inventories) {
+    if (!arraysEqual(inventory, FROZEN_LEGACY_PATHS)) {
+      errors.push(`${label} does not match the frozen 21-path deletion set`);
+    }
+  }
+  return FROZEN_LEGACY_PATHS.filter((path) => !sources.exists(path)).length;
 }
 
-function summarizeLedger(ledger, successorIndex, mappedSuccessors) {
+function validatePrincipleAuthoringSurface(sources, errors) {
+  const actualInventory = sources
+    .listFiles()
+    .filter((path) => path.startsWith('principles/'))
+    .sort();
+  if (!arraysEqual(actualInventory, PRINCIPLES_FILE_INVENTORY)) {
+    errors.push(
+      'principles/ must contain exactly the pinned Studio authority and migration-evidence files; undeclared realm surfaces are forbidden',
+    );
+  }
+
+  const actualRootMarkdown = sources
+    .listFiles()
+    .filter((path) => /^principles\/[^/]+\.md$/.test(path))
+    .sort();
+  if (!arraysEqual(actualRootMarkdown, PRINCIPLES_ROOT_MARKDOWN)) {
+    errors.push(
+      'principles root must contain exactly the final governance records and proposal template; top-level realm files are forbidden',
+    );
+  }
+
+  const template = sources.read(PRINCIPLE_TEMPLATE_PATH);
+  if (template === null) return;
+  const text = template.toString('utf8');
+  const normalized = normalizeWhitespace(text.replace(/^>\s?/gm, ''));
+  for (const phrase of PRINCIPLE_TEMPLATE_REQUIRED_PHRASES) {
+    if (!normalized.includes(normalizeWhitespace(phrase))) {
+      errors.push(`${PRINCIPLE_TEMPLATE_PATH}: missing required authoring rule "${phrase}"`);
+    }
+  }
+}
+
+const MARKDOWN_LINK = /!?\[[^\]]*\]\(\s*<?([^>)\s]+)>?(?:\s+["'][^"']*["'])?\s*\)/g;
+const MARKDOWN_REFERENCE = /^[ \t]*\[[^\]]+\]:[ \t]+<?([^>\s]+)>?/gm;
+const HTML_TARGET = /\b(?:href|src)\s*=\s*["']([^"']+)["']/g;
+const LIVE_BLOB_URL = new RegExp(
+  'https?://github\\.com/jrmoulckers/studio/(?:blob|tree|raw)/(?:main|master|HEAD)/(principles/[A-Za-z0-9._/-]+\\.md)',
+  'g',
+);
+const LEGACY_SLUG_PATTERN = new RegExp(
+  `(?<![A-Za-z0-9._/-])((?:\\.{1,2}/)*(?:[A-Za-z0-9._-]+/)*(?:${LEGACY_REALMS.map(({ slug }) => slug).join('|')})\\.md)(?![A-Za-z0-9-])`,
+  'g',
+);
+const PINNED_COMMIT_URL = /https?:\/\/github\.com\/[^\s)]+\/blob\/[0-9a-f]{40}\//;
+
+function resolveRepoPath(fromFile, target) {
+  const cleaned = target.split('#')[0].split('?')[0].trim();
+  if (cleaned.length === 0) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(cleaned)) return null;
+  const base = cleaned.startsWith('/')
+    ? cleaned.slice(1)
+    : posix.join(posix.dirname(fromFile), cleaned);
+  const normalized = posix.normalize(base);
+  return normalized.startsWith('..') ? null : normalized;
+}
+
+/** Repo-wide guard: no live link, path, or instruction may resolve to a deleted realm file. */
+function validateLinkSafety(sources, errors) {
+  let scanned = 0;
+  for (const path of sources.listFiles()) {
+    // The negative fixtures deliberately carry adversarial payloads; they are test data, never
+    // an instruction surface, and each payload is proven to fail by the fixture that owns it.
+    if (path === FIXTURES_PATH) continue;
+    const name = path.slice(path.lastIndexOf('/') + 1);
+    const dot = name.lastIndexOf('.');
+    const extension = dot > 0 ? name.slice(dot) : '';
+    if (!SCANNED_EXTENSIONS.has(extension)) continue;
+    const buffer = sources.read(path);
+    if (buffer === null) continue;
+    const text = buffer.toString('utf8');
+    scanned += 1;
+
+    for (const [, target] of text.matchAll(LIVE_BLOB_URL)) {
+      if (FROZEN_LEGACY_PATH_SET.has(target)) {
+        errors.push(`${path}: a live branch URL still resolves to the deleted ${target}`);
+      }
+    }
+    if (extension !== '.md' && extension !== '.mdx') continue;
+
+    for (const pattern of [MARKDOWN_LINK, MARKDOWN_REFERENCE, HTML_TARGET]) {
+      pattern.lastIndex = 0;
+      for (const [, target] of text.matchAll(pattern)) {
+        const resolved = resolveRepoPath(path, target);
+        if (resolved && FROZEN_LEGACY_PATH_SET.has(resolved)) {
+          errors.push(`${path}: Markdown link resolves to the deleted legacy path ${resolved}`);
+        }
+      }
+    }
+
+    let fenced = false;
+    text.split(/\r?\n/).forEach((line, offset) => {
+      if (/^\s*(?:```|~~~)/.test(line)) {
+        fenced = !fenced;
+        return;
+      }
+      if (fenced) return; // Inert fenced inventories are history, not instructions.
+      if (line.includes('studio-legacy:') || PINNED_COMMIT_URL.test(line)) return;
+      LEGACY_SLUG_PATTERN.lastIndex = 0;
+      for (const [, token] of line.matchAll(LEGACY_SLUG_PATTERN)) {
+        const resolved = token.startsWith('principles/')
+          ? posix.normalize(token)
+          : resolveRepoPath(path, token);
+        if (resolved && FROZEN_LEGACY_PATH_SET.has(resolved)) {
+          errors.push(
+            `${path}:${offset + 1}: live reference to the deleted legacy path ${resolved}`,
+          );
+        }
+      }
+    });
+  }
+  return scanned;
+}
+
+function validateSchemaFiles(schemas, errors) {
+  for (const [label, schema] of schemas) {
+    if (!isObject(schema)) {
+      errors.push(`${label}: must be a JSON Schema object`);
+      continue;
+    }
+    if (schema.$schema !== 'https://json-schema.org/draft/2020-12/schema') {
+      errors.push(`${label}: must use JSON Schema draft 2020-12`);
+    }
+    if (schema.type !== 'object' || !isObject(schema.properties) || !isObject(schema.$defs)) {
+      errors.push(`${label}: root object contract is incomplete`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Whole-state validation
+// ---------------------------------------------------------------------------
+
+function validateState(state) {
+  const { ledger, ledgerRaw, historical, historicalRaw, final, finalRaw, sources } = state;
+  const errors = [
+    ...findDuplicateJsonKeys(ledgerRaw, LEDGER_PATH),
+    ...findDuplicateJsonKeys(historicalRaw, HISTORICAL_RECEIPT_PATH),
+    ...findDuplicateJsonKeys(finalRaw, FINAL_RECEIPT_PATH),
+  ];
+
+  const historicalIndex = validateHistoricalReceipt(historical, errors);
+  const finalIndex = validateFinalReceipt(final, historical, errors);
+  validateLedger(ledger, errors);
+  const mappedSuccessors = validateReciprocity(ledger, finalIndex, historicalIndex, errors);
+  const localStudio = validateStudioTree(sources, final, errors);
+  const deletedCount = validateDeletionState(sources, historical, final, errors);
+  validatePrincipleAuthoringSurface(sources, errors);
+  const scannedFiles = validateLinkSafety(sources, errors);
+
+  const summary = summarize(ledger, finalIndex, mappedSuccessors, deletedCount, scannedFiles);
+  summary.preambleUpdatedFiles = localStudio?.preambleUpdatedFiles ?? 0;
+  checkLedgerTotals(summary, errors);
+  return { errors, summary, localStudioStatus: localStudio?.localStatus ?? null };
+}
+
+function summarize(ledger, finalIndex, mappedSuccessors, deletedCount, scannedFiles) {
   const dispositions = Object.fromEntries([...DISPOSITIONS].map((value) => [value, 0]));
   const destinations = Object.fromEntries(AUTHORITIES.map((value) => [value, 0]));
+  const statuses = new Set();
   let links = 0;
   let citationExceptions = 0;
-  for (const entry of Object.values(ledger.entries ?? {})) {
+  let retirements = 0;
+  for (const entry of Object.values(ledger?.entries ?? {})) {
     if (entry.disposition in dispositions) dispositions[entry.disposition] += 1;
+    if (entry.disposition === 'retire') retirements += 1;
     if (entry.citationException) citationExceptions += 1;
+    statuses.add(entry.status);
     for (const successor of entry.successors ?? []) {
       links += 1;
       if (successor.authority in destinations) destinations[successor.authority] += 1;
     }
   }
-  const draftCatalog = [...successorIndex.values()].filter(
-    ({ status }) => status === 'Draft',
-  ).length;
-  const mappedDraft = [...mappedSuccessors].filter(
-    (key) => successorIndex.get(key)?.status === 'Draft',
-  ).length;
   return {
-    entries: Object.keys(ledger.entries ?? {}).length,
+    entries: Object.keys(ledger?.entries ?? {}).length,
+    statuses: [...statuses].sort(),
     dispositions,
     destinations,
     links,
     citationExceptions,
+    retirements,
     uniqueMappedSuccessors: mappedSuccessors.size,
-    draftCatalog,
-    mappedDraft,
+    ratifiedCatalog: [...finalIndex.values()].filter(({ status }) => status === 'Ratified').length,
+    deletedCount,
+    scannedFiles,
   };
 }
 
-function runNegativeFixtures(fixtures, baseline) {
+function checkLedgerTotals(summary, errors) {
+  if (!deepEqual(summary.dispositions, LEDGER_TOTALS.dispositions)) {
+    errors.push('ledger disposition counts do not match the independent pin');
+  }
+  if (!deepEqual(summary.destinations, LEDGER_TOTALS.destinations)) {
+    errors.push('ledger destination link counts do not match the independent pin');
+  }
+  if (summary.links !== LEDGER_TOTALS.links) {
+    errors.push(`ledger must contain exactly ${LEDGER_TOTALS.links} successor links`);
+  }
+  if (summary.uniqueMappedSuccessors !== LEDGER_TOTALS.uniqueMappedSuccessors) {
+    errors.push(
+      `ledger must map exactly ${LEDGER_TOTALS.uniqueMappedSuccessors} unique Ratified successors`,
+    );
+  }
+  if (summary.citationExceptions !== LEDGER_TOTALS.citationExceptions) {
+    errors.push(
+      `ledger must retain exactly ${LEDGER_TOTALS.citationExceptions} citation exceptions`,
+    );
+  }
+  if (summary.retirements !== LEDGER_TOTALS.retirements) {
+    errors.push(`ledger must retain exactly ${LEDGER_TOTALS.retirements} retirement judgments`);
+  }
+  if (summary.ratifiedCatalog !== 174) {
+    errors.push('the final receipt must carry exactly 174 Ratified catalog records');
+  }
+  if (summary.deletedCount !== 21) {
+    errors.push('exactly the 21 frozen legacy realm files must be absent');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Persistent negative mutation fixtures
+// ---------------------------------------------------------------------------
+
+function cloneBaseline(baseline) {
+  return {
+    ledger: structuredClone(baseline.ledger),
+    ledgerRaw: baseline.ledgerRaw,
+    historical: structuredClone(baseline.historical),
+    historicalRaw: baseline.historicalRaw,
+    final: structuredClone(baseline.final),
+    finalRaw: baseline.finalRaw,
+    overrides: new Map(),
+  };
+}
+
+function requireValue(value, description) {
+  if (value === undefined || value === null) throw new Error(`missing ${description}`);
+  return value;
+}
+
+function resolveContainer(root, path) {
+  let target = root;
+  for (const segment of path.slice(0, -1))
+    target = requireValue(target?.[segment], `path ${segment}`);
+  return target;
+}
+
+function findAuthority(receipt, authority) {
+  return requireValue(
+    receipt.authorities.find((record) => record.authority === authority),
+    `authority ${authority}`,
+  );
+}
+
+function applyMutation(mutation, state) {
+  switch (mutation.operation) {
+    case 'add-unknown-ledger-entry':
+      state.ledger.entries[mutation.legacyId] = structuredClone(
+        requireValue(state.ledger.entries[mutation.cloneFrom], `entry ${mutation.cloneFrom}`),
+      );
+      break;
+    case 'duplicate-ledger-key': {
+      const marker = '"entries": {';
+      state.ledgerRaw = state.ledgerRaw.replace(
+        marker,
+        `${marker}\n    "${mutation.legacyId}": {},`,
+      );
+      state.ledger = JSON.parse(state.ledgerRaw);
+      break;
+    }
+    case 'set-ledger-field':
+      requireValue(state.ledger.entries[mutation.legacyId], `entry ${mutation.legacyId}`)[
+        mutation.field
+      ] = mutation.value;
+      break;
+    case 'append-successor':
+      requireValue(
+        state.ledger.entries[mutation.legacyId],
+        `entry ${mutation.legacyId}`,
+      ).successors.push(mutation.successor);
+      break;
+    case 'set-ledger-successor-id':
+      requireValue(
+        state.ledger.entries[mutation.legacyId]?.successors?.[mutation.index],
+        `successor ${mutation.index}`,
+      ).id = mutation.value;
+      break;
+    case 'remove-ledger-evidence': {
+      const entry = requireValue(state.ledger.entries[mutation.legacyId], 'ledger entry');
+      if (!entry.evidence.includes(mutation.value)) throw new Error('evidence value not present');
+      entry.evidence = entry.evidence.filter((value) => value !== mutation.value);
+      break;
+    }
+    case 'delete-ledger-citation-exception': {
+      const entry = requireValue(state.ledger.entries[mutation.legacyId], 'ledger entry');
+      if (!entry.citationException) throw new Error('entry has no citationException');
+      delete entry.citationException;
+      break;
+    }
+    case 'set-final-field':
+      resolveContainer(state.final, mutation.path)[mutation.path.at(-1)] = mutation.value;
+      break;
+    case 'set-historical-field':
+      resolveContainer(state.historical, mutation.path)[mutation.path.at(-1)] = mutation.value;
+      break;
+    case 'set-final-authority-field':
+      findAuthority(state.final, mutation.authority)[mutation.field] = mutation.value;
+      break;
+    case 'set-final-decision-field':
+      findAuthority(state.final, mutation.authority).decision[mutation.field] = mutation.value;
+      break;
+    case 'set-final-principle-field': {
+      const authority = findAuthority(state.final, mutation.authority);
+      requireValue(
+        authority.principles.find(({ id }) => id === mutation.id),
+        `principle ${mutation.id}`,
+      )[mutation.field] = mutation.value;
+      break;
+    }
+    case 'set-final-protection-field': {
+      const authority = findAuthority(state.final, mutation.authority);
+      requireValue(authority.protection, `${mutation.authority} protection`)[mutation.field] =
+        mutation.value;
+      break;
+    }
+    case 'delete-final-protection': {
+      const authority = findAuthority(state.final, mutation.authority);
+      requireValue(authority.protection, `${mutation.authority} protection`);
+      delete authority.protection;
+      break;
+    }
+    case 'copy-final-protection': {
+      const from = findAuthority(state.final, mutation.from);
+      const to = findAuthority(state.final, mutation.to);
+      to.protection = structuredClone(requireValue(from.protection, 'source protection'));
+      break;
+    }
+    case 'delete-final-principle': {
+      const authority = findAuthority(state.final, mutation.authority);
+      const before = authority.principles.length;
+      authority.principles = authority.principles.filter(({ id }) => id !== mutation.id);
+      if (authority.principles.length === before) throw new Error(`no principle ${mutation.id}`);
+      break;
+    }
+    case 'mutate-source-file': {
+      const buffer = requireValue(createSourceView().read(mutation.path), `file ${mutation.path}`);
+      const original = buffer.toString('utf8');
+      if (!original.includes(mutation.find)) {
+        throw new Error(`pattern not found in ${mutation.path}`);
+      }
+      state.overrides.set(
+        mutation.path,
+        Buffer.from(original.replace(mutation.find, mutation.replace), 'utf8'),
+      );
+      break;
+    }
+    case 'write-source-file':
+      state.overrides.set(mutation.path, Buffer.from(mutation.content, 'utf8'));
+      break;
+    case 'remove-source-file':
+      if (!createSourceView().exists(mutation.path)) throw new Error(`${mutation.path} is absent`);
+      state.overrides.set(mutation.path, null);
+      break;
+    default:
+      throw new Error(`unknown operation "${mutation.operation}"`);
+  }
+
+  if (mutation.syncFinalMapping) {
+    state.final.migration.mappingSha256 = ledgerMappingSha256(state.ledger);
+  }
+  if (mutation.recomputeFinalIntegrity) {
+    const unsigned = structuredClone(state.final);
+    delete unsigned.integrity;
+    state.final.integrity.digest = sha256(JSON.stringify(unsigned));
+  }
+  if (mutation.recomputeHistoricalIntegrity) {
+    const unsigned = structuredClone(state.historical);
+    delete unsigned.integrity;
+    state.historical.integrity.digest = sha256(JSON.stringify(unsigned));
+  }
+}
+
+function runNegativeFixtures(fixtures, baseline, baselineErrors) {
   const errors = [];
-  if (
-    !checkExactKeys(fixtures, ['schemaVersion', 'cases'], [], 'negative mutation fixtures', errors)
-  ) {
+  if (!checkExactKeys(fixtures, ['schemaVersion', 'cases'], [], 'negative fixtures', errors)) {
     return { errors, count: 0 };
   }
   if (fixtures.schemaVersion !== 1 || !Array.isArray(fixtures.cases)) {
-    errors.push('negative mutation fixtures: invalid schemaVersion or cases');
+    errors.push('negative fixtures: invalid schemaVersion or cases');
+    return { errors, count: 0 };
+  }
+  if (fixtures.cases.length === 0) {
+    errors.push('negative fixtures: at least one persistent mutation case is required');
+    return { errors, count: 0 };
+  }
+  if (baselineErrors.length > 0) {
+    errors.push('negative fixtures cannot run against a failing baseline');
     return { errors, count: 0 };
   }
 
+  const seenNames = new Set();
   for (const fixture of fixtures.cases) {
-    const ledger = structuredClone(baseline.ledger);
-    const receipt = structuredClone(baseline.receipt);
-    let ledgerRaw = baseline.ledgerRaw;
-    let receiptRaw = baseline.receiptRaw;
-    let studioFileOverrides = new Map();
-    let ratificationOverrideText;
+    if (!checkExactKeys(fixture, ['name', 'mutation', 'expectedError'], [], 'fixture', errors)) {
+      continue;
+    }
+    if (seenNames.has(fixture.name)) errors.push(`duplicate negative fixture "${fixture.name}"`);
+    seenNames.add(fixture.name);
+
+    // No self-baselining: the expected failure must be absent before the mutation is applied.
+    if (baselineErrors.some((message) => message.includes(fixture.expectedError))) {
+      errors.push(
+        `negative fixture "${fixture.name}" expects an error the clean baseline already reports`,
+      );
+      continue;
+    }
+
+    const state = cloneBaseline(baseline);
     try {
-      ({ ledgerRaw, receiptRaw, studioFileOverrides, ratificationOverrideText } =
-        applyNegativeMutation(fixture.mutation, ledger, receipt, ledgerRaw, receiptRaw));
+      applyMutation(fixture.mutation, state);
     } catch (error) {
       errors.push(`negative fixture "${fixture.name}" could not be applied: ${error.message}`);
       continue;
     }
     const result = validateState({
-      ledger,
-      receipt,
-      ledgerRaw,
-      receiptRaw,
-      checkLocalSources: Boolean(fixture.checkLocalSources),
-      studioFileOverrides,
-      ratificationOverrideText,
+      ledger: state.ledger,
+      ledgerRaw: state.ledgerRaw,
+      historical: state.historical,
+      historicalRaw: state.historicalRaw,
+      final: state.final,
+      finalRaw: state.finalRaw,
+      sources: createSourceView(state.overrides),
     });
     if (!result.errors.some((message) => message.includes(fixture.expectedError))) {
       errors.push(
@@ -1529,92 +2828,9 @@ function runNegativeFixtures(fixtures, baseline) {
   return { errors, count: fixtures.cases.length };
 }
 
-function applyNegativeMutation(mutation, ledger, receipt, ledgerRaw, receiptRaw) {
-  switch (mutation.operation) {
-    case 'add-unknown-ledger-entry':
-      ledger.entries[mutation.legacyId] = structuredClone(ledger.entries[mutation.cloneFrom]);
-      break;
-    case 'duplicate-ledger-key': {
-      const marker = '"entries": {';
-      const insertion = `${marker}\n    "${mutation.legacyId}": {},`;
-      ledgerRaw = ledgerRaw.replace(marker, insertion);
-      Object.assign(ledger, JSON.parse(ledgerRaw));
-      break;
-    }
-    case 'set-authority-field': {
-      const authority = receipt.authorities.find(
-        (record) => record.authority === mutation.authority,
-      );
-      authority[mutation.field] = mutation.value;
-      break;
-    }
-    case 'set-principle-field': {
-      const authority = receipt.authorities.find(
-        (record) => record.authority === mutation.authority,
-      );
-      const principle = authority.principles.find(({ id }) => id === mutation.id);
-      principle[mutation.field] = mutation.value;
-      break;
-    }
-    case 'delete-principle': {
-      const authority = receipt.authorities.find(
-        (record) => record.authority === mutation.authority,
-      );
-      authority.principles = authority.principles.filter(({ id }) => id !== mutation.id);
-      break;
-    }
-    case 'remove-principle-legacy-input': {
-      const authority = receipt.authorities.find(
-        (record) => record.authority === mutation.authority,
-      );
-      const principle = authority.principles.find(({ id }) => id === mutation.id);
-      principle.legacyInputs = principle.legacyInputs.filter(
-        (legacyId) => legacyId !== mutation.legacyId,
-      );
-      break;
-    }
-    case 'append-successor':
-      ledger.entries[mutation.legacyId].successors.push(mutation.successor);
-      break;
-    case 'set-ledger-field':
-      ledger.entries[mutation.legacyId][mutation.field] = mutation.value;
-      break;
-    case 'set-receipt-field': {
-      let target = receipt;
-      for (const segment of mutation.path.slice(0, -1)) target = target[segment];
-      target[mutation.path.at(-1)] = mutation.value;
-      break;
-    }
-    case 'mutate-studio-file': {
-      const original = readFileSync(filePath(mutation.path), 'utf8');
-      if (!original.includes(mutation.find)) {
-        throw new Error(`pattern not found in ${mutation.path}`);
-      }
-      const mutated = original.replace(mutation.find, mutation.replace);
-      return {
-        ledgerRaw,
-        receiptRaw,
-        studioFileOverrides: new Map([[mutation.path, Buffer.from(mutated, 'utf8')]]),
-      };
-    }
-    case 'mutate-ratification-record': {
-      const original = readFileSync(filePath(RATIFICATION_RECORD_PATH), 'utf8');
-      if (!original.includes(mutation.find)) {
-        throw new Error('pattern not found in the Ratification decision record');
-      }
-      return {
-        ledgerRaw,
-        receiptRaw,
-        ratificationOverrideText: original.replace(mutation.find, mutation.replace),
-      };
-    }
-    case 'delete-ratification-record':
-      return { ledgerRaw, receiptRaw, ratificationOverrideText: null };
-    default:
-      throw new Error(`unknown operation "${mutation.operation}"`);
-  }
-  return { ledgerRaw, receiptRaw };
-}
+// ---------------------------------------------------------------------------
+// Authenticated live verification
+// ---------------------------------------------------------------------------
 
 function githubToken() {
   const environmentToken = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
@@ -1655,53 +2871,379 @@ async function githubJson(url, token) {
   throw new Error(`GitHub API retry limit reached for ${url}`);
 }
 
-async function verifyLiveReceipt(receipt) {
-  const token = githubToken();
-  for (const authority of AUTHORITIES) {
-    const pin = AUTHORITY_PINS[authority];
-    const receiptAuthority = receipt.authorities.find((record) => record.authority === authority);
-    const apiRoot = `https://api.github.com/repos/${pin.repository}`;
-    const tree = await githubJson(`${apiRoot}/git/trees/${pin.commit}?recursive=1`, token);
-    if (tree.truncated) throw new Error(`${authority}: Git tree response was truncated`);
-    const treeIndex = new Map(tree.tree.map((entry) => [entry.path, entry]));
-    const sources = await Promise.all(
-      pin.paths.map(async (path) => {
-        const entry = treeIndex.get(path);
-        if (!entry || entry.type !== 'blob') {
-          throw new Error(`${authority}: pinned source path is missing: ${path}`);
-        }
-        const expectedFile = receiptAuthority.files.find((file) => file.path === path);
-        if (entry.sha !== expectedFile.blobSha) {
-          throw new Error(`${authority}: ${path} Git blob does not match the receipt`);
-        }
-        const blob = await githubJson(`${apiRoot}/git/blobs/${entry.sha}`, token);
-        if (blob.encoding !== 'base64') {
-          throw new Error(`${authority}: ${path} blob did not use base64 encoding`);
-        }
-        const buffer = Buffer.from(blob.content.replace(/\s/g, ''), 'base64');
-        if (gitBlobSha(buffer) !== entry.sha) {
-          throw new Error(`${authority}: ${path} Git blob digest failed`);
-        }
-        if (sha256(buffer) !== expectedFile.sha256) {
-          throw new Error(`${authority}: ${path} SHA-256 does not match the receipt`);
-        }
-        return { path, buffer, blobSha: entry.sha };
-      }),
+async function fetchFile(repository, path, ref, token) {
+  const url = `https://api.github.com/repos/${repository}/contents/${path}?ref=${ref}`;
+  const payload = await githubJson(url, token);
+  if (payload.type !== 'file' || payload.encoding !== 'base64') {
+    throw new Error(`${repository}@${ref}: ${path} is not a base64 file`);
+  }
+  const buffer = Buffer.from(payload.content.replace(/\s/g, ''), 'base64');
+  if (gitBlobSha(buffer) !== payload.sha) {
+    throw new Error(`${repository}@${ref}: ${path} Git blob digest failed`);
+  }
+  return { path, buffer, blobSha: payload.sha };
+}
+
+async function fetchSources(repository, paths, ref, token) {
+  return Promise.all(paths.map((path) => fetchFile(repository, path, ref, token)));
+}
+
+async function verifyLiveReconciliationLedger(ledger, token) {
+  const pin = RECONCILIATION_LEDGER;
+  const { buffer, blobSha } = await fetchFile(pin.repository, pin.path, pin.commit, token);
+  if (blobSha !== pin.blobSha) {
+    throw new Error(`PR #21 ledger blob at ${pin.commit} is not ${pin.blobSha}`);
+  }
+  if (sha256(buffer) !== pin.sha256) {
+    throw new Error(`PR #21 ledger content digest at ${pin.commit} changed`);
+  }
+  const historical = JSON.parse(buffer.toString('utf8'));
+  const historicalMapping = ledgerMappingSha256(historical);
+  if (historicalMapping !== pin.mappingSha256) {
+    throw new Error(`PR #21 normalized mapping is ${historicalMapping}, not ${pin.mappingSha256}`);
+  }
+  if (ledgerMappingSha256(ledger) !== historicalMapping) {
+    throw new Error('the current ledger mapping differs from the immutable PR #21 mapping');
+  }
+  const entries = Object.keys(historical.entries ?? {}).length;
+  console.log(`  PR #21 ledger: ${entries} frozen mappings recomputed at ${pin.commit}`);
+}
+
+async function verifyLiveLegacySnapshot(historicalReceipt, finalReceipt, token) {
+  const snapshot = finalReceipt.historicalEvidence.legacySourceSnapshot;
+  const historicalFiles = new Map(
+    historicalReceipt.legacySourceSnapshot.files.map((file) => [file.path, file]),
+  );
+  let bytes = 0;
+  let principles = 0;
+  for (const record of snapshot.files) {
+    const { buffer, blobSha } = await fetchFile(
+      LEGACY_SNAPSHOT.repository,
+      record.path,
+      LEGACY_SNAPSHOT.commit,
+      token,
     );
-    const liveCatalog = buildCatalogFromSources(authority, sources);
-    if (
-      JSON.stringify(liveCatalog.files) !== JSON.stringify(receiptAuthority.files) ||
-      JSON.stringify(liveCatalog.principles) !== JSON.stringify(receiptAuthority.principles) ||
-      liveCatalog.catalogSha256 !== receiptAuthority.catalogSha256
-    ) {
-      throw new Error(
-        `${authority}: live IDs, paths, statuses, Legacy inputs, or content digests differ from the receipt`,
-      );
+    if (blobSha !== record.blobSha || sha256(buffer) !== record.sha256) {
+      throw new Error(`${record.path}: deleted legacy bytes differ from the pinned snapshot`);
     }
-    console.log(
-      `  ${authority}: ${liveCatalog.principles.length} Draft principle(s) at ${pin.commit}`,
+    if (!deepEqual(historicalFiles.get(record.path), record)) {
+      throw new Error(`${record.path}: the two receipts disagree about the deleted bytes`);
+    }
+    const slug = record.path.slice('principles/'.length, -'.md'.length);
+    const ids = [...buffer.toString('utf8').matchAll(/^###\s+(\d+)\.\s+/gm)].map(
+      (match) => `studio-legacy:${slug}:${Number(match[1])}`,
+    );
+    if (!arraysEqual(ids, record.topLevelIds)) {
+      throw new Error(`${record.path}: recomputed top-level IDs differ from the pinned snapshot`);
+    }
+    bytes += buffer.length;
+    principles += ids.length;
+  }
+  if (principles !== LEGACY_SNAPSHOT.topLevelPrinciples || bytes !== LEGACY_SNAPSHOT.totalBytes) {
+    throw new Error(
+      `deleted legacy content is ${principles} principles / ${bytes} bytes, not ${LEGACY_SNAPSHOT.topLevelPrinciples} / ${LEGACY_SNAPSHOT.totalBytes}`,
     );
   }
+  console.log(
+    `  Deleted legacy source: ${snapshot.files.length} files, ${principles} principles, ${bytes} bytes recomputed at ${LEGACY_SNAPSHOT.commit}`,
+  );
+}
+
+async function verifyLiveAuthority(authority, historicalReceipt, finalReceipt, token) {
+  const pin = FINAL_AUTHORITY_PINS[authority];
+  const draftPin = DRAFT_AUTHORITY_PINS[authority];
+  const record = finalReceipt.authorities.find((entry) => entry.authority === authority);
+  const historicalRecord = historicalReceipt.authorities.find(
+    (entry) => entry.authority === authority,
+  );
+  const apiRoot = `https://api.github.com/repos/${pin.repository}`;
+
+  const sources = await fetchSources(pin.repository, pin.paths, pin.commit, token);
+  for (const source of sources) {
+    const expected = record.files.find((file) => file.path === source.path);
+    if (source.blobSha !== expected.blobSha || sha256(source.buffer) !== expected.sha256) {
+      throw new Error(`${authority}: ${source.path} differs from the Ratified receipt`);
+    }
+  }
+  const catalog = buildCatalogFromSources(authority, sources);
+  if (
+    !deepEqual(catalog.files, record.files) ||
+    !deepEqual(catalog.principles, record.principles) ||
+    catalog.catalogSha256 !== record.catalogSha256 ||
+    catalog.catalogSha256 !== pin.catalogSha256 ||
+    catalog.semanticCatalogSha256 !== record.semanticCatalogSha256 ||
+    catalog.semanticCatalogSha256 !== pin.semanticCatalogSha256
+  ) {
+    throw new Error(
+      `${authority}: live IDs, paths, statuses, Legacy inputs, or digests differ from the Ratified receipt`,
+    );
+  }
+  if (catalog.principles.some(({ status }) => status !== 'Ratified')) {
+    throw new Error(`${authority}: the live catalog is not fully Ratified`);
+  }
+
+  const decision = await fetchFile(pin.repository, pin.decisionPath, pin.commit, token);
+  if (
+    decision.blobSha !== pin.decisionBlobSha ||
+    sha256(decision.buffer) !== pin.decisionSha256 ||
+    decision.blobSha !== record.decision.blobSha ||
+    sha256(decision.buffer) !== record.decision.sha256
+  ) {
+    throw new Error(`${authority}: the decision record bytes changed`);
+  }
+  const scopeIds = extractDecisionScopeIds(decision.buffer.toString('utf8'), authority);
+  if (
+    !arraysEqual(scopeIds, [...record.decision.scopeIds].sort()) ||
+    !arraysEqual(scopeIds, catalog.principles.map(({ id }) => id).sort())
+  ) {
+    throw new Error(`${authority}: the live decision scope does not cover exactly its catalog`);
+  }
+
+  const pullRequest = await githubJson(`${apiRoot}/pulls/${pin.pullRequest}`, token);
+  if (
+    pullRequest.state !== 'closed' ||
+    pullRequest.merged !== true ||
+    pullRequest.merge_commit_sha !== pin.commit ||
+    pullRequest.base?.ref !== 'main' ||
+    pullRequest.head?.sha !== record.decision.headCommit ||
+    pullRequest.merged_at !== record.decision.mergedAt ||
+    pullRequest.author_association !== 'OWNER' ||
+    pullRequest.merged_by?.login !== OWNER.login ||
+    pullRequest.merged_by?.id !== OWNER.id
+  ) {
+    throw new Error(
+      `${authority}: PR #${pin.pullRequest} is not an owner merge of ${pin.commit} into main`,
+    );
+  }
+
+  await verifyLiveMainState(authority, pin, record, catalog, token);
+  await verifyLiveProtection(authority, pin, record, token);
+  await verifyLiveHistoricalComparison(
+    authority,
+    draftPin,
+    historicalRecord,
+    record,
+    catalog,
+    token,
+  );
+  console.log(
+    `  ${authority}: ${catalog.principles.length} Ratified principle(s) at ${pin.commit}; owner merge PR #${pin.pullRequest}`,
+  );
+}
+
+/**
+ * The pinned Ratification commit must remain in `main` history and the pinned catalog and
+ * decision content must still be served there. Later unrelated commits are allowed, so the
+ * Studio finalization merge cannot invalidate its own evidence.
+ */
+async function verifyLiveMainState(authority, pin, record, catalog, token) {
+  const apiRoot = `https://api.github.com/repos/${pin.repository}`;
+  const branch = await githubJson(`${apiRoot}/branches/main`, token);
+  const head = branch.commit?.sha;
+  if (!SHA1.test(head ?? '')) throw new Error(`${authority}: main head is not a commit SHA`);
+  if (head === pin.commit) return;
+
+  const comparison = await githubJson(`${apiRoot}/compare/${pin.commit}...${head}`, token);
+  if (comparison.status !== 'ahead' && comparison.status !== 'identical') {
+    throw new Error(
+      `${authority}: pinned Ratification commit ${pin.commit} is no longer an ancestor of main (${comparison.status})`,
+    );
+  }
+
+  const decision = await fetchFile(pin.repository, pin.decisionPath, head, token);
+  if (decision.blobSha !== pin.decisionBlobSha) {
+    throw new Error(`${authority}: the decision record changed at current main`);
+  }
+  const sources = await fetchSources(pin.repository, pin.paths, head, token);
+  const current = buildCatalogFromSources(authority, sources);
+  if (
+    contentCatalogSha256(current.principles) !== contentCatalogSha256(catalog.principles) ||
+    current.semanticCatalogSha256 !== catalog.semanticCatalogSha256
+  ) {
+    throw new Error(`${authority}: the Ratified catalog changed at current main (${head})`);
+  }
+  const changedFiles = sources.filter(
+    (source) => source.blobSha !== record.files.find((file) => file.path === source.path)?.blobSha,
+  ).length;
+  console.log(
+    `    ${authority}: main is ${head} (ahead of the pin); catalog unchanged, ${changedFiles} non-principle file edit(s)`,
+  );
+}
+
+/** Recomputes the pre-Ratification semantics and proves exactly which principles changed. */
+async function verifyLiveHistoricalComparison(
+  authority,
+  draftPin,
+  historicalRecord,
+  record,
+  catalog,
+  token,
+) {
+  const paths = historicalRecord.files.map(({ path }) => path);
+  const sources = await fetchSources(draftPin.repository, paths, draftPin.commit, token);
+  for (const source of sources) {
+    const expected = historicalRecord.files.find((file) => file.path === source.path);
+    if (source.blobSha !== expected.blobSha || sha256(source.buffer) !== expected.sha256) {
+      throw new Error(`${authority}: ${source.path} differs from the historical Draft receipt`);
+    }
+  }
+  const historicalCatalog = buildCatalogFromSources(authority, sources, { includeSemantic: false });
+  if (
+    !deepEqual(historicalCatalog.principles, historicalRecord.principles) ||
+    historicalCatalog.catalogSha256 !== historicalRecord.catalogSha256 ||
+    historicalCatalog.catalogSha256 !== draftPin.catalogSha256
+  ) {
+    throw new Error(`${authority}: the historical Draft catalog no longer reproduces its receipt`);
+  }
+  const semanticCatalog = buildCatalogFromSources(authority, sources);
+  if (
+    semanticCatalog.semanticCatalogSha256 !== draftPin.semanticCatalogSha256 ||
+    semanticCatalog.semanticCatalogSha256 !== record.historicalComparison.draftSemanticCatalogSha256
+  ) {
+    throw new Error(`${authority}: the recomputed historical semantic catalog does not match`);
+  }
+
+  const historicalById = new Map(
+    semanticCatalog.principles.map((principle) => [principle.id, principle]),
+  );
+  const changes = [];
+  for (const principle of catalog.principles) {
+    const before = historicalById.get(principle.id);
+    if (!before) throw new Error(`${authority}: ${principle.id} has no pre-Ratification record`);
+    if (
+      before.path !== principle.path ||
+      before.title !== principle.title ||
+      !arraysEqual(before.legacyInputs, principle.legacyInputs)
+    ) {
+      throw new Error(`${authority}: ${principle.id} changed identity, path, or Legacy inputs`);
+    }
+    if (before.semanticSha256 !== principle.semanticSha256) {
+      changes.push(
+        `${authority}:${principle.id}:${before.semanticSha256}:${principle.semanticSha256}`,
+      );
+    }
+  }
+  const expected = EXPECTED_SEMANTIC_CHANGES.filter((change) => change.authority === authority)
+    .map(
+      ({ id, historicalSemanticSha256, ratifiedSemanticSha256 }) =>
+        `${authority}:${id}:${historicalSemanticSha256}:${ratifiedSemanticSha256}`,
+    )
+    .sort();
+  if (!arraysEqual(changes.sort(), expected)) {
+    throw new Error(
+      `${authority}: semantic changes since the Draft evidence are ${changes.length ? changes.join(', ') : 'none'}, expected ${expected.length ? expected.join(', ') : 'none'}`,
+    );
+  }
+}
+
+/**
+ * Re-reads the protected-branch rule that is still in force and the required-check results on the
+ * reviewed Ratification head. The `.github` decision record makes owner merge effective only after
+ * the required `CI gate` succeeds, so this is a Ratification precondition, not decision prose.
+ */
+async function verifyLiveProtection(authority, pin, record, token) {
+  if (authority !== PROTECTION_AUTHORITY) return;
+  const apiRoot = `https://api.github.com/repos/${pin.repository}`;
+  const protection = record.protection;
+
+  let live;
+  try {
+    live = await githubJson(`${apiRoot}/branches/${protection.branch}/protection`, token);
+  } catch (error) {
+    throw new Error(
+      `${authority}: branch protection could not be read (${error.message}); this check needs a token with admin read on ${pin.repository}`,
+    );
+  }
+  const required = live.required_status_checks;
+  const liveChecks = (required?.checks ?? [])
+    .map(({ context, app_id: appId }) => ({ context, appId }))
+    .sort((left, right) => left.context.localeCompare(right.context));
+  if (
+    required?.strict !== true ||
+    !deepEqual(liveChecks, PROTECTION_PIN.requiredChecks) ||
+    !deepEqual(liveChecks, protection.requiredChecks) ||
+    !arraysEqual(
+      [...(required?.contexts ?? [])].sort(),
+      PROTECTION_PIN.requiredChecks.map(({ context }) => context).sort(),
+    )
+  ) {
+    throw new Error(
+      `${authority}: ${protection.branch} no longer strictly requires exactly ${PROTECTION_PIN.requiredChecks.map(({ context }) => context).join(', ')}`,
+    );
+  }
+  if (live.allow_force_pushes?.enabled !== false || live.allow_deletions?.enabled !== false) {
+    throw new Error(
+      `${authority}: ${protection.branch} must keep force pushes and branch deletion disabled`,
+    );
+  }
+
+  const head = record.decision.headCommit;
+  const runs = await githubJson(`${apiRoot}/commits/${head}/check-runs?per_page=100`, token);
+  const liveHeadChecks = (runs.check_runs ?? [])
+    .map((run) => ({
+      name: run.name,
+      required: PROTECTION_PIN.requiredChecks.some(({ context }) => context === run.name),
+      status: run.status,
+      conclusion: run.conclusion,
+      detailsUrl: run.details_url,
+    }))
+    .sort((left, right) => left.name.localeCompare(right.name));
+  if (
+    !deepEqual(liveHeadChecks, PROTECTION_PIN.ratificationHeadChecks) ||
+    !deepEqual(liveHeadChecks, protection.ratificationHeadChecks)
+  ) {
+    throw new Error(
+      `${authority}: check results on Ratification head ${head} differ from the pinned evidence`,
+    );
+  }
+  for (const { context } of PROTECTION_PIN.requiredChecks) {
+    const check = liveHeadChecks.find((run) => run.name === context);
+    if (check?.status !== 'completed' || check?.conclusion !== 'success') {
+      throw new Error(
+        `${authority}: required check "${context}" was not successful on Ratification head ${head}`,
+      );
+    }
+  }
+  console.log(
+    `    ${authority}: ${protection.branch} strictly requires ${PROTECTION_PIN.requiredChecks.map(({ context }) => context).join(', ')}; force pushes and deletion disabled; ${liveHeadChecks.length} check(s) successful on ${head}`,
+  );
+}
+
+async function verifyLive(ledger, historicalReceipt, finalReceipt) {
+  const token = githubToken();
+  await verifyLiveReconciliationLedger(ledger, token);
+  await verifyLiveLegacySnapshot(historicalReceipt, finalReceipt, token);
+  for (const authority of AUTHORITIES) {
+    await verifyLiveAuthority(authority, historicalReceipt, finalReceipt, token);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Optional one-time finalization diff
+// ---------------------------------------------------------------------------
+
+function verifyFinalizationDiff() {
+  const base = FINAL_AUTHORITY_PINS.Studio.commit;
+  const output = execFileSync(
+    'git',
+    ['-C', repoRoot, 'diff', '--no-renames', '--name-status', base, '--'],
+    { encoding: 'utf8', windowsHide: true },
+  );
+  const deleted = output
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith('D\t'))
+    .map((line) => line.slice(2).trim())
+    .sort();
+  if (!arraysEqual(deleted, FROZEN_LEGACY_PATHS)) {
+    const unexpected = deleted.filter((path) => !FROZEN_LEGACY_PATH_SET.has(path));
+    const missing = FROZEN_LEGACY_PATHS.filter((path) => !deleted.includes(path));
+    throw new Error(
+      `deletions against ${base} must be exactly the frozen 21 paths (unexpected: ${unexpected.join(', ') || 'none'}; missing: ${missing.join(', ') || 'none'})`,
+    );
+  }
+  console.log(
+    `Finalization diff: ${deleted.length} deletion(s) against ${base}, all frozen legacy realm paths.`,
+  );
 }
 
 function printFailure(errors) {
@@ -1710,48 +3252,56 @@ function printFailure(errors) {
   console.error(`\n${errors.length} problem(s).`);
 }
 
+// ---------------------------------------------------------------------------
+// Entry point
+// ---------------------------------------------------------------------------
+
+const KNOWN_ARGS = new Set(['--live', '--finalization-diff']);
 const args = process.argv.slice(2);
-const unknownArgs = args.filter((argument) => argument !== '--live');
+const unknownArgs = args.filter((argument) => !KNOWN_ARGS.has(argument));
 if (unknownArgs.length > 0) {
   printFailure([`unknown argument(s): ${unknownArgs.join(', ')}`]);
   process.exit(1);
 }
 
 const loadErrors = [];
-const ledgerFile = readJson('principles/migration-ledger.json', loadErrors);
-const receiptFile = readJson(RECEIPT_PATH, loadErrors);
-const ledgerSchemaFile = readJson('principles/migration-ledger.schema.json', loadErrors);
-const receiptSchemaFile = readJson(
-  'principles/migration-verification-receipt.schema.json',
+const ledgerFile = readJson(LEDGER_PATH, loadErrors);
+const historicalFile = readJson(HISTORICAL_RECEIPT_PATH, loadErrors);
+const finalFile = readJson(FINAL_RECEIPT_PATH, loadErrors);
+const ledgerSchemaFile = readJson(LEDGER_SCHEMA_PATH, loadErrors);
+const historicalSchemaFile = readJson(HISTORICAL_RECEIPT_SCHEMA_PATH, loadErrors);
+const finalSchemaFile = readJson(FINAL_RECEIPT_SCHEMA_PATH, loadErrors);
+const fixturesFile = readJson(FIXTURES_PATH, loadErrors);
+validateSchemaFiles(
+  [
+    [LEDGER_SCHEMA_PATH, ledgerSchemaFile.value],
+    [HISTORICAL_RECEIPT_SCHEMA_PATH, historicalSchemaFile.value],
+    [FINAL_RECEIPT_SCHEMA_PATH, finalSchemaFile.value],
+  ],
   loadErrors,
 );
-const fixturesFile = readJson(
-  'scripts/fixtures/principles/migration-negative-mutations.json',
-  loadErrors,
-);
-validateSchemaFiles(ledgerSchemaFile.value, receiptSchemaFile.value, loadErrors);
 
-if (loadErrors.length > 0 || !ledgerFile.value || !receiptFile.value || !fixturesFile.value) {
-  printFailure(loadErrors);
+if (
+  loadErrors.length > 0 ||
+  !ledgerFile.value ||
+  !historicalFile.value ||
+  !finalFile.value ||
+  !fixturesFile.value
+) {
+  printFailure(loadErrors.length > 0 ? loadErrors : ['required migration records could not load']);
   process.exit(1);
 }
 
-const result = validateState({
+const baseline = {
   ledger: ledgerFile.value,
-  receipt: receiptFile.value,
   ledgerRaw: ledgerFile.raw,
-  receiptRaw: receiptFile.raw,
-  checkLocalSources: true,
-});
-const fixtureResult =
-  result.errors.length === 0
-    ? runNegativeFixtures(fixturesFile.value, {
-        ledger: ledgerFile.value,
-        receipt: receiptFile.value,
-        ledgerRaw: ledgerFile.raw,
-        receiptRaw: receiptFile.raw,
-      })
-    : { errors: [], count: 0 };
+  historical: historicalFile.value,
+  historicalRaw: historicalFile.raw,
+  final: finalFile.value,
+  finalRaw: finalFile.raw,
+};
+const result = validateState({ ...baseline, sources: createSourceView() });
+const fixtureResult = runNegativeFixtures(fixturesFile.value, baseline, result.errors);
 const errors = [...result.errors, ...fixtureResult.errors];
 
 if (errors.length > 0) {
@@ -1759,37 +3309,58 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-const { summary, localStudioStatus } = result;
-const studioStatusLabel =
-  localStudioStatus === 'Ratified'
-    ? 'Ratified (locally; the pinned receipt stays historical Draft)'
-    : localStudioStatus === 'mixed'
-      ? 'mixed'
-      : 'Draft';
+const { summary } = result;
 console.log(
-  `Principle validation passed: ${AUTHORITY_PINS.Studio.principleCount} Studio successors are ${studioStatusLabel} and ${summary.entries}/192 legacy dispositions verified.`,
+  `Principle validation passed: ${summary.ratifiedCatalog} Ratified authority principles, ${summary.entries}/192 legacy dispositions ${summary.statuses.join('/')}.`,
 );
 console.log(
   `  Dispositions: rewrite ${summary.dispositions.rewrite}, split ${summary.dispositions.split}, reference ${summary.dispositions.reference}, retire ${summary.dispositions.retire}`,
 );
 console.log(
-  `  Successor links: Studio ${summary.destinations.Studio}, Engineering ${summary.destinations.Engineering}, Product ${summary.destinations.Product}, .github ${summary.destinations['.github']}`,
+  `  Successor links: ${summary.links} total — Studio ${summary.destinations.Studio}, Engineering ${summary.destinations.Engineering}, Product ${summary.destinations.Product}, .github ${summary.destinations['.github']}`,
 );
 console.log(
-  `  Receipt: ${summary.draftCatalog} Draft principles; ${summary.uniqueMappedSuccessors} unique mapped successors; ${summary.citationExceptions} verified citation exceptions`,
+  `  Receipts: historical Draft evidence preserved (proves no Ratification, authorizes no deletion); finalization evidence gates ${summary.uniqueMappedSuccessors} unique mapped successors and ${summary.citationExceptions} citation exceptions`,
 );
 console.log(
-  `  Deletion gate: blocked by ${summary.mappedDraft} mapped Draft successors; the receipt authorizes neither Ratification nor deletion`,
+  `  Studio tree: 25 Ratified blocks byte-identical to the pinned receipt; ${summary.preambleUpdatedFiles}/7 file(s) differ only in their independently pinned preamble`,
 );
+console.log(
+  `  Deletion: ${summary.deletedCount}/21 frozen legacy realm files absent, ${summary.retirements} retirement judgments preserved, ${summary.scannedFiles} text files scanned for live references`,
+);
+console.log(
+  '  Effective act: repository-owner merge of the finalization pull request; neither receipt can substitute for it',
+);
+const protectionRecord = finalFile.value.authorities.find(
+  ({ authority }) => authority === PROTECTION_AUTHORITY,
+)?.protection;
+if (protectionRecord) {
+  const required = protectionRecord.requiredChecks.map(({ context }) => context).join(', ');
+  const successful = protectionRecord.ratificationHeadChecks.filter(
+    ({ conclusion }) => conclusion === 'success',
+  ).length;
+  console.log(
+    `  Protected branch: ${PROTECTION_AUTHORITY} ${protectionRecord.branch} strictly requires ${required}; force pushes and deletion disabled; ${successful}/${protectionRecord.ratificationHeadChecks.length} check(s) successful on Ratification head`,
+  );
+}
 console.log(`  Negative mutations: ${fixtureResult.count} expected failures confirmed`);
 
 if (args.includes('--live')) {
   console.log('Live authority verification:');
   try {
-    await verifyLiveReceipt(receiptFile.value);
+    await verifyLive(ledgerFile.value, historicalFile.value, finalFile.value);
   } catch (error) {
     printFailure([error.message]);
     process.exit(1);
   }
   console.log('Live authority verification passed.');
+}
+
+if (args.includes('--finalization-diff')) {
+  try {
+    verifyFinalizationDiff();
+  } catch (error) {
+    printFailure([error.message]);
+    process.exit(1);
+  }
 }
