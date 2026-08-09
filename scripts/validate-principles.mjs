@@ -211,6 +211,26 @@ const RATIFICATION_REQUIRED_PHRASES = [
   'PR #15',
   'PR #21',
 ];
+const RATIFICATION_FORBIDDEN_CLAIMS = [
+  {
+    pattern: /\bpinned receipt\b.{0,160}\bproves Ratification\b/i,
+    message: 'the pinned receipt cannot prove Ratification',
+  },
+  {
+    pattern: /\bpinned receipt\b.{0,160}\bauthorizes (?:legacy )?deletion\b/i,
+    message: 'the pinned receipt cannot authorize legacy deletion',
+  },
+  {
+    pattern:
+      /\b(?:Ratification|owner approval) (?:is|was|became|already occurred).{0,80}\bbefore merge\b/i,
+    message: 'Ratification cannot be effective before repository-owner merge',
+  },
+  {
+    pattern:
+      /\b(?:contributor|agent|implementation owner)\b.{0,80}\b(?:approve|approves|ratify|ratifies)\b/i,
+    message: 'a non-owner cannot approve Ratification',
+  },
+];
 const REQUIRED_FIELDS = [
   'Status',
   'Statement',
@@ -288,6 +308,11 @@ function validateRatificationRecord(errors, expectedIds, overrideText) {
   for (const phrase of RATIFICATION_REQUIRED_PHRASES) {
     if (!normalized.includes(normalizeWhitespace(phrase))) {
       errors.push(`${RATIFICATION_RECORD_PATH}: missing required statement "${phrase}"`);
+    }
+  }
+  for (const { pattern, message } of RATIFICATION_FORBIDDEN_CLAIMS) {
+    if (pattern.test(normalized)) {
+      errors.push(`${RATIFICATION_RECORD_PATH}: forbidden claim: ${message}`);
     }
   }
 

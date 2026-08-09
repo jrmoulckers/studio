@@ -140,20 +140,40 @@
       "mutation": {
         "operation": "mutate-ratification-record",
         "find": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion.",
-        "replace": "already proves Ratification and already authorizes deletion of the legacy realm files."
+        "replace": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion. The pinned receipt proves Ratification."
       },
       "checkLocalSources": true,
-      "expectedError": "missing required statement \"remains historical, non-normative evidence; it proves no Ratification and authorizes no deletion.\""
+      "expectedError": "forbidden claim: the pinned receipt cannot prove Ratification"
+    },
+    {
+      "name": "Ratification record falsely claims the pinned receipt authorizes legacy deletion",
+      "mutation": {
+        "operation": "mutate-ratification-record",
+        "find": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion.",
+        "replace": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion. The pinned receipt authorizes legacy deletion."
+      },
+      "checkLocalSources": true,
+      "expectedError": "forbidden claim: the pinned receipt cannot authorize legacy deletion"
     },
     {
       "name": "Ratification record omits the not-yet-approved-before-merge disclaimer",
       "mutation": {
         "operation": "mutate-ratification-record",
         "find": "This record does not itself ratify anything and does not claim owner approval before\nmerge.",
-        "replace": "This record itself already ratifies the 25 IDs above; owner approval already occurred."
+        "replace": "This record does not itself ratify anything and does not claim owner approval before\nmerge. Owner approval already occurred before merge."
       },
       "checkLocalSources": true,
-      "expectedError": "missing required statement \"This record does not itself ratify anything and does not claim owner approval before merge.\""
+      "expectedError": "forbidden claim: Ratification cannot be effective before repository-owner merge"
+    },
+    {
+      "name": "Ratification record cannot delegate approval to a non-owner",
+      "mutation": {
+        "operation": "mutate-ratification-record",
+        "find": "The repository owner alone may ratify a Studio principle;",
+        "replace": "The repository owner alone may ratify a Studio principle; a contributor can ratify these principles without owner merge;"
+      },
+      "checkLocalSources": true,
+      "expectedError": "forbidden claim: a non-owner cannot approve Ratification"
     },
     {
       "name": "Ratification record scope missing an ID",
