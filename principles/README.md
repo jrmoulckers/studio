@@ -16,9 +16,10 @@ four-authority topology and mixes Studio design/UI material with Engineering, Pr
 `.github` concerns. The files remain useful migration input, but they are not a claim that
 Studio owns every realm they describe.
 
-All 21 realm files are preserved for Milestone 2. At the migration baseline they contain
-192 top-level legacy principles. Nested sub-principles travel with their top-level parent.
-The inventory below records coverage only; it does not assign a successor or disposition.
+All 21 realm files are preserved byte-for-byte through the final pre-ratification Milestone 2
+reconciliation. At the migration baseline they contain 192 top-level legacy principles. Nested
+sub-principles travel with their top-level parent. The inventory below freezes the source catalog;
+the proposed dispositions and independent source evidence live in the migration records.
 
 | Legacy realm                            | Stable ID range                       |   Count |
 | --------------------------------------- | ------------------------------------- | ------: |
@@ -45,6 +46,13 @@ The inventory below records coverage only; it does not assign a successor or dis
 | [Testing](testing.md)                   | `studio-legacy:testing:1..10`         |      10 |
 | **Total**                               |                                       | **192** |
 
+The proposed ledger now covers **192/192** stable IDs with zero unmapped entries: 21 `rewrite`,
+43 `split`, 122 `reference`, and 6 `retire`. Its 242 successor links point to 159 unique Draft
+successors across Studio (44 links), Engineering (92), Product (56), and `.github` (50). The
+verified authority catalog contains 174 Draft principles in total. See
+[`MIGRATION.md`](MIGRATION.md) for the mapping rules, retirement categories, receipt limits, and
+owner-only Ratification gate.
+
 ## Studio Draft principle tree
 
 Alongside the transitional legacy realm files, Studio authors its design and UI authority as a
@@ -63,13 +71,13 @@ inputs. Every principle is **Draft** and non-normative until the repository owne
 | [`experience/localization.md`](experience/localization.md)   | `STUDIO-L10N` | Text expansion, RTL/bidi UX; mechanism handoffs            |
 | [`experience/ux.md`](experience/ux.md)                       | `STUDIO-UX`   | Ease of use, visible state, tabular figures, consolidation |
 
-This Draft tree adds no ledger disposition: it does not remove, supersede, or reassign any legacy
-principle, and [`migration-ledger.json`](migration-ledger.json) stays at 0 of 192. A legacy file
-is removed only through the ratified disposition and evidence gate below. The tree is validated by
-[`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
-`pnpm principles:check`, and chained after the token suite in `pnpm test`), which checks the pinned
-stable ID set, file-to-area prefixes, required fields, and the exact `Draft` / `repository owner`
-values.
+The completed proposed ledger does not remove, supersede, or reassign any legacy principle. Every
+successor and disposition remains pre-ratification. A legacy file is removed only through the
+owner-ratified disposition and evidence gate below. The tree and migration records are validated
+by [`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
+`pnpm principles:check`, and chained after the token suite in `pnpm test`). It checks the exact
+legacy inventory and bytes, Studio Draft fields, ledger/schema/cardinality, pinned receipt
+digests, reciprocity, persistent negative mutations, and the blocked deletion gate.
 
 ## Precedence during migration
 
@@ -94,14 +102,16 @@ propose either, but proposals remain non-normative.
 
 ## Migration and removal gate
 
-[`MIGRATION.md`](MIGRATION.md) defines the ledger schema and workflow. Its machine-readable
-scaffold is [`migration-ledger.json`](migration-ledger.json), validated by
-[`migration-ledger.schema.json`](migration-ledger.schema.json).
+[`MIGRATION.md`](MIGRATION.md) defines the ledger schema, verification workflow, and evidence
+limits. The machine-readable records are [`migration-ledger.json`](migration-ledger.json) and the
+non-normative [`migration-verification-receipt.json`](migration-verification-receipt.json),
+validated by their adjacent schemas.
 
 No legacy top-level principle may be removed until its stable ID has **exactly one**
-owner-ratified disposition (`rewrite`, `split`, `reference`, or `retire`) and reaches
-`verified` with evidence. A realm file may be deleted only after every stable ID in its
-range passes that gate and all inbound references have been updated. Until then, all 21
+owner-ratified disposition (`rewrite`, `split`, `reference`, or `retire`), reaches `verified`
+with evidence, and every mapped successor is owner-ratified in its canonical authority. A realm
+file may be deleted only after every stable ID in its range passes that gate and all inbound
+references have been updated. All 174 verified successors are currently Draft, so all 21 legacy
 realm files remain in place.
 
 The repository-local canonical-role mapping is in [`AGENTS.md`](AGENTS.md). It is a path
