@@ -2,7 +2,7 @@
   "$schema": "./migration-finalization-receipt.schema.json",
   "schemaVersion": 1,
   "receiptType": "dated-finalization-verification-evidence",
-  "verifiedAt": "2026-08-09T18:05:32.870Z",
+  "verifiedAt": "2026-08-09T20:15:50.760Z",
   "purpose": "Non-normative evidence that owner-ratified successor catalogs satisfy the technical gate for the final Studio migration; the four authority repositories and the repository-owner merge of the finalization pull request remain the normative sources.",
   "claims": {
     "normativeSource": false,
@@ -3230,7 +3230,27 @@
             "id": "GH-ACT-005",
             "historicalSemanticSha256": "42dddba03f87cb55805c891c1a7679cc4454ac4abac7cb08a880de955c80cd57",
             "ratifiedSemanticSha256": "a6c2ce81397f1c94604cefd515f1fb18ceb0ec1d7be8336f82199288f6e7d53d",
-            "rationale": "Owner-reviewed PR #97 finalized immutable reusable-workflow references and registry enforcement before Ratification; its ID, authority, Legacy inputs, and migration mapping remain unchanged."
+            "rationale": "Owner-reviewed PR #97 finalized immutable reusable-workflow references and registry enforcement before Ratification; its ID, authority, Legacy inputs, and migration mapping remain unchanged.",
+            "review": {
+              "repository": "jrmoulckers/.github",
+              "pullRequest": 97,
+              "state": "closed",
+              "merged": true,
+              "mergedAt": "2026-08-09T01:19:53Z",
+              "baseRef": "main",
+              "beforeCommit": "3036d5d1ed882a4c5acffe1ccfa0b49165538eef",
+              "headCommit": "73a5bf6769a4d4235b55057453d896d876f71069",
+              "afterCommit": "97ff60ec21321563fa0fc7ba80015261e7dcd6fa",
+              "authorAssociation": "OWNER",
+              "author": {
+                "login": "jrmoulckers",
+                "id": 43014188
+              },
+              "mergedBy": {
+                "login": "jrmoulckers",
+                "id": 43014188
+              }
+            }
           }
         ]
       },
@@ -3385,6 +3405,6 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "digest": "6484e6815170cdc103920fdb6c6ed032975f6f00f0bd9400be09783244a9a14e"
+    "digest": "87fa5e88a1d3d556e1d32490d809c99fa596d073abda3c714b54422286135d2f"
   }
 }

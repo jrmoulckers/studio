@@ -80,8 +80,12 @@ also unchanged except for `GH-ACT-005`. Owner-reviewed `.github`
 [PR #97](https://github.com/jrmoulckers/.github/pull/97) finalized its immutable
 reusable-workflow reference and registry-enforcement wording before PR #99 Ratified the
 catalog. The ID, authority, `Legacy inputs`, and Studio ledger selection did not change, so
-no mapping change is warranted. The final receipt records both semantic digests and this
-rationale instead of hiding the reviewed refinement.
+no mapping change is warranted. The final receipt records both semantic digests, the
+pre-review base `3036d5d1ed882a4c5acffe1ccfa0b49165538eef`, reviewed head
+`73a5bf6769a4d4235b55057453d896d876f71069`, owner-merged result
+`97ff60ec21321563fa0fc7ba80015261e7dcd6fa`, owner identity, and rationale instead of hiding
+the reviewed refinement. Live verification re-reads PR #97, reproduces the after-commit
+semantic catalog, and proves that commit is in the PR #99 Ratification history.
 
 ## Final reconciliation totals
 
@@ -182,12 +186,12 @@ documentation; live links or instructions may not resolve to a deleted realm pat
 
 Persistent negative mutations reject a Draft, missing, renamed, or changed successor;
 wrong file/blob/block/semantic/catalog digest; missing, unmerged, non-owner, wrong-scope,
-or changed decision; stale or wrong authority commit; changed mapping or disposition
-cardinality; missing citation exception; partial or extra deletion inventory; reintroduced
-legacy path; undeclared top-level or nested realm surface; false receipt meaning or claims;
-historical Draft receipt claiming
-Ratification/deletion; local Studio ID, semantic, or `Legacy inputs` drift; and a
-recomputed receipt integrity digest that still conflicts with independent pins.
+or changed decision; missing, stale, unmerged, or non-owner semantic-refinement review
+provenance; stale or wrong authority commit; changed mapping or disposition cardinality;
+missing citation exception; partial or extra deletion inventory; reintroduced legacy path;
+undeclared top-level or nested realm surface; false receipt meaning or claims; historical
+Draft receipt claiming Ratification/deletion; local Studio ID, semantic, or `Legacy inputs`
+drift; and a recomputed receipt integrity digest that still conflicts with independent pins.
 
 Run the authenticated remote check with:
 
@@ -197,8 +201,9 @@ pnpm principles:verify-live
 
 It fetches the immutable historical ledger and 21 deleted legacy blobs, recomputes their
 digests, reads all four Ratified catalogs and decision records, verifies owner PR merge
-metadata, and checks each pinned Ratification commit remains in current `main` history with
-an unchanged decision-record blob and unchanged principle-block content/semantic catalogs.
+metadata, replays the PR #97 semantic-refinement evidence chain, and checks each pinned
+Ratification commit remains in current `main` history with an unchanged decision-record blob
+and unchanged principle-block content/semantic catalogs.
 
 ### Evidence limits
 

@@ -126,7 +126,7 @@ const FINAL_RECEIPT_PATH = 'principles/migration-finalization-receipt.json';
 // receipt. The pin stays independent: a tampered receipt that recomputes its own integrity digest
 // still fails every authority, mapping, semantic, and protection pin below.
 const FINAL_RECEIPT_INTEGRITY_PIN =
-  '6484e6815170cdc103920fdb6c6ed032975f6f00f0bd9400be09783244a9a14e';
+  '87fa5e88a1d3d556e1d32490d809c99fa596d073abda3c714b54422286135d2f';
 
 const LEDGER_PATH = 'principles/migration-ledger.json';
 const LEDGER_SCHEMA_PATH = 'principles/migration-ledger.schema.json';
@@ -255,6 +255,20 @@ const EXPECTED_SEMANTIC_CHANGES = [
     id: 'GH-ACT-005',
     historicalSemanticSha256: '42dddba03f87cb55805c891c1a7679cc4454ac4abac7cb08a880de955c80cd57',
     ratifiedSemanticSha256: 'a6c2ce81397f1c94604cefd515f1fb18ceb0ec1d7be8336f82199288f6e7d53d',
+    review: {
+      repository: 'jrmoulckers/.github',
+      pullRequest: 97,
+      state: 'closed',
+      merged: true,
+      mergedAt: '2026-08-09T01:19:53Z',
+      baseRef: 'main',
+      beforeCommit: '3036d5d1ed882a4c5acffe1ccfa0b49165538eef',
+      headCommit: '73a5bf6769a4d4235b55057453d896d876f71069',
+      afterCommit: '97ff60ec21321563fa0fc7ba80015261e7dcd6fa',
+      authorAssociation: 'OWNER',
+      author: { login: 'jrmoulckers', id: 43014188 },
+      mergedBy: { login: 'jrmoulckers', id: 43014188 },
+    },
   },
 ];
 
@@ -1721,10 +1735,13 @@ function validateHistoricalComparison(record, pin, changes, label, errors) {
   }
   const byId = new Map((record.principles ?? []).map((principle) => [principle.id, principle]));
   for (const change of comparison.changedPrinciples) {
+    const expectedChange = EXPECTED_SEMANTIC_CHANGES.find(
+      (expected) => expected.authority === record.authority && expected.id === change?.id,
+    );
     if (
       !checkExactKeys(
         change,
-        ['id', 'historicalSemanticSha256', 'ratifiedSemanticSha256', 'rationale'],
+        ['id', 'historicalSemanticSha256', 'ratifiedSemanticSha256', 'rationale', 'review'],
         [],
         `${label}: changedPrinciple`,
         errors,
@@ -1744,9 +1761,74 @@ function validateHistoricalComparison(record, pin, changes, label, errors) {
     if (change.historicalSemanticSha256 === change.ratifiedSemanticSha256) {
       errors.push(`${label}: ${change.id} is recorded as changed but both digests are equal`);
     }
+    if (!expectedChange) {
+      errors.push(`${label}: ${change.id} is not an independently pinned semantic change`);
+    } else {
+      validateSemanticChangeReview(
+        change.review,
+        expectedChange.review,
+        `${label}: ${change.id} semantic review`,
+        errors,
+      );
+    }
     changes.push(
       `${record.authority}:${change.id}:${change.historicalSemanticSha256}:${change.ratifiedSemanticSha256}`,
     );
+  }
+}
+
+function validateSemanticChangeReview(review, expected, label, errors) {
+  if (
+    !checkExactKeys(
+      review,
+      [
+        'repository',
+        'pullRequest',
+        'state',
+        'merged',
+        'mergedAt',
+        'baseRef',
+        'beforeCommit',
+        'headCommit',
+        'afterCommit',
+        'authorAssociation',
+        'author',
+        'mergedBy',
+      ],
+      [],
+      label,
+      errors,
+    )
+  ) {
+    return;
+  }
+  if (!deepEqual(review, expected)) {
+    errors.push(`${label}: provenance does not match the independent PR #97 pin`);
+  }
+  if (
+    !SHA1.test(review.beforeCommit ?? '') ||
+    !SHA1.test(review.headCommit ?? '') ||
+    !SHA1.test(review.afterCommit ?? '') ||
+    new Set([review.beforeCommit, review.headCommit, review.afterCommit]).size !== 3
+  ) {
+    errors.push(`${label}: before, head, and after commits must be distinct immutable SHAs`);
+  }
+  if (review.state !== 'closed' || review.merged !== true) {
+    errors.push(`${label}: the semantic refinement review must be merged`);
+  }
+  if (review.baseRef !== 'main') errors.push(`${label}: baseRef must be main`);
+  if (Number.isNaN(Date.parse(review.mergedAt))) {
+    errors.push(`${label}: mergedAt must be an ISO date-time`);
+  }
+  if (review.authorAssociation !== 'OWNER') {
+    errors.push(`${label}: authorAssociation must be OWNER`);
+  }
+  for (const field of ['author', 'mergedBy']) {
+    if (checkExactKeys(review[field], ['login', 'id'], [], `${label}: ${field}`, errors)) {
+      if (review[field].login !== OWNER.login || review[field].id !== OWNER.id) {
+        errors.push(`${label}: PR #97 must be owner-authored and owner-merged`);
+      }
+    }
   }
 }
 
@@ -3134,6 +3216,81 @@ async function verifyLiveHistoricalComparison(
       `${authority}: semantic changes since the Draft evidence are ${changes.length ? changes.join(', ') : 'none'}, expected ${expected.length ? expected.join(', ') : 'none'}`,
     );
   }
+  for (const change of EXPECTED_SEMANTIC_CHANGES.filter(
+    (expectedChange) => expectedChange.authority === authority,
+  )) {
+    await verifyLiveSemanticChangeReview(
+      authority,
+      FINAL_AUTHORITY_PINS[authority],
+      record,
+      change,
+      token,
+    );
+  }
+}
+
+async function verifyLiveSemanticChangeReview(authority, pin, record, expected, token) {
+  const change = record.historicalComparison.changedPrinciples.find(({ id }) => id === expected.id);
+  if (!change || !deepEqual(change.review, expected.review)) {
+    throw new Error(
+      `${authority}: ${expected.id} review provenance differs from the independent pin`,
+    );
+  }
+  const review = expected.review;
+  const apiRoot = `https://api.github.com/repos/${review.repository}`;
+  const pullRequest = await githubJson(`${apiRoot}/pulls/${review.pullRequest}`, token);
+  if (
+    pullRequest.state !== review.state ||
+    pullRequest.merged !== review.merged ||
+    pullRequest.merged_at !== review.mergedAt ||
+    pullRequest.base?.ref !== review.baseRef ||
+    pullRequest.base?.sha !== review.beforeCommit ||
+    pullRequest.head?.sha !== review.headCommit ||
+    pullRequest.merge_commit_sha !== review.afterCommit ||
+    pullRequest.author_association !== review.authorAssociation ||
+    pullRequest.user?.login !== review.author.login ||
+    pullRequest.user?.id !== review.author.id ||
+    pullRequest.merged_by?.login !== review.mergedBy.login ||
+    pullRequest.merged_by?.id !== review.mergedBy.id
+  ) {
+    throw new Error(
+      `${authority}: PR #${review.pullRequest} is not the pinned owner-reviewed ${expected.id} refinement`,
+    );
+  }
+
+  const reviewComparison = await githubJson(
+    `${apiRoot}/compare/${review.beforeCommit}...${review.afterCommit}`,
+    token,
+  );
+  if (reviewComparison.status !== 'ahead') {
+    throw new Error(
+      `${authority}: ${expected.id} after commit is not descended from its pinned before commit`,
+    );
+  }
+  const ratificationComparison = await githubJson(
+    `${apiRoot}/compare/${review.afterCommit}...${pin.commit}`,
+    token,
+  );
+  if (ratificationComparison.status !== 'ahead' && ratificationComparison.status !== 'identical') {
+    throw new Error(
+      `${authority}: ${expected.id} reviewed after commit is not in the Ratification history`,
+    );
+  }
+
+  const afterSources = await fetchSources(review.repository, pin.paths, review.afterCommit, token);
+  const afterCatalog = buildCatalogFromSources(authority, afterSources);
+  const after = afterCatalog.principles.find(({ id }) => id === expected.id);
+  if (
+    after?.semanticSha256 !== expected.ratifiedSemanticSha256 ||
+    afterCatalog.semanticCatalogSha256 !== pin.semanticCatalogSha256
+  ) {
+    throw new Error(
+      `${authority}: ${expected.id} reviewed after commit does not reproduce the Ratified semantics`,
+    );
+  }
+  console.log(
+    `    ${authority}: ${expected.id} semantic exception verified through owner merge PR #${review.pullRequest} (${review.beforeCommit} -> ${review.afterCommit})`,
+  );
 }
 
 /**

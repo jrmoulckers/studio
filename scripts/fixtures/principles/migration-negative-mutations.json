@@ -513,6 +513,106 @@
       "expectedError": "recorded semantic changes do not match the independently pinned set"
     },
     {
+      "name": "semantic refinement review provenance missing",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": ["authorities", 3, "historicalComparison", "changedPrinciples", 0, "review"],
+        "value": {},
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "semantic review is missing \"repository\""
+    },
+    {
+      "name": "semantic refinement before commit self-certified",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": [
+          "authorities",
+          3,
+          "historicalComparison",
+          "changedPrinciples",
+          0,
+          "review",
+          "beforeCommit"
+        ],
+        "value": "0000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "provenance does not match the independent PR #97 pin"
+    },
+    {
+      "name": "semantic refinement after commit self-certified",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": [
+          "authorities",
+          3,
+          "historicalComparison",
+          "changedPrinciples",
+          0,
+          "review",
+          "afterCommit"
+        ],
+        "value": "0000000000000000000000000000000000000000",
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "provenance does not match the independent PR #97 pin"
+    },
+    {
+      "name": "semantic refinement review PR rewritten",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": [
+          "authorities",
+          3,
+          "historicalComparison",
+          "changedPrinciples",
+          0,
+          "review",
+          "pullRequest"
+        ],
+        "value": 99,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "provenance does not match the independent PR #97 pin"
+    },
+    {
+      "name": "semantic refinement review unmerged",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": [
+          "authorities",
+          3,
+          "historicalComparison",
+          "changedPrinciples",
+          0,
+          "review",
+          "merged"
+        ],
+        "value": false,
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "semantic refinement review must be merged"
+    },
+    {
+      "name": "semantic refinement review merged by non-owner",
+      "mutation": {
+        "operation": "set-final-field",
+        "path": [
+          "authorities",
+          3,
+          "historicalComparison",
+          "changedPrinciples",
+          0,
+          "review",
+          "mergedBy"
+        ],
+        "value": { "login": "not-the-owner", "id": 1 },
+        "recomputeFinalIntegrity": true
+      },
+      "expectedError": "PR #97 must be owner-authored and owner-merged"
+    },
+    {
       "name": "local Studio Status drift",
       "mutation": {
         "operation": "mutate-source-file",

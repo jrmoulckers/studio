@@ -537,7 +537,13 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["id", "historicalSemanticSha256", "ratifiedSemanticSha256", "rationale"],
+            "required": [
+              "id",
+              "historicalSemanticSha256",
+              "ratifiedSemanticSha256",
+              "rationale",
+              "review"
+            ],
             "properties": {
               "id": {
                 "$ref": "#/$defs/principleId"
@@ -551,7 +557,90 @@
               "rationale": {
                 "type": "string",
                 "minLength": 1
+              },
+              "review": {
+                "$ref": "#/$defs/semanticChangeReview"
               }
+            }
+          }
+        }
+      }
+    },
+    "semanticChangeReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Immutable before/head/after commits and authenticated owner provenance for a reviewed semantic refinement between the Draft evidence and Ratification.",
+      "required": [
+        "repository",
+        "pullRequest",
+        "state",
+        "merged",
+        "mergedAt",
+        "baseRef",
+        "beforeCommit",
+        "headCommit",
+        "afterCommit",
+        "authorAssociation",
+        "author",
+        "mergedBy"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "pullRequest": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "const": "closed"
+        },
+        "merged": {
+          "const": true
+        },
+        "mergedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "baseRef": {
+          "const": "main"
+        },
+        "beforeCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "headCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "afterCommit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "authorAssociation": {
+          "const": "OWNER"
+        },
+        "author": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["login", "id"],
+          "properties": {
+            "login": {
+              "const": "jrmoulckers"
+            },
+            "id": {
+              "const": 43014188
+            }
+          }
+        },
+        "mergedBy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["login", "id"],
+          "properties": {
+            "login": {
+              "const": "jrmoulckers"
+            },
+            "id": {
+              "const": 43014188
             }
           }
         }
