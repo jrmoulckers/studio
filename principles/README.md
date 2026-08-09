@@ -47,19 +47,24 @@ the proposed dispositions and independent source evidence live in the migration 
 | **Total**                               |                                       | **192** |
 
 The proposed ledger now covers **192/192** stable IDs with zero unmapped entries: 21 `rewrite`,
-43 `split`, 122 `reference`, and 6 `retire`. Its 242 successor links point to 159 unique Draft
-successors across Studio (44 links), Engineering (92), Product (56), and `.github` (50). The
-verified authority catalog contains 174 Draft principles in total. See
-[`MIGRATION.md`](MIGRATION.md) for the mapping rules, retirement categories, receipt limits, and
-owner-only Ratification gate.
+43 `split`, 122 `reference`, and 6 `retire`. Its 242 successor links point to 159 unique
+successors across Studio (44 links), Engineering (92), Product (56), and `.github` (50), as
+recorded in the pinned, historical migration-verification receipt: **174 Draft principles in
+total** at that receipt's commit (unrefreshed; it does not track any later local `Status`
+change). See [`MIGRATION.md`](MIGRATION.md) for the mapping rules, retirement categories,
+receipt limits, and owner-only Ratification gate.
 
-## Studio Draft principle tree
+## Studio principle tree
 
 Alongside the transitional legacy realm files, Studio authors its design and UI authority as a
-concise Draft tree under [`design/`](design) and [`experience/`](experience). Each principle has
+concise tree under [`design/`](design) and [`experience/`](experience). Each principle has
 a stable `STUDIO-<AREA>-NNN` ID, a testable verification, repository-owner ratification
 accountability, an implementation owner, explicit cross-authority handoffs, and exact legacy
-inputs. Every principle is **Draft** and non-normative until the repository owner ratifies it.
+inputs. A principle's `Status` (`Draft` or `Ratified`) is normative only once the repository
+owner merges an owner-effective Ratification decision record naming it; see
+[`RATIFICATION-DESIGN-EXPERIENCE.md`](RATIFICATION-DESIGN-EXPERIENCE.md) for the 25
+design/experience successors this applies to. Before that merge, a candidate `Status: Ratified`
+value is a proposed change awaiting the owner's decision, not a normative claim.
 
 | File                                                         | Area prefix   | Scope                                                      |
 | ------------------------------------------------------------ | ------------- | ---------------------------------------------------------- |
@@ -71,13 +76,16 @@ inputs. Every principle is **Draft** and non-normative until the repository owne
 | [`experience/localization.md`](experience/localization.md)   | `STUDIO-L10N` | Text expansion, RTL/bidi UX; mechanism handoffs            |
 | [`experience/ux.md`](experience/ux.md)                       | `STUDIO-UX`   | Ease of use, visible state, tabular figures, consolidation |
 
-The completed proposed ledger does not remove, supersede, or reassign any legacy principle. Every
-successor and disposition remains pre-ratification. A legacy file is removed only through the
-owner-ratified disposition and evidence gate below. The tree and migration records are validated
-by [`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
+The completed proposed ledger does not remove, supersede, or reassign any legacy principle.
+Every legacy disposition remains pre-ratification regardless of any local Studio successor's
+`Status`. A legacy file is removed only through the owner-ratified disposition and evidence gate
+below. The tree and migration records are validated by
+[`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
 `pnpm principles:check`, and chained after the token suite in `pnpm test`). It checks the exact
-legacy inventory and bytes, Studio Draft fields, ledger/schema/cardinality, pinned receipt
-digests, reciprocity, persistent negative mutations, and the blocked deletion gate.
+legacy inventory and bytes, Studio `Status` fields (and, when `Ratified`, the covering
+Ratification decision record and an independent status-excluded content digest per principle),
+ledger/schema/cardinality, pinned receipt digests, reciprocity, persistent negative mutations,
+and the blocked deletion gate.
 
 ## Precedence during migration
 
@@ -87,9 +95,11 @@ digests, reciprocity, persistent negative mutations, and the blocked deletion ga
    paths do not transfer ownership.
 3. An unmapped legacy principle is transitional input only. It may inform a proposal, but
    it cannot establish authority outside Studio or override a ratified successor.
-4. The Studio Draft principle tree is a proposed successor set. Until the repository owner
-   ratifies a given principle, it is non-normative and does not supersede the legacy realm
-   text it draws from; both remain in place.
+4. A Studio successor's local `Status` is a proposed change until an owner-effective
+   Ratification decision record naming it is merged by the repository owner; only then is it
+   normative, and even then it supersedes no legacy realm text and does not by itself ratify
+   or advance any migration-ledger disposition or any Engineering/Product/`.github`
+   successor.
 
 Cross-authority references use durable repository links or stable IDs. Private Engineering
 and Product sources must not be copied into Studio merely to make a link locally
@@ -111,8 +121,10 @@ No legacy top-level principle may be removed until its stable ID has **exactly o
 owner-ratified disposition (`rewrite`, `split`, `reference`, or `retire`), reaches `verified`
 with evidence, and every mapped successor is owner-ratified in its canonical authority. A realm
 file may be deleted only after every stable ID in its range passes that gate and all inbound
-references have been updated. All 174 verified successors are currently Draft, so all 21 legacy
-realm files remain in place.
+references have been updated. The pinned [`migration-verification-receipt.json`](migration-verification-receipt.json)
+still records all 174 verified successors as `Draft` (it is historical evidence and is not
+refreshed by a local Studio `Status` change), so the deletion gate stays blocked and all 21
+legacy realm files remain in place.
 
 The repository-local canonical-role mapping is in [`AGENTS.md`](AGENTS.md). It is a path
 overlay, not a copy of the canonical agent definitions.

@@ -142,6 +142,95 @@ const AUTHORITY_PINS = {
 
 const BASELINE_COMMIT = 'efe6aa3b5ad020331a91f533844b0b9f70d70b76';
 const RECEIPT_INTEGRITY_PIN = 'b103a2d6a18b21b0b18e47c884f535d19a48100f294fc9a8d55d5e43656f2863';
+
+// Studio local principle Status is allowed to move from the receipt-pinned historical "Draft"
+// to "Ratified" only through an owner-effective Ratification decision record. Each pin below is
+// an independent, hardcoded status-excluded content digest for one Studio successor block: the
+// exact block bytes at the receipt-pinned commit with only the "- **Status:** <value>" line
+// normalized to a fixed placeholder. It is unaffected by a Draft <-> Ratified status edit and
+// changes if any other field (Statement, Rationale, Verification, owners, Handoffs, Legacy
+// inputs, or the ID/title heading) changes. It is never written into the pinned receipt, which
+// stays historical and unrefreshed.
+const STUDIO_STATUS_CONTENT_PIN = {
+  'STUDIO-A11Y-001': '6b17617fb6f8f7f15490b7a640d331b7d8e912d68338840a86f6148419ccc2fb',
+  'STUDIO-A11Y-002': '1cf31ea51e312ca26f5b91e0aeeb802a94c8f9f4fe1847adae5598eea37672ff',
+  'STUDIO-A11Y-003': 'cd5aaf501f94179a201bb860b5348b02d3d2da5a65b1f0f4da8bf1cfc10f44ab',
+  'STUDIO-CMP-001': '17af9c56b9844daec6b228c23b16c15ec66043edbff33a33a7a5dd51a5a70670',
+  'STUDIO-CMP-002': '81122335d04ae6619b5b47c2a710c16e80dc6d793794e5865b3ed8f6621af040',
+  'STUDIO-CMP-003': '1bd0e7b0657cd2787477ba197712c341c896ac5da51308cc45393a6bf9ad9cb2',
+  'STUDIO-FND-001': '1838b22c9380e0241401f4019094be9c262ab1b5aeaba1941ef658d6a9807145',
+  'STUDIO-FND-002': 'eb254f2be23d807fe282ff2ed7992b0edaf7747085d334eb82e29f526146fba1',
+  'STUDIO-FND-003': '89632734ee1c5ce2e5a8fa0b85e879bdf93ef23c5dca08e9a73014b2b238b7f0',
+  'STUDIO-INT-001': '367fea9df74fd3d1ac92ca898eabce27e581683b6c809cbf3ebd912171766f83',
+  'STUDIO-INT-002': '2cf1c6052ac25238c5eb1db0a4ab06565eda7785bdbee77745e90db3dfc968fe',
+  'STUDIO-INT-003': '1c1ee7236dc6218064067ed337fab47615ea01185297a100c3e01ac9ead1e9e0',
+  'STUDIO-INT-004': '66d6d0480882e1e399fb81d0781fb345d8bba448c14b6c6008661525ad945871',
+  'STUDIO-INT-005': '8afd2a62f939fa8020e1818ebee9f601aecec771f8dfef3f03c2466e3893fcb5',
+  'STUDIO-L10N-001': '4d23eb28a5fb8449c6aa67fbd8b1f32810103d8a7ad49766502562ad83326ca9',
+  'STUDIO-L10N-002': '960610c35139b36a2791643071cc889e5bce349889d60e248217f3a62a8d04f9',
+  'STUDIO-L10N-003': '9d9c4114d537445632a4f02ad7fe281fe7f8e68d9be3a89d5f64ec6d2ac0716a',
+  'STUDIO-TOK-001': '57d10bfc8a11065cadd9ce1578a6b0ba006e47c8f782e2041098e3237062789a',
+  'STUDIO-TOK-002': '65233ab09ab87da92e2b961f4cd5a357dc066163340c98af0d8ee44fd2ae95e3',
+  'STUDIO-TOK-003': '2272227893948f13f1edeaa1dc844eb71e762f681f2987e4dcba85aa0eb79c58',
+  'STUDIO-TOK-004': '2d28aa2f388ee9c295e88c963845cb2a69af957dff182d066d168f5a54175887',
+  'STUDIO-UX-001': '9c5dc6c3ea092746be92199cf9f6d92f060171e3675875db00fd4006fd760c5e',
+  'STUDIO-UX-002': '49f9524767e63bc97581900065d5fb04b1b365bc67bb4264fcfb97ad2c695c0a',
+  'STUDIO-UX-003': 'e33b988df5585393b0dffa5704b84418668774d2e3ce2ed713456fbe3963e808',
+  'STUDIO-UX-004': 'f7e6ada8b8d7dcc351f80bd1d6a61b43939b4eac38587c206693f393a34e069b',
+};
+const STUDIO_DRAFT_BANNER =
+  '> **Status:** Draft (proposed, non-normative). Only the repository owner may ratify.';
+const STUDIO_RATIFICATION_BANNER = [
+  "> **Ratification:** Each principle's `Status` becomes effective only when the repository owner",
+  '> merges the covering Ratification decision record; before that merge, the candidate change is',
+  '> proposed and non-normative.',
+].join('\n');
+const STUDIO_PREAMBLE_CONTENT_PIN = {
+  'principles/design/foundations.md':
+    '8ad429a989eb308e8d68ae7b05703e7868d235754740042cb80fe56424cb45ba',
+  'principles/design/tokens-and-themes.md':
+    '5e0e49942e990711bc4cc01a401f7ca9515e2214aeac33dc36735bddbfa19e3b',
+  'principles/design/components.md':
+    '0fba9e2ea871de09fc9914a40050f1da3855e225847324f0815c21b5c7f3afc1',
+  'principles/experience/interaction.md':
+    'c9ed50d25d6477bbb2fc4c24f26810495ca76e0d535d44b0c6d99c9a0db3839d',
+  'principles/experience/accessibility.md':
+    '23515405247b48d30922433723461a9d90964547cb911114c9a8fa948511e14b',
+  'principles/experience/localization.md':
+    '4d049093f112e2739b3d1a891f819801a12f8fd8a2a94579ba9ff7e0abaa8fc7',
+  'principles/experience/ux.md': 'd6004b888f77f01ea35d90d8f8cca83efdd462b9ea0cbb293120e26ef9e314de',
+};
+const ALLOWED_STUDIO_STATUSES = new Set(['Draft', 'Ratified']);
+const RATIFICATION_RECORD_PATH = 'principles/RATIFICATION-DESIGN-EXPERIENCE.md';
+const RATIFICATION_REQUIRED_PHRASES = [
+  'Content, ownership, IDs, and legacy inputs are unchanged.',
+  'Merging this pull request by the repository owner is the effective Ratification approval event.',
+  'This record does not itself ratify anything and does not claim owner approval before merge.',
+  'remains historical, non-normative evidence; it proves no Ratification and authorizes no deletion.',
+  'Downstream finalization remains blocked on Ratification by Engineering, Product, and `.github` plus refreshed live evidence.',
+  'PR #15',
+  'PR #21',
+];
+const RATIFICATION_FORBIDDEN_CLAIMS = [
+  {
+    pattern: /\bpinned receipt\b.{0,160}\bproves Ratification\b/i,
+    message: 'the pinned receipt cannot prove Ratification',
+  },
+  {
+    pattern: /\bpinned receipt\b.{0,160}\bauthorizes (?:legacy )?deletion\b/i,
+    message: 'the pinned receipt cannot authorize legacy deletion',
+  },
+  {
+    pattern:
+      /\b(?:Ratification|owner approval) (?:is|was|became|already occurred).{0,80}\bbefore merge\b/i,
+    message: 'Ratification cannot be effective before repository-owner merge',
+  },
+  {
+    pattern:
+      /\b(?:contributor|agent|implementation owner)\b.{0,80}\b(?:approve|approves|ratify|ratifies)\b/i,
+    message: 'a non-owner cannot approve Ratification',
+  },
+];
 const REQUIRED_FIELDS = [
   'Status',
   'Statement',
@@ -186,6 +275,66 @@ const sortedUnique = (values) => [...new Set(values)].sort();
 const arraysEqual = (left, right) =>
   left.length === right.length && left.every((value, index) => value === right[index]);
 const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+const normalizeWhitespace = (text) => text.replace(/\s+/g, ' ').trim();
+const STATUS_FIELD_LINE = /^- \*\*Status:\*\* .*$/m;
+const normalizeStatusField = (block) =>
+  STATUS_FIELD_LINE.test(block)
+    ? block.replace(STATUS_FIELD_LINE, '- **Status:** <normalized>')
+    : block;
+
+function extractScopeIds(text) {
+  const scopeHeadingIndex = text.indexOf('## Scope');
+  if (scopeHeadingIndex === -1) return null;
+  const fenceMatch = text.slice(scopeHeadingIndex).match(/```text\r?\n([\s\S]*?)```/);
+  if (!fenceMatch) return null;
+  return fenceMatch[1]
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function validateRatificationRecord(errors, expectedIds, overrideText) {
+  if (overrideText === null) return { exists: false, scopeIds: new Set() }; // Simulated deletion.
+  let text = overrideText;
+  if (text === undefined) {
+    try {
+      text = readFileSync(filePath(RATIFICATION_RECORD_PATH), 'utf8');
+    } catch {
+      return { exists: false, scopeIds: new Set() };
+    }
+  }
+
+  const normalized = normalizeWhitespace(text);
+  for (const phrase of RATIFICATION_REQUIRED_PHRASES) {
+    if (!normalized.includes(normalizeWhitespace(phrase))) {
+      errors.push(`${RATIFICATION_RECORD_PATH}: missing required statement "${phrase}"`);
+    }
+  }
+  for (const { pattern, message } of RATIFICATION_FORBIDDEN_CLAIMS) {
+    if (pattern.test(normalized)) {
+      errors.push(`${RATIFICATION_RECORD_PATH}: forbidden claim: ${message}`);
+    }
+  }
+
+  const scopeIds = extractScopeIds(text);
+  if (!scopeIds) {
+    errors.push(`${RATIFICATION_RECORD_PATH}: missing a parseable "## Scope" fenced ID list`);
+    return { exists: true, scopeIds: new Set() };
+  }
+  const malformed = scopeIds.find((id) => !AUTHORITY_ID.Studio.test(id));
+  if (malformed) {
+    errors.push(`${RATIFICATION_RECORD_PATH}: scope contains a malformed ID "${malformed}"`);
+  }
+  if (new Set(scopeIds).size !== scopeIds.length) {
+    errors.push(`${RATIFICATION_RECORD_PATH}: scope contains duplicate IDs`);
+  }
+  if (!arraysEqual([...scopeIds].sort(), [...expectedIds].sort())) {
+    errors.push(
+      `${RATIFICATION_RECORD_PATH}: scope must list exactly the ${expectedIds.length} Studio successor IDs, no more, no fewer`,
+    );
+  }
+  return { exists: true, scopeIds: new Set(scopeIds) };
+}
 
 function readJson(relativePath, errors) {
   const raw = readFileSync(filePath(relativePath), 'utf8');
@@ -286,17 +435,22 @@ function validateSchemaFiles(ledgerSchema, receiptSchema, errors) {
   }
 }
 
-function validateStudioTree(errors) {
+function validateStudioTree(errors, { fileOverrides = new Map(), ratificationOverrideText } = {}) {
   const seenIds = new Map();
+  const statusById = new Map();
   const sourceFiles = [];
 
   for (const { path, area, ids: expectedIds } of STUDIO_FILES) {
     let buffer;
-    try {
-      buffer = readFileSync(filePath(path));
-    } catch {
-      errors.push(`${path}: file is missing`);
-      continue;
+    if (fileOverrides.has(path)) {
+      buffer = fileOverrides.get(path);
+    } else {
+      try {
+        buffer = readFileSync(filePath(path));
+      } catch {
+        errors.push(`${path}: file is missing`);
+        continue;
+      }
     }
 
     const text = buffer.toString('utf8');
@@ -306,7 +460,7 @@ function validateStudioTree(errors) {
 
     const closeBlock = () => {
       if (!current) return;
-      validateStudioBlock(current, path, area, errors, seenIds);
+      validateStudioBlock(current, path, area, errors, seenIds, statusById);
       fileIds.push(current.id);
       current = null;
     };
@@ -357,10 +511,92 @@ function validateStudioTree(errors) {
     sourceFiles.push({ path, buffer });
   }
 
-  return buildCatalogFromSources('Studio', sourceFiles);
+  const localCatalog = buildCatalogFromSources('Studio', sourceFiles);
+  const contentHashesById = computeStudioStatusExcludedHashes(sourceFiles);
+  validateStudioStatuses(statusById, contentHashesById, errors, ratificationOverrideText);
+  const distinctLocalStatuses = new Set(statusById.values());
+  const localStatus = distinctLocalStatuses.size === 1 ? [...distinctLocalStatuses][0] : 'mixed';
+  validateStudioPreambles(sourceFiles, localStatus, errors);
+  return { ...localCatalog, localStatus };
 }
 
-function validateStudioBlock(block, path, expectedArea, errors, seenIds) {
+function computeStudioStatusExcludedHashes(sourceFiles) {
+  const hashesById = new Map();
+  for (const { buffer } of sourceFiles) {
+    const text = buffer.toString('utf8');
+    const matches = [...text.matchAll(/^### (STUDIO-[A-Z0-9]+-\d{3}) — .+$/gm)];
+    matches.forEach((match, index) => {
+      const block = text.slice(match.index, matches[index + 1]?.index ?? text.length);
+      hashesById.set(match[1], sha256(normalizeStatusField(block)));
+    });
+  }
+  return hashesById;
+}
+
+function validateStudioPreambles(sourceFiles, localStatus, errors) {
+  if (localStatus === 'mixed') return;
+  const expectedBanner =
+    localStatus === 'Ratified' ? STUDIO_RATIFICATION_BANNER : STUDIO_DRAFT_BANNER;
+  for (const { path, buffer } of sourceFiles) {
+    const text = buffer.toString('utf8');
+    const firstHeading = text.search(/^### STUDIO-/m);
+    const preamble = firstHeading === -1 ? text : text.slice(0, firstHeading);
+    if (!preamble.includes(expectedBanner)) {
+      errors.push(`${path}: preamble does not match the ${localStatus} Ratification state`);
+      continue;
+    }
+    const normalized = preamble.replace(expectedBanner, '> **Ratification:** <normalized>');
+    if (sha256(normalized) !== STUDIO_PREAMBLE_CONTENT_PIN[path]) {
+      errors.push(`${path}: preamble content changed beyond the Ratification banner`);
+    }
+  }
+}
+
+function validateStudioStatuses(statusById, contentHashesById, errors, ratificationOverrideText) {
+  const allExpectedIds = STUDIO_FILES.flatMap(({ ids }) => ids);
+  const statuses = allExpectedIds.map((id) => statusById.get(id)).filter(Boolean);
+  if (statuses.length !== allExpectedIds.length) return; // missing IDs are already reported.
+
+  const distinctStatuses = new Set(statuses);
+  if (distinctStatuses.size > 1) {
+    errors.push(
+      'Studio successor statuses are mixed; all 25 successors must share exactly one Status ("Draft" or "Ratified")',
+    );
+    return;
+  }
+
+  const [status] = distinctStatuses;
+  if (status !== 'Ratified') return; // An all-Draft tree needs no Ratification record.
+
+  const record = validateRatificationRecord(errors, allExpectedIds, ratificationOverrideText);
+  if (!record.exists) {
+    errors.push(
+      `Status: Ratified requires an owner-effective Ratification record at ${RATIFICATION_RECORD_PATH}`,
+    );
+    return;
+  }
+  for (const id of allExpectedIds) {
+    if (!record.scopeIds.has(id)) {
+      errors.push(
+        `${id}: Ratified status has no covering entry in the Ratification decision record scope`,
+      );
+    }
+  }
+
+  for (const id of allExpectedIds) {
+    const pin = STUDIO_STATUS_CONTENT_PIN[id];
+    const actual = contentHashesById.get(id);
+    if (!pin) {
+      errors.push(`${id}: no independent status-excluded content pin is recorded`);
+    } else if (actual !== pin) {
+      errors.push(
+        `${id}: content changed beyond the Status field (status-excluded content digest mismatch)`,
+      );
+    }
+  }
+}
+
+function validateStudioBlock(block, path, expectedArea, errors, seenIds, statusById) {
   if (seenIds.has(block.id)) {
     errors.push(`${path}: duplicate principle ID ${block.id} (also in ${seenIds.get(block.id)})`);
   } else {
@@ -379,8 +615,10 @@ function validateStudioBlock(block, path, expectedArea, errors, seenIds) {
       errors.push(`${path}: ${block.id} has an empty "${field}" field`);
     }
   }
-  if (block.fields.get('Status') !== 'Draft') {
-    errors.push(`${path}: ${block.id} Status must be exactly "Draft"`);
+  const status = block.fields.get('Status');
+  if (status !== undefined) statusById.set(block.id, status);
+  if (!ALLOWED_STUDIO_STATUSES.has(status)) {
+    errors.push(`${path}: ${block.id} Status must be exactly "Draft" or "Ratified"`);
   }
   if (block.fields.get('Ratification owner') !== 'repository owner') {
     errors.push(`${path}: ${block.id} Ratification owner must be exactly "repository owner"`);
@@ -1039,16 +1277,48 @@ function validateReciprocity(ledger, successorIndex, errors) {
 function validateLocalStudioReceipt(localCatalog, receipt, errors) {
   const studio = receipt.authorities?.find(({ authority }) => authority === 'Studio');
   if (!studio) return;
-  if (JSON.stringify(localCatalog.files) !== JSON.stringify(studio.files)) {
-    errors.push('local Studio successor file paths or digests do not match the pinned receipt');
+
+  const receiptPrinciples = new Map(
+    studio.principles.map((principle) => [principle.id, principle]),
+  );
+  const localPrinciples = new Map(
+    localCatalog.principles.map((principle) => [principle.id, principle]),
+  );
+
+  if (!arraysEqual([...receiptPrinciples.keys()].sort(), [...localPrinciples.keys()].sort())) {
+    errors.push('local Studio successor IDs do not match the pinned receipt catalog');
+    return;
   }
-  if (JSON.stringify(localCatalog.principles) !== JSON.stringify(studio.principles)) {
-    errors.push(
-      'local Studio successor IDs, paths, statuses, metadata, or block digests do not match the pinned receipt',
-    );
-  }
-  if (localCatalog.catalogSha256 !== studio.catalogSha256) {
-    errors.push('local Studio successor catalog digest does not match the pinned receipt');
+
+  for (const [id, receiptPrinciple] of receiptPrinciples) {
+    const localPrinciple = localPrinciples.get(id);
+    if (localPrinciple.path !== receiptPrinciple.path) {
+      errors.push(`${id}: path "${localPrinciple.path}" does not match the pinned receipt`);
+    }
+    if (localPrinciple.title !== receiptPrinciple.title) {
+      errors.push(`${id}: title does not match the pinned receipt`);
+    }
+    if (!arraysEqual(localPrinciple.legacyInputs, receiptPrinciple.legacyInputs)) {
+      errors.push(`${id}: Legacy inputs do not match the pinned receipt`);
+    }
+
+    const receiptStatus = receiptPrinciple.status; // always "Draft": the receipt is unrefreshed.
+    const localStatus = localPrinciple.status;
+    if (localStatus === receiptStatus) {
+      // Nothing is claimed to have changed for this principle: its own block must be identical.
+      if (localPrinciple.blockSha256 !== receiptPrinciple.blockSha256) {
+        errors.push(`${id}: content changed from the pinned receipt with no Status transition`);
+      }
+    } else if (receiptStatus === 'Draft' && localStatus === 'Ratified') {
+      // The only permitted transition. Content equivalence (besides Status) is proven by the
+      // independent status-excluded content pin, cross-checked in validateStudioStatuses;
+      // nothing further to compare against the (intentionally unrefreshed) receipt bytes here.
+      continue;
+    } else {
+      errors.push(
+        `${id}: Status transition from receipt-pinned "${receiptStatus}" to local "${localStatus}" is not permitted`,
+      );
+    }
   }
 }
 
@@ -1154,7 +1424,15 @@ function normalizeLegacyInputs(authority, raw) {
   return sortedUnique(ids);
 }
 
-function validateState({ ledger, receipt, ledgerRaw, receiptRaw, checkLocalSources }) {
+function validateState({
+  ledger,
+  receipt,
+  ledgerRaw,
+  receiptRaw,
+  checkLocalSources,
+  studioFileOverrides = new Map(),
+  ratificationOverrideText,
+}) {
   const errors = [
     ...findDuplicateJsonKeys(ledgerRaw, 'principles/migration-ledger.json'),
     ...findDuplicateJsonKeys(receiptRaw, RECEIPT_PATH),
@@ -1162,7 +1440,9 @@ function validateState({ ledger, receipt, ledgerRaw, receiptRaw, checkLocalSourc
   const legacyIds = checkLocalSources
     ? validateLegacyCatalog(receipt, errors)
     : EXPECTED_LEGACY_IDS;
-  const localStudio = checkLocalSources ? validateStudioTree(errors) : null;
+  const localStudio = checkLocalSources
+    ? validateStudioTree(errors, { fileOverrides: studioFileOverrides, ratificationOverrideText })
+    : null;
   const successorIndex = validateReceipt(receipt, errors);
   validateLedger(ledger, legacyIds, errors);
   const mappedSuccessors = validateReciprocity(ledger, successorIndex, errors);
@@ -1170,6 +1450,7 @@ function validateState({ ledger, receipt, ledgerRaw, receiptRaw, checkLocalSourc
   return {
     errors,
     summary: summarizeLedger(ledger, successorIndex, mappedSuccessors),
+    localStudioStatus: localStudio?.localStatus ?? null,
   };
 }
 
@@ -1221,14 +1502,11 @@ function runNegativeFixtures(fixtures, baseline) {
     const receipt = structuredClone(baseline.receipt);
     let ledgerRaw = baseline.ledgerRaw;
     let receiptRaw = baseline.receiptRaw;
+    let studioFileOverrides = new Map();
+    let ratificationOverrideText;
     try {
-      ({ ledgerRaw, receiptRaw } = applyNegativeMutation(
-        fixture.mutation,
-        ledger,
-        receipt,
-        ledgerRaw,
-        receiptRaw,
-      ));
+      ({ ledgerRaw, receiptRaw, studioFileOverrides, ratificationOverrideText } =
+        applyNegativeMutation(fixture.mutation, ledger, receipt, ledgerRaw, receiptRaw));
     } catch (error) {
       errors.push(`negative fixture "${fixture.name}" could not be applied: ${error.message}`);
       continue;
@@ -1238,7 +1516,9 @@ function runNegativeFixtures(fixtures, baseline) {
       receipt,
       ledgerRaw,
       receiptRaw,
-      checkLocalSources: false,
+      checkLocalSources: Boolean(fixture.checkLocalSources),
+      studioFileOverrides,
+      ratificationOverrideText,
     });
     if (!result.errors.some((message) => message.includes(fixture.expectedError))) {
       errors.push(
@@ -1305,6 +1585,31 @@ function applyNegativeMutation(mutation, ledger, receipt, ledgerRaw, receiptRaw)
       target[mutation.path.at(-1)] = mutation.value;
       break;
     }
+    case 'mutate-studio-file': {
+      const original = readFileSync(filePath(mutation.path), 'utf8');
+      if (!original.includes(mutation.find)) {
+        throw new Error(`pattern not found in ${mutation.path}`);
+      }
+      const mutated = original.replace(mutation.find, mutation.replace);
+      return {
+        ledgerRaw,
+        receiptRaw,
+        studioFileOverrides: new Map([[mutation.path, Buffer.from(mutated, 'utf8')]]),
+      };
+    }
+    case 'mutate-ratification-record': {
+      const original = readFileSync(filePath(RATIFICATION_RECORD_PATH), 'utf8');
+      if (!original.includes(mutation.find)) {
+        throw new Error('pattern not found in the Ratification decision record');
+      }
+      return {
+        ledgerRaw,
+        receiptRaw,
+        ratificationOverrideText: original.replace(mutation.find, mutation.replace),
+      };
+    }
+    case 'delete-ratification-record':
+      return { ledgerRaw, receiptRaw, ratificationOverrideText: null };
     default:
       throw new Error(`unknown operation "${mutation.operation}"`);
   }
@@ -1454,9 +1759,15 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-const { summary } = result;
+const { summary, localStudioStatus } = result;
+const studioStatusLabel =
+  localStudioStatus === 'Ratified'
+    ? 'Ratified (locally; the pinned receipt stays historical Draft)'
+    : localStudioStatus === 'mixed'
+      ? 'mixed'
+      : 'Draft';
 console.log(
-  `Principle validation passed: ${AUTHORITY_PINS.Studio.principleCount} Studio Draft principles and ${summary.entries}/192 legacy dispositions.`,
+  `Principle validation passed: ${AUTHORITY_PINS.Studio.principleCount} Studio successors are ${studioStatusLabel} and ${summary.entries}/192 legacy dispositions verified.`,
 );
 console.log(
   `  Dispositions: rewrite ${summary.dispositions.rewrite}, split ${summary.dispositions.split}, reference ${summary.dispositions.reference}, retire ${summary.dispositions.retire}`,

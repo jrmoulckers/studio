@@ -1,6 +1,8 @@
 # Studio principles — Design foundations
 
-> **Status:** Draft (proposed, non-normative). Only the repository owner may ratify.
+> **Ratification:** Each principle's `Status` becomes effective only when the repository owner
+> merges the covering Ratification decision record; before that merge, the candidate change is
+> proposed and non-normative.
 >
 > These principles are Studio's design-authority successor to parts of the transitional
 > legacy realm tree. They do not remove or supersede any legacy file, and the migration
@@ -16,7 +18,7 @@ consumers. Token, theme, component, and experience principles build on these.
 
 ### STUDIO-FND-001 — Design decisions are a framework-neutral contract
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Express every reusable, cross-product design decision as a named entry in the Studio design contract — tokens and component specs consumed through generated, framework-neutral outputs — never as a shared value or theming layer that lives inside one framework or product.
 - **Rationale:** Studio spans multiple frameworks and platforms; a single portable contract is the only thing that keeps one system consistent, while framework-locked source of truth fragments it and forces per-consumer divergence.
 - **Verification:** No reusable color, size, radius, elevation, or duration covered by the shared contract is duplicated as a literal in a consuming surface; every consumer reads the same generated CSS-variable / preset / typed-token contract, and no framework wrapper restates token values as its own source of truth.
@@ -27,7 +29,7 @@ consumers. Token, theme, component, and experience principles build on these.
 
 ### STUDIO-FND-002 — Evolve the contract additively and keep migrations compatible
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Add new semantic roles and component capabilities rather than repurposing existing ones; make any breaking change to a name or contract deliberate, versioned, aliased, and accompanied by a migration path.
 - **Rationale:** Every product binds to these names; silent breakage cascades across all consumers, while an additive, aliased contract lets the system improve without stranding anyone.
 - **Verification:** A removed or renamed contract entry ships with a compatibility alias and a documented migration; regression checks confirm the prior semantic surface still resolves for existing consumers.
@@ -38,7 +40,7 @@ consumers. Token, theme, component, and experience principles build on these.
 
 ### STUDIO-FND-003 — Ground design in current best practice and reference other authorities
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Base design decisions on current, platform-native UX and accessibility best practice, and reference Product, Engineering, and `.github` sources by their stable location rather than restating their rules inside Studio.
 - **Rationale:** Best practice encodes hard-won usability and accessibility lessons, and after ADR-0003 Studio owns only user-facing design/UI expression — copying another authority's normative rules creates drift and false ownership.
 - **Verification:** Design guidance cites recognized current standards where it makes a usability or accessibility claim, and cross-authority concerns link out instead of duplicating normative text; no Studio principle claims ownership of a Product, Engineering, or `.github` mechanism.
