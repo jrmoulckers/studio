@@ -68,6 +68,7 @@ pnpm typecheck
 pnpm lint
 pnpm test
 pnpm format:check
+pnpm workflows:check
 pnpm tokens:dist
 pnpm tokens:dist:check
 ```
@@ -75,6 +76,18 @@ pnpm tokens:dist:check
 `packages/tokens/build/` is disposable local output.
 `packages/tokens/dist/` is the committed distribution interface and must remain
 deterministic, current, and text-only.
+
+## Continuous integration
+
+CI runs once for pull requests and again after changes land on `main`; feature-branch pushes
+do not create a second run alongside pull request validation. Concurrency cancels stale runs
+for the same pull request or branch.
+
+Generic Linux lint/format, typecheck/test/build, and security checks call the canonical
+reusable workflows at an immutable commit. Studio keeps token distribution freshness and
+Windows formatting parity as local jobs. The stable `build` aggregate requires all of those
+checks, including the package graph, token contracts, and principles validation exercised by
+`pnpm test`. Run `pnpm workflows:check` to validate this wiring statically.
 
 ## Governance
 
