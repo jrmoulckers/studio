@@ -7,7 +7,7 @@
     "placeholder": { "$value": "{semantic.text.secondary}", "$type": "color" },
     "focus-ring": { "$value": "{semantic.border.focus}", "$type": "color" },
     "radius": { "$value": "{radius.sm}", "$type": "dimension" },
-    "min-height": { "$value": "46px", "$type": "dimension" },
+    "min-height": { "$value": "{target.min}", "$type": "dimension" },
     "padding-x": { "$value": "{spacing.md}", "$type": "dimension" },
     "padding-y": { "$value": "11px", "$type": "dimension" }
   }

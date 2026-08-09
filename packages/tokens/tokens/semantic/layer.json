@@ -1,0 +1,28 @@
+{
+  "layer": {
+    "$description": "Named stacking purposes. Components reference these, never the raw zIndex steps, so the stacking contract is reviewable in one place and two features cannot silently claim the same plane.",
+    "content": { "$value": "{zIndex.base}", "$type": "number" },
+    "raised": {
+      "$value": "{zIndex.raised}",
+      "$type": "number",
+      "$description": "Cards and tiles lifted above content."
+    },
+    "nav": {
+      "$value": "{zIndex.sticky}",
+      "$type": "number",
+      "$description": "App bar, tab bar, sidebar — the persistent shell."
+    },
+    "scrim": {
+      "$value": "{zIndex.overlay}",
+      "$type": "number",
+      "$description": "Dimming layer behind a modal or sheet."
+    },
+    "dialog": {
+      "$value": "{zIndex.modal}",
+      "$type": "number",
+      "$description": "Modals, sheets, and popovers."
+    },
+    "toast": { "$value": "{zIndex.toast}", "$type": "number" },
+    "tooltip": { "$value": "{zIndex.tooltip}", "$type": "number" }
+  }
+}

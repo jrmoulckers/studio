@@ -1,0 +1,17 @@
+{
+  "focus": {
+    "$description": "Base focus-ring geometry. Split out from the cognitive-accessibility overrides so a mode that needs a thicker ring redefines one token instead of restyling every focusable component. The ring COLOR stays semantic (semantic.border.focus).",
+    "ring": {
+      "width": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "Default focus-ring width. [data-a11y-cognitive=\"true\"] promotes this to cognitive.focusRingWidth (3px)."
+      },
+      "offset": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "Gap between the control edge and the ring, so the ring stays legible on filled controls."
+      }
+    }
+  }
+}

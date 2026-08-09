@@ -80,9 +80,17 @@
     }
   },
   "cognitiveFocus": {
-    "$description": "Enhanced focus indicators — thicker, more visible rings.",
+    "$description": "Enhanced focus indicators — thicker, more visible rings. Widens the base focus.ring geometry; consumers read --cognitive-focus-* under [data-a11y-cognitive=\"true\"] and --focus-ring-* otherwise.",
     "width": { "$value": "{cognitive.focusRingWidth}", "$type": "dimension" },
     "offset": { "$value": "{cognitive.focusRingOffset}", "$type": "dimension" }
+  },
+  "cognitiveTarget": {
+    "$description": "Roomier pointer targets — larger hit areas reduce mis-taps for motor and cognitive needs.",
+    "min": {
+      "$value": "{target.spacious}",
+      "$type": "dimension",
+      "$description": "Promotes the standard 46px target to the spacious 56px step."
+    }
   },
   "cognitiveElevation": {
     "$description": "Simplified elevation — a flatter UI reduces visual noise.",

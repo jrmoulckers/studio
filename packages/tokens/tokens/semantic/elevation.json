@@ -1,0 +1,20 @@
+{
+  "elevation": {
+    "$description": "Named elevation steps over the existing per-theme shadows. The Soft-Lift Rule still holds — there is exactly one lift shadow per theme — so this ramp names INTENT rather than introducing new shadow values. Because it references the theme-scoped shadow.lift / shadow.hairline tokens, each theme resolves it correctly with no per-theme elevation file.",
+    "flat": {
+      "$value": "{shadow.none}",
+      "$type": "shadow",
+      "$description": "No lift — the default for in-flow content."
+    },
+    "hairline": {
+      "$value": "{shadow.hairline}",
+      "$type": "shadow",
+      "$description": "1px inner ring that preserves an edge without a drop shadow."
+    },
+    "raised": {
+      "$value": "{shadow.lift}",
+      "$type": "shadow",
+      "$description": "The single Soft Lift — cards, tiles, popovers, toast."
+    }
+  }
+}

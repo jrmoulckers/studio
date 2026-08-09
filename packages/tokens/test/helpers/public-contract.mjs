@@ -7,13 +7,20 @@ export const REQUIRED_TOKEN_FILES = Object.freeze([
   'component/pill.json',
   'primitive/breakpoint.json',
   'primitive/cognitive.json',
+  'primitive/focus.json',
   'primitive/motion.json',
+  'primitive/opacity.json',
   'primitive/radius.json',
   'primitive/shadow.json',
   'primitive/spacing.json',
+  'primitive/target.json',
   'primitive/typography.json',
+  'primitive/zindex.json',
   'semantic/cognitive.json',
+  'semantic/elevation.json',
+  'semantic/layer.json',
   'semantic/motion.json',
+  'semantic/state.json',
   'semantic/typography.json',
   'themes/default/color.alias.json',
   'themes/default/color.primitive.json',
@@ -21,6 +28,34 @@ export const REQUIRED_TOKEN_FILES = Object.freeze([
   'themes/default/color.semantic.dark.json',
   'themes/default/color.semantic.high-contrast.json',
   'themes/default/color.semantic.light.json',
+]);
+
+/**
+ * Theme-agnostic structural tokens. These carry no color, so they are asserted
+ * once against the light build rather than through per-theme parity.
+ */
+export const REQUIRED_STRUCTURAL_TOKENS = Object.freeze([
+  { path: 'layer.content', type: 'number' },
+  { path: 'layer.raised', type: 'number' },
+  { path: 'layer.nav', type: 'number' },
+  { path: 'layer.scrim', type: 'number' },
+  { path: 'layer.dialog', type: 'number' },
+  { path: 'layer.toast', type: 'number' },
+  { path: 'layer.tooltip', type: 'number' },
+  { path: 'state.hover.overlay', type: 'number' },
+  { path: 'state.hover.surface-overlay', type: 'number' },
+  { path: 'state.pressed.overlay', type: 'number' },
+  { path: 'state.selected.overlay', type: 'number' },
+  { path: 'state.disabled.opacity', type: 'number' },
+  { path: 'state.scrim.opacity', type: 'number' },
+  { path: 'elevation.flat', type: 'shadow' },
+  { path: 'elevation.hairline', type: 'shadow' },
+  { path: 'elevation.raised', type: 'shadow' },
+  { path: 'focus.ring.width', type: 'dimension' },
+  { path: 'focus.ring.offset', type: 'dimension' },
+  { path: 'target.min', type: 'dimension' },
+  { path: 'target.compact', type: 'dimension' },
+  { path: 'target.spacious', type: 'dimension' },
 ]);
 
 export const REQUIRED_SEMANTIC_TOKENS = Object.freeze(

@@ -19,7 +19,7 @@
     "iconbtn": {
       "bg": { "$value": "{semantic.background.secondary}", "$type": "color" },
       "text": { "$value": "{semantic.text.primary}", "$type": "color" },
-      "size": { "$value": "46px", "$type": "dimension" },
+      "size": { "$value": "{target.min}", "$type": "dimension" },
       "radius": { "$value": "{radius.chip}", "$type": "dimension" }
     }
   }
