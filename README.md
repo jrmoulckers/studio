@@ -83,11 +83,11 @@ CI runs once for pull requests and again after changes land on `main`; feature-b
 do not create a second run alongside pull request validation. Concurrency cancels stale runs
 for the same pull request or branch.
 
-Generic Linux lint/format, typecheck/test/build, and security checks call the canonical
-reusable workflows at an immutable commit. Studio keeps token distribution freshness and
-Windows formatting parity as local jobs. The stable `build` aggregate requires all of those
-checks, including the package graph, token contracts, and principles validation exercised by
-`pnpm test`. Run `pnpm workflows:check` to validate this wiring statically.
+Generic Linux lint/format, typecheck/test/build, package audit, and secret scanning call the
+canonical reusable workflows at an immutable commit. Studio keeps token distribution
+freshness and Windows formatting parity as local jobs. The stable `build` aggregate requires
+all of those checks, including the package graph, token contracts, and principles validation
+exercised by `pnpm test`. Run `pnpm workflows:check` to validate this wiring statically.
 
 ## Governance
 

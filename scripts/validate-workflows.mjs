@@ -94,7 +94,11 @@ assert.match(security, /contents: read/);
 assert.doesNotMatch(security, /pull-requests: read/);
 assert.match(security, /run-package-audit: true/);
 assert.match(security, /run-secret-scan: true/);
-assert.match(security, /run-dependency-review: true/);
+assert.match(
+  security,
+  /run-dependency-review: false/,
+  'dependency review must stay disabled while the repository API does not support it',
+);
 
 const tokens = jobBlock('tokens_dist');
 assert.match(
