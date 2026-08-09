@@ -123,8 +123,9 @@ material should not become a durable principle in the current authority topology
 - every selected successor reciprocally cites its legacy input or uses one allowed external
   reference exception;
 - every legacy ID cited by any successor has a ledger disposition;
-- unknown IDs, duplicate keys, wrong commits or digests, renumbered successors, bad cardinality,
-  and self-authoritative or Ratification-claiming receipts fail;
+- unknown IDs, duplicate keys, wrong commits or digests, deleted or renumbered successors, bad
+  cardinality, nonreciprocity, circular or self-authoritative evidence, premature Ratification,
+  false Ratification claims, and Draft deletion authorization fail;
 - the complete ledger remains pre-ratification and deletion stays blocked while mapped successors
   are Draft.
 

@@ -40,13 +40,22 @@
       "expectedError": "catalog digest"
     },
     {
-      "name": "deleted or renumbered successor",
+      "name": "renumbered successor",
       "mutation": {
         "operation": "set-principle-field",
         "authority": "Studio",
         "id": "STUDIO-A11Y-001",
         "field": "id",
         "value": "STUDIO-A11Y-999"
+      },
+      "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
+    },
+    {
+      "name": "deleted successor",
+      "mutation": {
+        "operation": "delete-principle",
+        "authority": "Studio",
+        "id": "STUDIO-A11Y-001"
       },
       "expectedError": "unknown successor Studio:STUDIO-A11Y-001"
     },
@@ -73,13 +82,32 @@
       "expectedError": "a Draft successor cannot advance the disposition past proposed"
     },
     {
-      "name": "self-authoritative receipt",
+      "name": "nonreciprocal successor",
+      "mutation": {
+        "operation": "remove-principle-legacy-input",
+        "authority": "Studio",
+        "id": "STUDIO-A11Y-001",
+        "legacyId": "studio-legacy:accessibility:1"
+      },
+      "expectedError": "Studio:STUDIO-A11Y-001 does not cite the legacy ID"
+    },
+    {
+      "name": "circular receipt",
       "mutation": {
         "operation": "set-receipt-field",
         "path": ["verification", "ledgerWasNotInput"],
         "value": false
       },
       "expectedError": "must be independent of the ledger"
+    },
+    {
+      "name": "self-authoritative receipt",
+      "mutation": {
+        "operation": "set-receipt-field",
+        "path": ["claims", "normativeSource"],
+        "value": true
+      },
+      "expectedError": "cannot be a normative source"
     },
     {
       "name": "receipt claims ratification",
@@ -89,6 +117,15 @@
         "value": true
       },
       "expectedError": "cannot prove Ratification"
+    },
+    {
+      "name": "Draft receipt authorizes deletion",
+      "mutation": {
+        "operation": "set-receipt-field",
+        "path": ["claims", "authorizesLegacyDeletion"],
+        "value": true
+      },
+      "expectedError": "cannot authorize legacy deletion"
     }
   ]
 }

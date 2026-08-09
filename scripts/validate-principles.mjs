@@ -1276,6 +1276,23 @@ function applyNegativeMutation(mutation, ledger, receipt, ledgerRaw, receiptRaw)
       principle[mutation.field] = mutation.value;
       break;
     }
+    case 'delete-principle': {
+      const authority = receipt.authorities.find(
+        (record) => record.authority === mutation.authority,
+      );
+      authority.principles = authority.principles.filter(({ id }) => id !== mutation.id);
+      break;
+    }
+    case 'remove-principle-legacy-input': {
+      const authority = receipt.authorities.find(
+        (record) => record.authority === mutation.authority,
+      );
+      const principle = authority.principles.find(({ id }) => id === mutation.id);
+      principle.legacyInputs = principle.legacyInputs.filter(
+        (legacyId) => legacyId !== mutation.legacyId,
+      );
+      break;
+    }
     case 'append-successor':
       ledger.entries[mutation.legacyId].successors.push(mutation.successor);
       break;
