@@ -122,7 +122,10 @@ build/
 │   ├── tokens-dark-oled.css      # [data-theme="dark-oled"]
 │   ├── tokens-high-contrast.css  # [data-theme="high-contrast"]
 │   └── index.css                 # @imports all modes + auto-switching + cognitive blocks
-├── tailwind/default.cjs          # Tailwind preset object (var(--…)-backed)
+├── tailwind/default.cjs          # complete, self-sufficient Tailwind preset (var(--…)-backed)
+├── native/
+│   ├── compose/JrmTokens.kt      # Android — JrmColorScheme per theme + Dp/sp/Float scales
+│   └── swift/JRMTokens.swift     # Apple — JRMColorScheme per theme + CGFloat scales
 └── js/
     ├── default/tokens.<mode>.js + .d.ts
     └── index.js + index.d.ts     # barrel: tokens (=light), tokensDark, tokensDarkOled, themes, …
@@ -141,12 +144,14 @@ pnpm --filter @jrm/tokens dist    # or, from the repo root:  pnpm tokens:dist
 ```
 
 runs the Style Dictionary build and then deterministically mirrors the consumable subset
-(`css/`, `tailwind/`, `js/`) from `build/` into `dist/`:
+(`css/`, `tailwind/`, `native/`, `js/`) from `build/` into `dist/`:
 
 ```
 packages/tokens/dist/
 ├── css/default/{tokens,tokens-dark,tokens-dark-oled,tokens-high-contrast,index}.css
 ├── tailwind/default.cjs
+├── native/compose/JrmTokens.kt
+├── native/swift/JRMTokens.swift
 └── js/
     ├── index.js  index.d.ts
     └── default/tokens.{light,dark,dark-oled,high-contrast}.{js,d.ts}
@@ -236,6 +241,43 @@ same object and adds exactly that plugin.
 | `min-h-min`, `min-w-compact`                      | `--target-*`                                |
 | `ring` / `ring-offset` defaults                   | `--focus-ring-width`, `--focus-ring-offset` |
 | `p-safe-b`, `pt-safe-t`                           | `env(safe-area-inset-*)`                    |
+
+#### Native (Android and Apple)
+
+Native consumers vendor the same tree and compile the emitted sources directly — there is no
+package to install and no build step to run.
+
+```kotlin
+// Android — add dist/native/compose/JrmTokens.kt to your source set
+val colors = jrmColorScheme(JrmTheme.Dark)
+Surface(color = colors.backgroundPrimary) {
+    Text("Hello", color = colors.textPrimary, fontSize = JrmFontSize.body)
+}
+Modifier.padding(JrmSpacing.md).heightIn(min = JrmTarget.min)
+```
+
+```swift
+// Apple — add dist/native/swift/JRMTokens.swift to your target
+let colors = JRMTheme.dark.colors
+Text("Hello")
+    .foregroundStyle(colors.textPrimary)
+    .padding(JRMSpacing.md)
+    .frame(minHeight: JRMTarget.min)
+```
+
+Both files are rendered from the **same resolved token trees** as the CSS and JS output, so
+native cannot drift from web. Three translations happen at the boundary, because these concepts
+have no native equivalent:
+
+| Web              | Native                                                                  |
+| ---------------- | ----------------------------------------------------------------------- |
+| `oklch(L C H)`   | converted to sRGB via Oklab; out-of-gamut channels clamp as browsers do |
+| `rem` type scale | resolved against a 16px root, so `1rem` → `16.sp` / `16` pt             |
+| `ms` durations   | Kotlin `Int` milliseconds; Swift `TimeInterval` seconds                 |
+
+Themes are exposed as plain values (`JrmTheme` / `JRMTheme` and a color scheme per theme)
+rather than wired into `MaterialTheme` or the SwiftUI environment. Choosing how to propagate a
+theme is an app decision; this output stays framework-neutral, matching the web contract.
 
 ### This workspace
 
