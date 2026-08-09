@@ -143,8 +143,9 @@ StyleDictionary.registerFormat({
 });
 
 /**
- * Tailwind preset object whose values are `var(--…)` references, so a runtime
- * theme/mode swap (changing `data-theme`) re-flows every utility with no rebuild.
+ * A complete, drop-in Tailwind preset whose token values are `var(--…)` references,
+ * so a runtime theme/mode swap (changing `data-theme`) re-flows every utility with
+ * no rebuild.
  *
  * Exposes three color families:
  *   • flat back-compat keys (from color.alias.json) — `background`, `foreground`,
@@ -152,6 +153,14 @@ StyleDictionary.registerFormat({
  *   • the full semantic taxonomy, nested under `semantic.*` (e.g.
  *     `bg-semantic-background-primary`) → `var(--semantic-*)`.
  *   • `player.*` and `chart.*` (incl. `chart.hc.*`) primitives.
+ *
+ * It also carries the shared shell (dark-mode strategy, container, radius aliases,
+ * ring width, safe-area spacing, animations). The shell lives HERE rather than in
+ * @jrm/tailwind-preset because consumers receive `dist/` as a copied directory, not
+ * an installed package — `require('@jrm/tokens/tailwind')` cannot resolve for them.
+ * Emitting the shell into the generated file is what makes the vendored artifact
+ * self-sufficient. @jrm/tailwind-preset re-exports this and only adds the plugin,
+ * so there is exactly one definition of the shell.
  */
 StyleDictionary.registerFormat({
   name: 'jrm/tailwind-preset',
@@ -172,6 +181,10 @@ StyleDictionary.registerFormat({
     const boxShadow = {};
     const fontSize = {};
     const fontFamily = {};
+    const zIndex = {};
+    const minHeight = {};
+    const minWidth = {};
+    const opacity = {};
 
     const setDeep = (root, keys, value) => {
       let node = root;
@@ -222,10 +235,82 @@ StyleDictionary.registerFormat({
         fontFamily[rest[1]] = [varRef(token.path)];
         continue;
       }
+      // Structural tokens (added alongside the layer/state/elevation/focus/target
+      // categories) — surfaced as first-class Tailwind scales so consumers reach
+      // them through utilities instead of re-declaring raw var() strings.
+      if (group === 'layer') {
+        zIndex[rest.join('-')] = varRef(token.path);
+        continue;
+      }
+      if (group === 'elevation') {
+        boxShadow[rest.join('-')] = varRef(token.path);
+        continue;
+      }
+      if (group === 'opacity') {
+        opacity[rest.join('-')] = varRef(token.path);
+        continue;
+      }
+      if (group === 'target') {
+        minHeight[rest.join('-')] = varRef(token.path);
+        minWidth[rest.join('-')] = varRef(token.path);
+        continue;
+      }
     }
 
+    // Safe-area insets. Both jrm-recipes and score-king implemented these
+    // independently for PWA/notch support, so they belong in the kernel preset.
+    const safeArea = {
+      'safe-t': 'env(safe-area-inset-top)',
+      'safe-r': 'env(safe-area-inset-right)',
+      'safe-b': 'env(safe-area-inset-bottom)',
+      'safe-l': 'env(safe-area-inset-left)',
+    };
+    Object.assign(spacing, safeArea);
+
     const preset = {
-      theme: { extend: { colors, spacing, borderRadius, boxShadow, fontSize, fontFamily } },
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        container: {
+          center: true,
+          padding: '1rem',
+          // Matches the score-king content-max token.
+          screens: { '2xl': '760px' },
+        },
+        extend: {
+          colors,
+          spacing,
+          borderRadius: {
+            ...borderRadius,
+            DEFAULT: 'var(--radius-md)',
+            full: 'var(--radius-pill)',
+          },
+          boxShadow,
+          fontSize,
+          fontFamily,
+          zIndex,
+          minHeight,
+          minWidth,
+          opacity,
+          // Focus ring width is a token, so high-contrast and cognitive modes
+          // widen every ring by redefining one variable.
+          ringWidth: { DEFAULT: 'var(--focus-ring-width)' },
+          ringOffsetWidth: { DEFAULT: 'var(--focus-ring-offset)' },
+          keyframes: {
+            'fade-in': {
+              from: { opacity: '0' },
+              to: { opacity: '1' },
+            },
+            'pop-in': {
+              '0%': { opacity: '0', transform: 'scale(0.96)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+          },
+          animation: {
+            'fade-in': 'fade-in 0.2s ease-out',
+            'pop-in': 'pop-in 0.18s ease-out',
+          },
+        },
+      },
     };
     return `${AUTOGEN}\nmodule.exports = ${JSON.stringify(preset, null, 2)};\n`;
   },

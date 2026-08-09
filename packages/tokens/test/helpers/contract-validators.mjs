@@ -286,6 +286,39 @@ export function assertTailwindContract(preset, semanticPaths, aliasPaths) {
   }
 }
 
+/**
+ * The vendored artifact must be a *complete* Tailwind preset, not just token values.
+ * Consumers receive `dist/` as a copied directory rather than an installed package,
+ * so anything they would otherwise have to `require('@jrm/tailwind-preset')` for has
+ * to be present in the generated file itself. Guarding the shell here is what keeps
+ * "vendored" and "installed" from silently diverging.
+ */
+export function assertTailwindPresetShell(preset, shellContract) {
+  if (!Array.isArray(preset?.darkMode) || preset.darkMode[0] !== 'class') {
+    fail('Tailwind preset is missing the class-based darkMode strategy.');
+  }
+  if (preset.darkMode[1] !== '[data-theme="dark"]') {
+    fail('Tailwind preset darkMode must also match the [data-theme="dark"] attribute.');
+  }
+  if (preset?.theme?.container?.center !== true) {
+    fail('Tailwind preset is missing the centered container.');
+  }
+
+  const extend = preset?.theme?.extend;
+  if (!extend) fail('Tailwind preset is missing theme.extend.');
+
+  for (const [scale, key, expected] of shellContract) {
+    if (extend?.[scale]?.[key] !== expected) {
+      fail(`Tailwind preset is missing "${scale}.${key}" (expected ${expected}).`);
+    }
+  }
+
+  for (const name of ['fade-in', 'pop-in']) {
+    if (!extend.keyframes?.[name]) fail(`Tailwind preset is missing the "${name}" keyframes.`);
+    if (!extend.animation?.[name]) fail(`Tailwind preset is missing the "${name}" animation.`);
+  }
+}
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const declarationPattern = (name, value) =>
   new RegExp(`${escapeRegExp(name)}\\s*:\\s*${escapeRegExp(value)}\\s*;`);

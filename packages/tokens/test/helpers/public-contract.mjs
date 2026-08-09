@@ -58,6 +58,32 @@ export const REQUIRED_STRUCTURAL_TOKENS = Object.freeze([
   { path: 'target.spacious', type: 'dimension' },
 ]);
 
+/**
+ * The Tailwind shell that the *generated* preset must carry, expressed as
+ * `[scale, key, expectedValue]`.
+ *
+ * This exists because consumers vendor `dist/` as a plain copied directory. They
+ * cannot `require('@jrm/tailwind-preset')`, so any part of the shell that lived only
+ * in that package would be unreachable downstream. Declaring it here makes the shell
+ * a versioned promise rather than an implementation detail of the build script.
+ */
+export const REQUIRED_TAILWIND_SHELL = Object.freeze([
+  ['borderRadius', 'DEFAULT', 'var(--radius-md)'],
+  ['borderRadius', 'full', 'var(--radius-pill)'],
+  ['ringWidth', 'DEFAULT', 'var(--focus-ring-width)'],
+  ['ringOffsetWidth', 'DEFAULT', 'var(--focus-ring-offset)'],
+  ['spacing', 'safe-t', 'env(safe-area-inset-top)'],
+  ['spacing', 'safe-r', 'env(safe-area-inset-right)'],
+  ['spacing', 'safe-b', 'env(safe-area-inset-bottom)'],
+  ['spacing', 'safe-l', 'env(safe-area-inset-left)'],
+  ['zIndex', 'dialog', 'var(--layer-dialog)'],
+  ['zIndex', 'tooltip', 'var(--layer-tooltip)'],
+  ['boxShadow', 'raised', 'var(--elevation-raised)'],
+  ['opacity', 'disabled', 'var(--opacity-disabled)'],
+  ['minHeight', 'min', 'var(--target-min)'],
+  ['minWidth', 'min', 'var(--target-min)'],
+]);
+
 export const REQUIRED_SEMANTIC_TOKENS = Object.freeze(
   [
     'semantic.background.primary',
