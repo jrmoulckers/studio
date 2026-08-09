@@ -43,6 +43,7 @@ import {
 import {
   REQUIRED_ALIASES,
   REQUIRED_SEMANTIC_TOKENS,
+  REQUIRED_STRUCTURAL_TOKENS,
   REQUIRED_TOKEN_FILES,
 } from './helpers/public-contract.mjs';
 
@@ -111,6 +112,53 @@ test('all authored token JSON is DTCG-shaped and references resolve without cycl
   assertTokenContract(aliasDocument, REQUIRED_ALIASES);
   for (const { document } of modeDocuments) {
     validateReferenceGraph([...sharedDocuments, document]);
+  }
+});
+
+test('theme-agnostic structural tokens expose the documented layer, state, elevation, focus, and target contract', () => {
+  const structuralFiles = [
+    'primitive/opacity.json',
+    'primitive/zindex.json',
+    'primitive/focus.json',
+    'primitive/target.json',
+    'semantic/layer.json',
+    'semantic/state.json',
+    'semantic/elevation.json',
+  ];
+  for (const file of structuralFiles) {
+    assert.ok(byFile.get(file), `${file} is authored`);
+  }
+
+  const structural = REQUIRED_STRUCTURAL_TOKENS.reduce((groups, token) => {
+    const [group] = token.path.split('.');
+    (groups[group] ??= []).push(token);
+    return groups;
+  }, {});
+
+  assertTokenContract(byFile.get('semantic/layer.json'), structural.layer);
+  assertTokenContract(byFile.get('semantic/state.json'), structural.state);
+  assertTokenContract(byFile.get('semantic/elevation.json'), structural.elevation);
+  assertTokenContract(byFile.get('primitive/focus.json'), structural.focus);
+  assertTokenContract(byFile.get('primitive/target.json'), structural.target);
+
+  // Structural tokens must stay theme-agnostic: they carry no color, so they are
+  // declared once in :root rather than re-declared per [data-theme] override.
+  const rootCss = readText(join(distRoot, 'css', 'default', 'tokens.css'));
+  for (const { path } of REQUIRED_STRUCTURAL_TOKENS) {
+    assert.ok(
+      rootCss.includes(`--${path.replaceAll('.', '-')}:`),
+      `--${path.replaceAll('.', '-')} is declared in :root`,
+    );
+  }
+
+  // Components derive their pointer targets from the primitive rather than
+  // re-hardcoding a pixel literal.
+  for (const name of ['--button-primary-min-height', '--input-min-height', '--nav-iconbtn-size']) {
+    assert.match(
+      rootCss,
+      new RegExp(`${name}:\\s*var\\(--target-min\\)`),
+      `${name} derives from --target-min`,
+    );
   }
 });
 

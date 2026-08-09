@@ -1,0 +1,20 @@
+{
+  "target": {
+    "$description": "Minimum pointer-target sizes. Authored as primitives so touch ergonomics are a kernel guarantee rather than a per-component literal — the 46px control height previously hardcoded in component/button.json now derives from target.min.",
+    "min": {
+      "$value": "46px",
+      "$type": "dimension",
+      "$description": "Minimum interactive target — the thumb-first control height (exceeds the WCAG 2.2 AA 24px floor and the 44px platform guidance)."
+    },
+    "compact": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Dense affordance (icon button inside an already-large target). Only valid when the parent row itself meets target.min."
+    },
+    "spacious": {
+      "$value": "56px",
+      "$type": "dimension",
+      "$description": "Roomier target for primary actions and cognitive-accessibility mode."
+    }
+  }
+}

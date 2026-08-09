@@ -20,6 +20,7 @@ tokens/
 ├── primitive/            # shared, mode-independent scales
 │   ├── spacing.json  radius.json  typography.json
 │   ├── shadow.json   motion.json  breakpoint.json
+│   ├── opacity.json  zindex.json  focus.json  target.json
 │   └── cognitive.json    # cognitive-a11y raw primitives (touch target, ring, border)
 ├── themes/
 │   └── default/          # FIRST theme — Royal Violet / Crown Gold (seeded from score-king)
@@ -29,11 +30,29 @@ tokens/
 │       ├── color.semantic.dark-oled.json       # [data-theme="dark-oled"]  (true-black)
 │       ├── color.semantic.high-contrast.json   # [data-theme="high-contrast"]
 │       └── color.alias.json                    # flat --color-* back-compat aliases
-├── semantic/             # theme-agnostic: typography + motion + cognitive purposes
+├── semantic/             # theme-agnostic purposes
 │   ├── typography.json  motion.json  cognitive.json
+│   └── layer.json  state.json  elevation.json
 └── component/            # theme-agnostic bindings → semantic names only
     ├── button.json  card.json  input.json  pill.json  avatar.json  nav.json
 ```
+
+### Structural taxonomy (theme-agnostic)
+
+Alongside color, the kernel publishes the structural categories every consumer needs. These
+carry no color, so they are declared once in `:root` and are **not** re-declared per
+`[data-theme]` — a mode override would be a bug, and the contract tests assert it.
+
+| group       | tokens                                                                                                          | purpose                                                                                |
+| ----------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `layer`     | `content` `raised` `nav` `scrim` `dialog` `toast` `tooltip`                                                     | Named stacking planes. Reference these, never the raw `zIndex.*` steps.                |
+| `state`     | `hover.overlay` `hover.surface-overlay` `pressed.overlay` `selected.overlay` `disabled.opacity` `scrim.opacity` | Interaction strengths as opacities, so one set composes over any surface in any theme. |
+| `elevation` | `flat` `hairline` `raised`                                                                                      | Names intent over the per-theme `shadow.*` pair — the Soft-Lift Rule still holds.      |
+| `focus`     | `ring.width` `ring.offset`                                                                                      | Base ring geometry; a mode widens the ring by redefining one token.                    |
+| `target`    | `min` `compact` `spacious`                                                                                      | Minimum pointer targets. Components derive from these instead of pixel literals.       |
+
+`elevation.*` resolves through the theme-scoped `shadow.lift` / `shadow.hairline` aliases, so
+each mode re-flows automatically without a per-theme elevation file.
 
 ### Semantic taxonomy (`--semantic-*`)
 

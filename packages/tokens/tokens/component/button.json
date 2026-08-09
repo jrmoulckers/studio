@@ -7,7 +7,7 @@
       "border": { "$value": "{semantic.interactive.hover}", "$type": "color" },
       "hover-bg": { "$value": "{semantic.interactive.hover}", "$type": "color" },
       "radius": { "$value": "{radius.sm}", "$type": "dimension" },
-      "min-height": { "$value": "46px", "$type": "dimension" },
+      "min-height": { "$value": "{target.min}", "$type": "dimension" },
       "padding-x": { "$value": "18px", "$type": "dimension" },
       "padding-y": { "$value": "12px", "$type": "dimension" }
     },
@@ -17,7 +17,7 @@
       "border": { "$value": "{semantic.border.default}", "$type": "color" },
       "hover-bg": { "$value": "{semantic.background.raised}", "$type": "color" },
       "radius": { "$value": "{radius.sm}", "$type": "dimension" },
-      "min-height": { "$value": "46px", "$type": "dimension" },
+      "min-height": { "$value": "{target.min}", "$type": "dimension" },
       "padding-x": { "$value": "18px", "$type": "dimension" },
       "padding-y": { "$value": "12px", "$type": "dimension" }
     },

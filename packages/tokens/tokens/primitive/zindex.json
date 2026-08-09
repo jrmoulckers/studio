@@ -1,0 +1,12 @@
+{
+  "zIndex": {
+    "$description": "Raw stacking order steps. Never reference these directly from a component — use the named purposes in semantic/layer.json so stacking intent stays readable and collisions stay impossible to author by accident.",
+    "base": { "$value": 0, "$type": "number", "$description": "In-flow content." },
+    "raised": { "$value": 10, "$type": "number", "$description": "Lifted in-flow content." },
+    "sticky": { "$value": 100, "$type": "number", "$description": "Sticky chrome." },
+    "overlay": { "$value": 500, "$type": "number", "$description": "Scrims behind modals." },
+    "modal": { "$value": 1000, "$type": "number", "$description": "Dialogs and sheets." },
+    "toast": { "$value": 2000, "$type": "number", "$description": "Transient notifications." },
+    "tooltip": { "$value": 3000, "$type": "number", "$description": "Always-on-top hints." }
+  }
+}

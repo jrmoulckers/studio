@@ -36,11 +36,16 @@ const semDark = `${themeDir}/color.semantic.dark.json`;
 const semDarkOled = `${themeDir}/color.semantic.dark-oled.json`;
 const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
 
-/** Theme-agnostic semantic tokens (typography + motion + cognitive purposes). */
+/** Theme-agnostic semantic tokens (typography + motion + cognitive purposes,
+ *  plus the structural layer/state/elevation purposes). Elevation references the
+ *  theme-scoped shadow.* aliases, so it resolves per mode without a per-theme file. */
 const sharedSemantic = [
   toGlob(join(root, 'tokens', 'semantic', 'typography.json')),
   toGlob(join(root, 'tokens', 'semantic', 'motion.json')),
   toGlob(join(root, 'tokens', 'semantic', 'cognitive.json')),
+  toGlob(join(root, 'tokens', 'semantic', 'layer.json')),
+  toGlob(join(root, 'tokens', 'semantic', 'state.json')),
+  toGlob(join(root, 'tokens', 'semantic', 'elevation.json')),
 ];
 
 const components = toGlob(join(root, 'tokens', 'component', '*.json'));

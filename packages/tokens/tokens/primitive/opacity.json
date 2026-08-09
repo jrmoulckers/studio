@@ -1,0 +1,32 @@
+{
+  "opacity": {
+    "$description": "Opacity ramp. Feeds the semantic state overlays and disabled treatments so a state's strength is authored once and reused, rather than each surface inventing its own alpha.",
+    "none": { "$value": 0, "$type": "number", "$description": "Fully transparent." },
+    "subtle": {
+      "$value": 0.04,
+      "$type": "number",
+      "$description": "Barely-there wash — hover on large surfaces (rows, tiles)."
+    },
+    "soft": {
+      "$value": 0.08,
+      "$type": "number",
+      "$description": "Hover overlay on controls."
+    },
+    "medium": {
+      "$value": 0.12,
+      "$type": "number",
+      "$description": "Pressed overlay and selected-row wash."
+    },
+    "strong": {
+      "$value": 0.24,
+      "$type": "number",
+      "$description": "Scrims and heavy washes."
+    },
+    "disabled": {
+      "$value": 0.38,
+      "$type": "number",
+      "$description": "Disabled content alpha — WCAG-exempt, matching the disabled text/interactive tokens."
+    },
+    "full": { "$value": 1, "$type": "number", "$description": "Fully opaque." }
+  }
+}

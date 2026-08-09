@@ -1,0 +1,45 @@
+{
+  "state": {
+    "$description": "Interaction-state strengths, expressed as opacities rather than baked colors so one set of values works on every surface and in every theme. A consumer composes these with the semantic color it is already using (for example an interactive fill at state.hover.overlay), which keeps state consistent without multiplying per-theme color tokens.",
+    "hover": {
+      "overlay": {
+        "$value": "{opacity.soft}",
+        "$type": "number",
+        "$description": "Overlay strength for hovered controls."
+      },
+      "surface-overlay": {
+        "$value": "{opacity.subtle}",
+        "$type": "number",
+        "$description": "Gentler wash for large hovered surfaces (rows, tiles) so big areas do not shout."
+      }
+    },
+    "pressed": {
+      "overlay": {
+        "$value": "{opacity.medium}",
+        "$type": "number",
+        "$description": "Overlay strength while a control is held."
+      }
+    },
+    "selected": {
+      "overlay": {
+        "$value": "{opacity.medium}",
+        "$type": "number",
+        "$description": "Persistent wash marking the active item. Never the only selection signal — pair it with a non-color cue."
+      }
+    },
+    "disabled": {
+      "opacity": {
+        "$value": "{opacity.disabled}",
+        "$type": "number",
+        "$description": "Content alpha for disabled controls — WCAG-exempt."
+      }
+    },
+    "scrim": {
+      "opacity": {
+        "$value": "{opacity.strong}",
+        "$type": "number",
+        "$description": "Dimming strength behind modals and sheets."
+      }
+    }
+  }
+}
