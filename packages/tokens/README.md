@@ -218,8 +218,24 @@ Some repositories configure a different target (for example,
 hand-edit the vendored files: provenance and drift checks treat the synced bytes as the
 interface.
 
-The generated Tailwind preset contains token-backed theme values. It does not include the
-workspace-only `@jrm/tailwind-preset` wrapper's container defaults, animations, or plugin.
+The generated Tailwind preset is **complete and self-sufficient**: alongside the token-backed
+theme values it carries the shared shell — the `class` + `[data-theme="dark"]` dark-mode
+strategy, the centered container, `borderRadius` `DEFAULT`/`full` aliases, token-backed
+`ringWidth`/`ringOffsetWidth`, `env(safe-area-inset-*)` spacing, the structural `zIndex`,
+`opacity`, `minHeight`/`minWidth` and elevation `boxShadow` scales, and the `fade-in`/`pop-in`
+animations. It `require`s nothing, so it works from a copied directory with no package
+resolution. The only thing it cannot carry is a plugin _instance_; add `tailwindcss-animate`
+yourself if you use those utilities, or depend on `@jrm/tailwind-preset`, which re-exports this
+same object and adds exactly that plugin.
+
+| Utility                                           | Backing token                               |
+| ------------------------------------------------- | ------------------------------------------- |
+| `z-dialog`, `z-tooltip`                           | `--layer-*`                                 |
+| `shadow-raised`, `shadow-hairline`, `shadow-flat` | `--elevation-*`                             |
+| `opacity-disabled`, `opacity-subtle`              | `--opacity-*`                               |
+| `min-h-min`, `min-w-compact`                      | `--target-*`                                |
+| `ring` / `ring-offset` defaults                   | `--focus-ring-width`, `--focus-ring-offset` |
+| `p-safe-b`, `pt-safe-t`                           | `env(safe-area-inset-*)`                    |
 
 ### This workspace
 

@@ -32,6 +32,7 @@ import {
   assertDocumentSet,
   assertJsContract,
   assertTailwindContract,
+  assertTailwindPresetShell,
   assertThemeParity,
   assertTokenContract,
   assertTypeContract,
@@ -44,6 +45,7 @@ import {
   REQUIRED_ALIASES,
   REQUIRED_SEMANTIC_TOKENS,
   REQUIRED_STRUCTURAL_TOKENS,
+  REQUIRED_TAILWIND_SHELL,
   REQUIRED_TOKEN_FILES,
 } from './helpers/public-contract.mjs';
 
@@ -277,6 +279,52 @@ test('generated JS, CJS, CSS, and type entry points expose the documented contra
   } finally {
     rmSync(typeFixtureRoot, { recursive: true, force: true });
   }
+});
+
+test('the vendored dist preset is self-sufficient and carries the documented shell', () => {
+  // Consumers receive dist/ as a copied directory, so this asserts against the
+  // vendored artifact itself — required from its dist path with no package
+  // resolution — rather than the package export a consumer cannot reach.
+  const vendored = require(join(packageRoot, 'dist', 'tailwind', 'default.cjs'));
+
+  assertTailwindContract(vendored, semanticPaths, aliasPaths);
+  assertTailwindPresetShell(vendored, REQUIRED_TAILWIND_SHELL);
+
+  // A vendored preset must not reach for anything it cannot resolve downstream.
+  const source = readText(join(packageRoot, 'dist', 'tailwind', 'default.cjs'));
+  assert.ok(!/\brequire\(/.test(source), 'vendored preset must not require any module');
+});
+
+test('preset shell guards reject a dropped shell scale, ring token, and animation', () => {
+  const preset = clone(require(join(packageRoot, 'dist', 'tailwind', 'default.cjs')));
+
+  const missingRing = clone(preset);
+  delete missingRing.theme.extend.ringWidth;
+  assert.throws(
+    () => assertTailwindPresetShell(missingRing, REQUIRED_TAILWIND_SHELL),
+    /ringWidth\.DEFAULT/,
+  );
+
+  const missingSafeArea = clone(preset);
+  delete missingSafeArea.theme.extend.spacing['safe-b'];
+  assert.throws(
+    () => assertTailwindPresetShell(missingSafeArea, REQUIRED_TAILWIND_SHELL),
+    /spacing\.safe-b/,
+  );
+
+  const missingDarkMode = clone(preset);
+  delete missingDarkMode.darkMode;
+  assert.throws(
+    () => assertTailwindPresetShell(missingDarkMode, REQUIRED_TAILWIND_SHELL),
+    /darkMode strategy/,
+  );
+
+  const missingAnimation = clone(preset);
+  delete missingAnimation.theme.extend.animation['pop-in'];
+  assert.throws(
+    () => assertTailwindPresetShell(missingAnimation, REQUIRED_TAILWIND_SHELL),
+    /"pop-in" animation/,
+  );
 });
 
 test('generated contract guards reject removed exports, aliases, selectors, and preferences', async () => {
