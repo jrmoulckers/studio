@@ -1,10 +1,11 @@
 // @jrm/tokens — Style Dictionary v5 build.
 //
-// Produces THREE framework-agnostic outputs per theme (default), each covering
-// light / dark / high-contrast color modes:
+// Produces FOUR framework-agnostic output families per theme (default), each covering
+// light / dark / dark-oled / high-contrast color modes:
 //   (a) CSS custom properties  → build/css/default/*.css
 //   (b) a Tailwind preset object → build/tailwind/default.cjs
 //   (c) typed JS/TS token objects → build/js/default/*.{js,d.ts}
+//   (d) native value holders → build/native/{compose,swift}/*
 //
 // Model: primitive → semantic → component (DTCG $value/$type + {ref} aliases).
 // Light is the CSS :root default; dark & high-contrast are [data-theme] overrides.
@@ -15,8 +16,14 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 
+import { NATIVE_MODES, renderCompose, renderSwift } from './native.mjs';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
+
+/** Fully-resolved token tree per mode, captured during the JS build and reused by
+ *  the native renderers so every platform shares one resolution pass. */
+const resolvedTrees = {};
 
 const toGlob = (p) => p.replace(/\\/g, '/');
 const norm = (p) => (p || '').replace(/\\/g, '/');
@@ -128,8 +135,13 @@ function dtsType(node) {
 
 StyleDictionary.registerFormat({
   name: 'jrm/js-module',
-  format: ({ dictionary }) => {
+  format: ({ dictionary, file }) => {
     const tree = buildTree(dictionary.allTokens);
+    // Capture the fully-resolved tree so the native renderers reuse this single
+    // resolution pass instead of re-resolving references themselves. That is what
+    // guarantees the Compose/SwiftUI output can never disagree with the CSS and JS.
+    const mode = /^tokens\.(.+)\.js$/.exec(file.destination)?.[1];
+    if (mode) resolvedTrees[mode] = tree;
     return `${AUTOGEN}\nexport const tokens = ${JSON.stringify(tree, null, 2)};\nexport default tokens;\n`;
   },
 });
@@ -561,6 +573,25 @@ export default tokens;
   writeFileSync(join(jsIndexDir, 'index.d.ts'), indexDts);
 }
 
+/**
+ * Render the native value holders. Runs after every mode's JS build so
+ * `resolvedTrees` is complete; the missing-mode check keeps a future build-order
+ * change from silently emitting a partial theme set.
+ */
+function writeNative() {
+  const missing = NATIVE_MODES.filter((mode) => !resolvedTrees[mode]);
+  if (missing.length > 0) {
+    throw new Error(`Native output is missing resolved tokens for: ${missing.join(', ')}.`);
+  }
+
+  const composeDir = join(root, 'build', 'native', 'compose');
+  const swiftDir = join(root, 'build', 'native', 'swift');
+  mkdirSync(composeDir, { recursive: true });
+  mkdirSync(swiftDir, { recursive: true });
+  writeFileSync(join(composeDir, 'JrmTokens.kt'), renderCompose(resolvedTrees));
+  writeFileSync(join(swiftDir, 'JRMTokens.swift'), renderSwift(resolvedTrees));
+}
+
 // ---------------------------------------------------------------------------
 // Build
 // ---------------------------------------------------------------------------
@@ -571,8 +602,9 @@ try {
   await darkOledSd.buildAllPlatforms();
   await highContrastSd.buildAllPlatforms();
   writeBarrels();
+  writeNative();
   console.log(
-    `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast → css, tailwind, js).`,
+    `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast → css, tailwind, js, native).`,
   );
 } catch (err) {
   console.error('Build failed:', err);

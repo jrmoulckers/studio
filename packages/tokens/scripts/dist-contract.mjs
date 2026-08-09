@@ -10,6 +10,8 @@ export const DIST_OUTPUTS = Object.freeze([
   'css/default/tokens-dark.css',
   'css/default/tokens-high-contrast.css',
   'css/default/tokens.css',
+  'native/compose/JrmTokens.kt',
+  'native/swift/JRMTokens.swift',
   'tailwind/default.cjs',
   ...MODES.flatMap((mode) => [`js/default/tokens.${mode}.d.ts`, `js/default/tokens.${mode}.js`]),
   'js/index.d.ts',

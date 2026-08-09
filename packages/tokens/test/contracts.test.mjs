@@ -78,6 +78,30 @@ const exportPath = (entry) => resolve(packageRoot, entry);
 const readText = (path) => new TextDecoder('utf-8', { fatal: true }).decode(readFileSync(path));
 const resolvePackageEntry = (specifier) => fileURLToPath(import.meta.resolve(specifier));
 
+/** The resolved token tree for a mode, read from the committed dist. */
+const readTokenTree = (mode) =>
+  JSON.parse(
+    readText(join(packageRoot, 'dist', 'js', 'default', `tokens.${mode}.js`))
+      .replace(/^\/\/.*\n/, '')
+      .replace(/^export const tokens = /, '')
+      .replace(/;\s*export default tokens;\s*$/, ''),
+  );
+
+/** `semantic.background.primary` → `backgroundPrimary`, mirroring the native renderers. */
+const nativeFieldName = (path) =>
+  path
+    .split('.')
+    .slice(1)
+    .map((part, index) =>
+      part
+        .split('-')
+        .map((word, wordIndex) =>
+          index === 0 && wordIndex === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1),
+        )
+        .join(''),
+    )
+    .join('');
+
 function typeScriptDiagnostics(rootName) {
   const program = ts.createProgram([rootName], {
     module: ts.ModuleKind.NodeNext,
@@ -325,6 +349,61 @@ test('preset shell guards reject a dropped shell scale, ring token, and animatio
     () => assertTailwindPresetShell(missingAnimation, REQUIRED_TAILWIND_SHELL),
     /"pop-in" animation/,
   );
+});
+
+test('native output expresses every theme for Compose and SwiftUI', () => {
+  const kotlin = readText(join(packageRoot, 'dist', 'native', 'compose', 'JrmTokens.kt'));
+  const swift = readText(join(packageRoot, 'dist', 'native', 'swift', 'JRMTokens.swift'));
+
+  // Every documented theme must reach native, or a native app silently loses a mode.
+  for (const symbol of [
+    'JrmLightColors',
+    'JrmDarkColors',
+    'JrmDarkOledColors',
+    'JrmHighContrastColors',
+  ]) {
+    assert.ok(kotlin.includes(`val ${symbol}: JrmColorScheme`), `Kotlin defines ${symbol}`);
+  }
+  for (const symbol of ['light', 'dark', 'darkOled', 'highContrast']) {
+    assert.ok(swift.includes(`static let ${symbol} = JRMColorScheme(`), `Swift defines ${symbol}`);
+  }
+
+  // The semantic contract must be complete on both platforms, not a convenient subset.
+  for (const { path } of REQUIRED_SEMANTIC_TOKENS.filter((t) => t.type === 'color')) {
+    const field = nativeFieldName(path);
+    assert.ok(kotlin.includes(`val ${field}: Color,`), `Kotlin scheme has ${field}`);
+    assert.ok(swift.includes(`public let ${field}: Color`), `Swift scheme has ${field}`);
+  }
+
+  // No CSS-only unit or color function may leak into code that has to compile.
+  for (const [name, source] of [
+    ['Kotlin', kotlin],
+    ['Swift', swift],
+  ]) {
+    assert.ok(!/oklch\(/i.test(source), `${name} output resolves OKLCH to sRGB`);
+    assert.ok(!/\d(rem|px|ms)\b/.test(source), `${name} output carries no CSS units`);
+  }
+});
+
+test('native renderers reject values and names no native platform can express', async () => {
+  const { renderCompose, renderSwift, parseColor } = await import('../config/native.mjs');
+  const trees = Object.fromEntries(modeNames.map((mode) => [mode, clone(readTokenTree(mode))]));
+
+  assert.throws(() => parseColor('color-mix(in oklch, red, blue)', 'x'), /cannot express color/);
+  assert.deepEqual(parseColor('#0f1020', 'x'), { r: 15, g: 16, b: 32, a: 255 });
+
+  const badColor = clone(trees);
+  badColor.light.semantic.background.primary = 'color-mix(in srgb, red, blue)';
+  assert.throws(() => renderCompose(badColor), /cannot express color/);
+  assert.throws(() => renderSwift(badColor), /cannot express color/);
+
+  const badName = clone(trees);
+  badName.light.spacing.class = '4px';
+  assert.throws(() => renderCompose(badName), /cannot name token/);
+
+  const missingKey = clone(trees);
+  delete missingKey.dark.semantic.background.primary;
+  assert.throws(() => renderCompose(missingKey), /identical semantic keys/);
 });
 
 test('generated contract guards reject removed exports, aliases, selectors, and preferences', async () => {
