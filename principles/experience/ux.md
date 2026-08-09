@@ -1,6 +1,8 @@
 # Studio principles — UX
 
-> **Status:** Draft (proposed, non-normative). Only the repository owner may ratify.
+> **Ratification:** Each principle's `Status` becomes effective only when the repository owner
+> merges the covering Ratification decision record; before that merge, the candidate change is
+> proposed and non-normative.
 >
 > Studio design-authority successor to legacy UX guidance. It removes no legacy file; the
 > migration ledger stays at 0/192. Legacy inputs are cited by stable `<realm>#<n>` ID.
@@ -15,7 +17,7 @@ proliferation. It sits above interaction and component mechanics.
 
 ### STUDIO-UX-001 — Optimize for ease of use first
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** When usability and novelty conflict, choose the option that lets a user reach their goal with the least effort, memory, and ambiguity — prefer familiar, conventional patterns and make the common path the default.
 - **Rationale:** The system serves users, not the design; clever interfaces that raise cognitive load fail the people using every Studio surface.
 - **Verification:** Core actions use conventional, predictable patterns bound to shared component contracts; no core action is reachable only through a hidden gesture or a novel control that needs explaining.
@@ -26,7 +28,7 @@ proliferation. It sits above interaction and component mechanics.
 
 ### STUDIO-UX-002 — Keep state visible and hierarchy clear
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Keep the interface's current state visible through tokenized feedback, give each view a single visually dominant primary action, and let each accent carry exactly one meaning so emphasis stays legible.
 - **Rationale:** Users trust and navigate a system they can read; invisible state forces guessing, and three co-equal primary actions or a reused accent stop communicating anything, forcing users to read every control instead of scanning.
 - **Verification:** Interactive components render their loading/focus/selection/success/error states; each view has one dominant action with secondary actions stepped down; the accent's single meaning is decided once per product and applied consistently.
@@ -37,7 +39,7 @@ proliferation. It sits above interaction and component mechanics.
 
 ### STUDIO-UX-003 — Changing and comparable figures use tabular numerals
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Render any number that updates in place or stacks in a column for comparison — scores, money, timers, counts — with tabular (fixed-width) numerals applied through the shared type roles and numeric component tokens.
 - **Rationale:** In proportional type a `1` is narrower than an `8`, so a live-updating value visibly jitters and columns fail to align; both make numbers harder to compare and the jitter reads as instability.
 - **Verification:** Live-updating and column-aligned figures inherit tabular numerals from the shared type/numeric roles rather than an ad-hoc per-component setting.
@@ -48,7 +50,7 @@ proliferation. It sits above interaction and component mechanics.
 
 ### STUDIO-UX-004 — Consolidate before proliferating
 
-- **Status:** Draft
+- **Status:** Ratified
 - **Statement:** Before adding a new component, variant, or token, exhaust composing or extending what already exists, and require a new primitive to justify why nothing existing fits.
 - **Rationale:** Component and token bloat is the slow death of a design system — more surface to learn, maintain, theme, and keep consistent — while consolidation keeps the shared kernel small and sharp.
 - **Verification:** A proposed new component/variant/token records why existing specs could not be extended or composed; near-duplicate variants are folded back rather than forked, and additions with no active consumer are rejected.

@@ -126,6 +126,110 @@
         "value": true
       },
       "expectedError": "cannot authorize legacy deletion"
+    },
+    {
+      "name": "Ratified status without an owner-effective Ratification record",
+      "mutation": {
+        "operation": "delete-ratification-record"
+      },
+      "checkLocalSources": true,
+      "expectedError": "requires an owner-effective Ratification record"
+    },
+    {
+      "name": "Ratification record falsely claims the pinned receipt proves Ratification",
+      "mutation": {
+        "operation": "mutate-ratification-record",
+        "find": "remains historical, non-normative evidence; it proves no Ratification and authorizes no\ndeletion.",
+        "replace": "already proves Ratification and already authorizes deletion of the legacy realm files."
+      },
+      "checkLocalSources": true,
+      "expectedError": "missing required statement \"remains historical, non-normative evidence; it proves no Ratification and authorizes no deletion.\""
+    },
+    {
+      "name": "Ratification record omits the not-yet-approved-before-merge disclaimer",
+      "mutation": {
+        "operation": "mutate-ratification-record",
+        "find": "This record does not itself ratify anything and does not claim owner approval before\nmerge.",
+        "replace": "This record itself already ratifies the 25 IDs above; owner approval already occurred."
+      },
+      "checkLocalSources": true,
+      "expectedError": "missing required statement \"This record does not itself ratify anything and does not claim owner approval before merge.\""
+    },
+    {
+      "name": "Ratification record scope missing an ID",
+      "mutation": {
+        "operation": "mutate-ratification-record",
+        "find": "STUDIO-UX-004\n```",
+        "replace": "```"
+      },
+      "checkLocalSources": true,
+      "expectedError": "scope must list exactly the 25 Studio successor IDs"
+    },
+    {
+      "name": "mixed Studio successor statuses",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
+        "replace": "- **Status:** Draft\n- **Statement:** Express every reusable, cross-product design decision"
+      },
+      "checkLocalSources": true,
+      "expectedError": "Studio successor statuses are mixed"
+    },
+    {
+      "name": "wording change beyond the Status field fails the content pin",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "Studio spans multiple frameworks and platforms; a single portable contract is the only",
+        "replace": "Studio spans multiple frameworks and platforms; a single TAMPERED portable contract is the only"
+      },
+      "checkLocalSources": true,
+      "expectedError": "content changed beyond the Status field"
+    },
+    {
+      "name": "Legacy inputs change beyond the Status field fails the content pin",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3, architecture#12",
+        "replace": "- **Legacy inputs:** design#1, design#3, frontend#2, architecture#3"
+      },
+      "checkLocalSources": true,
+      "expectedError": "content changed beyond the Status field"
+    },
+    {
+      "name": "ID renumbering a Ratified Studio principle still fails",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "### STUDIO-FND-001 — Design decisions are a framework-neutral contract",
+        "replace": "### STUDIO-FND-999 — Design decisions are a framework-neutral contract"
+      },
+      "checkLocalSources": true,
+      "expectedError": "missing stable principle ID STUDIO-FND-001"
+    },
+    {
+      "name": "Studio principle file preamble change fails the content pin",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "Foundations govern the shape of Studio's design contract as a whole",
+        "replace": "TAMPERED foundations govern the shape of Studio's design contract as a whole"
+      },
+      "checkLocalSources": true,
+      "expectedError": "preamble content changed beyond the Ratification banner"
+    },
+    {
+      "name": "unexpected Studio Status value fails",
+      "mutation": {
+        "operation": "mutate-studio-file",
+        "path": "principles/design/foundations.md",
+        "find": "- **Status:** Ratified\n- **Statement:** Express every reusable, cross-product design decision",
+        "replace": "- **Status:** Approved\n- **Statement:** Express every reusable, cross-product design decision"
+      },
+      "checkLocalSources": true,
+      "expectedError": "Status must be exactly \"Draft\" or \"Ratified\""
     }
   ]
 }

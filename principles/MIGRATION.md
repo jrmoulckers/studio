@@ -7,9 +7,17 @@ without copying another authority's principles into Studio or treating a Draft p
 normative.
 
 **Pre-ratification coverage is 192 of 192 legacy principles, with zero unmapped IDs.** Every
-ledger entry remains `proposed`, every successor remains `Draft`, and all 21 legacy realm files
-remain intact. Completion of this reconciliation is evidence for owner review; it is not
-Ratification and does not authorize deletion.
+ledger entry remains `proposed`, the pinned migration-verification receipt records every
+successor as `Draft` at its reviewed commit, and all 21 legacy realm files remain intact.
+Completion of this reconciliation is evidence for owner review; it is not Ratification and
+does not authorize deletion.
+
+A local Studio successor's `Status` may separately move to a candidate `Ratified` value ahead
+of this ledger, through its own owner-effective Ratification decision record (for example,
+[`RATIFICATION-DESIGN-EXPERIENCE.md`](RATIFICATION-DESIGN-EXPERIENCE.md)). Such a record and its
+`Status: Ratified` fields propose Ratification; they are effective only when the repository
+owner merges the record, and even then they neither refresh this pinned receipt nor advance any
+ledger disposition past `proposed`.
 
 ## Authoritative records and evidence
 
@@ -118,7 +126,15 @@ material should not become a durable principle in the current authority topology
 - all 21 current legacy files match the reviewed source-snapshot blob and content digests;
 - ledger and receipt objects satisfy their dependency-free schema contracts and disposition
   cardinality;
-- local Studio successor IDs, paths, statuses, metadata, and bytes match the pinned receipt;
+- local Studio successor IDs, paths, and Legacy inputs match the pinned receipt exactly; each
+  principle's `Status` either matches the receipt's pinned `Draft` value with an unchanged
+  block digest, or is the one permitted `Draft` → `Ratified` transition, proven unchanged
+  otherwise by an independent, hardcoded status-excluded content digest (never written into
+  the receipt itself);
+- a local `Status: Ratified` is accepted only alongside a complete, owner-effective
+  Ratification decision record naming every Ratified ID (see
+  [`RATIFICATION-DESIGN-EXPERIENCE.md`](RATIFICATION-DESIGN-EXPERIENCE.md) for the current 25
+  design/experience successors); mixed or unexpected `Status` values across the 25 fail;
 - the receipt matches independent repository, commit, path, count, catalog, and integrity pins;
 - every selected successor reciprocally cites its legacy input or uses one allowed external
   reference exception;
@@ -126,8 +142,10 @@ material should not become a durable principle in the current authority topology
 - unknown IDs, duplicate keys, wrong commits or digests, deleted or renumbered successors, bad
   cardinality, nonreciprocity, circular or self-authoritative evidence, premature Ratification,
   false Ratification claims, and Draft deletion authorization fail;
-- the complete ledger remains pre-ratification and deletion stays blocked while mapped successors
-  are Draft.
+- the complete ledger remains pre-ratification and deletion stays blocked while every mapped
+  successor is `Draft` in the pinned, unrefreshed receipt — independent of any local Studio
+  `Status` candidate change, which does not itself ratify, supersede, or advance any ledger
+  disposition.
 
 Offline CI proves that the committed evidence is internally consistent and unchanged. It cannot
 prove that a private remote currently serves the recorded bytes or that a newer authority commit
