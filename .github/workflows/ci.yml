@@ -2,22 +2,67 @@ name: CI
 
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verify_ubuntu:
-    name: verify-ubuntu
+  lint:
+    name: lint
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: jrmoulckers/.github/.github/workflows/reusable-ci-lint.yml@97ff60ec21321563fa0fc7ba80015261e7dcd6fa
+    with:
+      node-version: '24'
+      package-manager: pnpm
+      lint-command: pnpm lint
+      format-check-command: pnpm format:check
+      semantic-pr-title: true
+
+  web:
+    name: web
+    permissions:
+      contents: read
+    uses: jrmoulckers/.github/.github/workflows/reusable-ci-web.yml@97ff60ec21321563fa0fc7ba80015261e7dcd6fa
+    with:
+      node-version: '24'
+      package-manager: pnpm
+      typecheck-command: pnpm typecheck
+      test-command: pnpm test
+      build-command: pnpm -r build
+
+  security:
+    name: security
+    permissions:
+      contents: read
+    uses: jrmoulckers/.github/.github/workflows/reusable-security-ci.yml@97ff60ec21321563fa0fc7ba80015261e7dcd6fa
+    with:
+      node-version: '24'
+      package-manager: pnpm
+      run-package-audit: true
+      run-secret-scan: true
+      # Studio does not have the dependency-review API capability.
+      run-dependency-review: false
+      dependency-fail-severity: high
+
+  tokens_dist:
+    name: tokens-dist-freshness
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0 (verified 2026-08-03)
@@ -33,21 +78,6 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm -r build
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Test
-        run: pnpm test
-
-      - name: Format check
-        run: pnpm format:check
-
       # Fails if the committed packages/tokens/dist/ tree drifts from the tokens
       # sources (regenerates dist, then asserts no git diff).
       - name: Tokens dist freshness
@@ -56,8 +86,13 @@ jobs:
   format_windows:
     name: format-windows
     runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0 (verified 2026-08-03)
@@ -79,15 +114,24 @@ jobs:
   build:
     name: build
     if: ${{ always() }}
-    needs: [verify_ubuntu, format_windows]
+    needs: [lint, web, security, tokens_dist, format_windows]
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
     steps:
       - name: Require successful CI jobs
         env:
-          UBUNTU_RESULT: ${{ needs.verify_ubuntu.result }}
+          LINT_RESULT: ${{ needs.lint.result }}
+          WEB_RESULT: ${{ needs.web.result }}
+          SECURITY_RESULT: ${{ needs.security.result }}
+          TOKENS_RESULT: ${{ needs.tokens_dist.result }}
           WINDOWS_RESULT: ${{ needs.format_windows.result }}
         run: |
-          if [[ "$UBUNTU_RESULT" != "success" || "$WINDOWS_RESULT" != "success" ]]; then
-            echo "Required CI job failed: verify-ubuntu=$UBUNTU_RESULT, format-windows=$WINDOWS_RESULT"
+          if [[ "$LINT_RESULT" != "success" ||
+                "$WEB_RESULT" != "success" ||
+                "$SECURITY_RESULT" != "success" ||
+                "$TOKENS_RESULT" != "success" ||
+                "$WINDOWS_RESULT" != "success" ]]; then
+            echo "Required CI job failed: lint=$LINT_RESULT, web=$WEB_RESULT, security=$SECURITY_RESULT, tokens=$TOKENS_RESULT, windows=$WINDOWS_RESULT"
             exit 1
           fi
