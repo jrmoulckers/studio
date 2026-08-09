@@ -1,45 +1,31 @@
-# Principles — <Realm>
+# Studio principle proposal template
 
-> **Status:** Draft · **Owner:** _you_ · **Aligned agent:** `<agent>`
+> **Proposal:** Non-normative until the repository owner merges an explicit Ratification
+> decision. Use this template in an issue or pull request description; do not create a new
+> realm file or insert an unpinned block into the Ratified tree.
 >
-> This file is authored in a dedicated worktree session. Fill in the tree below.
-> Keep each principle short, testable, and specific to this realm.
+> Keep the stable area prefix and existing numbering model. Never reuse or renumber a
+> published ID.
 
-## Purpose
+Use this block to shape the proposed principle:
 
-_One or two sentences: what this realm governs and why it exists._
+```markdown
+### STUDIO-<AREA>-<NNN> — <Principle title>
 
-## Principles
+- **Status:** Draft
+- **Statement:** <One imperative, testable rule.>
+- **Rationale:** <Why the rule is durable and the cost of ignoring it.>
+- **Verification:** <Observable evidence that proves compliance.>
+- **Ratification owner:** repository owner
+- **Implementation owner:** <canonical role>
+- **Handoffs:** <stable IDs or canonical authority links; use `none` when absent>
+- **Legacy inputs:** <comma-separated `<realm>#<n>` IDs, or `none`>
+```
 
-<!--
-Add principles as a tree. Each top-level principle may have sub-principles.
-Copy the block below for each principle.
--->
+Before changing an existing file under `design/` or `experience/`, the implementation must
+update the declared catalog, owner decision record, finalization receipt, independent
+semantic pins, and negative fixtures together. `pnpm principles:check` intentionally rejects
+an incomplete or self-baselined catalog change.
 
-### 1. <Principle name>
-
-- **Statement:** _The rule, stated as an imperative._
-- **Why:** _The rationale / the cost of ignoring it._
-- **In practice:** _What doing this looks like in this repo._
-- **Anti-patterns:** _What violating it looks like._
-
-#### 1.1 <Sub-principle name> (optional)
-
-- **Statement:**
-- **Why:**
-
-### 2. <Principle name>
-
-- **Statement:**
-- **Why:**
-- **In practice:**
-- **Anti-patterns:**
-
-## Aligned agent
-
-`<agent>` — this specialist should treat the principles above as binding practice
-when working in this realm.
-
-## Related realms
-
-- _Link realms that overlap or hand off to this one._
+Reference Engineering, Product, and `.github` principles by stable ID and canonical link
+instead of copying their text. Use `studio-legacy:*` inputs only for migration traceability.

@@ -1,130 +1,118 @@
-# JRM Studio - Principles transition
+# Studio design and UI principles
 
-Studio's local principle authority is design and UI: visual design, interaction,
-accessibility, localization UX, semantic tokens and themes, UI contracts, reusable
-platform implementations, UI presets and examples, and visual validation.
+Studio is the canonical authority for visual design, interaction, accessibility and
+localization UX, semantic tokens and themes, UI contracts, reusable platform
+implementations, UI presets and examples, and visual validation.
 
-The repository-wide authority boundary is canonical in
-[ADR-0003: Four-authority repository topology](https://github.com/jrmoulckers/.github/blob/main/docs/architecture/0003-four-authority-topology.md).
-This directory references that decision and applies it to Studio; it does not duplicate
-the ADR or define Engineering, Product, or `.github` policy.
+The repository owner ratified the complete 25-principle Studio catalog by merging
+[PR #25](https://github.com/jrmoulckers/studio/pull/25). The principles under
+[`design/`](design) and [`experience/`](experience) are therefore the local normative
+source. Migration receipts are dated evidence, not a second authority.
 
-## Current status
+## Canonical authority handoffs
 
-The existing realm tree is **legacy, Draft, and transitional**. It predates the
-four-authority topology and mixes Studio design/UI material with Engineering, Product, and
-`.github` concerns. The files remain useful migration input, but they are not a claim that
-Studio owns every realm they describe.
+| Authority   | Canonical source                                                                                                                       | Responsibility                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Studio      | [`design/`](design) and [`experience/`](experience)                                                                                    | User-facing design and UI expression                            |
+| Engineering | [Ratified Engineering principles](https://github.com/jrmoulckers/engineering/tree/60ff2e43da40b8177b7b8bc591f7193d58af617a/principles) | Mechanisms and engineering evidence                             |
+| Product     | [Ratified Product principles](https://github.com/jrmoulckers/product/tree/3a752c11856515a74eb204675d5d5198cac1e48e/principles)         | Obligations and outcomes                                        |
+| `.github`   | [Ratified GitHub and AI principles](https://github.com/jrmoulckers/.github/tree/a7be84b20737f9d404ea53213dec159dd59d5747/principles)   | Governance, automation, AI assets, distribution, and provenance |
 
-All 21 realm files are preserved byte-for-byte through the final pre-ratification Milestone 2
-reconciliation. At the migration baseline they contain 192 top-level legacy principles. Nested
-sub-principles travel with their top-level parent. The inventory below freezes the source catalog;
-the proposed dispositions and independent source evidence live in the migration records.
+[ADR-0003](https://github.com/jrmoulckers/.github/blob/main/docs/architecture/0003-four-authority-topology.md)
+defines the repository boundary. Studio references the other authorities by stable ID and
+immutable link instead of copying their normative text.
 
-| Legacy realm                            | Stable ID range                       |   Count |
-| --------------------------------------- | ------------------------------------- | ------: |
-| [Accessibility](accessibility.md)       | `studio-legacy:accessibility:1..7`    |       7 |
-| [AI Process](ai-process.md)             | `studio-legacy:ai-process:1..22`      |      22 |
-| [AI Products](ai-products.md)           | `studio-legacy:ai-products:1..8`      |       8 |
-| [Architecture](architecture.md)         | `studio-legacy:architecture:1..15`    |      15 |
-| [Backend](backend.md)                   | `studio-legacy:backend:1..7`          |       7 |
-| [Business](business.md)                 | `studio-legacy:business:1..6`         |       6 |
-| [Compliance](compliance.md)             | `studio-legacy:compliance:1..8`       |       8 |
-| [Data & Analytics](data-analytics.md)   | `studio-legacy:data-analytics:1..7`   |       7 |
-| [Design](design.md)                     | `studio-legacy:design:1..13`          |      13 |
-| [DevOps](devops.md)                     | `studio-legacy:devops:1..15`          |      15 |
-| [Documentation](documentation.md)       | `studio-legacy:documentation:1..7`    |       7 |
-| [Featuring](featuring.md)               | `studio-legacy:featuring:1..7`        |       7 |
-| [Frontend](frontend.md)                 | `studio-legacy:frontend:1..9`         |       9 |
-| [Local-First](local-first.md)           | `studio-legacy:local-first:1..4`      |       4 |
-| [Localization](localization.md)         | `studio-legacy:localization:1..9`     |       9 |
-| [Middleware](middleware.md)             | `studio-legacy:middleware:1..7`       |       7 |
-| [Performance](performance.md)           | `studio-legacy:performance:1..9`      |       9 |
-| [Process](process.md)                   | `studio-legacy:process:1..7`          |       7 |
-| [Project Planning](project-planning.md) | `studio-legacy:project-planning:1..7` |       7 |
-| [Security](security.md)                 | `studio-legacy:security:1..8`         |       8 |
-| [Testing](testing.md)                   | `studio-legacy:testing:1..10`         |      10 |
-| **Total**                               |                                       | **192** |
+## Studio catalog
 
-The proposed ledger now covers **192/192** stable IDs with zero unmapped entries: 21 `rewrite`,
-43 `split`, 122 `reference`, and 6 `retire`. Its 242 successor links point to 159 unique
-successors across Studio (44 links), Engineering (92), Product (56), and `.github` (50), as
-recorded in the pinned, historical migration-verification receipt: **174 Draft principles in
-total** at that receipt's commit (unrefreshed; it does not track any later local `Status`
-change). See [`MIGRATION.md`](MIGRATION.md) for the mapping rules, retirement categories,
-receipt limits, and owner-only Ratification gate.
+| File                                                         | Area prefix   | Principles | Scope                                                           |
+| ------------------------------------------------------------ | ------------- | ---------: | --------------------------------------------------------------- |
+| [`design/foundations.md`](design/foundations.md)             | `STUDIO-FND`  |          3 | Framework-neutral design contract and compatible evolution      |
+| [`design/tokens-and-themes.md`](design/tokens-and-themes.md) | `STUDIO-TOK`  |          4 | Primitive -> semantic -> component references and runtime modes |
+| [`design/components.md`](design/components.md)               | `STUDIO-CMP`  |          3 | Reusable behavioral contracts, native parity, and validation    |
+| [`experience/interaction.md`](experience/interaction.md)     | `STUDIO-INT`  |          5 | Native semantics, operation, focus, targets, errors, and motion |
+| [`experience/accessibility.md`](experience/accessibility.md) | `STUDIO-A11Y` |          3 | WCAG floor, accessibility modes, and cognitive-mode coverage    |
+| [`experience/localization.md`](experience/localization.md)   | `STUDIO-L10N` |          3 | Expansion, bidirectionality, locale behavior, and handoffs      |
+| [`experience/ux.md`](experience/ux.md)                       | `STUDIO-UX`   |          4 | Ease of use, visible state, figures, and consolidation          |
+| **Total**                                                    |               |     **25** |                                                                 |
 
-## Studio principle tree
+Each principle has a stable `STUDIO-<AREA>-NNN` ID, `Status: Ratified`, a testable
+verification, `Ratification owner: repository owner`, an implementation owner, explicit
+handoffs, and exact historical `Legacy inputs`. The owner-effective decision is preserved in
+[`RATIFICATION-DESIGN-EXPERIENCE.md`](RATIFICATION-DESIGN-EXPERIENCE.md).
 
-Alongside the transitional legacy realm files, Studio authors its design and UI authority as a
-concise tree under [`design/`](design) and [`experience/`](experience). Each principle has
-a stable `STUDIO-<AREA>-NNN` ID, a testable verification, repository-owner ratification
-accountability, an implementation owner, explicit cross-authority handoffs, and exact legacy
-inputs. A principle's `Status` (`Draft` or `Ratified`) is normative only once the repository
-owner merges an owner-effective Ratification decision record naming it; see
-[`RATIFICATION-DESIGN-EXPERIENCE.md`](RATIFICATION-DESIGN-EXPERIENCE.md) for the 25
-design/experience successors this applies to. Before that merge, a candidate `Status: Ratified`
-value is a proposed change awaiting the owner's decision, not a normative claim.
+## Completed legacy migration
 
-| File                                                         | Area prefix   | Scope                                                      |
-| ------------------------------------------------------------ | ------------- | ---------------------------------------------------------- |
-| [`design/foundations.md`](design/foundations.md)             | `STUDIO-FND`  | Framework-neutral design contract; additive evolution      |
-| [`design/tokens-and-themes.md`](design/tokens-and-themes.md) | `STUDIO-TOK`  | primitive→semantic→component chain; runtime themes/modes   |
-| [`design/components.md`](design/components.md)               | `STUDIO-CMP`  | Behavioral component contracts; native parity; validation  |
-| [`experience/interaction.md`](experience/interaction.md)     | `STUDIO-INT`  | Native semantics, keyboard/switch, focus, targets, motion  |
-| [`experience/accessibility.md`](experience/accessibility.md) | `STUDIO-A11Y` | WCAG floor, accessibility modes, cognitive mode + gap      |
-| [`experience/localization.md`](experience/localization.md)   | `STUDIO-L10N` | Text expansion, RTL/bidi UX; mechanism handoffs            |
-| [`experience/ux.md`](experience/ux.md)                       | `STUDIO-UX`   | Ease of use, visible state, tabular figures, consolidation |
+The final [`migration-ledger.json`](migration-ledger.json) retains exactly 192 stable
+`studio-legacy:<realm>:<number>` IDs. Its unchanged mappings contain 21 `rewrite`, 43
+`split`, 122 `reference`, and 6 `retire` dispositions. The 186 mapped entries contain 242
+links to 159 unique successors; every entry is `verified`.
 
-The completed proposed ledger does not remove, supersede, or reassign any legacy principle.
-Every legacy disposition remains pre-ratification regardless of any local Studio successor's
-`Status`. A legacy file is removed only through the owner-ratified disposition and evidence gate
-below. The tree and migration records are validated by
-[`../scripts/validate-principles.mjs`](../scripts/validate-principles.mjs) (run via
-`pnpm principles:check`, and chained after the token suite in `pnpm test`). It checks the exact
-legacy inventory and bytes, Studio `Status` fields (and, when `Ratified`, the covering
-Ratification decision record and an independent status-excluded content digest per principle),
-ledger/schema/cardinality, pinned receipt digests, reciprocity, persistent negative mutations,
-and the blocked deletion gate.
+The 21 superseded realm files were removed by the final owner-review change. Their content
+was not copied elsewhere. Auditability is preserved through:
 
-## Precedence during migration
+- the immutable `efe6aa3b5ad020331a91f533844b0b9f70d70b76` stable-ID baseline;
+- the immutable `20dc8e0119d8ee46bd3ec26643f1b21a3eca8df0` reviewed legacy-source
+  snapshot and its per-file blob/content hashes;
+- the historical, non-normative
+  [`migration-verification-receipt.json`](migration-verification-receipt.json), which
+  remains pinned to the pre-ratification Draft catalogs and authorizes no deletion;
+- the final, non-normative
+  [`migration-finalization-receipt.json`](migration-finalization-receipt.json), which
+  records the four owner-effective Ratification decisions and the verified technical
+  deletion gate;
+- the final ledger's retirement rationales, citation exceptions, source links, and Git
+  history.
 
-1. An owner-ratified principle in the correct canonical authority supersedes conflicting
-   legacy text.
-2. ADR-0003 decides which authority may own a successor; generated copies and distribution
-   paths do not transfer ownership.
-3. An unmapped legacy principle is transitional input only. It may inform a proposal, but
-   it cannot establish authority outside Studio or override a ratified successor.
-4. A Studio successor's local `Status` is a proposed change until an owner-effective
-   Ratification decision record naming it is merged by the repository owner; only then is it
-   normative, and even then it supersedes no legacy realm text and does not by itself ratify
-   or advance any migration-ledger disposition or any Engineering/Product/`.github`
-   successor.
+The frozen deleted inventory is:
 
-Cross-authority references use durable repository links or stable IDs. Private Engineering
-and Product sources must not be copied into Studio merely to make a link locally
-convenient. `.github` remains canonical for GitHub governance, Actions, Copilot and AI
-principles and implementations, agents, skills, prompts, instructions, evaluations,
-registry, sync, and provenance.
+| Realm path                       | Stable ID range                       |   Count |
+| -------------------------------- | ------------------------------------- | ------: |
+| `principles/accessibility.md`    | `studio-legacy:accessibility:1..7`    |       7 |
+| `principles/ai-process.md`       | `studio-legacy:ai-process:1..22`      |      22 |
+| `principles/ai-products.md`      | `studio-legacy:ai-products:1..8`      |       8 |
+| `principles/architecture.md`     | `studio-legacy:architecture:1..15`    |      15 |
+| `principles/backend.md`          | `studio-legacy:backend:1..7`          |       7 |
+| `principles/business.md`         | `studio-legacy:business:1..6`         |       6 |
+| `principles/compliance.md`       | `studio-legacy:compliance:1..8`       |       8 |
+| `principles/data-analytics.md`   | `studio-legacy:data-analytics:1..7`   |       7 |
+| `principles/design.md`           | `studio-legacy:design:1..13`          |      13 |
+| `principles/devops.md`           | `studio-legacy:devops:1..15`          |      15 |
+| `principles/documentation.md`    | `studio-legacy:documentation:1..7`    |       7 |
+| `principles/featuring.md`        | `studio-legacy:featuring:1..7`        |       7 |
+| `principles/frontend.md`         | `studio-legacy:frontend:1..9`         |       9 |
+| `principles/local-first.md`      | `studio-legacy:local-first:1..4`      |       4 |
+| `principles/localization.md`     | `studio-legacy:localization:1..9`     |       9 |
+| `principles/middleware.md`       | `studio-legacy:middleware:1..7`       |       7 |
+| `principles/performance.md`      | `studio-legacy:performance:1..9`      |       9 |
+| `principles/process.md`          | `studio-legacy:process:1..7`          |       7 |
+| `principles/project-planning.md` | `studio-legacy:project-planning:1..7` |       7 |
+| `principles/security.md`         | `studio-legacy:security:1..8`         |       8 |
+| `principles/testing.md`          | `studio-legacy:testing:1..10`         |      10 |
+| **Total**                        |                                       | **192** |
 
-Only the repository owner may ratify a principle or a migration disposition. Agents may
-propose either, but proposals remain non-normative.
+## Precedence
 
-## Migration and removal gate
+1. An owner-ratified principle in its canonical authority is normative for that authority's
+   scope.
+2. ADR-0003 decides ownership; generated copies and distribution paths do not transfer it.
+3. The final migration ledger records historical disposition and traceability. It does not
+   duplicate or override a canonical principle.
+4. Historical receipts and decision records are evidence about dated events, not normative
+   catalogs.
 
-[`MIGRATION.md`](MIGRATION.md) defines the ledger schema, verification workflow, and evidence
-limits. The machine-readable records are [`migration-ledger.json`](migration-ledger.json) and the
-non-normative [`migration-verification-receipt.json`](migration-verification-receipt.json),
-validated by their adjacent schemas.
+## Validation
 
-No legacy top-level principle may be removed until its stable ID has **exactly one**
-owner-ratified disposition (`rewrite`, `split`, `reference`, or `retire`), reaches `verified`
-with evidence, and every mapped successor is owner-ratified in its canonical authority. A realm
-file may be deleted only after every stable ID in its range passes that gate and all inbound
-references have been updated. The pinned [`migration-verification-receipt.json`](migration-verification-receipt.json)
-still records all 174 verified successors as `Draft` (it is historical evidence and is not
-refreshed by a local Studio `Status` change), so the deletion gate stays blocked and all 21
-legacy realm files remain in place.
+`pnpm principles:check` validates the Studio tree, both receipts, the frozen mapping,
+decision evidence, exact counts, reciprocity and citation exceptions, retirement records,
+deleted-path state, link safety, and persistent negative mutations. It is chained into
+`pnpm test`.
 
-The repository-local canonical-role mapping is in [`AGENTS.md`](AGENTS.md). It is a path
-overlay, not a copy of the canonical agent definitions.
+`pnpm principles:verify-live` additionally authenticates to GitHub, re-reads all four
+authority catalogs and owner merge records, recomputes every digest, verifies the
+historical ledger and deleted source snapshot at immutable commits, and confirms that
+current authority heads have not changed the pinned Ratified catalogs.
+
+Offline validation cannot prove what a private remote currently serves. The authenticated
+live check supplies that evidence. Repository-owner merge of the finalization pull request
+is the effective supersession and deletion act; neither receipt can substitute for that
+owner decision.

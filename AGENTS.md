@@ -15,8 +15,6 @@ canonical roles onto this repository's paths.
    determined by
    [ADR-0003](https://github.com/jrmoulckers/.github/blob/main/docs/architecture/0003-four-authority-topology.md).
 3. The nearest Studio instruction for Studio-owned paths.
-4. The legacy realm files under [`principles/`](principles) as transitional input only,
-   where they do not conflict with the authorities above.
 
 Studio locally owns design and UI principles and implementations: visual design,
 interaction, accessibility, localization UX, semantic tokens and themes, UI contracts,
@@ -30,21 +28,20 @@ The repository owner alone may ratify principles. Agents may research, draft, an
 changes, but must not label their own proposal Ratified or treat it as normative before
 owner review.
 
-## Transitional surfaces
+## Ratified principles and migration records
 
-- The 21 legacy realm files and their 192 top-level principles remain intact for Milestone 2. Use the stable IDs and process in
-  [`principles/MIGRATION.md`](principles/MIGRATION.md).
 - Studio's design/UI authority is authored as a concise tree under
   [`principles/design/`](principles/design) and [`principles/experience/`](principles/experience)
-  with stable `STUDIO-<AREA>-NNN` IDs. Each entry's `Status` (`Draft` or `Ratified`) becomes
-  normative only once the repository owner merges an owner-effective Ratification decision
-  record covering it — see
+  with 25 stable, owner-ratified `STUDIO-<AREA>-NNN` principles. The owner-effective decision
+  record is
   [`principles/RATIFICATION-DESIGN-EXPERIENCE.md`](principles/RATIFICATION-DESIGN-EXPERIENCE.md)
-  for the 25 design/experience successors. Ratifying these local `Status` fields supersedes
-  no legacy file, ratifies no Engineering/Product/`.github` successor, and the migration
-  ledger stays at 0/192. `pnpm principles:check` (chained into `pnpm test`) validates it.
-- A legacy principle cannot be deleted until it has exactly one owner-ratified disposition
-  and the ledger records verified evidence. Do not create empty successor realm files.
+  as merged in Studio PR #25.
+- [`principles/migration-ledger.json`](principles/migration-ledger.json) preserves the final
+  disposition of all 192 stable legacy IDs. The historical Draft receipt, final Ratification
+  receipt, source hashes, retirement judgments, and Git-history pointers remain audit evidence;
+  the deleted realm content is not duplicated.
+- Engineering, Product, and `.github` principles remain canonical in their own repositories.
+  Reference those sources by stable ID and immutable link; never copy them into Studio.
 - `@jrm/eslint-config`, `@jrm/tsconfig`, and `@jrm/prettier-config` remain here unchanged
   pending an additive Engineering migration. They have not moved and are not downstream
   distribution surfaces.
@@ -65,5 +62,5 @@ owner review.
 
 Before changing a Studio-owned surface, read the applicable local design/UI material and
 the canonical cross-authority references it depends on. Cite an owner-ratified successor
-principle when one exists; otherwise identify legacy guidance by its stable migration ID
-and label it transitional.
+principle. Use `studio-legacy:*` IDs only when referring to the preserved migration record or
+historical evidence.
