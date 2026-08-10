@@ -28,12 +28,14 @@ export const NATIVE_MODES = Object.freeze([
 ]);
 
 /**
- * `['semantic','background','primary']` → `backgroundPrimary`, and `2xl` → `xl2`.
+ * `['semantic','background','primary']` → `backgroundPrimary`, `2xl` → `xl2`, `4` → `step4`.
  *
  * Token names are CSS-shaped, and CSS permits identifiers that neither Kotlin nor Swift
- * does. Leading digits are the case Studio actually hits (`spacing.2xl`), so those are
- * reordered rather than mangled; anything else invalid throws, because generated code
- * that does not compile is worse than a failed build.
+ * does. Leading digits are the case Studio actually hits, in two shapes: a digit-prefixed
+ * name (`spacing.2xl`) is reordered so the scale still reads, and a bare grid multiplier
+ * (`spacing.4`) becomes `step4`, since reordering leaves nothing to lead with. Anything
+ * else invalid throws, because generated code that does not compile is worse than a
+ * failed build.
  */
 const camel = (parts) => {
   const raw = parts
@@ -48,7 +50,10 @@ const camel = (parts) => {
     .join('');
 
   // `2xl` → `xl2`: move a leading numeric run to the end, preserving the scale reading.
-  const identifier = raw.replace(/^(\d+)(.*)$/, (_, digits, rest) => `${rest}${digits}`);
+  // `4` → `step4`: an all-digit name has no remainder to lead with, so it is prefixed.
+  const identifier = /^\d+$/.test(raw)
+    ? `step${raw}`
+    : raw.replace(/^(\d+)(.*)$/, (_, digits, rest) => `${rest}${digits}`);
 
   if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(identifier) || RESERVED.has(identifier)) {
     throw new Error(

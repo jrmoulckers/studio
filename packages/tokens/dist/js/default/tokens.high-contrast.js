@@ -2,7 +2,10 @@
 export const tokens = {
   "breakpoint": {
     "content-max": "760px",
-    "tile-min": "150px"
+    "tile-min": "150px",
+    "sm": "640px",
+    "md": "1024px",
+    "lg": "1440px"
   },
   "cognitive": {
     "touchTargetMin": "48px",
@@ -20,13 +23,24 @@ export const tokens = {
   "duration": {
     "instant": "0ms",
     "press": "50ms",
-    "state": "150ms",
     "tile": "120ms",
+    "state": "150ms",
+    "fast": "150ms",
+    "normal": "250ms",
+    "slow": "400ms",
+    "slower": "800ms",
     "reduced": "1ms"
   },
   "easing": {
     "standard": "ease",
-    "linear": "linear"
+    "linear": "linear",
+    "balanced": "cubic-bezier(0.2, 0, 0, 1)",
+    "in": "cubic-bezier(0.4, 0, 1, 1)",
+    "out": "cubic-bezier(0, 0, 0.2, 1)",
+    "in-out": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "accelerate": "cubic-bezier(0.3, 0, 1, 1)",
+    "decelerate": "cubic-bezier(0, 0, 0, 1)",
+    "spring": "cubic-bezier(0.175, 0.885, 0.32, 1.275)"
   },
   "opacity": {
     "none": 0,
@@ -38,23 +52,56 @@ export const tokens = {
     "full": 1
   },
   "radius": {
-    "sm": "9px",
-    "md": "14px",
-    "chip": "10px",
-    "pill": "999px"
+    "0": "0px",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "6": "24px",
+    "8": "32px",
+    "full": "9999px",
+    "sm": "8px",
+    "chip": "12px",
+    "md": "16px",
+    "pill": "9999px"
   },
   "shadow": {
     "soft-lift-dark": "0 10px 30px rgba(0, 0, 0, 0.45)",
     "soft-lift-light": "0 10px 30px rgba(60, 50, 120, 0.12)",
     "inset-hairline": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
     "none": "none",
+    "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+    "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+    "dark": {
+      "sm": "0 1px 3px 0 rgba(0, 0, 0, 0.5)",
+      "md": "0 4px 8px -1px rgba(0, 0, 0, 0.55)",
+      "lg": "0 10px 20px -3px rgba(0, 0, 0, 0.6)",
+      "xl": "0 20px 30px -5px rgba(0, 0, 0, 0.65)"
+    },
     "lift": "0 10px 30px rgba(60, 50, 120, 0.12)",
     "hairline": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)"
   },
   "spacing": {
-    "xs": "6px",
-    "sm": "10px",
-    "md": "14px",
+    "0": "0px",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "7": "28px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px",
+    "14": "56px",
+    "16": "64px",
+    "20": "80px",
+    "24": "96px",
+    "xs": "4px",
+    "sm": "8px",
+    "md": "12px",
     "lg": "16px",
     "xl": "20px",
     "2xl": "24px",
@@ -467,7 +514,7 @@ export const tokens = {
     "ring": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
     "weight": 700,
     "size": "28px",
-    "radius": "999px"
+    "radius": "9999px"
   },
   "button": {
     "primary": {
@@ -475,7 +522,7 @@ export const tokens = {
       "text": "#ffffff",
       "border": "oklch(0.28 0.10 285)",
       "hover-bg": "oklch(0.28 0.10 285)",
-      "radius": "9px",
+      "radius": "8px",
       "min-height": "46px",
       "padding-x": "18px",
       "padding-y": "12px"
@@ -485,7 +532,7 @@ export const tokens = {
       "text": "#000000",
       "border": "#000000",
       "hover-bg": "#e7e7f4",
-      "radius": "9px",
+      "radius": "8px",
       "min-height": "46px",
       "padding-x": "18px",
       "padding-y": "12px"
@@ -504,7 +551,7 @@ export const tokens = {
     "bg": "#ffffff",
     "text": "#000000",
     "border": "#000000",
-    "radius": "14px",
+    "radius": "16px",
     "padding": "16px",
     "shadow": "0 10px 30px rgba(60, 50, 120, 0.12)"
   },
@@ -513,29 +560,29 @@ export const tokens = {
     "text": "#000000",
     "border": "#000000",
     "hover-border": "oklch(0.38 0.14 285)",
-    "radius": "14px",
+    "radius": "16px",
     "padding": "16px",
     "shadow": "0 10px 30px rgba(60, 50, 120, 0.12)"
   },
   "chart": {
     "bg": "#ffffff",
-    "radius": "14px",
-    "padding": "14px",
+    "radius": "16px",
+    "padding": "12px",
     "axis": "#000000",
     "grid": "#000000",
     "axis-label": "#1c1d2e",
     "legend-label": "#1c1d2e",
-    "legend-gap": "14px",
-    "swatch-radius": "9px",
+    "legend-gap": "12px",
+    "swatch-radius": "8px",
     "tooltip-bg": "#ffffff",
     "tooltip-text": "#000000",
     "tooltip-border": "#000000",
-    "tooltip-radius": "9px",
-    "tooltip-padding-x": "10px",
-    "tooltip-padding-y": "6px",
+    "tooltip-radius": "8px",
+    "tooltip-padding-x": "8px",
+    "tooltip-padding-y": "4px",
     "tooltip-shadow": "0 10px 30px rgba(60, 50, 120, 0.12)",
-    "bar-radius": "9px",
-    "bar-gap": "6px",
+    "bar-radius": "8px",
+    "bar-gap": "4px",
     "slice-stroke": "#ffffff",
     "series-1": "#648fff",
     "series-2": "#785ef0",
@@ -551,45 +598,45 @@ export const tokens = {
     "border": "#000000",
     "placeholder": "#1c1d2e",
     "focus-ring": "oklch(0.38 0.14 285)",
-    "radius": "9px",
+    "radius": "8px",
     "min-height": "46px",
-    "padding-x": "14px",
+    "padding-x": "12px",
     "padding-y": "11px"
   },
   "nav": {
     "tabbar": {
       "bg": "#ffffff",
       "border": "#000000",
-      "radius": "14px"
+      "radius": "16px"
     },
     "tab": {
       "text": "#1c1d2e",
       "active-text": "#000000",
       "active-bg": "#f1f1f9",
-      "radius": "10px"
+      "radius": "12px"
     },
     "iconbtn": {
       "bg": "#f1f1f9",
       "text": "#000000",
       "size": "46px",
-      "radius": "10px"
+      "radius": "12px"
     }
   },
   "pill": {
     "bg": "#f1f1f9",
     "text": "#1c1d2e",
     "border": "#000000",
-    "radius": "999px",
-    "padding-x": "10px",
+    "radius": "9999px",
+    "padding-x": "8px",
     "padding-y": "3px"
   },
   "progress": {
     "track": "#f1f1f9",
     "fill": "oklch(0.38 0.14 285)",
-    "height": "10px",
-    "height-lg": "14px",
-    "radius": "999px",
-    "stroke": "10px",
+    "height": "8px",
+    "height-lg": "12px",
+    "radius": "9999px",
+    "stroke": "8px",
     "duration": "150ms",
     "easing": "ease",
     "label": "#000000",

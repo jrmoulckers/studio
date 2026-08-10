@@ -1,6 +1,6 @@
 {
   "breakpoint": {
-    "$description": "Layout breakpoints for the single-column, thumb-first shell.",
+    "$description": "Two distinct kinds live here. content-max / tile-min are layout constraints — sizes a box may take. sm / md / lg are mobile-first min-width viewport thresholds on the 4px grid.",
     "content-max": {
       "$value": "760px",
       "$type": "dimension",
@@ -10,6 +10,21 @@
       "$value": "150px",
       "$type": "dimension",
       "$description": "Min game-tile width in the auto-fit grid"
+    },
+    "sm": {
+      "$value": "640px",
+      "$type": "dimension",
+      "$description": "Mobile → tablet-size screens"
+    },
+    "md": {
+      "$value": "1024px",
+      "$type": "dimension",
+      "$description": "Tablet → desktop-size screens"
+    },
+    "lg": {
+      "$value": "1440px",
+      "$type": "dimension",
+      "$description": "Desktop → widescreen displays"
     }
   }
 }

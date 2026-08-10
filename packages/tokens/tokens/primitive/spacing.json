@@ -1,22 +1,94 @@
 {
   "spacing": {
-    "$description": "Spacing scale from score-king's compact, thumb-first layout.",
-    "xs": { "$value": "6px", "$type": "dimension" },
-    "sm": { "$value": "10px", "$type": "dimension" },
-    "md": { "$value": "14px", "$type": "dimension" },
-    "lg": { "$value": "16px", "$type": "dimension" },
-    "xl": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "5": {
       "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "7": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "12": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "14": {
+      "$value": "56px",
+      "$type": "dimension"
+    },
+    "16": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "20": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "24": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "$description": "Canonical 4px grid. Numeric keys equal the multiplier of the 4px base (6 = 24px); the scale is intentionally sparse above 8. The t-shirt names are aliases onto the grid, kept so existing consumers keep reading the vocabulary they already use.",
+    "xs": {
+      "$value": "{spacing.1}",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "{spacing.2}",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "{spacing.3}",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "{spacing.4}",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "{spacing.5}",
       "$type": "dimension",
       "$description": "Roomier block padding — cognitive-accessibility mode."
     },
     "2xl": {
-      "$value": "24px",
+      "$value": "{spacing.6}",
       "$type": "dimension",
       "$description": "Card gap / inline padding — cognitive-accessibility mode."
     },
     "3xl": {
-      "$value": "32px",
+      "$value": "{spacing.8}",
       "$type": "dimension",
       "$description": "Section gap — cognitive-accessibility mode."
     }

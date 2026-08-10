@@ -1,6 +1,6 @@
 {
   "shadow": {
-    "$description": "One soft shadow per theme (the Soft-Lift Rule) plus an avatar hairline.",
+    "$description": "Two layers live here. The Soft-Lift Rule still governs product surfaces: one soft shadow per theme, plus an avatar hairline. The sm/md/lg/xl elevation ladder exists for consumers that need graded depth; dark.* is its dark-theme counterpart, because faint black shadows are invisible on near-black surfaces.",
     "soft-lift-dark": {
       "$value": "0 10px 30px rgba(0, 0, 0, 0.45)",
       "$type": "shadow",
@@ -20,6 +20,49 @@
       "$value": "none",
       "$type": "shadow",
       "$description": "No shadow — the flattened surface used by cognitive-accessibility mode."
+    },
+    "sm": {
+      "$value": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "$type": "shadow",
+      "$description": "Elevation 1 — resting cards on a light surface."
+    },
+    "md": {
+      "$value": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      "$type": "shadow",
+      "$description": "Elevation 2 — raised cards, dropdowns."
+    },
+    "lg": {
+      "$value": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+      "$type": "shadow",
+      "$description": "Elevation 3 — popovers, sheets."
+    },
+    "xl": {
+      "$value": "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+      "$type": "shadow",
+      "$description": "Elevation 4 — modals."
+    },
+    "dark": {
+      "$description": "Dark-theme elevation ladder. Higher-opacity black with larger blur restores depth cues that 0.05–0.1 alpha shadows cannot provide on near-black surfaces.",
+      "sm": {
+        "$value": "0 1px 3px 0 rgba(0, 0, 0, 0.5)",
+        "$type": "shadow",
+        "$description": "Elevation 1 on dark surfaces."
+      },
+      "md": {
+        "$value": "0 4px 8px -1px rgba(0, 0, 0, 0.55)",
+        "$type": "shadow",
+        "$description": "Elevation 2 on dark surfaces."
+      },
+      "lg": {
+        "$value": "0 10px 20px -3px rgba(0, 0, 0, 0.6)",
+        "$type": "shadow",
+        "$description": "Elevation 3 on dark surfaces."
+      },
+      "xl": {
+        "$value": "0 20px 30px -5px rgba(0, 0, 0, 0.65)",
+        "$type": "shadow",
+        "$description": "Elevation 4 on dark surfaces."
+      }
     }
   }
 }
