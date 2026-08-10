@@ -28,6 +28,19 @@ const resolvedTrees = {};
 const toGlob = (p) => p.replace(/\\/g, '/');
 const norm = (p) => (p || '').replace(/\\/g, '/');
 
+/**
+ * Join token path segments into a CSS custom-property name.
+ *
+ * Token keys are authored camelCase where a name has two words (`positiveSubtle`)
+ * so the JS/TS entry points stay dot-accessible. CSS custom properties are
+ * kebab-case by convention, so each segment is split on the camel hump:
+ * `['semantic','status','positiveSubtle']` → `semantic-status-positive-subtle`.
+ * Every emitter must go through this, otherwise the Tailwind preset and the
+ * preference-remap blocks reference `var(--…)` names the stylesheet never declares.
+ */
+const cssVarSegments = (path) =>
+  path.map((segment) => segment.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()).join('-');
+
 const THEME = 'default'; // studio-wide provisional theme (values seeded from score-king)
 const themeDir = toGlob(join(root, 'tokens', 'themes', THEME));
 
@@ -177,7 +190,7 @@ StyleDictionary.registerFormat({
 StyleDictionary.registerFormat({
   name: 'jrm/tailwind-preset',
   format: ({ dictionary }) => {
-    const varRef = (path) => `var(--${path.join('-')})`;
+    const varRef = (path) => `var(--${cssVarSegments(path)})`;
     // Flat-alias → Tailwind-ergonomic key names (mirrors the legacy preset).
     const colorAlias = {
       text: 'foreground',
@@ -399,7 +412,7 @@ const highContrastSd = overrideSd('high-contrast', semHighContrast, '[data-theme
 // ---------------------------------------------------------------------------
 
 /** `{color.ink.midnight}` → `--color-ink-midnight` (a var() target). */
-const refToVar = (ref) => '--' + String(ref).replace(/[{}]/g, '').trim().split('.').join('-');
+const refToVar = (ref) => '--' + cssVarSegments(String(ref).replace(/[{}]/g, '').trim().split('.'));
 
 /**
  * Turn a semantic-mode JSON file into `--semantic-*: var(--<primitive>)` remap
@@ -413,7 +426,7 @@ function cssRemapLines(semanticFile, indent = '    ') {
     for (const [k, v] of Object.entries(node)) {
       if (k.startsWith('$')) continue;
       if (v && typeof v === 'object' && '$value' in v) {
-        const name = '--' + [...path, k].join('-');
+        const name = '--' + cssVarSegments([...path, k]);
         const raw = v.$value;
         const val = typeof raw === 'string' && raw.startsWith('{') ? `var(${refToVar(raw)})` : raw;
         lines.push(`${indent}${name}: ${val};`);
@@ -501,9 +514,12 @@ ${chartHcRemap()}
  */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --motion-press-duration: 0ms;
-    --motion-state-duration: 0ms;
-    --motion-tile-duration: 0ms;
+    /* Deliberately 1ms, not 0ms: a zero-duration transition or animation never
+       fires transitionend/animationend, so cleanup or focus hand-off that awaits
+       those events would hang for reduced-motion users. Matches --duration-reduced. */
+    --motion-press-duration: 1ms;
+    --motion-state-duration: 1ms;
+    --motion-tile-duration: 1ms;
   }
 }
 
@@ -524,9 +540,11 @@ ${chartHcRemap()}
   --text-overline-size: var(--cognitive-type-overline-size);
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
 
-  --motion-press-duration: 0ms;
-  --motion-state-duration: 0ms;
-  --motion-tile-duration: 0ms;
+  /* Matches --duration-reduced: an instant-but-nonzero duration still fires
+     transitionend/animationend, so listeners that await them never hang. */
+  --motion-press-duration: 1ms;
+  --motion-state-duration: 1ms;
+  --motion-tile-duration: 1ms;
 }
 `;
   writeFileSync(join(root, 'build', 'css', THEME, 'index.css'), indexCss);

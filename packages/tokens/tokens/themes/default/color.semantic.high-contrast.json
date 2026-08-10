@@ -71,8 +71,28 @@
         "$description": "Pair with icon+text — never color alone."
       },
       "negative": { "$value": "{color.loss.700}", "$type": "color" },
-      "warning": { "$value": "{color.caution.700}", "$type": "color" },
-      "info": { "$value": "{color.info.700}", "$type": "color" }
+      "warning": {
+        "$value": "{color.caution.800}",
+        "$type": "color",
+        "$description": "Uses 800, not 700. The high-contrast theme still renders on a haze background-raised surface, where amber at 700 measures only 4.37:1 — below AA in the one theme that must never fail. 800 measures 8.89:1 on white and 7.25:1 on haze."
+      },
+      "info": {
+        "$value": "{color.info.800}",
+        "$type": "color",
+        "$description": "Uses 800, not 700, for the same reason as warning: sky at 700 measures 4.28:1 on the haze raised surface. 800 measures 8.05:1 on white and 6.57:1 on haze."
+      },
+      "pending": {
+        "$value": "{color.pending.800}",
+        "$type": "color",
+        "$description": "In-flight, processing, syncing. Pair with an icon or label; never signal state by hue alone."
+      },
+      "neutral": { "$value": "{color.ink.midnight}", "$type": "color" },
+      "positiveSubtle": { "$value": "{color.win.50}", "$type": "color" },
+      "negativeSubtle": { "$value": "{color.loss.50}", "$type": "color" },
+      "warningSubtle": { "$value": "{color.caution.50}", "$type": "color" },
+      "infoSubtle": { "$value": "{color.info.50}", "$type": "color" },
+      "pendingSubtle": { "$value": "{color.pending.50}", "$type": "color" },
+      "neutralSubtle": { "$value": "{color.paper.cloud-line}", "$type": "color" }
     }
   },
   "shadow": {

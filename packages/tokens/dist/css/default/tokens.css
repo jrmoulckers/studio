@@ -16,7 +16,7 @@
   --duration-press: 50ms; /** Button :active press-down */
   --duration-state: 150ms; /** Hover / state color transitions */
   --duration-tile: 120ms; /** Game-tile hover lift */
-  --duration-reduced: 0ms; /** Reduced-motion alternative — collapse motion to instant (prefers-reduced-motion). */
+  --duration-reduced: 1ms; /** Reduced-motion alternative — effectively instant, but deliberately 1ms rather than 0ms. A zero-duration transition or animation never fires transitionend or animationend, so any cleanup, focus hand-off, or promise that awaits those events hangs forever under prefers-reduced-motion. 1ms is imperceptible and still dispatches the event. */
   --easing-standard: ease; /** Default functional easing */
   --easing-linear: linear; /** Reduced-motion / crossfade easing */
   --opacity-none: 0; /** Fully transparent. */
@@ -83,6 +83,8 @@
   --color-crown-gold-800: oklch(0.42 0.07 90);
   --color-crown-gold-900: oklch(0.30 0.05 90);
   --color-crown-gold-ink-light: #806600; /** Gold text on light surfaces — darkened to clear WCAG >=4.5:1 on white while keeping the gold identity. */
+  --color-win-50: oklch(0.98 0.015 165);
+  --color-win-100: oklch(0.97 0.03 165);
   --color-win-200: oklch(0.95 0.05 165);
   --color-win-300: oklch(0.87 0.10 165);
   --color-win-400: oklch(0.78 0.15 165);
@@ -91,6 +93,8 @@
   --color-win-700: oklch(0.47 0.10 165);
   --color-win-800: oklch(0.36 0.07 165);
   --color-win-900: oklch(0.25 0.05 165);
+  --color-loss-50: oklch(0.98 0.012 25);
+  --color-loss-100: oklch(0.97 0.025 25);
   --color-loss-200: oklch(0.95 0.04 25);
   --color-loss-300: oklch(0.88 0.09 25);
   --color-loss-400: oklch(0.79 0.14 25);
@@ -99,6 +103,8 @@
   --color-loss-700: oklch(0.50 0.13 25);
   --color-loss-800: oklch(0.39 0.10 25);
   --color-loss-900: oklch(0.28 0.06 25);
+  --color-caution-50: oklch(0.98 0.015 80);
+  --color-caution-100: oklch(0.97 0.03 80);
   --color-caution-200: oklch(0.96 0.05 80);
   --color-caution-300: oklch(0.90 0.11 80);
   --color-caution-400: oklch(0.83 0.16 80);
@@ -107,6 +113,8 @@
   --color-caution-700: oklch(0.53 0.11 80);
   --color-caution-800: oklch(0.41 0.08 80);
   --color-caution-900: oklch(0.29 0.05 80);
+  --color-info-50: oklch(0.98 0.01 230);
+  --color-info-100: oklch(0.97 0.02 230);
   --color-info-200: oklch(0.95 0.03 230);
   --color-info-300: oklch(0.88 0.07 230);
   --color-info-400: oklch(0.80 0.11 230);
@@ -115,6 +123,16 @@
   --color-info-700: oklch(0.52 0.12 230);
   --color-info-800: oklch(0.42 0.10 230);
   --color-info-900: oklch(0.30 0.07 230);
+  --color-pending-50: oklch(0.98 0.012 195);
+  --color-pending-100: oklch(0.97 0.025 195);
+  --color-pending-200: oklch(0.95 0.04 195);
+  --color-pending-300: oklch(0.88 0.08 195);
+  --color-pending-400: oklch(0.80 0.11 195);
+  --color-pending-500: oklch(0.72 0.12 195);
+  --color-pending-600: oklch(0.61 0.11 195);
+  --color-pending-700: oklch(0.50 0.09 195);
+  --color-pending-800: oklch(0.40 0.07 195);
+  --color-pending-900: oklch(0.28 0.05 195);
   --color-ink-midnight: #0f1020; /** Midnight Court — app background */
   --color-ink-indigo-slate: #1a1b2e; /** Indigo Slate — surface */
   --color-ink-raised-slate: #24263f; /** Raised Slate — surface-2 */
@@ -188,8 +206,16 @@
   --semantic-accent-ink: var(--color-crown-gold-ink-light); /** Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold fills as accent.default. */
   --semantic-status-positive: var(--color-win-700); /** Light-theme positive. Uses the 700 step, not 500: 500 is tuned for dark surfaces and measures only 1.92:1 on white. 700 clears WCAG AA on every light surface — 6.46:1 on white, 5.75:1 on frost, 5.27:1 on haze — and 6.46:1 for white text placed on it as a fill. */
   --semantic-status-negative: var(--color-loss-700); /** Light-theme negative. Reaches real text through --button-danger-text, so the dark-tuned 500 step was body text at 2.77:1. 700 measures 6.42:1 on white, 5.71:1 on frost, 5.24:1 on haze, and 6.42:1 for white text on it as a fill. */
-  --semantic-status-warning: var(--color-caution-800); /** Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step still measures 4.37:1 on haze, short of AA. The 800 step clears every light surface — 7.86:1 on white, 6.99:1 on frost, 6.41:1 on haze. */
-  --semantic-status-info: var(--color-info-800); /** Light-theme info. Cyan behaves like amber here: the 700 step measures 4.28:1 on haze, short of AA. The 800 step clears every light surface — 7.82:1 on white, 6.96:1 on frost, 6.38:1 on haze. */
+  --semantic-status-warning: var(--color-caution-800); /** Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step measures only 4.37:1 on haze, short of AA. The 800 step clears every light surface — 8.89:1 on white, 7.91:1 on frost, 7.25:1 on haze. */
+  --semantic-status-info: var(--color-info-800); /** Light-theme info. Sky behaves like amber here: the 700 step measures only 4.28:1 on haze, short of AA. The 800 step clears every light surface — 8.05:1 on white, 7.17:1 on frost, 6.57:1 on haze. */
+  --semantic-status-pending: var(--color-pending-700); /** In-flight, processing, syncing, unsettled — distinct from warning because a pending operation is not a problem. 5.68:1 on white, 5.05:1 on frost, 4.63:1 on haze. Pair with an icon or label; never signal state by hue alone. */
+  --semantic-status-neutral: var(--color-paper-slate-gray); /** Uncategorized or inactive status. 6.27:1 on white, 5.12:1 on haze. */
+  --semantic-status-positive-subtle: var(--color-win-50); /** Low-emphasis positive fill for badges, banners, and toasts. Carries text.primary at 15.78:1. */
+  --semantic-status-negative-subtle: var(--color-loss-50); /** Low-emphasis negative fill. Carries text.primary at 15.61:1. */
+  --semantic-status-warning-subtle: var(--color-caution-50); /** Low-emphasis warning fill. Carries text.primary at 15.71:1. */
+  --semantic-status-info-subtle: var(--color-info-50); /** Low-emphasis info fill. Carries text.primary at 15.72:1. */
+  --semantic-status-pending-subtle: var(--color-pending-50); /** Low-emphasis pending fill. Carries text.primary at 15.73:1. */
+  --semantic-status-neutral-subtle: var(--color-paper-cloud-line); /** Low-emphasis neutral fill for uncategorized badges. */
   --text-display-family: var(--font-family-sans);
   --text-display-size: var(--font-size-display);
   --text-display-weight: var(--font-weight-bold);

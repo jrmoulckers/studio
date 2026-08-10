@@ -10,9 +10,9 @@
     },
     "tile": { "$value": "120ms", "$type": "duration", "$description": "Game-tile hover lift" },
     "reduced": {
-      "$value": "0ms",
+      "$value": "1ms",
       "$type": "duration",
-      "$description": "Reduced-motion alternative — collapse motion to instant (prefers-reduced-motion)."
+      "$description": "Reduced-motion alternative — effectively instant, but deliberately 1ms rather than 0ms. A zero-duration transition or animation never fires transitionend or animationend, so any cleanup, focus hand-off, or promise that awaits those events hangs forever under prefers-reduced-motion. 1ms is imperceptible and still dispatches the event."
     }
   },
   "easing": {

@@ -68,7 +68,23 @@
       "positive": { "$value": "{color.win.500}", "$type": "color" },
       "negative": { "$value": "{color.loss.500}", "$type": "color" },
       "warning": { "$value": "{color.caution.500}", "$type": "color" },
-      "info": { "$value": "{color.info.400}", "$type": "color" }
+      "info": { "$value": "{color.info.400}", "$type": "color" },
+      "pending": {
+        "$value": "{color.pending.400}",
+        "$type": "color",
+        "$description": "In-flight, processing, syncing. 9.49:1 on elevated, 10.56:1 on primary. Pair with an icon or label; never signal state by hue alone."
+      },
+      "neutral": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
+      "positiveSubtle": {
+        "$value": "{color.win.900}",
+        "$type": "color",
+        "$description": "Low-emphasis positive fill. Carries text.primary at 13.04:1 and stays distinguishable from background-elevated."
+      },
+      "negativeSubtle": { "$value": "{color.loss.900}", "$type": "color" },
+      "warningSubtle": { "$value": "{color.caution.900}", "$type": "color" },
+      "infoSubtle": { "$value": "{color.info.900}", "$type": "color" },
+      "pendingSubtle": { "$value": "{color.pending.900}", "$type": "color" },
+      "neutralSubtle": { "$value": "{color.ink.lifted-slate}", "$type": "color" }
     }
   },
   "shadow": {

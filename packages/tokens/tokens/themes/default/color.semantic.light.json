@@ -90,12 +90,52 @@
       "warning": {
         "$value": "{color.caution.800}",
         "$type": "color",
-        "$description": "Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step still measures 4.37:1 on haze, short of AA. The 800 step clears every light surface — 7.86:1 on white, 6.99:1 on frost, 6.41:1 on haze."
+        "$description": "Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step measures only 4.37:1 on haze, short of AA. The 800 step clears every light surface — 8.89:1 on white, 7.91:1 on frost, 7.25:1 on haze."
       },
       "info": {
         "$value": "{color.info.800}",
         "$type": "color",
-        "$description": "Light-theme info. Cyan behaves like amber here: the 700 step measures 4.28:1 on haze, short of AA. The 800 step clears every light surface — 7.82:1 on white, 6.96:1 on frost, 6.38:1 on haze."
+        "$description": "Light-theme info. Sky behaves like amber here: the 700 step measures only 4.28:1 on haze, short of AA. The 800 step clears every light surface — 8.05:1 on white, 7.17:1 on frost, 6.57:1 on haze."
+      },
+      "pending": {
+        "$value": "{color.pending.700}",
+        "$type": "color",
+        "$description": "In-flight, processing, syncing, unsettled — distinct from warning because a pending operation is not a problem. 5.68:1 on white, 5.05:1 on frost, 4.63:1 on haze. Pair with an icon or label; never signal state by hue alone."
+      },
+      "neutral": {
+        "$value": "{color.paper.slate-gray}",
+        "$type": "color",
+        "$description": "Uncategorized or inactive status. 6.27:1 on white, 5.12:1 on haze."
+      },
+      "positiveSubtle": {
+        "$value": "{color.win.50}",
+        "$type": "color",
+        "$description": "Low-emphasis positive fill for badges, banners, and toasts. Carries text.primary at 15.78:1."
+      },
+      "negativeSubtle": {
+        "$value": "{color.loss.50}",
+        "$type": "color",
+        "$description": "Low-emphasis negative fill. Carries text.primary at 15.61:1."
+      },
+      "warningSubtle": {
+        "$value": "{color.caution.50}",
+        "$type": "color",
+        "$description": "Low-emphasis warning fill. Carries text.primary at 15.71:1."
+      },
+      "infoSubtle": {
+        "$value": "{color.info.50}",
+        "$type": "color",
+        "$description": "Low-emphasis info fill. Carries text.primary at 15.72:1."
+      },
+      "pendingSubtle": {
+        "$value": "{color.pending.50}",
+        "$type": "color",
+        "$description": "Low-emphasis pending fill. Carries text.primary at 15.73:1."
+      },
+      "neutralSubtle": {
+        "$value": "{color.paper.cloud-line}",
+        "$type": "color",
+        "$description": "Low-emphasis neutral fill for uncategorized badges."
       }
     }
   },

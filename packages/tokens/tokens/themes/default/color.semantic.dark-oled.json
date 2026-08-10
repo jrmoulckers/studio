@@ -76,7 +76,23 @@
       "positive": { "$value": "{color.win.500}", "$type": "color" },
       "negative": { "$value": "{color.loss.500}", "$type": "color" },
       "warning": { "$value": "{color.caution.500}", "$type": "color" },
-      "info": { "$value": "{color.info.400}", "$type": "color" }
+      "info": { "$value": "{color.info.400}", "$type": "color" },
+      "pending": {
+        "$value": "{color.pending.400}",
+        "$type": "color",
+        "$description": "In-flight, processing, syncing. 11.77:1 on the true-black primary surface. Pair with an icon or label; never signal state by hue alone."
+      },
+      "neutral": { "$value": "{color.ink.lavender-gray}", "$type": "color" },
+      "positiveSubtle": {
+        "$value": "{color.win.900}",
+        "$type": "color",
+        "$description": "Low-emphasis positive fill. Carries text.primary at 13.04:1 while staying dark enough not to defeat the OLED power saving of a true-black base."
+      },
+      "negativeSubtle": { "$value": "{color.loss.900}", "$type": "color" },
+      "warningSubtle": { "$value": "{color.caution.900}", "$type": "color" },
+      "infoSubtle": { "$value": "{color.info.900}", "$type": "color" },
+      "pendingSubtle": { "$value": "{color.pending.900}", "$type": "color" },
+      "neutralSubtle": { "$value": "{color.ink.lifted-slate}", "$type": "color" }
     }
   },
   "shadow": {
