@@ -212,7 +212,7 @@
         "syncFinalMapping": true,
         "recomputeFinalIntegrity": true
       },
-      "expectedError": "does not match the independent PR #21 mapping pin"
+      "expectedError": "does not match the current ledger mapping pin"
     },
     {
       "name": "wrong disposition cardinality",
