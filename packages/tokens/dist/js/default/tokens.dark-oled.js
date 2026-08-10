@@ -517,6 +517,34 @@ export const tokens = {
     "padding": "16px",
     "shadow": "0 10px 30px rgba(0, 0, 0, 0.45)"
   },
+  "chart": {
+    "bg": "#000000",
+    "radius": "14px",
+    "padding": "14px",
+    "axis": "#a3a6cb",
+    "grid": "#a3a6cb",
+    "axis-label": "#a3a6cb",
+    "legend-label": "#a3a6cb",
+    "legend-gap": "14px",
+    "swatch-radius": "9px",
+    "tooltip-bg": "#111111",
+    "tooltip-text": "#e9e9f4",
+    "tooltip-border": "#a3a6cb",
+    "tooltip-radius": "9px",
+    "tooltip-padding-x": "10px",
+    "tooltip-padding-y": "6px",
+    "tooltip-shadow": "0 10px 30px rgba(0, 0, 0, 0.45)",
+    "bar-radius": "9px",
+    "bar-gap": "6px",
+    "slice-stroke": "#000000",
+    "series-1": "#648fff",
+    "series-2": "#785ef0",
+    "series-3": "#dc267f",
+    "series-4": "#fe6100",
+    "series-5": "#ffb000",
+    "series-6": "#009e73",
+    "series-other": "#a3a6cb"
+  },
   "input": {
     "bg": "#111111",
     "text": "#e9e9f4",
@@ -554,6 +582,23 @@ export const tokens = {
     "radius": "999px",
     "padding-x": "10px",
     "padding-y": "3px"
+  },
+  "progress": {
+    "track": "#0a0a0a",
+    "fill": "oklch(0.71 0.16 285)",
+    "height": "10px",
+    "height-lg": "14px",
+    "radius": "999px",
+    "stroke": "10px",
+    "duration": "150ms",
+    "easing": "ease",
+    "label": "#e9e9f4",
+    "label-muted": "#a3a6cb",
+    "on-track": "#34d399",
+    "at-risk": "#fbbf24",
+    "exceeded": "#f87171",
+    "pending": "oklch(0.80 0.11 195)",
+    "complete": "#34d399"
   }
 };
 export default tokens;

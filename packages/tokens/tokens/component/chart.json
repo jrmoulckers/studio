@@ -1,0 +1,111 @@
+{
+  "chart": {
+    "$description": "Component-level tokens for data visualization. Series colors come from the CVD-safe chart ramp, which the high-contrast themes already remap. Charts must never convey meaning through color alone — pair every series with a direct label, pattern, or marker shape. Ported from finance's design-tokens package and re-expressed against Studio's t-shirt spacing and radius scales.",
+    "bg": {
+      "$value": "{semantic.background.primary}",
+      "$type": "color",
+      "$description": "Plot area background — inherits the page surface so charts sit flush."
+    },
+    "radius": {
+      "$value": "{radius.md}",
+      "$type": "dimension",
+      "$description": "Chart container corner radius. Matches card radius."
+    },
+    "padding": {
+      "$value": "{spacing.md}",
+      "$type": "dimension",
+      "$description": "Padding between the container edge and the plot area."
+    },
+    "axis": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Axis line color."
+    },
+    "grid": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Grid line color. Render grid lines at reduced opacity rather than with a separate token, so the axis stays dominant without adding a theme-parity surface."
+    },
+    "axis-label": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Axis tick and label text."
+    },
+    "legend-label": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Legend item text."
+    },
+    "legend-gap": {
+      "$value": "{spacing.md}",
+      "$type": "dimension",
+      "$description": "Gap between legend items."
+    },
+    "swatch-radius": {
+      "$value": "{radius.sm}",
+      "$type": "dimension",
+      "$description": "Legend color swatch corner radius."
+    },
+    "tooltip-bg": {
+      "$value": "{semantic.background.elevated}",
+      "$type": "color",
+      "$description": "Tooltip surface."
+    },
+    "tooltip-text": {
+      "$value": "{semantic.text.primary}",
+      "$type": "color",
+      "$description": "Tooltip text."
+    },
+    "tooltip-border": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Tooltip border."
+    },
+    "tooltip-radius": {
+      "$value": "{radius.sm}",
+      "$type": "dimension",
+      "$description": "Tooltip corner radius."
+    },
+    "tooltip-padding-x": {
+      "$value": "{spacing.sm}",
+      "$type": "dimension",
+      "$description": "Tooltip horizontal padding."
+    },
+    "tooltip-padding-y": {
+      "$value": "{spacing.xs}",
+      "$type": "dimension",
+      "$description": "Tooltip vertical padding."
+    },
+    "tooltip-shadow": {
+      "$value": "{elevation.raised}",
+      "$type": "shadow",
+      "$description": "Tooltip elevation, so it reads above the plot area."
+    },
+    "bar-radius": {
+      "$value": "{radius.sm}",
+      "$type": "dimension",
+      "$description": "Bar cap rounding."
+    },
+    "bar-gap": {
+      "$value": "{spacing.xs}",
+      "$type": "dimension",
+      "$description": "Gap between adjacent bars."
+    },
+    "slice-stroke": {
+      "$value": "{semantic.background.primary}",
+      "$type": "color",
+      "$description": "Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined."
+    },
+    "series-1": { "$value": "{color.chart.1}", "$type": "color" },
+    "series-2": { "$value": "{color.chart.2}", "$type": "color" },
+    "series-3": { "$value": "{color.chart.3}", "$type": "color" },
+    "series-4": { "$value": "{color.chart.4}", "$type": "color" },
+    "series-5": { "$value": "{color.chart.5}", "$type": "color" },
+    "series-6": { "$value": "{color.chart.6}", "$type": "color" },
+    "series-other": {
+      "$value": "{semantic.status.neutral}",
+      "$type": "color",
+      "$description": "Grouped tail categories rendered as a single \"Other\" series. Neutral by design, so it never competes with a real series."
+    }
+  }
+}
