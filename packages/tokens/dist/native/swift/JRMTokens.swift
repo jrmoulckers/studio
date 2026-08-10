@@ -224,6 +224,38 @@ extension JRMColorScheme {
         statusPendingSubtle: Color(red: 0.9412, green: 0.9843, blue: 0.9843, opacity: 1),
         statusNeutralSubtle: Color(red: 0.8627, green: 0.8627, blue: 0.9176, opacity: 1)
     )
+
+    public static let highContrastDark = JRMColorScheme(
+        backgroundPrimary: Color(red: 0, green: 0, blue: 0, opacity: 1),
+        backgroundSecondary: Color(red: 0.0588, green: 0.0627, blue: 0.1255, opacity: 1),
+        backgroundElevated: Color(red: 0.102, green: 0.1059, blue: 0.1804, opacity: 1),
+        backgroundRaised: Color(red: 0.1412, green: 0.149, blue: 0.2471, opacity: 1),
+        textPrimary: Color(red: 1, green: 1, blue: 1, opacity: 1),
+        textSecondary: Color(red: 0.9137, green: 0.9137, blue: 0.9569, opacity: 1),
+        textDisabled: Color(red: 0.6392, green: 0.651, blue: 0.7961, opacity: 1),
+        textInverse: Color(red: 0, green: 0, blue: 0, opacity: 1),
+        borderDefault: Color(red: 0.6392, green: 0.651, blue: 0.7961, opacity: 1),
+        borderFocus: Color(red: 0.7529, green: 0.749, blue: 1, opacity: 1),
+        borderError: Color(red: 1, green: 0.7569, blue: 0.7294, opacity: 1),
+        interactiveDefault: Color(red: 0.7529, green: 0.749, blue: 1, opacity: 1),
+        interactiveHover: Color(red: 0.9098, green: 0.9098, blue: 1, opacity: 1),
+        interactivePressed: Color(red: 0.9098, green: 0.9098, blue: 1, opacity: 1),
+        interactiveDisabled: Color(red: 0.1725, green: 0.1804, blue: 0.302, opacity: 1),
+        accentDefault: Color(red: 0.9333, green: 0.7765, blue: 0.3176, opacity: 1),
+        accentInk: Color(red: 0.9333, green: 0.7765, blue: 0.3176, opacity: 1),
+        statusPositive: Color(red: 0.2157, green: 0.8353, blue: 0.6235, opacity: 1),
+        statusNegative: Color(red: 1, green: 0.7569, blue: 0.7294, opacity: 1),
+        statusWarning: Color(red: 0.9922, green: 0.7294, blue: 0.1843, opacity: 1),
+        statusInfo: Color(red: 0.6588, green: 0.8824, blue: 0.9922, opacity: 1),
+        statusPending: Color(red: 0.5922, green: 0.9137, blue: 0.9098, opacity: 1),
+        statusNeutral: Color(red: 0.9137, green: 0.9137, blue: 0.9569, opacity: 1),
+        statusPositiveSubtle: Color(red: 0, green: 0.4235, blue: 0.302, opacity: 1),
+        statusNegativeSubtle: Color(red: 0.6275, green: 0.2471, blue: 0.2353, opacity: 1),
+        statusWarningSubtle: Color(red: 0.5529, green: 0.3882, blue: 0, opacity: 1),
+        statusInfoSubtle: Color(red: 0, green: 0.4549, blue: 0.6275, opacity: 1),
+        statusPendingSubtle: Color(red: 0, green: 0.451, blue: 0.451, opacity: 1),
+        statusNeutralSubtle: Color(red: 0.1922, green: 0.2, blue: 0.3412, opacity: 1)
+    )
 }
 
 /// The documented themes. Light is the default.
@@ -232,6 +264,7 @@ public enum JRMTheme: String, CaseIterable, Sendable {
     case dark = "dark"
     case darkOled = "dark-oled"
     case highContrast = "high-contrast"
+    case highContrastDark = "high-contrast-dark"
 
     public var colors: JRMColorScheme {
         switch self {
@@ -239,6 +272,7 @@ public enum JRMTheme: String, CaseIterable, Sendable {
         case .dark: return .dark
         case .darkOled: return .darkOled
         case .highContrast: return .highContrast
+        case .highContrastDark: return .highContrastDark
         }
     }
 }

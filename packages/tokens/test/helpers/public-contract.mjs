@@ -29,6 +29,7 @@ export const REQUIRED_TOKEN_FILES = Object.freeze([
   'themes/default/color.semantic.dark-oled.json',
   'themes/default/color.semantic.dark.json',
   'themes/default/color.semantic.high-contrast.json',
+  'themes/default/color.semantic.high-contrast-dark.json',
   'themes/default/color.semantic.light.json',
 ]);
 

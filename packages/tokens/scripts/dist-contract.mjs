@@ -2,12 +2,13 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync }
 import { dirname, join, relative, sep } from 'node:path';
 import { TextDecoder } from 'node:util';
 
-const MODES = ['light', 'dark', 'dark-oled', 'high-contrast'];
+const MODES = ['light', 'dark', 'dark-oled', 'high-contrast', 'high-contrast-dark'];
 
 export const DIST_OUTPUTS = Object.freeze([
   'css/default/index.css',
   'css/default/tokens-dark-oled.css',
   'css/default/tokens-dark.css',
+  'css/default/tokens-high-contrast-dark.css',
   'css/default/tokens-high-contrast.css',
   'css/default/tokens.css',
   'native/compose/JrmTokens.kt',

@@ -55,6 +55,7 @@ const semLight = `${themeDir}/color.semantic.light.json`;
 const semDark = `${themeDir}/color.semantic.dark.json`;
 const semDarkOled = `${themeDir}/color.semantic.dark-oled.json`;
 const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
+const semHighContrastDark = `${themeDir}/color.semantic.high-contrast-dark.json`;
 
 /** Theme-agnostic semantic tokens (typography + motion + cognitive purposes,
  *  plus the structural layer/state/elevation purposes). Elevation references the
@@ -406,6 +407,11 @@ const overrideSd = (mode, semanticColorFile, selector) =>
 const darkSd = overrideSd('dark', semDark, '[data-theme="dark"]');
 const darkOledSd = overrideSd('dark-oled', semDarkOled, '[data-theme="dark-oled"]');
 const highContrastSd = overrideSd('high-contrast', semHighContrast, '[data-theme="high-contrast"]');
+const highContrastDarkSd = overrideSd(
+  'high-contrast-dark',
+  semHighContrastDark,
+  '[data-theme="high-contrast-dark"]',
+);
 
 // ---------------------------------------------------------------------------
 // Barrel files (not token-derived — stable wiring around the generated output)
@@ -452,6 +458,7 @@ function writeBarrels() {
 
   const darkRemap = cssRemapLines(semDark);
   const highContrastRemap = cssRemapLines(semHighContrast);
+  const highContrastDarkRemap = cssRemapLines(semHighContrastDark);
 
   // CSS barrel: import every mode, then port finance's preference auto-switching.
   // Each @media block is guarded with :not([data-theme]) so an explicit theme wins.
@@ -460,9 +467,11 @@ function writeBarrels() {
 @import './tokens-dark.css';
 @import './tokens-dark-oled.css';
 @import './tokens-high-contrast.css';
+@import './tokens-high-contrast-dark.css';
 
-/* Chart series swap to CVD-safe high-contrast variants under the explicit HC theme. */
-[data-theme="high-contrast"] {
+/* Chart series swap to CVD-safe high-contrast variants under either HC theme. */
+[data-theme="high-contrast"],
+[data-theme="high-contrast-dark"] {
 ${chartHcRemap()}
 }
 
@@ -488,24 +497,17 @@ ${chartHcRemap()}
 }
 
 /*
- * Dark + more contrast: brighter foregrounds and stronger borders on the dark
- * surfaces for users who want both.
+ * Dark + more contrast: promote the full high-contrast-dark palette. This block
+ * used to be a hand-maintained list of a dozen overrides that existed nowhere
+ * else in the system — invisible to JS and native consumers, and impossible for
+ * a user to select explicitly. It is now generated from the same theme file that
+ * backs [data-theme="high-contrast-dark"], so the preference-driven path and the
+ * explicit path can no longer drift apart.
  */
 @media (prefers-color-scheme: dark) and (prefers-contrast: more) {
   :root:not([data-theme]) {
-    --semantic-text-primary: var(--color-base-white);
-    --semantic-text-secondary: var(--color-ink-moonlight);
-    --semantic-text-inverse: var(--color-ink-midnight);
-    --semantic-border-default: var(--color-ink-lavender-gray);
-    --semantic-border-focus: var(--color-royal-violet-300);
-    --semantic-border-error: var(--color-loss-300);
-    --semantic-interactive-default: var(--color-royal-violet-300);
-    --semantic-interactive-hover: var(--color-royal-violet-200);
-    --semantic-interactive-pressed: var(--color-royal-violet-200);
-    --semantic-status-positive: var(--color-win-500);
-    --semantic-status-negative: var(--color-loss-400);
-    --semantic-status-warning: var(--color-caution-500);
-    --semantic-status-info: var(--color-info-300);
+${highContrastDarkRemap}
+${chartHcRemap()}
   }
 }
 
@@ -556,13 +558,21 @@ import light from './${THEME}/tokens.light.js';
 import dark from './${THEME}/tokens.dark.js';
 import darkOled from './${THEME}/tokens.dark-oled.js';
 import highContrast from './${THEME}/tokens.high-contrast.js';
+import highContrastDark from './${THEME}/tokens.high-contrast-dark.js';
 
 export const tokens = light;
 export const tokensLight = light;
 export const tokensDark = dark;
 export const tokensDarkOled = darkOled;
 export const tokensHighContrast = highContrast;
-export const themes = { light, dark, 'dark-oled': darkOled, 'high-contrast': highContrast };
+export const tokensHighContrastDark = highContrastDark;
+export const themes = {
+  light,
+  dark,
+  'dark-oled': darkOled,
+  'high-contrast': highContrast,
+  'high-contrast-dark': highContrastDark,
+};
 
 export default tokens;
 `;
@@ -573,17 +583,20 @@ import light from './${THEME}/tokens.light.js';
 import dark from './${THEME}/tokens.dark.js';
 import darkOled from './${THEME}/tokens.dark-oled.js';
 import highContrast from './${THEME}/tokens.high-contrast.js';
+import highContrastDark from './${THEME}/tokens.high-contrast-dark.js';
 
 export declare const tokens: typeof light;
 export declare const tokensLight: typeof light;
 export declare const tokensDark: typeof dark;
 export declare const tokensDarkOled: typeof darkOled;
 export declare const tokensHighContrast: typeof highContrast;
+export declare const tokensHighContrastDark: typeof highContrastDark;
 export declare const themes: {
   readonly light: typeof light;
   readonly dark: typeof dark;
   readonly 'dark-oled': typeof darkOled;
   readonly 'high-contrast': typeof highContrast;
+  readonly 'high-contrast-dark': typeof highContrastDark;
 };
 
 export default tokens;
@@ -619,10 +632,11 @@ try {
   await darkSd.buildAllPlatforms();
   await darkOledSd.buildAllPlatforms();
   await highContrastSd.buildAllPlatforms();
+  await highContrastDarkSd.buildAllPlatforms();
   writeBarrels();
   writeNative();
   console.log(
-    `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast → css, tailwind, js, native).`,
+    `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast + high-contrast-dark → css, tailwind, js, native).`,
   );
 } catch (err) {
   console.error('Build failed:', err);

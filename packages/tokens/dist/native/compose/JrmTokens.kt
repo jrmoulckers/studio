@@ -168,12 +168,45 @@ val JrmHighContrastColors: JrmColorScheme = JrmColorScheme(
     statusNeutralSubtle = Color(0xFFDCDCEA),
 )
 
+val JrmHighContrastDarkColors: JrmColorScheme = JrmColorScheme(
+    backgroundPrimary = Color(0xFF000000),
+    backgroundSecondary = Color(0xFF0F1020),
+    backgroundElevated = Color(0xFF1A1B2E),
+    backgroundRaised = Color(0xFF24263F),
+    textPrimary = Color(0xFFFFFFFF),
+    textSecondary = Color(0xFFE9E9F4),
+    textDisabled = Color(0xFFA3A6CB),
+    textInverse = Color(0xFF000000),
+    borderDefault = Color(0xFFA3A6CB),
+    borderFocus = Color(0xFFC0BFFF),
+    borderError = Color(0xFFFFC1BA),
+    interactiveDefault = Color(0xFFC0BFFF),
+    interactiveHover = Color(0xFFE8E8FF),
+    interactivePressed = Color(0xFFE8E8FF),
+    interactiveDisabled = Color(0xFF2C2E4D),
+    accentDefault = Color(0xFFEEC651),
+    accentInk = Color(0xFFEEC651),
+    statusPositive = Color(0xFF37D59F),
+    statusNegative = Color(0xFFFFC1BA),
+    statusWarning = Color(0xFFFDBA2F),
+    statusInfo = Color(0xFFA8E1FD),
+    statusPending = Color(0xFF97E9E8),
+    statusNeutral = Color(0xFFE9E9F4),
+    statusPositiveSubtle = Color(0xFF006C4D),
+    statusNegativeSubtle = Color(0xFFA03F3C),
+    statusWarningSubtle = Color(0xFF8D6300),
+    statusInfoSubtle = Color(0xFF0074A0),
+    statusPendingSubtle = Color(0xFF007373),
+    statusNeutralSubtle = Color(0xFF313357),
+)
+
 /** The documented themes. [Light] is the default. */
 enum class JrmTheme {
     Light,
     Dark,
     DarkOled,
     HighContrast,
+    HighContrastDark,
 }
 
 fun jrmColorScheme(theme: JrmTheme): JrmColorScheme = when (theme) {
@@ -181,6 +214,7 @@ fun jrmColorScheme(theme: JrmTheme): JrmColorScheme = when (theme) {
     JrmTheme.Dark -> JrmDarkColors
     JrmTheme.DarkOled -> JrmDarkOledColors
     JrmTheme.HighContrast -> JrmHighContrastColors
+    JrmTheme.HighContrastDark -> JrmHighContrastDarkColors
 }
 
 object JrmSpacing {
