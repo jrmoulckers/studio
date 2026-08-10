@@ -3540,22 +3540,36 @@
       "owner": "repository owner"
     },
     "studio-legacy:security:8": {
-      "disposition": "reference",
+      "disposition": "split",
       "successors": [
         {
           "authority": "Product",
           "id": "PROD-CONTENT-002"
+        },
+        {
+          "authority": ".github",
+          "id": "GH-REPO-003"
         }
       ],
       "status": "verified",
-      "rationale": "Product PROD-CONTENT-002 owns the durable “Publish a disclosure policy and answer reports on a stated clock” rule; Studio should reference that authority instead of restating it.",
+      "rationale": "The legacy \u201cPublish a disclosure policy and answer reports on a stated clock\u201d rule combined separable concerns: surface enumeration (SECURITY.md as a documented public surface) owned by Product PROD-CONTENT-002, and disclosure content (private reporting channel, acknowledgement SLA, coordinated-disclosure deadline, safe harbor) owned by .github GH-REPO-003 via GitHub-native health inheritance. The .github SECURITY.md carries all disclosure obligations: severity guide, response timeline, coordinated disclosure, scope, and safe harbor.",
       "evidence": [
         "principles/migration-verification-receipt.json",
         "https://github.com/jrmoulckers/product/blob/b0b2ef66094bbc5abf19cd4ae0ac85b05f12ddb5/principles/content-operations.md",
+        "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md",
         "principles/migration-finalization-receipt.json",
-        "https://github.com/jrmoulckers/product/blob/3a752c11856515a74eb204675d5d5198cac1e48e/principles/content-operations.md"
+        "https://github.com/jrmoulckers/product/blob/3a752c11856515a74eb204675d5d5198cac1e48e/principles/content-operations.md",
+        "https://github.com/jrmoulckers/.github/blob/a7be84b20737f9d404ea53213dec159dd59d5747/principles/github/repository-governance.md"
       ],
-      "owner": "repository owner"
+      "owner": "repository owner",
+      "citationException": {
+        "kind": "externally-verified-ownership",
+        "reason": "GH-REPO-003 is the verified .github owner for GitHub-native health inheritance including SECURITY.md. Its Legacy inputs cite devops:11 rather than security:8 because it was first mapped from the devops realm; the disclosure-content obligation in security:8 was previously mis-attributed to PROD-CONTENT-002 alone. GH-REPO-003\u2019s statement, the .github SECURITY.md (272 lines covering private reporting, response timeline, coordinated disclosure, scope, and safe harbor), and PROD-CONTENT-002\u2019s Handoff to .github for health-file distribution together establish the split.",
+        "evidence": [
+          "https://github.com/jrmoulckers/.github/blob/3036d5d1ed882a4c5acffe1ccfa0b49165538eef/principles/github/repository-governance.md",
+          "https://github.com/jrmoulckers/.github/blob/a7be84b20737f9d404ea53213dec159dd59d5747/SECURITY.md"
+        ]
+      }
     },
     "studio-legacy:testing:1": {
       "disposition": "split",

@@ -115,6 +115,12 @@ const RECONCILIATION_LEDGER = {
   mappingSha256: '887e11e27b97cdbcf12a0b914e8af685dbc14cda14ee6301ceb35282277d5c75',
 };
 
+// Post-finalization ledger amendment: security:8 was corrected from reference→split, adding
+// .github GH-REPO-003 as a second successor. The PR #21 mapping pin is preserved above for
+// historical-evidence validation; this pin is the current authoritative mapping digest.
+const CURRENT_LEDGER_MAPPING_PIN =
+  'c1e372db180c05c82f1ef6417a8f359e1323cb2221734505d81e330b1253d6fc';
+
 const HISTORICAL_RECEIPT_PATH = 'principles/migration-verification-receipt.json';
 const HISTORICAL_RECEIPT_PIN = {
   verifiedAt: '2026-08-08T23:14:56.835Z',
@@ -126,7 +132,7 @@ const FINAL_RECEIPT_PATH = 'principles/migration-finalization-receipt.json';
 // receipt. The pin stays independent: a tampered receipt that recomputes its own integrity digest
 // still fails every authority, mapping, semantic, and protection pin below.
 const FINAL_RECEIPT_INTEGRITY_PIN =
-  '87fa5e88a1d3d556e1d32490d809c99fa596d073abda3c714b54422286135d2f';
+  '1a3e3b0fb92dd3688fdb6e5e5f4eb2d3f8dc1b87a75dab862298ab9f50937020';
 
 const LEDGER_PATH = 'principles/migration-ledger.json';
 const LEDGER_SCHEMA_PATH = 'principles/migration-ledger.schema.json';
@@ -311,11 +317,11 @@ const PROTECTION_PIN = {
 const LEDGER_TOTALS = {
   entries: 192,
   status: 'verified',
-  dispositions: { rewrite: 21, split: 43, reference: 122, retire: 6 },
-  destinations: { Studio: 44, Engineering: 92, Product: 56, '.github': 50 },
-  links: 242,
+  dispositions: { rewrite: 21, split: 44, reference: 121, retire: 6 },
+  destinations: { Studio: 44, Engineering: 92, Product: 56, '.github': 51 },
+  links: 243,
   uniqueMappedSuccessors: 159,
-  citationExceptions: 4,
+  citationExceptions: 5,
   retirements: 6,
 };
 
@@ -1412,8 +1418,8 @@ function validateFinalMigration(migration, errors) {
   if (migration.requiredEntryStatus !== LEDGER_TOTALS.status) {
     errors.push(`${label}: requiredEntryStatus must be "${LEDGER_TOTALS.status}"`);
   }
-  if (migration.mappingSha256 !== RECONCILIATION_LEDGER.mappingSha256) {
-    errors.push(`${label}: mapping digest does not match the independent PR #21 mapping pin`);
+  if (migration.mappingSha256 !== CURRENT_LEDGER_MAPPING_PIN) {
+    errors.push(`${label}: mapping digest does not match the current ledger mapping pin`);
   }
   if (!deepEqual(migration.dispositionCounts, LEDGER_TOTALS.dispositions)) {
     errors.push(`${label}: disposition counts do not match the independent pin`);
@@ -1978,9 +1984,9 @@ function validateLedger(ledger, errors) {
   }
 
   const mapping = ledgerMappingSha256(ledger);
-  if (mapping !== RECONCILIATION_LEDGER.mappingSha256) {
+  if (mapping !== CURRENT_LEDGER_MAPPING_PIN) {
     errors.push(
-      `${LEDGER_PATH}: normalized mapping digest ${mapping} does not match the independent PR #21 mapping pin`,
+      `${LEDGER_PATH}: normalized mapping digest ${mapping} does not match the current ledger mapping pin`,
     );
   }
 }
@@ -2069,10 +2075,15 @@ function validateCitationException(legacyId, entry, errors) {
   const label = `ledger ${legacyId}: citationException`;
   const exception = entry.citationException;
   if (!checkExactKeys(exception, ['kind', 'reason', 'evidence'], [], label, errors)) return;
-  if (entry.disposition !== 'reference' || entry.successors.length !== 1) {
-    errors.push(`${label}: allowed only for a single-successor reference`);
+  if (entry.disposition === 'reference' && entry.successors.length !== 1) {
+    errors.push(`${label}: reference citationException requires exactly one successor`);
   }
-  if (entry.successors[0]?.authority === 'Studio') {
+  if (!['reference', 'split'].includes(entry.disposition)) {
+    errors.push(`${label}: allowed only for reference or split dispositions`);
+  }
+  const hasStudioOnlySuccessors =
+    entry.successors.length > 0 && entry.successors.every((s) => s.authority === 'Studio');
+  if (hasStudioOnlySuccessors) {
     errors.push(`${label}: allowed only for externally verified ownership`);
   }
   if (exception.kind !== 'externally-verified-ownership') {
@@ -2104,7 +2115,7 @@ function validateReciprocity(ledger, finalIndex, historicalIndex, errors) {
       if (!citesLegacy && !entry.citationException) {
         errors.push(`${legacyId}: ${key} does not cite the legacy ID`);
       }
-      if (citesLegacy && entry.citationException) {
+      if (citesLegacy && entry.citationException && entry.successors.length === 1) {
         errors.push(`${legacyId}: citationException is unnecessary because ${key} cites it`);
       }
 
@@ -2123,7 +2134,11 @@ function validateReciprocity(ledger, finalIndex, historicalIndex, errors) {
             `${legacyId}: historical evidence for ${key} must be preserved, not replaced`,
           );
         }
-        if (entry.citationException && !entry.citationException.evidence.includes(historicalUrl)) {
+        if (
+          !citesLegacy &&
+          entry.citationException &&
+          !entry.citationException.evidence.includes(historicalUrl)
+        ) {
           errors.push(`${legacyId}: citationException must keep its reviewed source for ${key}`);
         }
       } else {

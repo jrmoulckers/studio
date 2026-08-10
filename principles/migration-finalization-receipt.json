@@ -3358,22 +3358,22 @@
     "ledgerPath": "principles/migration-ledger.json",
     "entryCount": 192,
     "requiredEntryStatus": "verified",
-    "mappingSha256": "887e11e27b97cdbcf12a0b914e8af685dbc14cda14ee6301ceb35282277d5c75",
+    "mappingSha256": "c1e372db180c05c82f1ef6417a8f359e1323cb2221734505d81e330b1253d6fc",
     "dispositionCounts": {
       "rewrite": 21,
-      "split": 43,
-      "reference": 122,
+      "split": 44,
+      "reference": 121,
       "retire": 6
     },
     "destinationLinks": {
       "Studio": 44,
       "Engineering": 92,
       "Product": 56,
-      ".github": 50
+      ".github": 51
     },
-    "successorLinks": 242,
+    "successorLinks": 243,
     "uniqueMappedSuccessors": 159,
-    "citationExceptions": 4,
+    "citationExceptions": 5,
     "retirements": 6
   },
   "deletion": {
@@ -3405,6 +3405,6 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "digest": "87fa5e88a1d3d556e1d32490d809c99fa596d073abda3c714b54422286135d2f"
+    "digest": "1a3e3b0fb92dd3688fdb6e5e5f4eb2d3f8dc1b87a75dab862298ab9f50937020"
   }
 }
