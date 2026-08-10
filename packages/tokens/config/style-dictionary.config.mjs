@@ -59,6 +59,36 @@ const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
 const semHighContrastDark = `${themeDir}/color.semantic.high-contrast-dark.json`;
 
 /**
+ * Every motion purpose that carries a duration, read from the semantic token file.
+ *
+ * The reduced-motion block used to hand-list `press`, `state` and `tile`. That list was
+ * invisible from the token side, so adding a motion purpose silently produced a token that
+ * kept animating under `prefers-reduced-motion` — an accessibility regression that nothing
+ * would have caught. Deriving it means a new purpose is covered the moment it is authored.
+ */
+function motionPurposes() {
+  const file = join(root, 'tokens', 'semantic', 'motion.json');
+  const json = JSON.parse(readFileSync(file, 'utf8'));
+  const purposes = Object.entries(json.motion ?? {})
+    .filter(([key, value]) => !key.startsWith('$') && value && typeof value === 'object')
+    // `reduced` is the escape hatch consumers select deliberately (and the only path
+    // native platforms have, lacking media queries). Collapsing it onto itself is a no-op.
+    .filter(([key, value]) => key !== 'reduced' && 'duration' in value)
+    .map(([key]) => key);
+
+  if (purposes.length === 0) {
+    throw new Error('Reduced motion: no motion purpose carrying a duration was found.');
+  }
+  return purposes;
+}
+
+function reducedMotionLines(indent = '    ') {
+  return motionPurposes()
+    .map((purpose) => `${indent}--${cssVarSegments(['motion', purpose, 'duration'])}: 1ms;`)
+    .join('\n');
+}
+
+/**
  * Every color mode, in documented order, paired with the selector it is emitted
  * under. Downstream generators derive from this rather than restating the list,
  * so adding a mode cannot leave a hand-written selector list behind.
@@ -593,10 +623,9 @@ ${chartHcRemap()}
   :root {
     /* Deliberately 1ms, not 0ms: a zero-duration transition or animation never
        fires transitionend/animationend, so cleanup or focus hand-off that awaits
-       those events would hang for reduced-motion users. Matches --duration-reduced. */
-    --motion-press-duration: 1ms;
-    --motion-state-duration: 1ms;
-    --motion-tile-duration: 1ms;
+       those events would hang for reduced-motion users. Matches --duration-reduced.
+       Generated from tokens/semantic/motion.json so a new purpose cannot escape it. */
+${reducedMotionLines()}
   }
 }
 
@@ -618,10 +647,11 @@ ${chartHcRemap()}
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
 
   /* Matches --duration-reduced: an instant-but-nonzero duration still fires
-     transitionend/animationend, so listeners that await them never hang. */
-  --motion-press-duration: 1ms;
-  --motion-state-duration: 1ms;
-  --motion-tile-duration: 1ms;
+     transitionend/animationend, so listeners that await them never hang.
+     Generated from tokens/semantic/motion.json, like the media-query block above —
+     cognitive mode is documented as a superset of prefers-reduced-motion, so the two
+     lists must never diverge. */
+${reducedMotionLines('  ')}
 }
 `;
   writeFileSync(join(root, 'build', 'css', THEME, 'index.css'), indexCss);

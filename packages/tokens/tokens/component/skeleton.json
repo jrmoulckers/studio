@@ -1,0 +1,45 @@
+{
+  "skeleton": {
+    "$description": "Loading placeholders. The shimmer is continuous, so it is the clearest case for the reduced-motion collapse: under prefers-reduced-motion the sweep stops and the placeholder holds its base color. A skeleton must never be the only signal that content is loading — pair it with an aria-busy region or a status message.",
+    "base": {
+      "$value": "{semantic.background.secondary}",
+      "$type": "color",
+      "$description": "Placeholder body."
+    },
+    "highlight": {
+      "$value": "{semantic.background.raised}",
+      "$type": "color",
+      "$description": "Shimmer sweep — deliberately low contrast against base, since it carries no information."
+    },
+    "radius": {
+      "$value": "{radius.sm}",
+      "$type": "dimension",
+      "$description": "Placeholder radius for blocks and controls."
+    },
+    "radius-text": {
+      "$value": "{radius.1}",
+      "$type": "dimension",
+      "$description": "Tighter radius for text-line placeholders."
+    },
+    "line-height": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Height of a single text-line placeholder."
+    },
+    "gap": {
+      "$value": "{spacing.2}",
+      "$type": "dimension",
+      "$description": "Gap between stacked placeholder lines."
+    },
+    "duration": {
+      "$value": "{motion.loading.duration}",
+      "$type": "duration",
+      "$description": "Shimmer cycle."
+    },
+    "easing": {
+      "$value": "{motion.loading.easing}",
+      "$type": "cubicBezier",
+      "$description": "Shimmer easing."
+    }
+  }
+}

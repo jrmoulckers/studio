@@ -358,6 +358,45 @@ function assertDeclaration(source, name, value) {
 }
 
 /**
+ * Every motion purpose must be collapsed under BOTH reduced-motion paths.
+ *
+ * These two blocks were hand-maintained lists of `press`/`state`/`tile`, invisible from
+ * the token side. Adding a motion purpose produced a token that kept animating for users
+ * who asked it not to, and nothing failed. The generator now derives both lists, and this
+ * assertion pins the property rather than the generator: it reads the purposes out of the
+ * shipped `:root` declarations, so it cannot pass merely because the generator agrees with
+ * itself.
+ *
+ * `reduced` is excluded — it is already the reduced value, so collapsing it is a no-op.
+ */
+export function assertReducedMotionContract({ rootCss, indexCss }) {
+  const purposes = [
+    ...new Set(
+      [...stripCssComments(rootCss).matchAll(/--motion-([a-z-]+)-duration\s*:/g)].map(
+        (match) => match[1],
+      ),
+    ),
+  ].filter((purpose) => purpose !== 'reduced');
+
+  if (purposes.length === 0) fail('No motion purposes were found in the shipped root CSS.');
+
+  const css = stripCssComments(indexCss);
+  const blocks = [
+    [
+      '@media (prefers-reduced-motion: reduce)',
+      blockBody(css, '@media (prefers-reduced-motion: reduce)'),
+    ],
+    ['[data-a11y-cognitive="true"]', blockBody(css, '[data-a11y-cognitive="true"]')],
+  ];
+
+  for (const [, body] of blocks) {
+    for (const purpose of purposes) {
+      assertDeclaration(body, `motion-${purpose}-duration`, '1ms');
+    }
+  }
+}
+
+/**
  * The accessibility stylesheet is the application layer for tokens that Studio
  * shipped but never applied. Two things are worth guarding independently of the
  * generator: that every rule stays token-driven, and that the dark-mode selector

@@ -425,6 +425,34 @@ export const tokens = {
       "duration": "120ms",
       "easing": "ease"
     },
+    "page-transition": {
+      "duration": "250ms",
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
+    },
+    "list-item": {
+      "duration": "150ms",
+      "easing": "cubic-bezier(0, 0, 0, 1)"
+    },
+    "progress": {
+      "duration": "400ms",
+      "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    "celebrate": {
+      "duration": "800ms",
+      "easing": "cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+    },
+    "fade-in": {
+      "duration": "250ms",
+      "easing": "cubic-bezier(0, 0, 0, 1)"
+    },
+    "fade-out": {
+      "duration": "150ms",
+      "easing": "cubic-bezier(0.3, 0, 1, 1)"
+    },
+    "loading": {
+      "duration": "800ms",
+      "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
     "reduced": {
       "duration": "1ms",
       "easing": "linear"
@@ -603,6 +631,24 @@ export const tokens = {
     "padding-x": "12px",
     "padding-y": "11px"
   },
+  "modal": {
+    "surface": "#1a1b2e",
+    "text": "#e9e9f4",
+    "text-muted": "#a3a6cb",
+    "border": "#313357",
+    "radius": "16px",
+    "elevation": "0 10px 30px rgba(0, 0, 0, 0.45)",
+    "layer": 1000,
+    "scrim-layer": 500,
+    "scrim-opacity": 0.24,
+    "padding": "20px",
+    "gap": "16px",
+    "max-width": "560px",
+    "enter-duration": "250ms",
+    "enter-easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "exit-duration": "150ms",
+    "exit-easing": "cubic-bezier(0.3, 0, 1, 1)"
+  },
   "nav": {
     "tabbar": {
       "bg": "#1a1b2e",
@@ -646,6 +692,38 @@ export const tokens = {
     "exceeded": "#f87171",
     "pending": "oklch(0.80 0.11 195)",
     "complete": "#34d399"
+  },
+  "skeleton": {
+    "base": "#24263f",
+    "highlight": "#2c2e4d",
+    "radius": "8px",
+    "radius-text": "4px",
+    "line-height": "12px",
+    "gap": "8px",
+    "duration": "800ms",
+    "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  "toast": {
+    "surface": "#1a1b2e",
+    "text": "#e9e9f4",
+    "text-muted": "#a3a6cb",
+    "border": "#313357",
+    "action": "#ffd166",
+    "radius": "16px",
+    "elevation": "0 10px 30px rgba(0, 0, 0, 0.45)",
+    "layer": 2000,
+    "padding-block": "12px",
+    "padding-inline": "16px",
+    "gap": "12px",
+    "max-width": "420px",
+    "enter-duration": "250ms",
+    "enter-easing": "cubic-bezier(0, 0, 0, 1)",
+    "exit-duration": "150ms",
+    "exit-easing": "cubic-bezier(0.3, 0, 1, 1)",
+    "positive": "#34d399",
+    "negative": "#f87171",
+    "warning": "#fbbf24",
+    "info": "oklch(0.80 0.11 230)"
   }
 };
 export default tokens;

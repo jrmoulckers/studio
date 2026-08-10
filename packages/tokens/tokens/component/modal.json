@@ -1,0 +1,85 @@
+{
+  "modal": {
+    "$description": "Modal dialogs and sheets. The scrim is a required part of the component, not decoration: it is what makes the dialog modal, and it must be paired with a focus trap and an Escape handler in the consuming implementation.",
+    "surface": {
+      "$value": "{semantic.background.elevated}",
+      "$type": "color",
+      "$description": "Dialog background."
+    },
+    "text": {
+      "$value": "{semantic.text.primary}",
+      "$type": "color",
+      "$description": "Body text."
+    },
+    "text-muted": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Supporting text and helper copy."
+    },
+    "border": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Edge against the scrim."
+    },
+    "radius": {
+      "$value": "{radius.md}",
+      "$type": "dimension",
+      "$description": "Dialog corner radius."
+    },
+    "elevation": {
+      "$value": "{elevation.raised}",
+      "$type": "shadow",
+      "$description": "The single Soft Lift."
+    },
+    "layer": {
+      "$value": "{layer.dialog}",
+      "$type": "number",
+      "$description": "Dialog plane."
+    },
+    "scrim-layer": {
+      "$value": "{layer.scrim}",
+      "$type": "number",
+      "$description": "Dimming plane, directly beneath the dialog."
+    },
+    "scrim-opacity": {
+      "$value": "{state.scrim.opacity}",
+      "$type": "number",
+      "$description": "Scrim strength. Shared with sheets so every modal surface dims identically."
+    },
+    "padding": {
+      "$value": "{spacing.5}",
+      "$type": "dimension",
+      "$description": "Dialog padding."
+    },
+    "gap": {
+      "$value": "{spacing.4}",
+      "$type": "dimension",
+      "$description": "Gap between title, body, and actions."
+    },
+    "max-width": {
+      "$value": "560px",
+      "$type": "dimension",
+      "$description": "Comfortable measure for dialog prose."
+    },
+    "enter-duration": {
+      "$value": "{motion.page-transition.duration}",
+      "$type": "duration",
+      "$description": "Entrance — a dialog is a page-scale move."
+    },
+    "enter-easing": {
+      "$value": "{motion.page-transition.easing}",
+      "$type": "cubicBezier",
+      "$description": "Entrance easing."
+    },
+    "exit-duration": {
+      "$value": "{motion.fade-out.duration}",
+      "$type": "duration",
+      "$description": "Exit."
+    },
+    "exit-easing": {
+      "$value": "{motion.fade-out.easing}",
+      "$type": "cubicBezier",
+      "$description": "Exit easing."
+    }
+  }
+}

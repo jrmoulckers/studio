@@ -30,6 +30,7 @@ import {
 import {
   assertCssContract,
   assertA11yContract,
+  assertReducedMotionContract,
   assertDocumentSet,
   assertJsContract,
   assertTailwindContract,
@@ -92,6 +93,13 @@ function resolveCssColor(themeCss, rootCss, property) {
   const resolved = rootCss.match(new RegExp(`${reference}:\\s*([^;]+);`))?.[1]?.trim();
   if (!resolved) throw new Error(`${reference} is not declared.`);
   return resolved;
+}
+
+/** Replace only the final occurrence, so a two-block guard can be failed one block at a time. */
+function replaceLast(source, search, replacement) {
+  const index = source.lastIndexOf(search);
+  if (index === -1) throw new Error(`replaceLast: "${search}" not found.`);
+  return source.slice(0, index) + replacement + source.slice(index + search.length);
 }
 
 /** WCAG relative luminance of a #rgb / #rrggbb color. */
@@ -319,6 +327,7 @@ test('generated JS, CJS, CSS, and type entry points expose the documented contra
         ) < 0.5,
     ),
   });
+  assertReducedMotionContract({ rootCss, indexCss });
 
   for (const relativePath of [
     packageJson.main,
@@ -574,6 +583,39 @@ test('generated contract guards reject removed exports, aliases, selectors, and 
         typeSource.replace('export declare const tokensDarkOled', 'declare const tokensDarkOled'),
       ),
     /tokensDarkOled/,
+  );
+
+  // The exact regression this guard exists for: a motion purpose exists as a token but was
+  // never added to a reduced-motion block, so it keeps animating for users who opted out.
+  // Both blocks are checked, because cognitive mode is documented as a superset.
+  for (const purpose of ['celebrate', 'loading', 'page-transition']) {
+    assert.throws(
+      () =>
+        assertReducedMotionContract({
+          rootCss,
+          indexCss: indexCss.replace(`--motion-${purpose}-duration: 1ms;`, ''),
+        }),
+      new RegExp(`motion-${purpose}-duration`),
+      `dropping ${purpose} from the first reduced-motion block fails`,
+    );
+    assert.throws(
+      () =>
+        assertReducedMotionContract({
+          rootCss,
+          indexCss: replaceLast(indexCss, `--motion-${purpose}-duration: 1ms;`, ''),
+        }),
+      new RegExp(`motion-${purpose}-duration`),
+      `dropping ${purpose} from the cognitive block fails`,
+    );
+  }
+  // Collapsing to 0ms would break transitionend/animationend for reduced-motion users.
+  assert.throws(
+    () =>
+      assertReducedMotionContract({
+        rootCss,
+        indexCss: indexCss.replaceAll('-duration: 1ms;', '-duration: 0ms;'),
+      }),
+    /motion-.*-duration/,
   );
 
   const malformedTypesRoot = mkdtempSync(join(tmpdir(), 'jrm-token-types-negative-'));

@@ -1,21 +1,122 @@
 {
   "motion": {
-    "$description": "Semantic motion purposes. Each has a `reduced` companion; the CSS output also ships a prefers-reduced-motion block that collapses the underlying duration primitives to 0ms.",
+    "$description": "Semantic motion purposes. A component references a purpose, never a raw duration or easing, so motion reads consistently across surfaces. The CSS output ships a prefers-reduced-motion block that collapses every purpose below to 1ms; that block is generated from this file, so a purpose added here cannot escape it. `reduced` is the explicit escape hatch consumers select deliberately — it is the only path native platforms have, since they have no media queries.",
     "press": {
-      "duration": { "$value": "{duration.press}", "$type": "duration" },
-      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+      "duration": {
+        "$value": "{duration.press}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.standard}",
+        "$type": "cubicBezier"
+      }
     },
     "state": {
-      "duration": { "$value": "{duration.state}", "$type": "duration" },
-      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+      "duration": {
+        "$value": "{duration.state}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.standard}",
+        "$type": "cubicBezier"
+      }
     },
     "tile": {
-      "duration": { "$value": "{duration.tile}", "$type": "duration" },
-      "easing": { "$value": "{easing.standard}", "$type": "cubicBezier" }
+      "duration": {
+        "$value": "{duration.tile}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.standard}",
+        "$type": "cubicBezier"
+      }
+    },
+    "page-transition": {
+      "$description": "Route changes and full-screen sheets — the largest move in the product.",
+      "duration": {
+        "$value": "{duration.normal}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.balanced}",
+        "$type": "cubicBezier"
+      }
+    },
+    "list-item": {
+      "$description": "Staggered list and grid item entrances. Distinct from motion.state, which is hover feedback on an item already present.",
+      "duration": {
+        "$value": "{duration.fast}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.decelerate}",
+        "$type": "cubicBezier"
+      }
+    },
+    "progress": {
+      "$description": "Indeterminate progress rings, bars, and spinners.",
+      "duration": {
+        "$value": "{duration.slow}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.in-out}",
+        "$type": "cubicBezier"
+      }
+    },
+    "celebrate": {
+      "$description": "Success moments. The only purpose permitted to overshoot, and the one most in need of its reduced-motion collapse.",
+      "duration": {
+        "$value": "{duration.slower}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.spring}",
+        "$type": "cubicBezier"
+      }
+    },
+    "fade-in": {
+      "$description": "Content reveals — cards, sections, tooltips, toast entrance.",
+      "duration": {
+        "$value": "{duration.normal}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.decelerate}",
+        "$type": "cubicBezier"
+      }
+    },
+    "fade-out": {
+      "$description": "Dismissals — toast exit, overlay teardown. Deliberately faster than the matching entrance.",
+      "duration": {
+        "$value": "{duration.fast}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.accelerate}",
+        "$type": "cubicBezier"
+      }
+    },
+    "loading": {
+      "$description": "Skeleton shimmer and other continuous loading states.",
+      "duration": {
+        "$value": "{duration.slower}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.in-out}",
+        "$type": "cubicBezier"
+      }
     },
     "reduced": {
-      "duration": { "$value": "{duration.reduced}", "$type": "duration" },
-      "easing": { "$value": "{easing.linear}", "$type": "cubicBezier" }
+      "duration": {
+        "$value": "{duration.reduced}",
+        "$type": "duration"
+      },
+      "easing": {
+        "$value": "{easing.linear}",
+        "$type": "cubicBezier"
+      }
     }
   }
 }

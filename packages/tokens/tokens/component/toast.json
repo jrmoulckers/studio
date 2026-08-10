@@ -1,0 +1,105 @@
+{
+  "toast": {
+    "$description": "Transient status messages. Status is never carried by color alone: every accent below requires an icon and text naming the condition, because a toast is often the only notice a user receives and it disappears on its own.",
+    "surface": {
+      "$value": "{semantic.background.elevated}",
+      "$type": "color",
+      "$description": "Toast background — elevated so it separates from the page beneath."
+    },
+    "text": {
+      "$value": "{semantic.text.primary}",
+      "$type": "color",
+      "$description": "Message text."
+    },
+    "text-muted": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Supporting detail or timestamp."
+    },
+    "border": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Hairline edge, so the toast holds its shape on a busy surface."
+    },
+    "action": {
+      "$value": "{semantic.accent.default}",
+      "$type": "color",
+      "$description": "Inline action (\"Undo\"). Must remain a real control, never the only way to recover."
+    },
+    "radius": {
+      "$value": "{radius.md}",
+      "$type": "dimension",
+      "$description": "Container radius — matches cards."
+    },
+    "elevation": {
+      "$value": "{elevation.raised}",
+      "$type": "shadow",
+      "$description": "The single Soft Lift."
+    },
+    "layer": {
+      "$value": "{layer.toast}",
+      "$type": "number",
+      "$description": "Above dialogs, so a toast raised by a dialog action stays visible."
+    },
+    "padding-block": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Vertical padding."
+    },
+    "padding-inline": {
+      "$value": "{spacing.4}",
+      "$type": "dimension",
+      "$description": "Horizontal padding."
+    },
+    "gap": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Gap between icon, message, and action."
+    },
+    "max-width": {
+      "$value": "420px",
+      "$type": "dimension",
+      "$description": "Keeps a toast readable in one or two lines on a wide viewport."
+    },
+    "enter-duration": {
+      "$value": "{motion.fade-in.duration}",
+      "$type": "duration",
+      "$description": "Entrance."
+    },
+    "enter-easing": {
+      "$value": "{motion.fade-in.easing}",
+      "$type": "cubicBezier",
+      "$description": "Entrance easing."
+    },
+    "exit-duration": {
+      "$value": "{motion.fade-out.duration}",
+      "$type": "duration",
+      "$description": "Exit — faster than the entrance, so a dismissal feels answered."
+    },
+    "exit-easing": {
+      "$value": "{motion.fade-out.easing}",
+      "$type": "cubicBezier",
+      "$description": "Exit easing."
+    },
+    "positive": {
+      "$value": "{semantic.status.positive}",
+      "$type": "color",
+      "$description": "Success. Requires a success icon and text."
+    },
+    "negative": {
+      "$value": "{semantic.status.negative}",
+      "$type": "color",
+      "$description": "Error. Requires an icon, text, and a way to retry or recover."
+    },
+    "warning": {
+      "$value": "{semantic.status.warning}",
+      "$type": "color",
+      "$description": "Warning. Requires an icon and text naming the risk."
+    },
+    "info": {
+      "$value": "{semantic.status.info}",
+      "$type": "color",
+      "$description": "Neutral information. Requires an icon and text."
+    }
+  }
+}

@@ -217,7 +217,9 @@
   --button-ghost-bg: transparent;
   --button-danger-bg: transparent;
   --input-padding-y: 11px;
+  --modal-max-width: 560px; /** Comfortable measure for dialog prose. */
   --pill-padding-y: 3px;
+  --toast-max-width: 420px; /** Keeps a toast readable in one or two lines on a wide viewport. */
   --duration-fast: var(--duration-state); /** Generic short transition — alias of the state duration. */
   --radius-sm: var(--radius-2); /** Controls: buttons, inputs, steppers */
   --radius-chip: var(--radius-3); /** Icon buttons and small chips */
@@ -288,6 +290,18 @@
   --motion-state-easing: var(--easing-standard);
   --motion-tile-duration: var(--duration-tile);
   --motion-tile-easing: var(--easing-standard);
+  --motion-page-transition-duration: var(--duration-normal);
+  --motion-page-transition-easing: var(--easing-balanced);
+  --motion-list-item-easing: var(--easing-decelerate);
+  --motion-progress-duration: var(--duration-slow);
+  --motion-progress-easing: var(--easing-in-out);
+  --motion-celebrate-duration: var(--duration-slower);
+  --motion-celebrate-easing: var(--easing-spring);
+  --motion-fade-in-duration: var(--duration-normal);
+  --motion-fade-in-easing: var(--easing-decelerate);
+  --motion-fade-out-easing: var(--easing-accelerate);
+  --motion-loading-duration: var(--duration-slower);
+  --motion-loading-easing: var(--easing-in-out);
   --motion-reduced-duration: var(--duration-reduced);
   --motion-reduced-easing: var(--easing-linear);
   --cognitive-type-display-size: var(--font-size-display);
@@ -336,7 +350,15 @@
   --chart-series-5: var(--color-chart-5);
   --chart-series-6: var(--color-chart-6);
   --input-min-height: var(--target-min);
+  --modal-padding: var(--spacing-5); /** Dialog padding. */
+  --modal-gap: var(--spacing-4); /** Gap between title, body, and actions. */
   --nav-iconbtn-size: var(--target-min);
+  --skeleton-radius-text: var(--radius-1); /** Tighter radius for text-line placeholders. */
+  --skeleton-line-height: var(--spacing-3); /** Height of a single text-line placeholder. */
+  --skeleton-gap: var(--spacing-2); /** Gap between stacked placeholder lines. */
+  --toast-padding-block: var(--spacing-3); /** Vertical padding. */
+  --toast-padding-inline: var(--spacing-4); /** Horizontal padding. */
+  --toast-gap: var(--spacing-3); /** Gap between icon, message, and action. */
   --color-bg: var(--semantic-background-primary); /** Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var. */
   --color-surface: var(--semantic-background-elevated);
   --color-surface-2: var(--semantic-background-secondary);
@@ -353,6 +375,8 @@
   --color-danger: var(--semantic-status-negative);
   --color-warning: var(--semantic-status-warning);
   --color-focus-ring: var(--semantic-border-focus);
+  --motion-list-item-duration: var(--duration-fast);
+  --motion-fade-out-duration: var(--duration-fast);
   --cognitive-spacing-section-gap: var(--spacing-3xl); /** Gap between major sections — 32px. */
   --cognitive-spacing-card-gap: var(--spacing-2xl); /** Gap between cards — 24px. */
   --cognitive-spacing-element-gap: var(--spacing-lg); /** Gap between elements within a section — 16px. */
@@ -415,6 +439,17 @@
   --input-focus-ring: var(--semantic-border-focus);
   --input-radius: var(--radius-sm);
   --input-padding-x: var(--spacing-md);
+  --modal-surface: var(--semantic-background-elevated); /** Dialog background. */
+  --modal-text: var(--semantic-text-primary); /** Body text. */
+  --modal-text-muted: var(--semantic-text-secondary); /** Supporting text and helper copy. */
+  --modal-border: var(--semantic-border-default); /** Edge against the scrim. */
+  --modal-radius: var(--radius-md); /** Dialog corner radius. */
+  --modal-layer: var(--layer-dialog); /** Dialog plane. */
+  --modal-scrim-layer: var(--layer-scrim); /** Dimming plane, directly beneath the dialog. */
+  --modal-scrim-opacity: var(--state-scrim-opacity); /** Scrim strength. Shared with sheets so every modal surface dims identically. */
+  --modal-enter-duration: var(--motion-page-transition-duration); /** Entrance — a dialog is a page-scale move. */
+  --modal-enter-easing: var(--motion-page-transition-easing); /** Entrance easing. */
+  --modal-exit-easing: var(--motion-fade-out-easing); /** Exit easing. */
   --nav-tabbar-bg: var(--semantic-background-elevated); /** Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule. */
   --nav-tabbar-border: var(--semantic-border-default);
   --nav-tabbar-radius: var(--radius-md);
@@ -445,5 +480,28 @@
   --progress-exceeded: var(--semantic-status-negative); /** Past the limit. Requires an icon and a text label stating the overage. */
   --progress-pending: var(--semantic-status-pending); /** Indeterminate or awaiting data. Requires an icon and a text label; do not animate indefinitely without one. */
   --progress-complete: var(--semantic-status-positive); /** Finished. Distinguished from on-track by its icon and label, not by color — the two share a value deliberately. */
+  --skeleton-base: var(--semantic-background-secondary); /** Placeholder body. */
+  --skeleton-highlight: var(--semantic-background-raised); /** Shimmer sweep — deliberately low contrast against base, since it carries no information. */
+  --skeleton-radius: var(--radius-sm); /** Placeholder radius for blocks and controls. */
+  --skeleton-duration: var(--motion-loading-duration); /** Shimmer cycle. */
+  --skeleton-easing: var(--motion-loading-easing); /** Shimmer easing. */
+  --toast-surface: var(--semantic-background-elevated); /** Toast background — elevated so it separates from the page beneath. */
+  --toast-text: var(--semantic-text-primary); /** Message text. */
+  --toast-text-muted: var(--semantic-text-secondary); /** Supporting detail or timestamp. */
+  --toast-border: var(--semantic-border-default); /** Hairline edge, so the toast holds its shape on a busy surface. */
+  --toast-action: var(--semantic-accent-default); /** Inline action ("Undo"). Must remain a real control, never the only way to recover. */
+  --toast-radius: var(--radius-md); /** Container radius — matches cards. */
+  --toast-layer: var(--layer-toast); /** Above dialogs, so a toast raised by a dialog action stays visible. */
+  --toast-enter-duration: var(--motion-fade-in-duration); /** Entrance. */
+  --toast-enter-easing: var(--motion-fade-in-easing); /** Entrance easing. */
+  --toast-exit-easing: var(--motion-fade-out-easing); /** Exit easing. */
+  --toast-positive: var(--semantic-status-positive); /** Success. Requires a success icon and text. */
+  --toast-negative: var(--semantic-status-negative); /** Error. Requires an icon, text, and a way to retry or recover. */
+  --toast-warning: var(--semantic-status-warning); /** Warning. Requires an icon and text naming the risk. */
+  --toast-info: var(--semantic-status-info); /** Neutral information. Requires an icon and text. */
   --chart-tooltip-shadow: var(--elevation-raised); /** Tooltip elevation, so it reads above the plot area. */
+  --modal-elevation: var(--elevation-raised); /** The single Soft Lift. */
+  --modal-exit-duration: var(--motion-fade-out-duration); /** Exit. */
+  --toast-elevation: var(--elevation-raised); /** The single Soft Lift. */
+  --toast-exit-duration: var(--motion-fade-out-duration); /** Exit — faster than the entrance, so a dismissal feels answered. */
 }
