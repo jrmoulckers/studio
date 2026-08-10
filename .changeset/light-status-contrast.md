@@ -11,7 +11,7 @@ These are not decorative-only — `--button-danger-text` and
 `--button-danger-border` resolve from `status.negative`, so body text was
 rendering at 2.77:1.
 
-The light theme now references steps chosen to clear AA on the *worst* light
+The light theme now references steps chosen to clear AA on the _worst_ light
 surface (`haze`, `#e7e7f4`) rather than only on white: `win.700`, `loss.700`,
 `caution.800`, and `info.800`. Amber and cyan need the extra step because at
 `.700` they measure 4.37:1 and 4.28:1 on haze. All four also clear AA for white
