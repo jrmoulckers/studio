@@ -92,6 +92,9 @@
   --font-line-height-relaxed: 1.75; /** Roomy leading — used by cognitive-accessibility mode for improved reading flow. */
   --font-letter-spacing-normal: 0;
   --font-letter-spacing-wide: 0.08em; /** Overline tracking */
+  --font-variant-numeric-normal: normal; /** Proportional figures — the default, correct inside running text. */
+  --font-variant-numeric-tabular: tabular-nums; /** Fixed-width figures so digits align vertically in scores, amounts, and tables. */
+  --font-variant-numeric-tabular-slashed: tabular-nums slashed-zero; /** Tabular figures with a slashed zero, which separates 0 from O in reference codes and account numbers. */
   --z-index-base: 0; /** In-flow content. */
   --z-index-raised: 10; /** Lifted in-flow content. */
   --z-index-sticky: 100; /** Sticky chrome. */
@@ -284,6 +287,11 @@
   --text-overline-weight: var(--font-weight-semibold);
   --text-overline-line-height: var(--font-line-height-tight);
   --text-overline-letter-spacing: var(--font-letter-spacing-wide);
+  --text-amount-family: var(--font-family-sans);
+  --text-amount-size: var(--font-size-body);
+  --text-amount-weight: var(--font-weight-semibold);
+  --text-amount-line-height: var(--font-line-height-normal);
+  --text-amount-variant-numeric: var(--font-variant-numeric-tabular);
   --motion-press-duration: var(--duration-press);
   --motion-press-easing: var(--easing-standard);
   --motion-state-duration: var(--duration-state);
@@ -349,6 +357,21 @@
   --chart-series-4: var(--color-chart-4);
   --chart-series-5: var(--color-chart-5);
   --chart-series-6: var(--color-chart-6);
+  --cognitive-button-padding-y: var(--spacing-3); /** Roomier vertical padding. */
+  --cognitive-button-radius: var(--radius-3); /** Softer corner than the default control radius. */
+  --cognitive-button-border-width: var(--cognitive-border-width); /** Thicker border so an outline button reads as a control, not as text. */
+  --cognitive-input-padding-x: var(--spacing-4); /** Roomier horizontal padding. */
+  --cognitive-input-padding-y: var(--spacing-3); /** Roomier vertical padding. */
+  --cognitive-input-radius: var(--radius-3); /** Softer corner than the default control radius. */
+  --cognitive-input-border-width: var(--cognitive-border-width); /** Thicker border so the field boundary is unambiguous. */
+  --cognitive-card-radius: var(--radius-4); /** Softer container corner. */
+  --cognitive-card-border-width: var(--cognitive-border-width); /** Thicker border so the card boundary does not rely on a shadow. */
+  --cognitive-nav-item-padding-x: var(--spacing-5); /** Roomier horizontal padding on navigation items. */
+  --cognitive-nav-item-padding-y: var(--spacing-3); /** Roomier vertical padding on navigation items. */
+  --cognitive-nav-item-gap: var(--spacing-2); /** Separation between adjacent targets, so a near miss lands on nothing rather than on the wrong item. */
+  --cognitive-list-item-padding-x: var(--spacing-5); /** Roomier horizontal padding. */
+  --cognitive-list-item-padding-y: var(--spacing-3); /** Roomier vertical padding. */
+  --cognitive-list-item-gap: var(--spacing-2); /** Separation between adjacent rows, so a near miss lands on nothing rather than on the wrong row. */
   --input-min-height: var(--target-min);
   --modal-padding: var(--spacing-5); /** Dialog padding. */
   --modal-gap: var(--spacing-4); /** Gap between title, body, and actions. */
@@ -432,6 +455,10 @@
   --chart-bar-gap: var(--spacing-xs); /** Gap between adjacent bars. */
   --chart-slice-stroke: var(--semantic-background-primary); /** Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined. */
   --chart-series-other: var(--semantic-status-neutral); /** Grouped tail categories rendered as a single "Other" series. Neutral by design, so it never competes with a real series. */
+  --cognitive-button-min-height: var(--cognitive-target-min); /** Minimum target height. */
+  --cognitive-input-min-height: var(--cognitive-target-min); /** Minimum target height. */
+  --cognitive-nav-item-min-height: var(--cognitive-target-min); /** Minimum navigation-item height. */
+  --cognitive-list-item-min-height: var(--cognitive-target-min); /** Minimum list-item height. */
   --input-bg: var(--semantic-background-elevated);
   --input-text: var(--semantic-text-primary);
   --input-border: var(--semantic-border-default);
@@ -500,6 +527,9 @@
   --toast-warning: var(--semantic-status-warning); /** Warning. Requires an icon and text naming the risk. */
   --toast-info: var(--semantic-status-info); /** Neutral information. Requires an icon and text. */
   --chart-tooltip-shadow: var(--elevation-raised); /** Tooltip elevation, so it reads above the plot area. */
+  --cognitive-button-padding-x: var(--cognitive-spacing-inline-padding); /** Roomier horizontal padding for a larger hit area. */
+  --cognitive-card-padding: var(--cognitive-spacing-inline-padding); /** Roomier card padding. */
+  --cognitive-card-gap: var(--cognitive-spacing-element-gap); /** Gap between elements inside the card. */
   --modal-elevation: var(--elevation-raised); /** The single Soft Lift. */
   --modal-exit-duration: var(--motion-fade-out-duration); /** Exit. */
   --toast-elevation: var(--elevation-raised); /** The single Soft Lift. */

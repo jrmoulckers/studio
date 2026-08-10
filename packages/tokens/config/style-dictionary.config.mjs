@@ -59,6 +59,58 @@ const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
 const semHighContrastDark = `${themeDir}/color.semantic.high-contrast-dark.json`;
 
 /**
+ * Remap declarations that put cognitive-mode component sizing into effect.
+ *
+ * Studio has shipped cognitive tokens that nothing applied. A token that no selector reads
+ * is indistinguishable from a missing one, so this walks `component/cognitive.json` and,
+ * for every property that the matching default component also declares, emits the override.
+ *
+ * It is derived rather than listed for the same reason the reduced-motion block is: a new
+ * button variant, or a new property on an existing component, must not silently keep its
+ * default sizing in a mode whose entire purpose is larger targets. A cognitive property
+ * with no default counterpart (`border-width`) is intentionally skipped — there is nothing
+ * to override, and consumers read it directly.
+ */
+function cognitiveComponentLines(indent = '  ') {
+  const read = (name) =>
+    JSON.parse(readFileSync(join(root, 'tokens', 'component', `${name}.json`), 'utf8'));
+  const cognitive = read('cognitive');
+  const leaves = (node) =>
+    Object.entries(node ?? {}).filter(
+      ([key, value]) => !key.startsWith('$') && value && typeof value === 'object',
+    );
+
+  const lines = [];
+  for (const [group, properties] of leaves(cognitive)) {
+    const componentName = group.replace(/^cognitive-/, '');
+    let defaults;
+    try {
+      defaults = read(componentName)[componentName];
+    } catch {
+      continue; // No default component of that name — the cognitive tokens are additive.
+    }
+
+    // A component is either flat (input, card) or a set of variants (button).
+    const targets = leaves(defaults).every(([, value]) => '$value' in value)
+      ? [[null, defaults]]
+      : leaves(defaults).filter(([, value]) => !('$value' in value));
+
+    for (const [variant, target] of targets) {
+      for (const [property] of leaves(properties)) {
+        if (!Object.hasOwn(target, property)) continue;
+        const name = cssVarSegments([componentName, ...(variant ? [variant] : []), property]);
+        lines.push(`${indent}--${name}: var(--${cssVarSegments([group, property])});`);
+      }
+    }
+  }
+
+  if (lines.length === 0) {
+    throw new Error('Cognitive mode: no component override could be resolved.');
+  }
+  return lines.join('\n');
+}
+
+/**
  * Every motion purpose that carries a duration, read from the semantic token file.
  *
  * The reduced-motion block used to hand-list `press`, `state` and `tile`. That list was
@@ -645,6 +697,10 @@ ${reducedMotionLines()}
   --text-label-line-height: var(--cognitive-type-label-line-height);
   --text-overline-size: var(--cognitive-type-overline-size);
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
+
+  /* Component sizing for the mode — generated from tokens/component/cognitive.json so a
+     new variant or property cannot keep its default sizing here by omission. */
+${cognitiveComponentLines()}
 
   /* Matches --duration-reduced: an instant-but-nonzero duration still fires
      transitionend/animationend, so listeners that await them never hang.

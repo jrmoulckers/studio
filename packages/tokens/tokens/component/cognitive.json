@@ -1,0 +1,124 @@
+{
+  "$description": "Component sizing under cognitive-accessibility mode, applied when the consumer sets [data-a11y-cognitive=\"true\"]. These are overrides, not a second component system: a consumer swaps the value it reads for the cognitive one and changes nothing else. Every minimum height resolves through cognitiveTarget.min, so the mode has exactly one target-size decision to review.",
+  "cognitive-button": {
+    "$description": "Ported from finance, which authored primary, secondary and destructive separately with identical values. Collapsed to one set plus the border width the outline variant needs — three copies of one decision is how the three drift apart.",
+    "padding-x": {
+      "$value": "{cognitiveSpacing.inline-padding}",
+      "$type": "dimension",
+      "$description": "Roomier horizontal padding for a larger hit area."
+    },
+    "padding-y": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Roomier vertical padding."
+    },
+    "radius": {
+      "$value": "{radius.3}",
+      "$type": "dimension",
+      "$description": "Softer corner than the default control radius."
+    },
+    "border-width": {
+      "$value": "{cognitive.borderWidth}",
+      "$type": "dimension",
+      "$description": "Thicker border so an outline button reads as a control, not as text."
+    },
+    "min-height": {
+      "$value": "{cognitiveTarget.min}",
+      "$type": "dimension",
+      "$description": "Minimum target height."
+    }
+  },
+  "cognitive-input": {
+    "padding-x": {
+      "$value": "{spacing.4}",
+      "$type": "dimension",
+      "$description": "Roomier horizontal padding."
+    },
+    "padding-y": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Roomier vertical padding."
+    },
+    "radius": {
+      "$value": "{radius.3}",
+      "$type": "dimension",
+      "$description": "Softer corner than the default control radius."
+    },
+    "border-width": {
+      "$value": "{cognitive.borderWidth}",
+      "$type": "dimension",
+      "$description": "Thicker border so the field boundary is unambiguous."
+    },
+    "min-height": {
+      "$value": "{cognitiveTarget.min}",
+      "$type": "dimension",
+      "$description": "Minimum target height."
+    }
+  },
+  "cognitive-card": {
+    "padding": {
+      "$value": "{cognitiveSpacing.inline-padding}",
+      "$type": "dimension",
+      "$description": "Roomier card padding."
+    },
+    "radius": {
+      "$value": "{radius.4}",
+      "$type": "dimension",
+      "$description": "Softer container corner."
+    },
+    "border-width": {
+      "$value": "{cognitive.borderWidth}",
+      "$type": "dimension",
+      "$description": "Thicker border so the card boundary does not rely on a shadow."
+    },
+    "gap": {
+      "$value": "{cognitiveSpacing.element-gap}",
+      "$type": "dimension",
+      "$description": "Gap between elements inside the card."
+    }
+  },
+  "cognitive-nav": {
+    "item-min-height": {
+      "$value": "{cognitiveTarget.min}",
+      "$type": "dimension",
+      "$description": "Minimum navigation-item height."
+    },
+    "item-padding-x": {
+      "$value": "{spacing.5}",
+      "$type": "dimension",
+      "$description": "Roomier horizontal padding on navigation items."
+    },
+    "item-padding-y": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Roomier vertical padding on navigation items."
+    },
+    "item-gap": {
+      "$value": "{spacing.2}",
+      "$type": "dimension",
+      "$description": "Separation between adjacent targets, so a near miss lands on nothing rather than on the wrong item."
+    }
+  },
+  "cognitive-list-item": {
+    "min-height": {
+      "$value": "{cognitiveTarget.min}",
+      "$type": "dimension",
+      "$description": "Minimum list-item height."
+    },
+    "padding-x": {
+      "$value": "{spacing.5}",
+      "$type": "dimension",
+      "$description": "Roomier horizontal padding."
+    },
+    "padding-y": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Roomier vertical padding."
+    },
+    "gap": {
+      "$value": "{spacing.2}",
+      "$type": "dimension",
+      "$description": "Separation between adjacent rows, so a near miss lands on nothing rather than on the wrong row."
+    }
+  }
+}

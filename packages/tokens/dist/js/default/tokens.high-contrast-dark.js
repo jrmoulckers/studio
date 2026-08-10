@@ -145,6 +145,11 @@ export const tokens = {
     "letterSpacing": {
       "normal": "0",
       "wide": "0.08em"
+    },
+    "variantNumeric": {
+      "normal": "normal",
+      "tabular": "tabular-nums",
+      "tabular-slashed": "tabular-nums slashed-zero"
     }
   },
   "zIndex": {
@@ -410,6 +415,21 @@ export const tokens = {
       "weight": 600,
       "line-height": 1.2,
       "letter-spacing": "0.08em"
+    },
+    "amount": {
+      "family": [
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica",
+        "Arial",
+        "sans-serif"
+      ],
+      "size": "1rem",
+      "weight": 600,
+      "line-height": 1.5,
+      "variant-numeric": "tabular-nums"
     }
   },
   "motion": {
@@ -619,6 +639,38 @@ export const tokens = {
     "series-5": "#ffb000",
     "series-6": "#009e73",
     "series-other": "#e9e9f4"
+  },
+  "cognitive-button": {
+    "padding-x": "24px",
+    "padding-y": "12px",
+    "radius": "12px",
+    "border-width": "2px",
+    "min-height": "56px"
+  },
+  "cognitive-input": {
+    "padding-x": "16px",
+    "padding-y": "12px",
+    "radius": "12px",
+    "border-width": "2px",
+    "min-height": "56px"
+  },
+  "cognitive-card": {
+    "padding": "24px",
+    "radius": "16px",
+    "border-width": "2px",
+    "gap": "16px"
+  },
+  "cognitive-nav": {
+    "item-min-height": "56px",
+    "item-padding-x": "20px",
+    "item-padding-y": "12px",
+    "item-gap": "8px"
+  },
+  "cognitive-list-item": {
+    "min-height": "56px",
+    "padding-x": "20px",
+    "padding-y": "12px",
+    "gap": "8px"
   },
   "input": {
     "bg": "#1a1b2e",

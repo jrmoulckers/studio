@@ -31,6 +31,7 @@ import {
   assertCssContract,
   assertA11yContract,
   assertReducedMotionContract,
+  assertCognitiveComponentContract,
   assertDocumentSet,
   assertJsContract,
   assertTailwindContract,
@@ -68,6 +69,10 @@ const sharedDocuments = documents.filter(
   ({ file }) => !file.startsWith('themes/default/color.semantic.'),
 );
 const aliasDocument = byFile.get('themes/default/color.alias.json');
+/** Component names taken from the authored token files, so the guard tracks whatever ships. */
+const componentNames = documents
+  .filter(({ file }) => file.startsWith('component/'))
+  .map(({ file }) => file.slice('component/'.length).replace(/\.json$/, ''));
 const aliasPaths = REQUIRED_ALIASES.map(({ path }) => path.split('.'));
 const aliases = REQUIRED_ALIASES.map(({ path, value }) => ({
   name: path.replaceAll('.', '-'),
@@ -328,6 +333,7 @@ test('generated JS, CJS, CSS, and type entry points expose the documented contra
     ),
   });
   assertReducedMotionContract({ rootCss, indexCss });
+  assertCognitiveComponentContract({ rootCss, indexCss, componentNames });
 
   for (const relativePath of [
     packageJson.main,
@@ -616,6 +622,40 @@ test('generated contract guards reject removed exports, aliases, selectors, and 
         indexCss: indexCss.replaceAll('-duration: 1ms;', '-duration: 0ms;'),
       }),
     /motion-.*-duration/,
+  );
+
+  // The regression this guard exists for: a component gains a sizing property (or a new
+  // button variant appears) and cognitive mode silently keeps the default sizing, in the
+  // one mode whose entire purpose is larger, calmer targets.
+  for (const [name, cognitive] of [
+    ['button-primary-min-height', 'cognitive-button-min-height'],
+    ['input-padding-x', 'cognitive-input-padding-x'],
+    ['card-radius', 'cognitive-card-radius'],
+  ]) {
+    assert.throws(
+      () =>
+        assertCognitiveComponentContract({
+          rootCss,
+          componentNames,
+          indexCss: replaceLast(indexCss, `--${name}: var(--${cognitive});`, ''),
+        }),
+      new RegExp(name),
+      `dropping ${name} from the cognitive block fails`,
+    );
+  }
+  // Pointing an override at a literal instead of the cognitive token defeats the purpose.
+  assert.throws(
+    () =>
+      assertCognitiveComponentContract({
+        rootCss,
+        componentNames,
+        indexCss: replaceLast(
+          indexCss,
+          '--card-radius: var(--cognitive-card-radius);',
+          '--card-radius: 8px;',
+        ),
+      }),
+    /card-radius/,
   );
 
   const malformedTypesRoot = mkdtempSync(join(tmpdir(), 'jrm-token-types-negative-'));
