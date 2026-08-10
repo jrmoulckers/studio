@@ -296,6 +296,21 @@
   --card-padding: var(--spacing-lg);
   --tile-radius: var(--radius-md);
   --tile-padding: var(--spacing-lg);
+  --chart-radius: var(--radius-md); /** Chart container corner radius. Matches card radius. */
+  --chart-padding: var(--spacing-md); /** Padding between the container edge and the plot area. */
+  --chart-legend-gap: var(--spacing-md); /** Gap between legend items. */
+  --chart-swatch-radius: var(--radius-sm); /** Legend color swatch corner radius. */
+  --chart-tooltip-radius: var(--radius-sm); /** Tooltip corner radius. */
+  --chart-tooltip-padding-x: var(--spacing-sm); /** Tooltip horizontal padding. */
+  --chart-tooltip-padding-y: var(--spacing-xs); /** Tooltip vertical padding. */
+  --chart-bar-radius: var(--radius-sm); /** Bar cap rounding. */
+  --chart-bar-gap: var(--spacing-xs); /** Gap between adjacent bars. */
+  --chart-series-1: var(--color-chart-1);
+  --chart-series-2: var(--color-chart-2);
+  --chart-series-3: var(--color-chart-3);
+  --chart-series-4: var(--color-chart-4);
+  --chart-series-5: var(--color-chart-5);
+  --chart-series-6: var(--color-chart-6);
   --input-radius: var(--radius-sm);
   --input-min-height: var(--target-min);
   --input-padding-x: var(--spacing-md);
@@ -305,6 +320,10 @@
   --nav-iconbtn-radius: var(--radius-chip);
   --pill-radius: var(--radius-pill);
   --pill-padding-x: var(--spacing-sm);
+  --progress-height: var(--spacing-sm); /** Bar thickness at the default size. */
+  --progress-height-lg: var(--spacing-md); /** Bar thickness when the bar is the primary element of a card. */
+  --progress-radius: var(--radius-pill); /** Fully rounded ends on both the track and the fill. */
+  --progress-stroke: var(--spacing-sm); /** Ring stroke width. Matches the default bar height so the two read as one component family. */
   --color-bg: var(--semantic-background-primary); /** Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var. */
   --color-surface: var(--semantic-background-elevated);
   --color-surface-2: var(--semantic-background-secondary);
@@ -345,6 +364,16 @@
   --tile-border: var(--semantic-border-default);
   --tile-hover-border: var(--semantic-interactive-default);
   --tile-shadow: var(--shadow-lift);
+  --chart-bg: var(--semantic-background-primary); /** Plot area background — inherits the page surface so charts sit flush. */
+  --chart-axis: var(--semantic-border-default); /** Axis line color. */
+  --chart-grid: var(--semantic-border-default); /** Grid line color. Render grid lines at reduced opacity rather than with a separate token, so the axis stays dominant without adding a theme-parity surface. */
+  --chart-axis-label: var(--semantic-text-secondary); /** Axis tick and label text. */
+  --chart-legend-label: var(--semantic-text-secondary); /** Legend item text. */
+  --chart-tooltip-bg: var(--semantic-background-elevated); /** Tooltip surface. */
+  --chart-tooltip-text: var(--semantic-text-primary); /** Tooltip text. */
+  --chart-tooltip-border: var(--semantic-border-default); /** Tooltip border. */
+  --chart-slice-stroke: var(--semantic-background-primary); /** Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined. */
+  --chart-series-other: var(--semantic-status-neutral); /** Grouped tail categories rendered as a single "Other" series. Neutral by design, so it never competes with a real series. */
   --input-bg: var(--semantic-background-elevated);
   --input-text: var(--semantic-text-primary);
   --input-border: var(--semantic-border-default);
@@ -360,4 +389,16 @@
   --pill-bg: var(--semantic-background-secondary);
   --pill-text: var(--semantic-text-secondary);
   --pill-border: var(--semantic-border-default);
+  --progress-track: var(--semantic-background-secondary); /** Unfilled portion of a bar or ring. */
+  --progress-fill: var(--semantic-interactive-default); /** Filled portion, for progress that carries no status meaning. */
+  --progress-duration: var(--motion-state-duration); /** Fill transition. Uses the shared state duration, so it collapses to 1ms under prefers-reduced-motion along with everything else. */
+  --progress-easing: var(--motion-state-easing); /** Fill transition easing. */
+  --progress-label: var(--semantic-text-primary); /** Primary label — the value itself. */
+  --progress-label-muted: var(--semantic-text-secondary); /** Secondary label — percentage, remaining amount, or description. */
+  --progress-on-track: var(--semantic-status-positive); /** Progressing as expected. Requires a success icon and a text label; color alone is not sufficient. */
+  --progress-at-risk: var(--semantic-status-warning); /** Approaching a limit or deadline. Requires a warning icon and a text label naming the threshold. */
+  --progress-exceeded: var(--semantic-status-negative); /** Past the limit. Requires an icon and a text label stating the overage. */
+  --progress-pending: var(--semantic-status-pending); /** Indeterminate or awaiting data. Requires an icon and a text label; do not animate indefinitely without one. */
+  --progress-complete: var(--semantic-status-positive); /** Finished. Distinguished from on-track by its icon and label, not by color — the two share a value deliberately. */
+  --chart-tooltip-shadow: var(--elevation-raised); /** Tooltip elevation, so it reads above the plot area. */
 }

@@ -1,0 +1,80 @@
+{
+  "progress": {
+    "$description": "Component-level tokens for determinate progress indicators — bars and rings. Progress state is never signalled by color alone: every state token pairs with a required icon and text label, named in its description. Ported from finance's design-tokens package and re-expressed against Studio's t-shirt spacing and radius scales.",
+    "track": {
+      "$value": "{semantic.background.secondary}",
+      "$type": "color",
+      "$description": "Unfilled portion of a bar or ring."
+    },
+    "fill": {
+      "$value": "{semantic.interactive.default}",
+      "$type": "color",
+      "$description": "Filled portion, for progress that carries no status meaning."
+    },
+    "height": {
+      "$value": "{spacing.sm}",
+      "$type": "dimension",
+      "$description": "Bar thickness at the default size."
+    },
+    "height-lg": {
+      "$value": "{spacing.md}",
+      "$type": "dimension",
+      "$description": "Bar thickness when the bar is the primary element of a card."
+    },
+    "radius": {
+      "$value": "{radius.pill}",
+      "$type": "dimension",
+      "$description": "Fully rounded ends on both the track and the fill."
+    },
+    "stroke": {
+      "$value": "{spacing.sm}",
+      "$type": "dimension",
+      "$description": "Ring stroke width. Matches the default bar height so the two read as one component family."
+    },
+    "duration": {
+      "$value": "{motion.state.duration}",
+      "$type": "duration",
+      "$description": "Fill transition. Uses the shared state duration, so it collapses to 1ms under prefers-reduced-motion along with everything else."
+    },
+    "easing": {
+      "$value": "{motion.state.easing}",
+      "$type": "cubicBezier",
+      "$description": "Fill transition easing."
+    },
+    "label": {
+      "$value": "{semantic.text.primary}",
+      "$type": "color",
+      "$description": "Primary label — the value itself."
+    },
+    "label-muted": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Secondary label — percentage, remaining amount, or description."
+    },
+    "on-track": {
+      "$value": "{semantic.status.positive}",
+      "$type": "color",
+      "$description": "Progressing as expected. Requires a success icon and a text label; color alone is not sufficient."
+    },
+    "at-risk": {
+      "$value": "{semantic.status.warning}",
+      "$type": "color",
+      "$description": "Approaching a limit or deadline. Requires a warning icon and a text label naming the threshold."
+    },
+    "exceeded": {
+      "$value": "{semantic.status.negative}",
+      "$type": "color",
+      "$description": "Past the limit. Requires an icon and a text label stating the overage."
+    },
+    "pending": {
+      "$value": "{semantic.status.pending}",
+      "$type": "color",
+      "$description": "Indeterminate or awaiting data. Requires an icon and a text label; do not animate indefinitely without one."
+    },
+    "complete": {
+      "$value": "{semantic.status.positive}",
+      "$type": "color",
+      "$description": "Finished. Distinguished from on-track by its icon and label, not by color — the two share a value deliberately."
+    }
+  }
+}
