@@ -397,6 +397,53 @@ export function assertReducedMotionContract({ rootCss, indexCss }) {
 }
 
 /**
+ * Cognitive component sizing must actually take effect.
+ *
+ * Studio has shipped cognitive tokens before that no selector ever read, which is
+ * indistinguishable from not shipping them. This pins the property rather than the
+ * generator: it reads both the cognitive tokens and their default counterparts out of
+ * the shipped `:root` declarations, then requires an override for every pair that
+ * exists. A cognitive property with no default counterpart is additive and skipped —
+ * there is nothing to override.
+ */
+export function assertCognitiveComponentContract({ rootCss, indexCss, componentNames }) {
+  const root = stripCssComments(rootCss);
+  const names = [...componentNames].filter((name) => name !== 'cognitive');
+  if (names.length === 0) fail('No default components were supplied to compare against.');
+
+  const pairs = [];
+  for (const component of names) {
+    const pattern = new RegExp(`--cognitive-${escapeRegExp(component)}-([a-z0-9-]+)\\s*:`, 'g');
+    for (const match of root.matchAll(pattern)) pairs.push([component, match[1]]);
+  }
+
+  if (pairs.length === 0) fail('No cognitive component tokens were found in the shipped root CSS.');
+
+  const body = blockBody(stripCssComments(indexCss), '[data-a11y-cognitive="true"]');
+  let overrides = 0;
+
+  for (const [component, property] of pairs) {
+    const declared = [
+      ...root.matchAll(
+        new RegExp(
+          `--(${escapeRegExp(component)}(?:-[a-z0-9]+)*-${escapeRegExp(property)})\\s*:`,
+          'g',
+        ),
+      ),
+    ].map((match) => match[1]);
+
+    for (const name of declared) {
+      assertDeclaration(body, name, `var(--cognitive-${component}-${property})`);
+      overrides += 1;
+    }
+  }
+
+  if (overrides === 0) {
+    fail('Cognitive mode overrides no component property; the tokens are shipped but inert.');
+  }
+}
+
+/**
  * The accessibility stylesheet is the application layer for tokens that Studio
  * shipped but never applied. Two things are worth guarding independently of the
  * generator: that every rule stays token-driven, and that the dark-mode selector

@@ -191,6 +191,23 @@
   --text-overline-size: var(--cognitive-type-overline-size);
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
 
+  /* Component sizing for the mode — generated from tokens/component/cognitive.json so a
+     new variant or property cannot keep its default sizing here by omission. */
+  --button-primary-padding-x: var(--cognitive-button-padding-x);
+  --button-primary-padding-y: var(--cognitive-button-padding-y);
+  --button-primary-radius: var(--cognitive-button-radius);
+  --button-primary-min-height: var(--cognitive-button-min-height);
+  --button-default-padding-x: var(--cognitive-button-padding-x);
+  --button-default-padding-y: var(--cognitive-button-padding-y);
+  --button-default-radius: var(--cognitive-button-radius);
+  --button-default-min-height: var(--cognitive-button-min-height);
+  --input-padding-x: var(--cognitive-input-padding-x);
+  --input-padding-y: var(--cognitive-input-padding-y);
+  --input-radius: var(--cognitive-input-radius);
+  --input-min-height: var(--cognitive-input-min-height);
+  --card-padding: var(--cognitive-card-padding);
+  --card-radius: var(--cognitive-card-radius);
+
   /* Matches --duration-reduced: an instant-but-nonzero duration still fires
      transitionend/animationend, so listeners that await them never hang.
      Generated from tokens/semantic/motion.json, like the media-query block above —

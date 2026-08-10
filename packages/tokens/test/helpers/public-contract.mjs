@@ -3,6 +3,7 @@ export const REQUIRED_TOKEN_FILES = Object.freeze([
   'component/button.json',
   'component/card.json',
   'component/chart.json',
+  'component/cognitive.json',
   'component/input.json',
   'component/modal.json',
   'component/nav.json',
