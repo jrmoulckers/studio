@@ -5,6 +5,7 @@ import { TextDecoder } from 'node:util';
 const MODES = ['light', 'dark', 'dark-oled', 'high-contrast', 'high-contrast-dark'];
 
 export const DIST_OUTPUTS = Object.freeze([
+  'css/default/a11y.css',
   'css/default/index.css',
   'css/default/tokens-dark-oled.css',
   'css/default/tokens-dark.css',

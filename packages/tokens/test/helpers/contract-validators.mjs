@@ -357,6 +357,71 @@ function assertDeclaration(source, name, value) {
   if (!pattern.test(source)) fail(`CSS block is missing required declaration "--${name}".`);
 }
 
+/**
+ * The accessibility stylesheet is the application layer for tokens that Studio
+ * shipped but never applied. Two things are worth guarding independently of the
+ * generator: that every rule stays token-driven, and that the dark-mode selector
+ * list matches the modes whose surfaces actually measure dark.
+ *
+ * `darkModes` is computed by the caller from the *shipped* theme CSS, not from
+ * the build config, so this assertion cannot pass merely because the generator
+ * agrees with itself.
+ */
+export function assertA11yContract({ a11yCss, rootCss, darkModes }) {
+  const css = stripCssComments(a11yCss);
+
+  for (const required of [
+    ':focus-visible',
+    '@supports selector(:focus-visible)',
+    '.jrm-sr-only',
+    '.jrm-sr-only-focusable',
+    '@media (forced-colors: active)',
+    '@media (prefers-color-scheme: dark)',
+  ]) {
+    if (!css.includes(required)) fail(`Accessibility stylesheet is missing "${required}".`);
+  }
+
+  // Scoped to the focus rule itself: a document-wide search would still pass if
+  // one of two occurrences were hardcoded.
+  const focusRule = blockBody(css, ':focus-visible');
+  for (const variable of ['--focus-ring-width', '--focus-ring-offset', '--semantic-border-focus']) {
+    if (!focusRule.includes(`var(${variable})`)) {
+      fail(`Accessibility stylesheet focus ring must derive from ${variable}.`);
+    }
+  }
+  if (!css.includes('var(--target-min)')) {
+    fail('Accessibility stylesheet must derive from --target-min.');
+  }
+
+  // Every referenced custom property must exist in the shipped :root stylesheet.
+  const declared = new Set(
+    Array.from(stripCssComments(rootCss).matchAll(/(--[a-z0-9-]+)\s*:/g), (match) => match[1]),
+  );
+  for (const [, variable] of css.matchAll(/var\((--[a-z0-9-]+)\)/g)) {
+    if (!declared.has(variable)) {
+      fail(`Accessibility stylesheet references undeclared "${variable}".`);
+    }
+  }
+
+  // Bare anchors are deliberately excluded: a min-inline-size on every a[href]
+  // would break inline prose links, so target sizing is role-driven instead.
+  const targetSelector = css.slice(0, css.indexOf('min-block-size: var(--target-min)'));
+  if (/(^|[\s,])a\[href\]/.test(targetSelector.slice(targetSelector.lastIndexOf('}') + 1))) {
+    fail('Accessibility stylesheet must not apply --target-min to bare anchors.');
+  }
+
+  const scoped = new Set(
+    Array.from(css.matchAll(/\[data-theme="([a-z-]+)"\] input\[type=/g), (match) => match[1]),
+  );
+  const expected = [...darkModes].sort();
+  const actual = [...scoped].sort();
+  if (expected.join(',') !== actual.join(',')) {
+    fail(
+      `Accessibility stylesheet dark-mode scoping drifted: expected [${expected}], got [${actual}].`,
+    );
+  }
+}
+
 export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
   rootCss = stripCssComments(rootCss);
   indexCss = stripCssComments(indexCss);

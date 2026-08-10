@@ -22,6 +22,7 @@
     "./css/dark-oled": "./build/css/default/tokens-dark-oled.css",
     "./css/high-contrast": "./build/css/default/tokens-high-contrast.css",
     "./css/high-contrast-dark": "./build/css/default/tokens-high-contrast-dark.css",
+    "./css/a11y": "./build/css/default/a11y.css",
     "./tailwind": "./build/tailwind/default.cjs",
     "./package.json": "./package.json"
   },

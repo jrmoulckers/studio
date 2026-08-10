@@ -29,6 +29,7 @@ import {
 } from '../scripts/dist-contract.mjs';
 import {
   assertCssContract,
+  assertA11yContract,
   assertDocumentSet,
   assertJsContract,
   assertTailwindContract,
@@ -77,6 +78,38 @@ const clone = (value) => JSON.parse(JSON.stringify(value));
 const exportPath = (entry) => resolve(packageRoot, entry);
 const readText = (path) => new TextDecoder('utf-8', { fatal: true }).decode(readFileSync(path));
 const resolvePackageEntry = (specifier) => fileURLToPath(import.meta.resolve(specifier));
+
+/**
+ * Read a custom property from a theme stylesheet, following one level of
+ * var() indirection into the :root stylesheet where the primitives live.
+ */
+function resolveCssColor(themeCss, rootCss, property) {
+  const read = (css) => css.match(new RegExp(`${property}:\\s*([^;]+);`))?.[1]?.trim();
+  const value = read(themeCss) ?? read(rootCss);
+  if (!value) throw new Error(`${property} is not declared.`);
+  const reference = value.match(/^var\((--[a-z0-9-]+)\)$/)?.[1];
+  if (!reference) return value;
+  const resolved = rootCss.match(new RegExp(`${reference}:\\s*([^;]+);`))?.[1]?.trim();
+  if (!resolved) throw new Error(`${reference} is not declared.`);
+  return resolved;
+}
+
+/** WCAG relative luminance of a #rgb / #rrggbb color. */
+function relativeLuminance(hex) {
+  const digits = hex.replace('#', '');
+  const expanded =
+    digits.length === 3
+      ? digits
+          .split('')
+          .map((digit) => digit + digit)
+          .join('')
+      : digits;
+  const [r, g, b] = [0, 2, 4].map((offset) => {
+    const channel = Number.parseInt(expanded.slice(offset, offset + 2), 16) / 255;
+    return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
 
 /** The resolved token tree for a mode, read from the committed dist. */
 const readTokenTree = (mode) =>
@@ -269,6 +302,23 @@ test('generated JS, CJS, CSS, and type entry points expose the documented contra
   assertTailwindContract(tailwind, semanticPaths, aliasPaths);
   assertTypeContract(typeSource);
   assertCssContract({ rootCss, indexCss, aliases, modes });
+  assertA11yContract({
+    a11yCss: readText(resolvePackageEntry('@jrm/tokens/css/a11y')),
+    rootCss,
+    // Derived from the shipped stylesheets rather than from the build config, so
+    // agreement here is evidence and not a tautology.
+    darkModes: modeNames.filter(
+      (name) =>
+        name !== 'light' &&
+        relativeLuminance(
+          resolveCssColor(
+            readText(resolvePackageEntry(`@jrm/tokens/css/${name}`)),
+            rootCss,
+            '--semantic-background-primary',
+          ),
+        ) < 0.5,
+    ),
+  });
 
   for (const relativePath of [
     packageJson.main,
@@ -467,6 +517,46 @@ test('generated contract guards reject removed exports, aliases, selectors, and 
   );
 
   const typeSource = readText(exportPath(packageJson.types));
+
+  // The accessibility stylesheet's value is entirely in staying tied to the
+  // tokens and to the theme set, so prove each of those guards can fail.
+  const a11yCss = readText(resolvePackageEntry('@jrm/tokens/css/a11y'));
+  const darkModes = ['dark', 'dark-oled', 'high-contrast-dark'];
+  assertA11yContract({ a11yCss, rootCss, darkModes });
+
+  assert.throws(
+    () =>
+      assertA11yContract({
+        a11yCss: a11yCss.replace('var(--focus-ring-width)', '2px'),
+        rootCss,
+        darkModes,
+      }),
+    /--focus-ring-width/,
+  );
+  assert.throws(
+    () =>
+      assertA11yContract({
+        a11yCss: a11yCss.replace('var(--target-min)', 'var(--target-invented)'),
+        rootCss,
+        darkModes,
+      }),
+    /undeclared|--target-min/,
+  );
+  // A sixth dark mode the stylesheet had not been taught about.
+  assert.throws(
+    () => assertA11yContract({ a11yCss, rootCss, darkModes: [...darkModes, 'dark-dim'] }),
+    /drifted/,
+  );
+  assert.throws(
+    () =>
+      assertA11yContract({
+        a11yCss: a11yCss.replaceAll('[data-theme="dark-oled"] input[type=', '[data-x] input[type='),
+        rootCss,
+        darkModes,
+      }),
+    /drifted/,
+  );
+
   assert.throws(
     () =>
       assertTypeContract(
