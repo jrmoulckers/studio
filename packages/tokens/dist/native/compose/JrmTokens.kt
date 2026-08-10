@@ -218,9 +218,24 @@ fun jrmColorScheme(theme: JrmTheme): JrmColorScheme = when (theme) {
 }
 
 object JrmSpacing {
-    val xs: Dp = 6.dp
-    val sm: Dp = 10.dp
-    val md: Dp = 14.dp
+    val step0: Dp = 0.dp
+    val step1: Dp = 4.dp
+    val step2: Dp = 8.dp
+    val step3: Dp = 12.dp
+    val step4: Dp = 16.dp
+    val step5: Dp = 20.dp
+    val step6: Dp = 24.dp
+    val step7: Dp = 28.dp
+    val step8: Dp = 32.dp
+    val step10: Dp = 40.dp
+    val step12: Dp = 48.dp
+    val step14: Dp = 56.dp
+    val step16: Dp = 64.dp
+    val step20: Dp = 80.dp
+    val step24: Dp = 96.dp
+    val xs: Dp = 4.dp
+    val sm: Dp = 8.dp
+    val md: Dp = 12.dp
     val lg: Dp = 16.dp
     val xl: Dp = 20.dp
     val xl2: Dp = 24.dp
@@ -228,10 +243,18 @@ object JrmSpacing {
 }
 
 object JrmRadius {
-    val sm: Dp = 9.dp
-    val md: Dp = 14.dp
-    val chip: Dp = 10.dp
-    val pill: Dp = 999.dp
+    val step0: Dp = 0.dp
+    val step1: Dp = 4.dp
+    val step2: Dp = 8.dp
+    val step3: Dp = 12.dp
+    val step4: Dp = 16.dp
+    val step6: Dp = 24.dp
+    val step8: Dp = 32.dp
+    val full: Dp = 9999.dp
+    val sm: Dp = 8.dp
+    val chip: Dp = 12.dp
+    val md: Dp = 16.dp
+    val pill: Dp = 9999.dp
 }
 
 object JrmTarget {
@@ -277,7 +300,11 @@ object JrmLayer {
 object JrmDuration {
     const val instant: Int = 0
     const val press: Int = 50
-    const val state: Int = 150
     const val tile: Int = 120
+    const val state: Int = 150
+    const val fast: Int = 150
+    const val normal: Int = 250
+    const val slow: Int = 400
+    const val slower: Int = 800
     const val reduced: Int = 1
 }

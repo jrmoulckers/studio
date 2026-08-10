@@ -105,6 +105,21 @@ module.exports = {
         }
       },
       "spacing": {
+        "0": "var(--spacing-0)",
+        "1": "var(--spacing-1)",
+        "2": "var(--spacing-2)",
+        "3": "var(--spacing-3)",
+        "4": "var(--spacing-4)",
+        "5": "var(--spacing-5)",
+        "6": "var(--spacing-6)",
+        "7": "var(--spacing-7)",
+        "8": "var(--spacing-8)",
+        "10": "var(--spacing-10)",
+        "12": "var(--spacing-12)",
+        "14": "var(--spacing-14)",
+        "16": "var(--spacing-16)",
+        "20": "var(--spacing-20)",
+        "24": "var(--spacing-24)",
         "xs": "var(--spacing-xs)",
         "sm": "var(--spacing-sm)",
         "md": "var(--spacing-md)",
@@ -118,12 +133,19 @@ module.exports = {
         "safe-l": "env(safe-area-inset-left)"
       },
       "borderRadius": {
+        "0": "var(--radius-0)",
+        "1": "var(--radius-1)",
+        "2": "var(--radius-2)",
+        "3": "var(--radius-3)",
+        "4": "var(--radius-4)",
+        "6": "var(--radius-6)",
+        "8": "var(--radius-8)",
+        "full": "var(--radius-pill)",
         "sm": "var(--radius-sm)",
-        "md": "var(--radius-md)",
         "chip": "var(--radius-chip)",
+        "md": "var(--radius-md)",
         "pill": "var(--radius-pill)",
-        "DEFAULT": "var(--radius-md)",
-        "full": "var(--radius-pill)"
+        "DEFAULT": "var(--radius-md)"
       },
       "boxShadow": {
         "lift": "var(--shadow-lift)",

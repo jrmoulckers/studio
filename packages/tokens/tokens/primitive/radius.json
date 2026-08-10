@@ -1,19 +1,56 @@
 {
   "radius": {
-    "$description": "Corner radius scale — 9px controls, 14px containers, fully-round pills.",
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "$description": "Corner radius on the same 4px grid as spacing. Numeric keys equal the multiplier of the 4px base; the named steps are aliases that carry the intent (controls, chips, containers, pills).",
+    "full": {
+      "$value": "9999px",
+      "$type": "dimension",
+      "$description": "Fully-round — pills, avatars, circular targets."
+    },
     "sm": {
-      "$value": "9px",
+      "$value": "{radius.2}",
       "$type": "dimension",
       "$description": "Controls: buttons, inputs, steppers"
     },
-    "md": { "$value": "14px", "$type": "dimension", "$description": "Containers: cards, tiles" },
     "chip": {
-      "$value": "10px",
+      "$value": "{radius.3}",
       "$type": "dimension",
       "$description": "Icon buttons and small chips"
     },
+    "md": {
+      "$value": "{radius.4}",
+      "$type": "dimension",
+      "$description": "Containers: cards, tiles"
+    },
     "pill": {
-      "$value": "999px",
+      "$value": "{radius.full}",
       "$type": "dimension",
       "$description": "Fully-rounded pills and avatars"
     }

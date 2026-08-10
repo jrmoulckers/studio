@@ -1,14 +1,45 @@
 {
   "duration": {
     "$description": "Motion durations — fast and functional (150–250ms), never choreography.",
-    "instant": { "$value": "0ms", "$type": "duration" },
-    "press": { "$value": "50ms", "$type": "duration", "$description": "Button :active press-down" },
+    "instant": {
+      "$value": "0ms",
+      "$type": "duration"
+    },
+    "press": {
+      "$value": "50ms",
+      "$type": "duration",
+      "$description": "Button :active press-down"
+    },
+    "tile": {
+      "$value": "120ms",
+      "$type": "duration",
+      "$description": "Game-tile hover lift"
+    },
     "state": {
       "$value": "150ms",
       "$type": "duration",
       "$description": "Hover / state color transitions"
     },
-    "tile": { "$value": "120ms", "$type": "duration", "$description": "Game-tile hover lift" },
+    "fast": {
+      "$value": "{duration.state}",
+      "$type": "duration",
+      "$description": "Generic short transition — alias of the state duration."
+    },
+    "normal": {
+      "$value": "250ms",
+      "$type": "duration",
+      "$description": "Standard enter/exit for surfaces and overlays"
+    },
+    "slow": {
+      "$value": "400ms",
+      "$type": "duration",
+      "$description": "Deliberate transitions — sheets, expanding panels"
+    },
+    "slower": {
+      "$value": "800ms",
+      "$type": "duration",
+      "$description": "Extended animations: celebrations, complex transitions"
+    },
     "reduced": {
       "$value": "1ms",
       "$type": "duration",
@@ -16,6 +47,7 @@
     }
   },
   "easing": {
+    "$description": "Easing curves. standard and linear are the functional defaults; the named curves below are for directional motion and are referenced by component tokens rather than used ad hoc.",
     "standard": {
       "$value": "ease",
       "$type": "cubicBezier",
@@ -25,6 +57,41 @@
       "$value": "linear",
       "$type": "cubicBezier",
       "$description": "Reduced-motion / crossfade easing"
+    },
+    "balanced": {
+      "$value": "cubic-bezier(0.2, 0, 0, 1)",
+      "$type": "cubicBezier",
+      "$description": "Material 3 standard curve — balanced enter/exit"
+    },
+    "in": {
+      "$value": "cubic-bezier(0.4, 0, 1, 1)",
+      "$type": "cubicBezier",
+      "$description": "Ease-in — motion leaving the viewport"
+    },
+    "out": {
+      "$value": "cubic-bezier(0, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Ease-out — motion entering the viewport"
+    },
+    "in-out": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Symmetric ease-in-out"
+    },
+    "accelerate": {
+      "$value": "cubic-bezier(0.3, 0, 1, 1)",
+      "$type": "cubicBezier",
+      "$description": "Content exiting — starts slow, exits quickly"
+    },
+    "decelerate": {
+      "$value": "cubic-bezier(0, 0, 0, 1)",
+      "$type": "cubicBezier",
+      "$description": "Content entering — starts fast, settles gently"
+    },
+    "spring": {
+      "$value": "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+      "$type": "cubicBezier",
+      "$description": "Playful overshoot — celebrations, success moments"
     }
   }
 }

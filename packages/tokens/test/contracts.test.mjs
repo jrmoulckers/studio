@@ -433,6 +433,17 @@ test('native output expresses every theme for Compose and SwiftUI', () => {
     assert.ok(!/oklch\(/i.test(source), `${name} output resolves OKLCH to sRGB`);
     assert.ok(!/\d(rem|px|ms)\b/.test(source), `${name} output carries no CSS units`);
   }
+
+  // Grid multipliers (`spacing.4`) are legal CSS names but illegal bare identifiers on both
+  // platforms, and reordering leading digits leaves nothing to lead with. Pin the prefixed
+  // form, and pin that no digit-led declaration survives anywhere in either file.
+  assert.ok(kotlin.includes('val step4: Dp = 16.dp'), 'Kotlin names spacing.4 as step4');
+  assert.ok(
+    swift.includes('public static let step4: CGFloat = 16'),
+    'Swift names spacing.4 as step4',
+  );
+  assert.ok(!/\bval \d/.test(kotlin), 'Kotlin declares no digit-led identifier');
+  assert.ok(!/\bstatic let \d/.test(swift), 'Swift declares no digit-led identifier');
 });
 
 test('native renderers reject values and names no native platform can express', async () => {

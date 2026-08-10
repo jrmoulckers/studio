@@ -5,6 +5,9 @@
 :root {
   --breakpoint-content-max: 760px; /** Max content column width */
   --breakpoint-tile-min: 150px; /** Min game-tile width in the auto-fit grid */
+  --breakpoint-sm: 640px; /** Mobile → tablet-size screens */
+  --breakpoint-md: 1024px; /** Tablet → desktop-size screens */
+  --breakpoint-lg: 1440px; /** Desktop → widescreen displays */
   --cognitive-touch-target-min: 48px; /** Minimum interactive touch/click target — WCAG 2.2 SC 2.5.5 Target Size (Enhanced, AAA). */
   --cognitive-focus-ring-width: 3px; /** Enhanced focus-ring width for improved visibility (default is 2px). */
   --cognitive-focus-ring-offset: 3px; /** Enhanced focus-ring offset for improved visibility (default is 2px). */
@@ -14,11 +17,21 @@
   --focus-ring-offset: 2px; /** Gap between the control edge and the ring, so the ring stays legible on filled controls. */
   --duration-instant: 0ms;
   --duration-press: 50ms; /** Button :active press-down */
-  --duration-state: 150ms; /** Hover / state color transitions */
   --duration-tile: 120ms; /** Game-tile hover lift */
+  --duration-state: 150ms; /** Hover / state color transitions */
+  --duration-normal: 250ms; /** Standard enter/exit for surfaces and overlays */
+  --duration-slow: 400ms; /** Deliberate transitions — sheets, expanding panels */
+  --duration-slower: 800ms; /** Extended animations: celebrations, complex transitions */
   --duration-reduced: 1ms; /** Reduced-motion alternative — effectively instant, but deliberately 1ms rather than 0ms. A zero-duration transition or animation never fires transitionend or animationend, so any cleanup, focus hand-off, or promise that awaits those events hangs forever under prefers-reduced-motion. 1ms is imperceptible and still dispatches the event. */
   --easing-standard: ease; /** Default functional easing */
   --easing-linear: linear; /** Reduced-motion / crossfade easing */
+  --easing-balanced: cubic-bezier(0.2, 0, 0, 1); /** Material 3 standard curve — balanced enter/exit */
+  --easing-in: cubic-bezier(0.4, 0, 1, 1); /** Ease-in — motion leaving the viewport */
+  --easing-out: cubic-bezier(0, 0, 0.2, 1); /** Ease-out — motion entering the viewport */
+  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1); /** Symmetric ease-in-out */
+  --easing-accelerate: cubic-bezier(0.3, 0, 1, 1); /** Content exiting — starts slow, exits quickly */
+  --easing-decelerate: cubic-bezier(0, 0, 0, 1); /** Content entering — starts fast, settles gently */
+  --easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /** Playful overshoot — celebrations, success moments */
   --opacity-none: 0; /** Fully transparent. */
   --opacity-subtle: 0.04; /** Barely-there wash — hover on large surfaces (rows, tiles). */
   --opacity-soft: 0.08; /** Hover overlay on controls. */
@@ -26,21 +39,41 @@
   --opacity-strong: 0.24; /** Scrims and heavy washes. */
   --opacity-disabled: 0.38; /** Disabled content alpha — WCAG-exempt, matching the disabled text/interactive tokens. */
   --opacity-full: 1; /** Fully opaque. */
-  --radius-sm: 9px; /** Controls: buttons, inputs, steppers */
-  --radius-md: 14px; /** Containers: cards, tiles */
-  --radius-chip: 10px; /** Icon buttons and small chips */
-  --radius-pill: 999px; /** Fully-rounded pills and avatars */
+  --radius-0: 0px;
+  --radius-1: 4px;
+  --radius-2: 8px;
+  --radius-3: 12px;
+  --radius-4: 16px;
+  --radius-6: 24px;
+  --radius-8: 32px;
+  --radius-full: 9999px; /** Fully-round — pills, avatars, circular targets. */
   --shadow-soft-lift-dark: 0 10px 30px rgba(0, 0, 0, 0.45); /** The single dark-theme shadow — floats cards, tiles, toast. */
   --shadow-soft-lift-light: 0 10px 30px rgba(60, 50, 120, 0.12); /** Light-theme equivalent of Soft Lift. */
   --shadow-inset-hairline: inset 0 0 0 1px rgba(0, 0, 0, 0.18); /** 1px inner ring on avatars so light player colors keep their edge. */
   --shadow-none: none; /** No shadow — the flattened surface used by cognitive-accessibility mode. */
-  --spacing-xs: 6px;
-  --spacing-sm: 10px;
-  --spacing-md: 14px;
-  --spacing-lg: 16px;
-  --spacing-xl: 20px; /** Roomier block padding — cognitive-accessibility mode. */
-  --spacing-2xl: 24px; /** Card gap / inline padding — cognitive-accessibility mode. */
-  --spacing-3xl: 32px; /** Section gap — cognitive-accessibility mode. */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /** Elevation 1 — resting cards on a light surface. */
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /** Elevation 2 — raised cards, dropdowns. */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /** Elevation 3 — popovers, sheets. */
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1); /** Elevation 4 — modals. */
+  --shadow-dark-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5); /** Elevation 1 on dark surfaces. */
+  --shadow-dark-md: 0 4px 8px -1px rgba(0, 0, 0, 0.55); /** Elevation 2 on dark surfaces. */
+  --shadow-dark-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.6); /** Elevation 3 on dark surfaces. */
+  --shadow-dark-xl: 0 20px 30px -5px rgba(0, 0, 0, 0.65); /** Elevation 4 on dark surfaces. */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
   --target-min: 46px; /** Minimum interactive target — the thumb-first control height (exceeds the WCAG 2.2 AA 24px floor and the 44px platform guidance). */
   --target-compact: 32px; /** Dense affordance (icon button inside an already-large target). Only valid when the parent row itself meets target.min. */
   --target-spacious: 56px; /** Roomier target for primary actions and cognitive-accessibility mode. */
@@ -185,8 +218,20 @@
   --button-danger-bg: transparent;
   --input-padding-y: 11px;
   --pill-padding-y: 3px;
+  --duration-fast: var(--duration-state); /** Generic short transition — alias of the state duration. */
+  --radius-sm: var(--radius-2); /** Controls: buttons, inputs, steppers */
+  --radius-chip: var(--radius-3); /** Icon buttons and small chips */
+  --radius-md: var(--radius-4); /** Containers: cards, tiles */
+  --radius-pill: var(--radius-full); /** Fully-rounded pills and avatars */
   --shadow-lift: var(--shadow-soft-lift-light);
   --shadow-hairline: var(--shadow-inset-hairline);
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-3);
+  --spacing-lg: var(--spacing-4);
+  --spacing-xl: var(--spacing-5); /** Roomier block padding — cognitive-accessibility mode. */
+  --spacing-2xl: var(--spacing-6); /** Card gap / inline padding — cognitive-accessibility mode. */
+  --spacing-3xl: var(--spacing-8); /** Section gap — cognitive-accessibility mode. */
   --semantic-background-primary: var(--color-paper-lilac-mist); /** App background. */
   --semantic-background-secondary: var(--color-paper-frost); /** Secondary chrome surface. */
   --semantic-background-elevated: var(--color-paper-white); /** Elevated surface — cards, popovers, inputs. */
@@ -260,11 +305,6 @@
   --cognitive-type-overline-size: var(--font-size-label); /** Stepped up from overline (0.8rem) to label (0.9rem) — 0.8rem is too small for cognitive needs. */
   --cognitive-type-overline-weight: var(--font-weight-semibold);
   --cognitive-type-overline-line-height: var(--font-line-height-snug);
-  --cognitive-spacing-section-gap: var(--spacing-3xl); /** Gap between major sections — 32px. */
-  --cognitive-spacing-card-gap: var(--spacing-2xl); /** Gap between cards — 24px. */
-  --cognitive-spacing-element-gap: var(--spacing-lg); /** Gap between elements within a section — 16px. */
-  --cognitive-spacing-inline-padding: var(--spacing-2xl); /** Horizontal padding inside containers — 24px. */
-  --cognitive-spacing-block-padding: var(--spacing-xl); /** Vertical padding inside containers — 20px. */
   --cognitive-focus-width: var(--cognitive-focus-ring-width);
   --cognitive-focus-offset: var(--cognitive-focus-ring-offset);
   --cognitive-target-min: var(--target-spacious); /** Promotes the standard 46px target to the spacious 56px step. */
@@ -287,43 +327,16 @@
   --elevation-flat: var(--shadow-none); /** No lift — the default for in-flow content. */
   --avatar-bg: var(--color-player-1); /** Default fill; runtime assigns #7c5cff–#facc15 in order. */
   --avatar-weight: var(--font-weight-bold);
-  --avatar-radius: var(--radius-pill);
-  --button-primary-radius: var(--radius-sm);
   --button-primary-min-height: var(--target-min);
-  --button-default-radius: var(--radius-sm);
   --button-default-min-height: var(--target-min);
-  --card-radius: var(--radius-md);
-  --card-padding: var(--spacing-lg);
-  --tile-radius: var(--radius-md);
-  --tile-padding: var(--spacing-lg);
-  --chart-radius: var(--radius-md); /** Chart container corner radius. Matches card radius. */
-  --chart-padding: var(--spacing-md); /** Padding between the container edge and the plot area. */
-  --chart-legend-gap: var(--spacing-md); /** Gap between legend items. */
-  --chart-swatch-radius: var(--radius-sm); /** Legend color swatch corner radius. */
-  --chart-tooltip-radius: var(--radius-sm); /** Tooltip corner radius. */
-  --chart-tooltip-padding-x: var(--spacing-sm); /** Tooltip horizontal padding. */
-  --chart-tooltip-padding-y: var(--spacing-xs); /** Tooltip vertical padding. */
-  --chart-bar-radius: var(--radius-sm); /** Bar cap rounding. */
-  --chart-bar-gap: var(--spacing-xs); /** Gap between adjacent bars. */
   --chart-series-1: var(--color-chart-1);
   --chart-series-2: var(--color-chart-2);
   --chart-series-3: var(--color-chart-3);
   --chart-series-4: var(--color-chart-4);
   --chart-series-5: var(--color-chart-5);
   --chart-series-6: var(--color-chart-6);
-  --input-radius: var(--radius-sm);
   --input-min-height: var(--target-min);
-  --input-padding-x: var(--spacing-md);
-  --nav-tabbar-radius: var(--radius-md);
-  --nav-tab-radius: var(--radius-chip);
   --nav-iconbtn-size: var(--target-min);
-  --nav-iconbtn-radius: var(--radius-chip);
-  --pill-radius: var(--radius-pill);
-  --pill-padding-x: var(--spacing-sm);
-  --progress-height: var(--spacing-sm); /** Bar thickness at the default size. */
-  --progress-height-lg: var(--spacing-md); /** Bar thickness when the bar is the primary element of a card. */
-  --progress-radius: var(--radius-pill); /** Fully rounded ends on both the track and the fill. */
-  --progress-stroke: var(--spacing-sm); /** Ring stroke width. Matches the default bar height so the two read as one component family. */
   --color-bg: var(--semantic-background-primary); /** Back-compat alias → --semantic-background-primary. Re-flows across every mode via the semantic var. */
   --color-surface: var(--semantic-background-elevated);
   --color-surface-2: var(--semantic-background-secondary);
@@ -340,38 +353,59 @@
   --color-danger: var(--semantic-status-negative);
   --color-warning: var(--semantic-status-warning);
   --color-focus-ring: var(--semantic-border-focus);
+  --cognitive-spacing-section-gap: var(--spacing-3xl); /** Gap between major sections — 32px. */
+  --cognitive-spacing-card-gap: var(--spacing-2xl); /** Gap between cards — 24px. */
+  --cognitive-spacing-element-gap: var(--spacing-lg); /** Gap between elements within a section — 16px. */
+  --cognitive-spacing-inline-padding: var(--spacing-2xl); /** Horizontal padding inside containers — 24px. */
+  --cognitive-spacing-block-padding: var(--spacing-xl); /** Vertical padding inside containers — 20px. */
   --elevation-hairline: var(--shadow-hairline); /** 1px inner ring that preserves an edge without a drop shadow. */
   --elevation-raised: var(--shadow-lift); /** The single Soft Lift — cards, tiles, popovers, toast. */
   --avatar-text: var(--semantic-text-inverse);
   --avatar-ring: var(--shadow-hairline);
+  --avatar-radius: var(--radius-pill);
   --button-primary-bg: var(--semantic-interactive-default);
   --button-primary-text: var(--semantic-text-inverse);
   --button-primary-border: var(--semantic-interactive-hover);
   --button-primary-hover-bg: var(--semantic-interactive-hover);
+  --button-primary-radius: var(--radius-sm);
   --button-default-bg: var(--semantic-background-secondary);
   --button-default-text: var(--semantic-text-primary);
   --button-default-border: var(--semantic-border-default);
   --button-default-hover-bg: var(--semantic-background-raised);
+  --button-default-radius: var(--radius-sm);
   --button-ghost-text: var(--semantic-text-primary);
   --button-danger-text: var(--semantic-status-negative);
   --button-danger-border: var(--semantic-status-negative);
   --card-bg: var(--semantic-background-elevated);
   --card-text: var(--semantic-text-primary);
   --card-border: var(--semantic-border-default);
+  --card-radius: var(--radius-md);
+  --card-padding: var(--spacing-lg);
   --card-shadow: var(--shadow-lift);
   --tile-bg: var(--semantic-background-elevated);
   --tile-text: var(--semantic-text-primary);
   --tile-border: var(--semantic-border-default);
   --tile-hover-border: var(--semantic-interactive-default);
+  --tile-radius: var(--radius-md);
+  --tile-padding: var(--spacing-lg);
   --tile-shadow: var(--shadow-lift);
   --chart-bg: var(--semantic-background-primary); /** Plot area background — inherits the page surface so charts sit flush. */
+  --chart-radius: var(--radius-md); /** Chart container corner radius. Matches card radius. */
+  --chart-padding: var(--spacing-md); /** Padding between the container edge and the plot area. */
   --chart-axis: var(--semantic-border-default); /** Axis line color. */
   --chart-grid: var(--semantic-border-default); /** Grid line color. Render grid lines at reduced opacity rather than with a separate token, so the axis stays dominant without adding a theme-parity surface. */
   --chart-axis-label: var(--semantic-text-secondary); /** Axis tick and label text. */
   --chart-legend-label: var(--semantic-text-secondary); /** Legend item text. */
+  --chart-legend-gap: var(--spacing-md); /** Gap between legend items. */
+  --chart-swatch-radius: var(--radius-sm); /** Legend color swatch corner radius. */
   --chart-tooltip-bg: var(--semantic-background-elevated); /** Tooltip surface. */
   --chart-tooltip-text: var(--semantic-text-primary); /** Tooltip text. */
   --chart-tooltip-border: var(--semantic-border-default); /** Tooltip border. */
+  --chart-tooltip-radius: var(--radius-sm); /** Tooltip corner radius. */
+  --chart-tooltip-padding-x: var(--spacing-sm); /** Tooltip horizontal padding. */
+  --chart-tooltip-padding-y: var(--spacing-xs); /** Tooltip vertical padding. */
+  --chart-bar-radius: var(--radius-sm); /** Bar cap rounding. */
+  --chart-bar-gap: var(--spacing-xs); /** Gap between adjacent bars. */
   --chart-slice-stroke: var(--semantic-background-primary); /** Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined. */
   --chart-series-other: var(--semantic-status-neutral); /** Grouped tail categories rendered as a single "Other" series. Neutral by design, so it never competes with a real series. */
   --input-bg: var(--semantic-background-elevated);
@@ -379,18 +413,29 @@
   --input-border: var(--semantic-border-default);
   --input-placeholder: var(--semantic-text-secondary);
   --input-focus-ring: var(--semantic-border-focus);
+  --input-radius: var(--radius-sm);
+  --input-padding-x: var(--spacing-md);
   --nav-tabbar-bg: var(--semantic-background-elevated); /** Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule. */
   --nav-tabbar-border: var(--semantic-border-default);
+  --nav-tabbar-radius: var(--radius-md);
   --nav-tab-text: var(--semantic-text-secondary);
   --nav-tab-active-text: var(--semantic-text-primary);
   --nav-tab-active-bg: var(--semantic-background-secondary);
+  --nav-tab-radius: var(--radius-chip);
   --nav-iconbtn-bg: var(--semantic-background-secondary);
   --nav-iconbtn-text: var(--semantic-text-primary);
+  --nav-iconbtn-radius: var(--radius-chip);
   --pill-bg: var(--semantic-background-secondary);
   --pill-text: var(--semantic-text-secondary);
   --pill-border: var(--semantic-border-default);
+  --pill-radius: var(--radius-pill);
+  --pill-padding-x: var(--spacing-sm);
   --progress-track: var(--semantic-background-secondary); /** Unfilled portion of a bar or ring. */
   --progress-fill: var(--semantic-interactive-default); /** Filled portion, for progress that carries no status meaning. */
+  --progress-height: var(--spacing-sm); /** Bar thickness at the default size. */
+  --progress-height-lg: var(--spacing-md); /** Bar thickness when the bar is the primary element of a card. */
+  --progress-radius: var(--radius-pill); /** Fully rounded ends on both the track and the fill. */
+  --progress-stroke: var(--spacing-sm); /** Ring stroke width. Matches the default bar height so the two read as one component family. */
   --progress-duration: var(--motion-state-duration); /** Fill transition. Uses the shared state duration, so it collapses to 1ms under prefers-reduced-motion along with everything else. */
   --progress-easing: var(--motion-state-easing); /** Fill transition easing. */
   --progress-label: var(--semantic-text-primary); /** Primary label — the value itself. */

@@ -279,9 +279,24 @@ public enum JRMTheme: String, CaseIterable, Sendable {
 
 /// Spacing scale, in points.
 public enum JRMSpacing {
-    public static let xs: CGFloat = 6
-    public static let sm: CGFloat = 10
-    public static let md: CGFloat = 14
+    public static let step0: CGFloat = 0
+    public static let step1: CGFloat = 4
+    public static let step2: CGFloat = 8
+    public static let step3: CGFloat = 12
+    public static let step4: CGFloat = 16
+    public static let step5: CGFloat = 20
+    public static let step6: CGFloat = 24
+    public static let step7: CGFloat = 28
+    public static let step8: CGFloat = 32
+    public static let step10: CGFloat = 40
+    public static let step12: CGFloat = 48
+    public static let step14: CGFloat = 56
+    public static let step16: CGFloat = 64
+    public static let step20: CGFloat = 80
+    public static let step24: CGFloat = 96
+    public static let xs: CGFloat = 4
+    public static let sm: CGFloat = 8
+    public static let md: CGFloat = 12
     public static let lg: CGFloat = 16
     public static let xl: CGFloat = 20
     public static let xl2: CGFloat = 24
@@ -290,10 +305,18 @@ public enum JRMSpacing {
 
 /// Corner radius scale, in points.
 public enum JRMRadius {
-    public static let sm: CGFloat = 9
-    public static let md: CGFloat = 14
-    public static let chip: CGFloat = 10
-    public static let pill: CGFloat = 999
+    public static let step0: CGFloat = 0
+    public static let step1: CGFloat = 4
+    public static let step2: CGFloat = 8
+    public static let step3: CGFloat = 12
+    public static let step4: CGFloat = 16
+    public static let step6: CGFloat = 24
+    public static let step8: CGFloat = 32
+    public static let full: CGFloat = 9999
+    public static let sm: CGFloat = 8
+    public static let chip: CGFloat = 12
+    public static let md: CGFloat = 16
+    public static let pill: CGFloat = 9999
 }
 
 /// Minimum hit-target sizes, in points.
@@ -344,7 +367,11 @@ public enum JRMLayer {
 public enum JRMDuration {
     public static let instant: TimeInterval = 0
     public static let press: TimeInterval = 0.05
-    public static let state: TimeInterval = 0.15
     public static let tile: TimeInterval = 0.12
+    public static let state: TimeInterval = 0.15
+    public static let fast: TimeInterval = 0.15
+    public static let normal: TimeInterval = 0.25
+    public static let slow: TimeInterval = 0.4
+    public static let slower: TimeInterval = 0.8
     public static let reduced: TimeInterval = 0.001
 }
