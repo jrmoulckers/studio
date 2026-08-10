@@ -240,9 +240,9 @@ export const tokens = {
     "on-primary": "#ffffff",
     "accent": "#ffd166",
     "accent-ink": "#806600",
-    "success": "#34d399",
-    "danger": "#f87171",
-    "warning": "#fbbf24",
+    "success": "oklch(0.47 0.10 165)",
+    "danger": "oklch(0.50 0.13 25)",
+    "warning": "oklch(0.41 0.08 80)",
     "focus-ring": "#7c5cff"
   },
   "semantic": {
@@ -274,10 +274,10 @@ export const tokens = {
       "ink": "#806600"
     },
     "status": {
-      "positive": "#34d399",
-      "negative": "#f87171",
-      "warning": "#fbbf24",
-      "info": "#38bdf8"
+      "positive": "oklch(0.47 0.10 165)",
+      "negative": "oklch(0.50 0.13 25)",
+      "warning": "oklch(0.41 0.08 80)",
+      "info": "oklch(0.42 0.10 230)"
     }
   },
   "text": {
@@ -484,8 +484,8 @@ export const tokens = {
     },
     "danger": {
       "bg": "transparent",
-      "text": "#f87171",
-      "border": "#f87171"
+      "text": "oklch(0.50 0.13 25)",
+      "border": "oklch(0.50 0.13 25)"
     }
   },
   "card": {

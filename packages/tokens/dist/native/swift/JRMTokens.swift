@@ -91,10 +91,10 @@ extension JRMColorScheme {
         interactiveDisabled: Color(red: 0.9059, green: 0.9059, blue: 0.9569, opacity: 1),
         accentDefault: Color(red: 1, green: 0.8196, blue: 0.4, opacity: 1),
         accentInk: Color(red: 0.502, green: 0.4, blue: 0, opacity: 1),
-        statusPositive: Color(red: 0.2039, green: 0.8275, blue: 0.6, opacity: 1),
-        statusNegative: Color(red: 0.9725, green: 0.4431, blue: 0.4431, opacity: 1),
-        statusWarning: Color(red: 0.9843, green: 0.749, blue: 0.1412, opacity: 1),
-        statusInfo: Color(red: 0.2196, green: 0.7412, blue: 0.9725, opacity: 1)
+        statusPositive: Color(red: 0, green: 0.4235, blue: 0.302, opacity: 1),
+        statusNegative: Color(red: 0.6275, green: 0.2471, blue: 0.2353, opacity: 1),
+        statusWarning: Color(red: 0.3804, green: 0.2706, blue: 0.0353, opacity: 1),
+        statusInfo: Color(red: 0, green: 0.3373, blue: 0.4745, opacity: 1)
     )
 
     public static let dark = JRMColorScheme(

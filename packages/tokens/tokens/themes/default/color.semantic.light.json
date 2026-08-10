@@ -77,10 +77,26 @@
       }
     },
     "status": {
-      "positive": { "$value": "{color.win.500}", "$type": "color" },
-      "negative": { "$value": "{color.loss.500}", "$type": "color" },
-      "warning": { "$value": "{color.caution.500}", "$type": "color" },
-      "info": { "$value": "{color.info.500}", "$type": "color" }
+      "positive": {
+        "$value": "{color.win.700}",
+        "$type": "color",
+        "$description": "Light-theme positive. Uses the 700 step, not 500: 500 is tuned for dark surfaces and measures only 1.92:1 on white. 700 clears WCAG AA on every light surface — 6.46:1 on white, 5.75:1 on frost, 5.27:1 on haze — and 6.46:1 for white text placed on it as a fill."
+      },
+      "negative": {
+        "$value": "{color.loss.700}",
+        "$type": "color",
+        "$description": "Light-theme negative. Reaches real text through --button-danger-text, so the dark-tuned 500 step was body text at 2.77:1. 700 measures 6.42:1 on white, 5.71:1 on frost, 5.24:1 on haze, and 6.42:1 for white text on it as a fill."
+      },
+      "warning": {
+        "$value": "{color.caution.800}",
+        "$type": "color",
+        "$description": "Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step still measures 4.37:1 on haze, short of AA. The 800 step clears every light surface — 7.86:1 on white, 6.99:1 on frost, 6.41:1 on haze."
+      },
+      "info": {
+        "$value": "{color.info.800}",
+        "$type": "color",
+        "$description": "Light-theme info. Cyan behaves like amber here: the 700 step measures 4.28:1 on haze, short of AA. The 800 step clears every light surface — 7.82:1 on white, 6.96:1 on frost, 6.38:1 on haze."
+      }
     }
   },
   "shadow": {

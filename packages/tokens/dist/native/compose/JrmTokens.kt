@@ -50,10 +50,10 @@ val JrmLightColors: JrmColorScheme = JrmColorScheme(
     interactiveDisabled = Color(0xFFE7E7F4),
     accentDefault = Color(0xFFFFD166),
     accentInk = Color(0xFF806600),
-    statusPositive = Color(0xFF34D399),
-    statusNegative = Color(0xFFF87171),
-    statusWarning = Color(0xFFFBBF24),
-    statusInfo = Color(0xFF38BDF8),
+    statusPositive = Color(0xFF006C4D),
+    statusNegative = Color(0xFFA03F3C),
+    statusWarning = Color(0xFF614509),
+    statusInfo = Color(0xFF005679),
 )
 
 val JrmDarkColors: JrmColorScheme = JrmColorScheme(

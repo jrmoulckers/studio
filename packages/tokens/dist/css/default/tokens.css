@@ -186,10 +186,10 @@
   --semantic-interactive-disabled: var(--color-paper-haze); /** Disabled interactive fill — WCAG-exempt. */
   --semantic-accent-default: var(--color-crown-gold-500); /** Crown Gold — leader & winner fills/washes (the Crown Gold Rule). */
   --semantic-accent-ink: var(--color-crown-gold-ink-light); /** Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold fills as accent.default. */
-  --semantic-status-positive: var(--color-win-500);
-  --semantic-status-negative: var(--color-loss-500);
-  --semantic-status-warning: var(--color-caution-500);
-  --semantic-status-info: var(--color-info-500);
+  --semantic-status-positive: var(--color-win-700); /** Light-theme positive. Uses the 700 step, not 500: 500 is tuned for dark surfaces and measures only 1.92:1 on white. 700 clears WCAG AA on every light surface — 6.46:1 on white, 5.75:1 on frost, 5.27:1 on haze — and 6.46:1 for white text placed on it as a fill. */
+  --semantic-status-negative: var(--color-loss-700); /** Light-theme negative. Reaches real text through --button-danger-text, so the dark-tuned 500 step was body text at 2.77:1. 700 measures 6.42:1 on white, 5.71:1 on frost, 5.24:1 on haze, and 6.42:1 for white text on it as a fill. */
+  --semantic-status-warning: var(--color-caution-800); /** Light-theme warning. Amber is an inherently low-luminance-contrast hue: the 700 step still measures 4.37:1 on haze, short of AA. The 800 step clears every light surface — 7.86:1 on white, 6.99:1 on frost, 6.41:1 on haze. */
+  --semantic-status-info: var(--color-info-800); /** Light-theme info. Cyan behaves like amber here: the 700 step measures 4.28:1 on haze, short of AA. The 800 step clears every light surface — 7.82:1 on white, 6.96:1 on frost, 6.38:1 on haze. */
   --text-display-family: var(--font-family-sans);
   --text-display-size: var(--font-size-display);
   --text-display-weight: var(--font-weight-bold);
