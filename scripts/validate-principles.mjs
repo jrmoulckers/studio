@@ -2134,7 +2134,11 @@ function validateReciprocity(ledger, finalIndex, historicalIndex, errors) {
             `${legacyId}: historical evidence for ${key} must be preserved, not replaced`,
           );
         }
-        if (!citesLegacy && entry.citationException && !entry.citationException.evidence.includes(historicalUrl)) {
+        if (
+          !citesLegacy &&
+          entry.citationException &&
+          !entry.citationException.evidence.includes(historicalUrl)
+        ) {
           errors.push(`${legacyId}: citationException must keep its reviewed source for ${key}`);
         }
       } else {

@@ -638,10 +638,7 @@
           "path": "principles/design/components.md",
           "title": "Each reusable component has one behavioral contract",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:11",
-            "studio-legacy:design:7"
-          ],
+          "legacyInputs": ["studio-legacy:design:11", "studio-legacy:design:7"],
           "blobSha": "054d8f0835428c40c2a9a9310ea04a4432d9cce0",
           "fileSha256": "352ac21a46afddcd923d62320178ce3c30d7d59637162736ec0f858da37723fd",
           "blockSha256": "29cb1b2d76ac3e713b07a1bb90394c3dfe32e8db005ed60bf11a10e480014d6d",
@@ -715,9 +712,7 @@
           "path": "principles/design/foundations.md",
           "title": "Ground design in current best practice and reference other authorities",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:13"
-          ],
+          "legacyInputs": ["studio-legacy:design:13"],
           "blobSha": "1b51dd95f1f185d9481a12067a45b4436b5a36fc",
           "fileSha256": "863f312160bb33acdf1f2297ad5cdd1366d041ac9efeaf4251bba1e48aadde3f",
           "blockSha256": "73e3ca0c191a81dedd139bafd069894dc4e684510ae4b1258603315903eeb467",
@@ -774,9 +769,7 @@
           "path": "principles/design/tokens-and-themes.md",
           "title": "Component tokens capture a reusable semantic role",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:7"
-          ],
+          "legacyInputs": ["studio-legacy:design:7"],
           "blobSha": "df44addce9e6aaf3cda78ea23da111957f486431",
           "fileSha256": "d9e5692d14cea93bb53120cfce016fca3f26ea3cbb74b5546306a88573c53f0e",
           "blockSha256": "86814fa20441742c71fd5d3a999dce41736ec90ebccdfee949e0aa45b3bbbf46",
@@ -817,10 +810,7 @@
           "path": "principles/experience/accessibility.md",
           "title": "Cognitive mode remaps the full role set; the current gap is explicit",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:7",
-            "studio-legacy:design:8"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:7", "studio-legacy:design:8"],
           "blobSha": "5bc8eb586ff143a2420c6d5c80a68ae10e48b3bd",
           "fileSha256": "b1f2ab01e4ebb8a53f14f9beeed99d5a6504fbbfb881f87cf92e679ea728189e",
           "blockSha256": "8b5fdb4216b448c59af78ed766c761caad9302ce87a2fba1a53ea819a7d39282",
@@ -831,10 +821,7 @@
           "path": "principles/experience/interaction.md",
           "title": "Convey structure and state through native semantics first",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:5",
-            "studio-legacy:frontend:4"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:5", "studio-legacy:frontend:4"],
           "blobSha": "5fe35a71c19d26801c648430403cd0c44caf5a54",
           "fileSha256": "ca2debf905c28b4413461d3d155974b9d2498eb3d168c7fbfb94129ef67464c8",
           "blockSha256": "cc0bdcb61f73dcc7567ddc71b3bbca96a89789cd14a4d27d94c34cb3af15090e",
@@ -845,10 +832,7 @@
           "path": "principles/experience/interaction.md",
           "title": "Everything is operable by keyboard and switch",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:4",
-            "studio-legacy:frontend:4"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:4", "studio-legacy:frontend:4"],
           "blobSha": "5fe35a71c19d26801c648430403cd0c44caf5a54",
           "fileSha256": "ca2debf905c28b4413461d3d155974b9d2498eb3d168c7fbfb94129ef67464c8",
           "blockSha256": "67c484f13c731345cca73a714b9b9b98e1d20c3a960b9523782534fbd5e3ab37",
@@ -859,9 +843,7 @@
           "path": "principles/experience/interaction.md",
           "title": "Interactive targets meet minimum size and spacing",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:4"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:4"],
           "blobSha": "5fe35a71c19d26801c648430403cd0c44caf5a54",
           "fileSha256": "ca2debf905c28b4413461d3d155974b9d2498eb3d168c7fbfb94129ef67464c8",
           "blockSha256": "c1f60f7cff16f9505a18babe9b44d2d3cfb434e3ec9297b09281201d9f7e0479",
@@ -889,10 +871,7 @@
           "path": "principles/experience/interaction.md",
           "title": "Motion honors reduced-motion, including imperative animation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:3",
-            "studio-legacy:design:6"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:3", "studio-legacy:design:6"],
           "blobSha": "5fe35a71c19d26801c648430403cd0c44caf5a54",
           "fileSha256": "ca2debf905c28b4413461d3d155974b9d2498eb3d168c7fbfb94129ef67464c8",
           "blockSha256": "06fc05919a9cfd9a45bc2f2b9145cb1831210c6afd0f6ace68aae8d3a1ba659e",
@@ -903,9 +882,7 @@
           "path": "principles/experience/localization.md",
           "title": "UI absorbs text expansion and bidirectional content",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:localization:7"
-          ],
+          "legacyInputs": ["studio-legacy:localization:7"],
           "blobSha": "ca1521cb1a2156b78425bfe2483320d2b89f6d63",
           "fileSha256": "2cc27040e80ee8605ea3e6d61e08629bba206a86a32ffd1a0818d6649b809c62",
           "blockSha256": "dd32cbaa384ea50e177579d7dac81924d8e2ec88bfad0e162f3a18ccc07e742c",
@@ -916,9 +893,7 @@
           "path": "principles/experience/localization.md",
           "title": "Layout mirrors for RTL and behaves by locale",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:localization:7"
-          ],
+          "legacyInputs": ["studio-legacy:localization:7"],
           "blobSha": "ca1521cb1a2156b78425bfe2483320d2b89f6d63",
           "fileSha256": "2cc27040e80ee8605ea3e6d61e08629bba206a86a32ffd1a0818d6649b809c62",
           "blockSha256": "ec1663354c83ac604a0a97215da9cad1fe512272934ff277dff154fd31404439",
@@ -946,9 +921,7 @@
           "path": "principles/experience/ux.md",
           "title": "Optimize for ease of use first",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:9"
-          ],
+          "legacyInputs": ["studio-legacy:design:9"],
           "blobSha": "5d9e97dd687158eed921a6e07fcb7d9003b21140",
           "fileSha256": "bb59d21b7cc02c46c6c645ef0b174cb790c47c27307e2d717967a61217e66598",
           "blockSha256": "43acbe833dd7eee267b5acb57ab7fe0e3322546bc1e28591529d1eafc94538ce",
@@ -959,9 +932,7 @@
           "path": "principles/experience/ux.md",
           "title": "Keep state visible and hierarchy clear",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:9"
-          ],
+          "legacyInputs": ["studio-legacy:design:9"],
           "blobSha": "5d9e97dd687158eed921a6e07fcb7d9003b21140",
           "fileSha256": "bb59d21b7cc02c46c6c645ef0b174cb790c47c27307e2d717967a61217e66598",
           "blockSha256": "98a5a26753e7193439004c30e5aeb56e4aea728ec48137ddcb3f40e9d21b7556",
@@ -972,9 +943,7 @@
           "path": "principles/experience/ux.md",
           "title": "Changing and comparable figures use tabular numerals",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:9"
-          ],
+          "legacyInputs": ["studio-legacy:design:9"],
           "blobSha": "5d9e97dd687158eed921a6e07fcb7d9003b21140",
           "fileSha256": "bb59d21b7cc02c46c6c645ef0b174cb790c47c27307e2d717967a61217e66598",
           "blockSha256": "3818ad5b041e3e5f5cb537acaeec5a0b1c079c56dc06bbf271dbd25b322a26a8",
@@ -985,9 +954,7 @@
           "path": "principles/experience/ux.md",
           "title": "Consolidate before proliferating",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:design:10"
-          ],
+          "legacyInputs": ["studio-legacy:design:10"],
           "blobSha": "5d9e97dd687158eed921a6e07fcb7d9003b21140",
           "fileSha256": "bb59d21b7cc02c46c6c645ef0b174cb790c47c27307e2d717967a61217e66598",
           "blockSha256": "167773f49bfb3fcc09babd7f3a0dbe5a8b773d222a6924dbc94002f8523a50d6",
@@ -1165,9 +1132,7 @@
           "path": "principles/architecture/boundaries-and-contracts.md",
           "title": "Durable decisions",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:5"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:5"],
           "blobSha": "b0c2a92d4b07bba75219a597e8179263f6593bb6",
           "fileSha256": "813fe1ac69d2608ba0b5d4d06ba79d95022b5856e5f3ddacd34403a4c8289778",
           "blockSha256": "551e22e98d8f5dba26a69f752747b8046651cdf18c37e63d5acac56abd591c48",
@@ -1178,9 +1143,7 @@
           "path": "principles/architecture/boundaries-and-contracts.md",
           "title": "Reproducible construction",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:10"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:10"],
           "blobSha": "b0c2a92d4b07bba75219a597e8179263f6593bb6",
           "fileSha256": "813fe1ac69d2608ba0b5d4d06ba79d95022b5856e5f3ddacd34403a4c8289778",
           "blockSha256": "484fbf28eec44706d55825864f2a6649e987f4153644f947edf843263346574c",
@@ -1191,9 +1154,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Reproducible measurements",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:1"
-          ],
+          "legacyInputs": ["studio-legacy:performance:1"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "497eb73c23ba11017f54c474d28925a0efa064f20dc7edbb84882b88f94606a4",
@@ -1204,9 +1165,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Versioned performance budgets",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:2"
-          ],
+          "legacyInputs": ["studio-legacy:performance:2"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "610be5bb3840e333592a0d9699538a84d57e8b08d52708dcd8818151939bea27",
@@ -1217,9 +1176,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Minimal package surface",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:3"
-          ],
+          "legacyInputs": ["studio-legacy:performance:3"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "06db8632d36441d0063c2db381d6629533731848181c87be97580a7db0c40dba",
@@ -1230,10 +1187,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Correctness-preserving caches",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:4",
-            "studio-legacy:performance:4"
-          ],
+          "legacyInputs": ["studio-legacy:devops:4", "studio-legacy:performance:4"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "757a11697460cf47d6d38ebd775db3e28ab1f1753fb8bdbf1cd62f51674cf708",
@@ -1244,10 +1198,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Foreground responsiveness",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:frontend:6",
-            "studio-legacy:performance:6"
-          ],
+          "legacyInputs": ["studio-legacy:frontend:6", "studio-legacy:performance:6"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "154a06064a0b5035aecf89bd8ac26035e91265cdfd175d6153ab05003867efda",
@@ -1273,9 +1224,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Platform-native profiling",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:7"
-          ],
+          "legacyInputs": ["studio-legacy:performance:7"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "f0c42ef5f8b405b6a0e7d68ed42d2d68f4c008c8c7255114e9ec49bd5fd2c9d6",
@@ -1286,9 +1235,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Quantified regression triage",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:8"
-          ],
+          "legacyInputs": ["studio-legacy:performance:8"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "7696ba59d1376933b3d6d829436e2bee4f05e7be7e3aab20552df12536ed6090",
@@ -1299,9 +1246,7 @@
           "path": "principles/assurance/performance.md",
           "title": "Assurance precedence",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:performance:9"
-          ],
+          "legacyInputs": ["studio-legacy:performance:9"],
           "blobSha": "ef322f1a0801c8036dab32b26cca3dddbe2d8afe",
           "fileSha256": "8d6f617b362d7d1e2005a412c2350417289177292fca2595c7008052d558059d",
           "blockSha256": "99225202b813797d2cd505af54c214cfc2030c31fbbb547bfe3982b05fa7f66d",
@@ -1312,10 +1257,7 @@
           "path": "principles/assurance/security-and-privacy.md",
           "title": "Secret lifecycle",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:frontend:7",
-            "studio-legacy:security:1"
-          ],
+          "legacyInputs": ["studio-legacy:frontend:7", "studio-legacy:security:1"],
           "blobSha": "968256b205ac82ee59c2282e37b6c1d9ace2087d",
           "fileSha256": "b81340fad6e279ac06c6db26f99cd25d3144d308eea198c6560ebe9e346f3bdc",
           "blockSha256": "b5099eabe5f7c876db2ecaf603f0ea79a5fbac26d8ba0c7c75d8e12f1b8651ea",
@@ -1342,9 +1284,7 @@
           "path": "principles/assurance/security-and-privacy.md",
           "title": "Boundary threat models",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:security:3"
-          ],
+          "legacyInputs": ["studio-legacy:security:3"],
           "blobSha": "968256b205ac82ee59c2282e37b6c1d9ace2087d",
           "fileSha256": "b81340fad6e279ac06c6db26f99cd25d3144d308eea198c6560ebe9e346f3bdc",
           "blockSha256": "7da14236647e6a2da1f8a4c55231f984047e6cf402cb837c41713819b44ade34",
@@ -1387,9 +1327,7 @@
           "path": "principles/assurance/security-and-privacy.md",
           "title": "Risk-focused security review",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:security:6"
-          ],
+          "legacyInputs": ["studio-legacy:security:6"],
           "blobSha": "968256b205ac82ee59c2282e37b6c1d9ace2087d",
           "fileSha256": "b81340fad6e279ac06c6db26f99cd25d3144d308eea198c6560ebe9e346f3bdc",
           "blockSha256": "3f3727e9986d616a90b942b778478bfef68ce1c8a1d4dbd2aeb8e2cdd7770d90",
@@ -1400,9 +1338,7 @@
           "path": "principles/assurance/security-and-privacy.md",
           "title": "Secure failure",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:security:7"
-          ],
+          "legacyInputs": ["studio-legacy:security:7"],
           "blobSha": "968256b205ac82ee59c2282e37b6c1d9ace2087d",
           "fileSha256": "b81340fad6e279ac06c6db26f99cd25d3144d308eea198c6560ebe9e346f3bdc",
           "blockSha256": "20b1aaad222df17ce0703e35871cc295ec72f1819a53f6ad13a566be00d285a4",
@@ -1433,9 +1369,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Layered test portfolio",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:1"
-          ],
+          "legacyInputs": ["studio-legacy:testing:1"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "b2e21f2dd74ee1eeae7e923abe471d079e075b7d369b6475b0caa8ea6f3db327",
@@ -1461,10 +1395,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Regression boundaries",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:3",
-            "studio-legacy:testing:7"
-          ],
+          "legacyInputs": ["studio-legacy:testing:3", "studio-legacy:testing:7"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "54452751100cbe45875d6e842e7f240c58cffbfab9a6c31ea44e7f7f30258b50",
@@ -1475,9 +1406,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Distinct static signals",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:4"
-          ],
+          "legacyInputs": ["studio-legacy:testing:4"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "c5f7a08931eb7e01d57d6e135d7d8ea2b838f2b75769cbe6e536821f165ffe75",
@@ -1488,10 +1417,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Clean deterministic verification",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:10",
-            "studio-legacy:testing:5"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:10", "studio-legacy:testing:5"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "4535a64493372873b7f83667e0f49b73dea63ee49ef97cf83e316e2a447ab918",
@@ -1502,9 +1428,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Risk-based meaningful coverage",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:6"
-          ],
+          "legacyInputs": ["studio-legacy:testing:6"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "305338ead0c0c748ac833d026920d938c4894bb5d9dbb7a3eb0d372c5024cb52",
@@ -1515,10 +1439,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Positive and negative polarity",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:5",
-            "studio-legacy:testing:8"
-          ],
+          "legacyInputs": ["studio-legacy:backend:5", "studio-legacy:testing:8"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "af950f8973ca5bc079bdb1a51197ea14d9bf55e84c3044d359e68db81141cc87",
@@ -1529,9 +1450,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Discriminating mutation evidence",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:8"
-          ],
+          "legacyInputs": ["studio-legacy:testing:8"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "edf07297406f1edc6b4d34ec8288b4adf995424e00bb4c58e26616b9f7adf3d1",
@@ -1542,9 +1461,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Independent real-world evidence",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:9"
-          ],
+          "legacyInputs": ["studio-legacy:testing:9"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "2b75d3e78b8081919f6e7b8871b0172643f1433cf33c780c2ebc76aa5c43b609",
@@ -1555,9 +1472,7 @@
           "path": "principles/assurance/testing.md",
           "title": "Executable procedures",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:testing:10"
-          ],
+          "legacyInputs": ["studio-legacy:testing:10"],
           "blobSha": "8b91202f695e37773284bd6d10c246fc76602551",
           "fileSha256": "ed679a3c7fb553eb6f221fc4aa8dc4c2ed72a309f58984f3a4a3ba65f076a96b",
           "blockSha256": "d871ee6c8e1f75319803ba822aa939a90a32c57534a4127967fecd699fd1bfea",
@@ -1628,10 +1543,7 @@
           "path": "principles/operations/build-and-release.md",
           "title": "Clean reproducible environments",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:10",
-            "studio-legacy:devops:1"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:10", "studio-legacy:devops:1"],
           "blobSha": "3ab8f2185de309b04dfbc91eb1e5c95594d73bfb",
           "fileSha256": "1695c4ce02198b5d201a3d539f58e3d6a864011a624373ad80bf5d7dc4d0ece9",
           "blockSha256": "4dd0716dcff3d38dd7d76811f7d99430f8eb673ac1f5b774c0f42d6fa6651181",
@@ -1673,10 +1585,7 @@
           "path": "principles/operations/build-and-release.md",
           "title": "Rollback-compatible releases",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:3",
-            "studio-legacy:frontend:9"
-          ],
+          "legacyInputs": ["studio-legacy:backend:3", "studio-legacy:frontend:9"],
           "blobSha": "3ab8f2185de309b04dfbc91eb1e5c95594d73bfb",
           "fileSha256": "1695c4ce02198b5d201a3d539f58e3d6a864011a624373ad80bf5d7dc4d0ece9",
           "blockSha256": "101b699f6c6c7b293dedb85946c2a85f168f4cd8a132c0a5819b62d8cd20ed1b",
@@ -1702,9 +1611,7 @@
           "path": "principles/operations/observability.md",
           "title": "Live service identity",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:9"
-          ],
+          "legacyInputs": ["studio-legacy:devops:9"],
           "blobSha": "a0a9ac66423ddaca665cafb9320e5aabaffef75c",
           "fileSha256": "0cd6240a720086ace6f53b66d77fd8fa8699cd2333d495b1794dc49110f165a7",
           "blockSha256": "0e55c9657c5430d318ac15682c4484e3778721baff87e376414875a1772ad88e",
@@ -1715,10 +1622,7 @@
           "path": "principles/operations/observability.md",
           "title": "Bounded dependency checks",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:6",
-            "studio-legacy:devops:9"
-          ],
+          "legacyInputs": ["studio-legacy:backend:6", "studio-legacy:devops:9"],
           "blobSha": "a0a9ac66423ddaca665cafb9320e5aabaffef75c",
           "fileSha256": "0cd6240a720086ace6f53b66d77fd8fa8699cd2333d495b1794dc49110f165a7",
           "blockSha256": "d2470936c5b1a2e7773d83c92b28370654d8af621ccd83922d091272c3375765",
@@ -1729,10 +1633,7 @@
           "path": "principles/operations/observability.md",
           "title": "End-to-end correlation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:6",
-            "studio-legacy:backend:7"
-          ],
+          "legacyInputs": ["studio-legacy:backend:6", "studio-legacy:backend:7"],
           "blobSha": "a0a9ac66423ddaca665cafb9320e5aabaffef75c",
           "fileSha256": "0cd6240a720086ace6f53b66d77fd8fa8699cd2333d495b1794dc49110f165a7",
           "blockSha256": "8eefc8d6aa095a70cf3a60b39390b19e448e801191d8370f229e2a36f0712fe3",
@@ -1769,10 +1670,7 @@
           "path": "principles/operations/observability.md",
           "title": "Predictable degradation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:6",
-            "studio-legacy:devops:9"
-          ],
+          "legacyInputs": ["studio-legacy:backend:6", "studio-legacy:devops:9"],
           "blobSha": "a0a9ac66423ddaca665cafb9320e5aabaffef75c",
           "fileSha256": "0cd6240a720086ace6f53b66d77fd8fa8699cd2333d495b1794dc49110f165a7",
           "blockSha256": "01c6029aff574ba4e2ef97b94ac054872a72f4c4cc5484b621ccb1e680f4f04a",
@@ -1798,10 +1696,7 @@
           "path": "principles/platforms/api-backend.md",
           "title": "Persistence-aware services",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:2",
-            "studio-legacy:backend:3"
-          ],
+          "legacyInputs": ["studio-legacy:backend:2", "studio-legacy:backend:3"],
           "blobSha": "604d0d978540cdee97544024372193c05365f5cc",
           "fileSha256": "db56a0029bbe4d6360363bf9fc1b41c7dfedce61712c5e7618648b994d9aa027",
           "blockSha256": "93f30a69ba3ce77cdb7206c66033994bce33870e60b6b8ad0c1692e86c842770",
@@ -1812,10 +1707,7 @@
           "path": "principles/platforms/api-backend.md",
           "title": "Server-enforced authorization",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:4",
-            "studio-legacy:security:1"
-          ],
+          "legacyInputs": ["studio-legacy:backend:4", "studio-legacy:security:1"],
           "blobSha": "604d0d978540cdee97544024372193c05365f5cc",
           "fileSha256": "db56a0029bbe4d6360363bf9fc1b41c7dfedce61712c5e7618648b994d9aa027",
           "blockSha256": "efa0ccb29fd340da658f58867fcf4fccbdf365555fe828034effeadc35e570fc",
@@ -1826,10 +1718,7 @@
           "path": "principles/platforms/api-backend.md",
           "title": "Retry-safe service degradation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:5",
-            "studio-legacy:backend:6"
-          ],
+          "legacyInputs": ["studio-legacy:backend:5", "studio-legacy:backend:6"],
           "blobSha": "604d0d978540cdee97544024372193c05365f5cc",
           "fileSha256": "db56a0029bbe4d6360363bf9fc1b41c7dfedce61712c5e7618648b994d9aa027",
           "blockSha256": "9d45a952f385d4170e8043c4d340866ced6c8b5488e7bf14d4c727e37618b127",
@@ -1840,10 +1729,7 @@
           "path": "principles/platforms/browser-frontend.md",
           "title": "Browser trust seam",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:frontend:7",
-            "studio-legacy:security:1"
-          ],
+          "legacyInputs": ["studio-legacy:frontend:7", "studio-legacy:security:1"],
           "blobSha": "b5c0727fb96ed83c4a7f5397521e9a3ef78621a6",
           "fileSha256": "c6483f3e2ae6adef3e5aadb22ea8792308f7daee01fa6f5a4cdbe3a94029b27d",
           "blockSha256": "ae87b641c5b450bde6d6d3ff9cdef69b2f8547821fbe3928b7362af24a6b7454",
@@ -1854,10 +1740,7 @@
           "path": "principles/platforms/browser-frontend.md",
           "title": "Capability-safe enhancement",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:13",
-            "studio-legacy:frontend:8"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:13", "studio-legacy:frontend:8"],
           "blobSha": "b5c0727fb96ed83c4a7f5397521e9a3ef78621a6",
           "fileSha256": "c6483f3e2ae6adef3e5aadb22ea8792308f7daee01fa6f5a4cdbe3a94029b27d",
           "blockSha256": "2a325ec03eda6f6fd96cf961ba2d95e4f9804141c6d8ec2b7c392e9d7e6b5331",
@@ -1898,10 +1781,7 @@
           "path": "principles/platforms/data-systems.md",
           "title": "Owned durable integrity",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:backend:2",
-            "studio-legacy:backend:3"
-          ],
+          "legacyInputs": ["studio-legacy:backend:2", "studio-legacy:backend:3"],
           "blobSha": "8d3626cec21e98210f953c7ede4b5180a17557fc",
           "fileSha256": "1e0d54d720d0e02cdffb57561ffdcac5b0a8349cad113b5265c7128bc0568f92",
           "blockSha256": "cd083dc975e293a7c0b78002c6d664e4349f4abaf520d91f417095336c042b17",
@@ -1960,9 +1840,7 @@
           "path": "principles/platforms/integration-boundaries.md",
           "title": "Explicit seam caches",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:middleware:4"
-          ],
+          "legacyInputs": ["studio-legacy:middleware:4"],
           "blobSha": "f12285ee22e9a8bd03937496b42616d7cd61f83c",
           "fileSha256": "f13bffe0aff71288151484cfa08991d4b85be1458009dcb98df794fa683ce753",
           "blockSha256": "a8c5f3b730ce0c05f5019fe799350d384eabad7cde679074b45e6f55e667842b",
@@ -1988,9 +1866,7 @@
           "path": "principles/platforms/integration-boundaries.md",
           "title": "Observable seams",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:middleware:7"
-          ],
+          "legacyInputs": ["studio-legacy:middleware:7"],
           "blobSha": "f12285ee22e9a8bd03937496b42616d7cd61f83c",
           "fileSha256": "f13bffe0aff71288151484cfa08991d4b85be1458009dcb98df794fa683ce753",
           "blockSha256": "55e07094bc1dfc3741fef16f681a575f816a892241228bb196052a2a3bb5e37f",
@@ -2001,10 +1877,7 @@
           "path": "principles/platforms/integration-boundaries.md",
           "title": "Credential proxy isolation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:architecture:14",
-            "studio-legacy:security:1"
-          ],
+          "legacyInputs": ["studio-legacy:architecture:14", "studio-legacy:security:1"],
           "blobSha": "f12285ee22e9a8bd03937496b42616d7cd61f83c",
           "fileSha256": "f13bffe0aff71288151484cfa08991d4b85be1458009dcb98df794fa683ce753",
           "blockSha256": "803a49274c9ac9434f4ce3b629fb53a09c38637eb41aeb4aca419973d3f7671a",
@@ -2015,9 +1888,7 @@
           "path": "principles/platforms/local-first.md",
           "title": "Local durable ownership",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:local-first:1"
-          ],
+          "legacyInputs": ["studio-legacy:local-first:1"],
           "blobSha": "1103a22bd0eb353515a34853bfd5e7e81c6a77cb",
           "fileSha256": "487e8c2fd2dfa71abf6d970e99362f7bc1da1de1cf2df5b9f41b703d5cde76cd",
           "blockSha256": "f612921ddc74c0be7ac4b6a00c1f7ba5c698c4c5c1befce7d7adcfe0abca9735",
@@ -2028,9 +1899,7 @@
           "path": "principles/platforms/local-first.md",
           "title": "Optional sync seam",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:local-first:2"
-          ],
+          "legacyInputs": ["studio-legacy:local-first:2"],
           "blobSha": "1103a22bd0eb353515a34853bfd5e7e81c6a77cb",
           "fileSha256": "487e8c2fd2dfa71abf6d970e99362f7bc1da1de1cf2df5b9f41b703d5cde76cd",
           "blockSha256": "ea0e4650a3eaa185268c8c81f8f146916b9f7ead1056a75f544c62fe7812ef4a",
@@ -2041,9 +1910,7 @@
           "path": "principles/platforms/local-first.md",
           "title": "Declared conflict model",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:local-first:3"
-          ],
+          "legacyInputs": ["studio-legacy:local-first:3"],
           "blobSha": "1103a22bd0eb353515a34853bfd5e7e81c6a77cb",
           "fileSha256": "487e8c2fd2dfa71abf6d970e99362f7bc1da1de1cf2df5b9f41b703d5cde76cd",
           "blockSha256": "ef3784297988a640c7b705f6b33ad593a1a75371e7aa002ebc4206efc14a4447",
@@ -2054,9 +1921,7 @@
           "path": "principles/platforms/local-first.md",
           "title": "Zero-config safe degradation",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:local-first:4"
-          ],
+          "legacyInputs": ["studio-legacy:local-first:4"],
           "blobSha": "1103a22bd0eb353515a34853bfd5e7e81c6a77cb",
           "fileSha256": "487e8c2fd2dfa71abf6d970e99362f7bc1da1de1cf2df5b9f41b703d5cde76cd",
           "blockSha256": "a7c343bba395af12fa7fed7ea1521a2f8e2fad5a909cd869b96527ec53d28384",
@@ -2250,10 +2115,7 @@
           "path": "principles/business.md",
           "title": "Ground market claims and constraints in evidence",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:business:4",
-            "studio-legacy:business:5"
-          ],
+          "legacyInputs": ["studio-legacy:business:4", "studio-legacy:business:5"],
           "blobSha": "3bf184873a89b476bacfe540fed12a89d4500c68",
           "fileSha256": "f1b3c36087065e5945600df65ac97b383d279950527b6d118ebf5f3dcc233f00",
           "blockSha256": "02acfe8fec102890b3515f370b6888b6f799640693350fceecdca2bbb45b1ffe",
@@ -2264,10 +2126,7 @@
           "path": "principles/compliance.md",
           "title": "Trace every applicable obligation to evidence",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:compliance:1",
-            "studio-legacy:compliance:6"
-          ],
+          "legacyInputs": ["studio-legacy:compliance:1", "studio-legacy:compliance:6"],
           "blobSha": "35846ae0b0f0ec271aad3e1feeddb9906042fb42",
           "fileSha256": "46b5e527a12658bff3dd872174ffce589e0ec9dcd61f08603c33c05aa79a31ae",
           "blockSha256": "ef4f6855be73f5f49c0b88afc047c73a216d1bdbed0c1a425ad780c1df54fafa",
@@ -2310,9 +2169,7 @@
           "path": "principles/compliance.md",
           "title": "Decide residency and transfer bounds before launch",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:compliance:3"
-          ],
+          "legacyInputs": ["studio-legacy:compliance:3"],
           "blobSha": "35846ae0b0f0ec271aad3e1feeddb9906042fb42",
           "fileSha256": "46b5e527a12658bff3dd872174ffce589e0ec9dcd61f08603c33c05aa79a31ae",
           "blockSha256": "493e7bec0c57e6df2bbd8095a101ae012e705e3fef534c0aa6dae832ed47a426",
@@ -2338,10 +2195,7 @@
           "path": "principles/compliance.md",
           "title": "Permit only reviewed software distribution",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:compliance:5",
-            "studio-legacy:security:2"
-          ],
+          "legacyInputs": ["studio-legacy:compliance:5", "studio-legacy:security:2"],
           "blobSha": "35846ae0b0f0ec271aad3e1feeddb9906042fb42",
           "fileSha256": "46b5e527a12658bff3dd872174ffce589e0ec9dcd61f08603c33c05aa79a31ae",
           "blockSha256": "e4b08cc8c90d47b672f42b25df900d692f1f78b75ae7c666627c09f7f72926c7",
@@ -2352,10 +2206,7 @@
           "path": "principles/compliance.md",
           "title": "Keep audit readiness continuous",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:compliance:1",
-            "studio-legacy:compliance:6"
-          ],
+          "legacyInputs": ["studio-legacy:compliance:1", "studio-legacy:compliance:6"],
           "blobSha": "35846ae0b0f0ec271aad3e1feeddb9906042fb42",
           "fileSha256": "46b5e527a12658bff3dd872174ffce589e0ec9dcd61f08603c33c05aa79a31ae",
           "blockSha256": "50b79e118bd84e7d788500112a2fde309e1a2745e8fe30f6b9a273b491944e69",
@@ -2385,10 +2236,7 @@
           "path": "principles/compliance.md",
           "title": "Use data categories and synthetic examples",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:business:2",
-            "studio-legacy:compliance:8"
-          ],
+          "legacyInputs": ["studio-legacy:business:2", "studio-legacy:compliance:8"],
           "blobSha": "35846ae0b0f0ec271aad3e1feeddb9906042fb42",
           "fileSha256": "46b5e527a12658bff3dd872174ffce589e0ec9dcd61f08603c33c05aa79a31ae",
           "blockSha256": "88cbfb04b46562943aa4d8b5955768fac76ff5d624ce7d149c19b590556c40e1",
@@ -2399,10 +2247,7 @@
           "path": "principles/content-operations.md",
           "title": "Keep contract documentation beside governed artifacts",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:1",
-            "studio-legacy:documentation:2"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:1", "studio-legacy:documentation:2"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "f1328e1d0138d2583581301341d94937aa3288d70532cf6a4306d5b744aa0598",
@@ -2413,10 +2258,7 @@
           "path": "principles/content-operations.md",
           "title": "Enumerate every public surface",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:3",
-            "studio-legacy:security:8"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:3", "studio-legacy:security:8"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "e3fbbe4fb9837e806b90c5ad60c9a230362d415b7fb40f3be6333efa1627d6ff",
@@ -2427,10 +2269,7 @@
           "path": "principles/content-operations.md",
           "title": "Keep examples executable and current",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:4",
-            "studio-legacy:documentation:6"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:4", "studio-legacy:documentation:6"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "09fb695d6eaf5c5bb186eeedf52928d87bbb561dffe8caa669d58e4dae5709e6",
@@ -2441,10 +2280,7 @@
           "path": "principles/content-operations.md",
           "title": "Update required content in the same change",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:4",
-            "studio-legacy:localization:9"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:4", "studio-legacy:localization:9"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "955c8e9b7ddb3486e4dfe5fa8b0a887c0f215e3721e418cb2c99699b6f24fd24",
@@ -2455,10 +2291,7 @@
           "path": "principles/content-operations.md",
           "title": "Structure content for accessible use",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:accessibility:1",
-            "studio-legacy:documentation:6"
-          ],
+          "legacyInputs": ["studio-legacy:accessibility:1", "studio-legacy:documentation:6"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "54b5f57b021d1413ea56f7820c324776be23d612266fbdd1475751dc244ac7e3",
@@ -2469,10 +2302,7 @@
           "path": "principles/content-operations.md",
           "title": "Use diagrams when relationships need them",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:3",
-            "studio-legacy:documentation:6"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:3", "studio-legacy:documentation:6"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "fb17e863dee46b9e2aa44d56c1f9c7a80448b418c460c5bfea7a301fd544e8a6",
@@ -2483,10 +2313,7 @@
           "path": "principles/content-operations.md",
           "title": "Preserve link integrity",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:documentation:6",
-            "studio-legacy:documentation:7"
-          ],
+          "legacyInputs": ["studio-legacy:documentation:6", "studio-legacy:documentation:7"],
           "blobSha": "68af691ae6554a94967431eabbd6d4b22cdc7155",
           "fileSha256": "f477adc0e60347eb03d2790571ad29ae52fd0c506711b6eff028509bb2a0a7dd",
           "blockSha256": "7d1206617253aa08c95ec4ca20ddf11d60ff8afd1b09c5a9ad4a2894910c75e9",
@@ -2574,10 +2401,7 @@
           "path": "principles/discovery-and-experiments.md",
           "title": "Conclude every experiment honestly",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:featuring:5",
-            "studio-legacy:featuring:7"
-          ],
+          "legacyInputs": ["studio-legacy:featuring:5", "studio-legacy:featuring:7"],
           "blobSha": "95bb0ae375b55e49da19e0990de123748ee4af95",
           "fileSha256": "90d4db45aac97c056a6d4a4e1fac477693287d9481c19ecc544710c8207e992b",
           "blockSha256": "b1201c50afe48889ad269d3f342af0b75fab4152081577a8d39a0db77c8ae02e",
@@ -2619,10 +2443,7 @@
           "path": "principles/metrics.md",
           "title": "Interpret metrics honestly",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:business:2",
-            "studio-legacy:featuring:5"
-          ],
+          "legacyInputs": ["studio-legacy:business:2", "studio-legacy:featuring:5"],
           "blobSha": "3ce3ca183b54780eef20b455454ed1fe67d111cb",
           "fileSha256": "7d73611259cf1b45a9a3f9b9daf0173652f0144d6cf7716a8bf5fd70cb186588",
           "blockSha256": "ac08deb97eed13402c0b2ecb36567bca322ca24082368ef9f849f12656b5dbcb",
@@ -2648,10 +2469,7 @@
           "path": "principles/planning-and-delivery.md",
           "title": "Make work decision-ready before commitment",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:project-planning:3",
-            "studio-legacy:project-planning:5"
-          ],
+          "legacyInputs": ["studio-legacy:project-planning:3", "studio-legacy:project-planning:5"],
           "blobSha": "b67d402dc7463e48b6627e153a74a29d891c5b1f",
           "fileSha256": "0f4bbdeb6386c566a325740fc94bfa01bd6643bcc0f57dc16401fc4dd36d632f",
           "blockSha256": "f56625a057a092ad9881cff23702cef9a0fb4c3dbe440a71b12979bbb63fb915",
@@ -2662,10 +2480,7 @@
           "path": "principles/planning-and-delivery.md",
           "title": "Expose dependencies and parity obligations",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:project-planning:2",
-            "studio-legacy:project-planning:6"
-          ],
+          "legacyInputs": ["studio-legacy:project-planning:2", "studio-legacy:project-planning:6"],
           "blobSha": "b67d402dc7463e48b6627e153a74a29d891c5b1f",
           "fileSha256": "0f4bbdeb6386c566a325740fc94bfa01bd6643bcc0f57dc16401fc4dd36d632f",
           "blockSha256": "45821d1d420a9b8162bcf42aa2557bbc6ba660a0bf6c010482d7916f36db9867",
@@ -2676,9 +2491,7 @@
           "path": "principles/planning-and-delivery.md",
           "title": "Keep the backlog intentional",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:project-planning:4"
-          ],
+          "legacyInputs": ["studio-legacy:project-planning:4"],
           "blobSha": "b67d402dc7463e48b6627e153a74a29d891c5b1f",
           "fileSha256": "0f4bbdeb6386c566a325740fc94bfa01bd6643bcc0f57dc16401fc4dd36d632f",
           "blockSha256": "d4a8d1ee8dd011e98dcb2ea869ff7d12ba37a407ea29fcba0c20ca5cd0205e75",
@@ -2770,10 +2583,7 @@
           "path": "principles/strategy.md",
           "title": "Put durable value and trust first",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:6",
-            "studio-legacy:business:6"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:6", "studio-legacy:business:6"],
           "blobSha": "31180558892c4f8230d05c88f85e65e648e784e7",
           "fileSha256": "2cd5034a5e443452fc2fcbe10a79a36c11f0ea3133f5a199f6d3dc81a2d98cb8",
           "blockSha256": "9801afd83e58ac072f029660498fd3e4c8f6c195856ee5cf7093f9854f9d0165",
@@ -2784,10 +2594,7 @@
           "path": "principles/strategy.md",
           "title": "Separate evidence, inference, and assumption",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:business:2",
-            "studio-legacy:business:4"
-          ],
+          "legacyInputs": ["studio-legacy:business:2", "studio-legacy:business:4"],
           "blobSha": "31180558892c4f8230d05c88f85e65e648e784e7",
           "fileSha256": "2cd5034a5e443452fc2fcbe10a79a36c11f0ea3133f5a199f6d3dc81a2d98cb8",
           "blockSha256": "0a8ac560f33c1ef6750844cdeb79d6b5deaf0c0a81a5251632b90e911cd7c6b0",
@@ -2798,10 +2605,7 @@
           "path": "principles/strategy.md",
           "title": "Build roadmaps from coherent outcome milestones",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:8",
-            "studio-legacy:project-planning:1"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:8", "studio-legacy:project-planning:1"],
           "blobSha": "31180558892c4f8230d05c88f85e65e648e784e7",
           "fileSha256": "2cd5034a5e443452fc2fcbe10a79a36c11f0ea3133f5a199f6d3dc81a2d98cb8",
           "blockSha256": "64296bafaecc8e88c3c771555854616fccc2c63b0861c288d849f7dc92dbc456",
@@ -2921,9 +2725,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Author AI configuration once",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:1"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:1"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "c843bd6d6017ba6ccb6775bd8563faf334eb094f0c5d4ee9badeda77ac40f2bb",
@@ -2934,10 +2736,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Reconcile schemas, files, and capability rosters",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:1",
-            "studio-legacy:ai-process:4"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:1", "studio-legacy:ai-process:4"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "032f337c75ed2b9b4cfcf5f277da44d917d35b0881dd8532b16eba9a7dedb1b3",
@@ -2948,10 +2747,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Grant least-privilege tools and writes",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:2",
-            "studio-legacy:security:4"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:2", "studio-legacy:security:4"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "e032052a785fab70336847b14f6d92ebac137286ab42b2def9f9fc10a23b97cc",
@@ -2962,9 +2758,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Assign one accountable lead per path",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:3"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:3"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "f6c70d5a5c69fcd6c6672ad8ccf51e8f8f448912c4a253310ffcb31c55f762a3",
@@ -2975,9 +2769,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Structure prompts as testable contracts",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:5"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:5"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "cc6b324f9280775fca88f235a95d206a16a7bf6845b2ef5c34528aebad93b282",
@@ -3003,9 +2795,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Stop for human-gated operations",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:7"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:7"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "8d801850ae211d5ff6f2b41a8ad643e6326e1b3f278ebd447424329ad88f292c",
@@ -3016,9 +2806,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Version every behavior-bearing configuration",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:8"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:8"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "83bf03cfc65351a201d638eddc6d2de423b4c722c1b85a53abf0918ad2d18344",
@@ -3029,10 +2817,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Keep secrets and sensitive data out of context",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:9",
-            "studio-legacy:compliance:8"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:9", "studio-legacy:compliance:8"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "a8b177c654e1a9e5796331b14c33f67c9a838d5261a7f89e861aee43d764c254",
@@ -3043,9 +2828,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Stage work from plan through monitoring",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:10"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:10"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "cc37d4d7ff8d7eab2dd90d9918bad716401e1237f3e4d3e2bcbaaf36f8ca28d4",
@@ -3056,9 +2839,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Factor reusable expertise into focused skills",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:11"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:11"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "2c732f76645040c68b046896075df10af9cd03bfe2861c0847c5c3dbba002e6a",
@@ -3069,9 +2850,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Dispatch from declared capability",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:12"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:12"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "9c4018bb95e21183fc5d6e6c380a76928f17766bd1c25804f1ac84b30a60e3b4",
@@ -3082,9 +2861,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Bind one owning agent to each isolated task",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:13"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:13"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "8c1b0e47e532d5f68beec9769458c171bd28951e79507743cb22b0773f340802",
@@ -3095,10 +2872,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Vet and pin external AI tools",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:14",
-            "studio-legacy:security:2"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:14", "studio-legacy:security:2"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "7679ef3a875545221b79b17a066f1e5fb00e71949a88f0990dda2d72745f44b0",
@@ -3109,9 +2883,7 @@
           "path": "principles/ai/agent-operations.md",
           "title": "Enforce artifact shapes and local overlays",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:16"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:16"],
           "blobSha": "98cbd0dd56c1217aeba4c8c8133ffab7e06bcc67",
           "fileSha256": "41c514c503fbe4f658f75fb6edbc4ad67307d19a7d91d53f4baedb8d34f49a0d",
           "blockSha256": "680636c83e99ceb5e857cb072c3622cb33f4b54583724b37d4ce5d6b0a8e8c2a",
@@ -3122,9 +2894,7 @@
           "path": "principles/ai/evidence-and-evals.md",
           "title": "Supersede corrections explicitly",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:17"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:17"],
           "blobSha": "fa23855d1dbf09d05aa682751b6f3082edaf19f7",
           "fileSha256": "087b93a986ce4e0494be981391b2fe5a8c42281b7d41602764d40162e07cfdfd",
           "blockSha256": "0f6b7df41ae523f81df3741733664547bfbd411a991d3be9916cbb89bf1dd029",
@@ -3135,9 +2905,7 @@
           "path": "principles/ai/evidence-and-evals.md",
           "title": "Route decisions to the party with standing",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:18"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:18"],
           "blobSha": "fa23855d1dbf09d05aa682751b6f3082edaf19f7",
           "fileSha256": "087b93a986ce4e0494be981391b2fe5a8c42281b7d41602764d40162e07cfdfd",
           "blockSha256": "5c5a6fd55a618be96b3e6d87a585c9ea7b9d741dde5d5e94a9709cfaf1e3bdbb",
@@ -3148,9 +2916,7 @@
           "path": "principles/ai/evidence-and-evals.md",
           "title": "Challenge congenial premises first",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:19"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:19"],
           "blobSha": "fa23855d1dbf09d05aa682751b6f3082edaf19f7",
           "fileSha256": "087b93a986ce4e0494be981391b2fe5a8c42281b7d41602764d40162e07cfdfd",
           "blockSha256": "ac178b615afb7fb93c3405c1ae70b88f615464d54ccc04b5e53badbbb7905857",
@@ -3161,9 +2927,7 @@
           "path": "principles/ai/evidence-and-evals.md",
           "title": "Treat tools and checkouts as versioned inputs",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:20"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:20"],
           "blobSha": "fa23855d1dbf09d05aa682751b6f3082edaf19f7",
           "fileSha256": "087b93a986ce4e0494be981391b2fe5a8c42281b7d41602764d40162e07cfdfd",
           "blockSha256": "fa4747ccb351fc2f893cc253a3dc39f52e59c9a0dd518dc1f4d52aa127051357",
@@ -3189,9 +2953,7 @@
           "path": "principles/ai/evidence-and-evals.md",
           "title": "Re-run baseline checks after a salient correction",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:22"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:22"],
           "blobSha": "fa23855d1dbf09d05aa682751b6f3082edaf19f7",
           "fileSha256": "087b93a986ce4e0494be981391b2fe5a8c42281b7d41602764d40162e07cfdfd",
           "blockSha256": "9bdd7110ce8ce1ba2ee90eaf441d05aa9b97f406a8aaaa70577b46068abb7c4b",
@@ -3202,9 +2964,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Select the smallest passing model",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:1"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:1"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "0530419ecdfaf57ad310a725f17d74cdc1923865e9bade518c4688f1a34bdd51",
@@ -3215,9 +2975,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Design prompts through the user experience",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:2"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:2"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "ea0e922f75d8599b69929e2a4bf01272580a9db7c47d000892655fce99ad2032",
@@ -3228,10 +2986,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Constrain model inputs, outputs, and actions",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:3",
-            "studio-legacy:security:5"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:3", "studio-legacy:security:5"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "3b7acc25db10e543f2821ae4d8c2c71a22d1fd6ed7b36e562e7365f0aae81269",
@@ -3257,9 +3012,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Budget latency and cost before release",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:5"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:5"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "728dc7489523e1f4806dc14559b68767e26eb5b874f7be9a7520fcb852aa70e0",
@@ -3270,10 +3023,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Disclose AI involvement and limits",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:6",
-            "studio-legacy:compliance:1"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:6", "studio-legacy:compliance:1"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "e5abb1d338c6e04600290d3dec803f0eeb2897203d652d797042bfffd09ade23",
@@ -3299,10 +3049,7 @@
           "path": "principles/ai/product-ai.md",
           "title": "Preserve a non-AI completion path",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-products:8",
-            "studio-legacy:featuring:6"
-          ],
+          "legacyInputs": ["studio-legacy:ai-products:8", "studio-legacy:featuring:6"],
           "blobSha": "c422cecbecfc80b11956518ac7ddddc68ecf68ae",
           "fileSha256": "c235351be6229aabc691a5b0e256ad69d5b69ee9d60e83fe27839bf5d037469b",
           "blockSha256": "f2fdf3d70b4f0519dbf87119fb184483458e87149deaf16e2a243cfebdde1972",
@@ -3313,10 +3060,7 @@
           "path": "principles/github/actions-and-delivery.md",
           "title": "Automate authority-owned commands",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:1",
-            "studio-legacy:devops:2"
-          ],
+          "legacyInputs": ["studio-legacy:devops:1", "studio-legacy:devops:2"],
           "blobSha": "38c907bac4699d78c75a8b49d85d62cacc92031b",
           "fileSha256": "389afabfe2b332936ec5c2796dfbd7777f5b5e1d0e10ef54db6dc57da0c0d876",
           "blockSha256": "999dd07d7cea057a37dd9084c07c04e2ecfa6ff307ae13c69dd962a6b78f3a27",
@@ -3327,9 +3071,7 @@
           "path": "principles/github/actions-and-delivery.md",
           "title": "Give every required check a terminal result",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:1"
-          ],
+          "legacyInputs": ["studio-legacy:devops:1"],
           "blobSha": "38c907bac4699d78c75a8b49d85d62cacc92031b",
           "fileSha256": "389afabfe2b332936ec5c2796dfbd7777f5b5e1d0e10ef54db6dc57da0c0d876",
           "blockSha256": "a265397c92e4048eaf36ba723af1ca146a105f909c57598ca729dd94b43eb26e",
@@ -3372,10 +3114,7 @@
           "path": "principles/github/actions-and-delivery.md",
           "title": "Own reusable workflows once",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:11",
-            "studio-legacy:devops:2"
-          ],
+          "legacyInputs": ["studio-legacy:devops:11", "studio-legacy:devops:2"],
           "blobSha": "38c907bac4699d78c75a8b49d85d62cacc92031b",
           "fileSha256": "389afabfe2b332936ec5c2796dfbd7777f5b5e1d0e10ef54db6dc57da0c0d876",
           "blockSha256": "3b7c28713c979639c8bcc8f9c100a81a80c28093f7e574246c52884b784b3cec",
@@ -3386,9 +3125,7 @@
           "path": "principles/github/actions-and-delivery.md",
           "title": "Keep release automation subordinate to release authority",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:8"
-          ],
+          "legacyInputs": ["studio-legacy:devops:8"],
           "blobSha": "38c907bac4699d78c75a8b49d85d62cacc92031b",
           "fileSha256": "389afabfe2b332936ec5c2796dfbd7777f5b5e1d0e10ef54db6dc57da0c0d876",
           "blockSha256": "4a579ac95e046728affb787e5de2817b475bf1c4c9c5060d9ba0613805cd535a",
@@ -3399,10 +3136,7 @@
           "path": "principles/github/actions-and-delivery.md",
           "title": "Report partial and refused automation honestly",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:1",
-            "studio-legacy:devops:14"
-          ],
+          "legacyInputs": ["studio-legacy:devops:1", "studio-legacy:devops:14"],
           "blobSha": "38c907bac4699d78c75a8b49d85d62cacc92031b",
           "fileSha256": "389afabfe2b332936ec5c2796dfbd7777f5b5e1d0e10ef54db6dc57da0c0d876",
           "blockSha256": "2122088b11cc07e9ba4f47ab961e5f7ab7c0dccbe19aa38f84a098fcb2c4ed9b",
@@ -3424,10 +3158,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Make merge evidence explicit",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:1",
-            "studio-legacy:process:4"
-          ],
+          "legacyInputs": ["studio-legacy:devops:1", "studio-legacy:process:4"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "4ebfd57adf8897017d82a2deec4a9fcb51517daef711ad4031f07931b9dfb055",
@@ -3438,9 +3169,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Prefer GitHub-native health inheritance",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:11"
-          ],
+          "legacyInputs": ["studio-legacy:devops:11"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "07c221fd9f57c6b008c718082a8d265ba9edfef0933095bf09b06029c02278fb",
@@ -3451,9 +3180,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Keep the fleet registry factual",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:15"
-          ],
+          "legacyInputs": ["studio-legacy:devops:15"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "7bbc39d60a806d66274bd7d93b8510e8607cdd2b490398a0648ce9dfa044bd87",
@@ -3464,10 +3191,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Preserve provenance and refuse ambiguous clobbers",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:13",
-            "studio-legacy:devops:14"
-          ],
+          "legacyInputs": ["studio-legacy:devops:13", "studio-legacy:devops:14"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "a7501c7601ea4b242bd2ed1e482e8496799ce82cd2a26474397cec0f66ec4be9",
@@ -3478,10 +3202,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Compare normalized rendered content",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:devops:12",
-            "studio-legacy:devops:13"
-          ],
+          "legacyInputs": ["studio-legacy:devops:12", "studio-legacy:devops:13"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "25e40c528a2c3debbc4b54dbd26bac3200bce0286afc5a101732c33e86e18423",
@@ -3492,10 +3213,7 @@
           "path": "principles/github/repository-governance.md",
           "title": "Isolate Copilot repository sessions",
           "status": "Ratified",
-          "legacyInputs": [
-            "studio-legacy:ai-process:13",
-            "studio-legacy:process:1"
-          ],
+          "legacyInputs": ["studio-legacy:ai-process:13", "studio-legacy:process:1"],
           "blobSha": "403247a015120eec0fa9b8c37d3fee3207dccb0b",
           "fileSha256": "de941cb1dba8ff9251f9fab065d5c873d3d7e3d157c9b7863ed282848db6d593",
           "blockSha256": "c8e7200c61cb955c43c6ecf645a6cf36d1e9d33120216d06b906614c39b9ae57",
