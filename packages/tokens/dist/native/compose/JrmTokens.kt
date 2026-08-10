@@ -30,6 +30,14 @@ data class JrmColorScheme(
     val statusNegative: Color,
     val statusWarning: Color,
     val statusInfo: Color,
+    val statusPending: Color,
+    val statusNeutral: Color,
+    val statusPositiveSubtle: Color,
+    val statusNegativeSubtle: Color,
+    val statusWarningSubtle: Color,
+    val statusInfoSubtle: Color,
+    val statusPendingSubtle: Color,
+    val statusNeutralSubtle: Color,
 )
 
 val JrmLightColors: JrmColorScheme = JrmColorScheme(
@@ -54,6 +62,14 @@ val JrmLightColors: JrmColorScheme = JrmColorScheme(
     statusNegative = Color(0xFFA03F3C),
     statusWarning = Color(0xFF614509),
     statusInfo = Color(0xFF005679),
+    statusPending = Color(0xFF007373),
+    statusNeutral = Color(0xFF5B5E7E),
+    statusPositiveSubtle = Color(0xFFF0FCF6),
+    statusNegativeSubtle = Color(0xFFFFF6F4),
+    statusWarningSubtle = Color(0xFFFEF8ED),
+    statusInfoSubtle = Color(0xFFF2FAFE),
+    statusPendingSubtle = Color(0xFFF0FBFB),
+    statusNeutralSubtle = Color(0xFFDCDCEA),
 )
 
 val JrmDarkColors: JrmColorScheme = JrmColorScheme(
@@ -78,6 +94,14 @@ val JrmDarkColors: JrmColorScheme = JrmColorScheme(
     statusNegative = Color(0xFFF87171),
     statusWarning = Color(0xFFFBBF24),
     statusInfo = Color(0xFF6BCBF7),
+    statusPending = Color(0xFF57D4D4),
+    statusNeutral = Color(0xFFA3A6CB),
+    statusPositiveSubtle = Color(0xFF02291C),
+    statusNegativeSubtle = Color(0xFF421C19),
+    statusWarningSubtle = Color(0xFF38280A),
+    statusInfoSubtle = Color(0xFF00334A),
+    statusPendingSubtle = Color(0xFF003030),
+    statusNeutralSubtle = Color(0xFF2C2E4D),
 )
 
 val JrmDarkOledColors: JrmColorScheme = JrmColorScheme(
@@ -102,6 +126,14 @@ val JrmDarkOledColors: JrmColorScheme = JrmColorScheme(
     statusNegative = Color(0xFFF87171),
     statusWarning = Color(0xFFFBBF24),
     statusInfo = Color(0xFF6BCBF7),
+    statusPending = Color(0xFF57D4D4),
+    statusNeutral = Color(0xFFA3A6CB),
+    statusPositiveSubtle = Color(0xFF02291C),
+    statusNegativeSubtle = Color(0xFF421C19),
+    statusWarningSubtle = Color(0xFF38280A),
+    statusInfoSubtle = Color(0xFF00334A),
+    statusPendingSubtle = Color(0xFF003030),
+    statusNeutralSubtle = Color(0xFF2C2E4D),
 )
 
 val JrmHighContrastColors: JrmColorScheme = JrmColorScheme(
@@ -124,8 +156,16 @@ val JrmHighContrastColors: JrmColorScheme = JrmColorScheme(
     accentInk = Color(0xFF806600),
     statusPositive = Color(0xFF006C4D),
     statusNegative = Color(0xFFA03F3C),
-    statusWarning = Color(0xFF8D6300),
-    statusInfo = Color(0xFF0074A0),
+    statusWarning = Color(0xFF614509),
+    statusInfo = Color(0xFF005679),
+    statusPending = Color(0xFF005353),
+    statusNeutral = Color(0xFF0F1020),
+    statusPositiveSubtle = Color(0xFFF0FCF6),
+    statusNegativeSubtle = Color(0xFFFFF6F4),
+    statusWarningSubtle = Color(0xFFFEF8ED),
+    statusInfoSubtle = Color(0xFFF2FAFE),
+    statusPendingSubtle = Color(0xFFF0FBFB),
+    statusNeutralSubtle = Color(0xFFDCDCEA),
 )
 
 /** The documented themes. [Light] is the default. */
@@ -205,5 +245,5 @@ object JrmDuration {
     const val press: Int = 50
     const val state: Int = 150
     const val tile: Int = 120
-    const val reduced: Int = 0
+    const val reduced: Int = 1
 }

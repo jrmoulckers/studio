@@ -107,6 +107,14 @@ export const REQUIRED_SEMANTIC_TOKENS = Object.freeze(
     'semantic.status.negative',
     'semantic.status.warning',
     'semantic.status.info',
+    'semantic.status.pending',
+    'semantic.status.neutral',
+    'semantic.status.positiveSubtle',
+    'semantic.status.negativeSubtle',
+    'semantic.status.warningSubtle',
+    'semantic.status.infoSubtle',
+    'semantic.status.pendingSubtle',
+    'semantic.status.neutralSubtle',
   ]
     .map((path) => ({ path, type: 'color' }))
     .concat([

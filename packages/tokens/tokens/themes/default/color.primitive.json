@@ -38,6 +38,8 @@
     },
     "win": {
       "$description": "Win Green — positive deltas, success/synced (hue 165).",
+      "50": { "$value": "oklch(0.98 0.015 165)", "$type": "color" },
+      "100": { "$value": "oklch(0.97 0.03 165)", "$type": "color" },
       "200": { "$value": "oklch(0.95 0.05 165)", "$type": "color" },
       "300": { "$value": "oklch(0.87 0.10 165)", "$type": "color" },
       "400": { "$value": "oklch(0.78 0.15 165)", "$type": "color" },
@@ -49,6 +51,8 @@
     },
     "loss": {
       "$description": "Loss Coral — negative deltas, destructive text, errors (hue 25).",
+      "50": { "$value": "oklch(0.98 0.012 25)", "$type": "color" },
+      "100": { "$value": "oklch(0.97 0.025 25)", "$type": "color" },
       "200": { "$value": "oklch(0.95 0.04 25)", "$type": "color" },
       "300": { "$value": "oklch(0.88 0.09 25)", "$type": "color" },
       "400": { "$value": "oklch(0.79 0.14 25)", "$type": "color" },
@@ -60,6 +64,8 @@
     },
     "caution": {
       "$description": "Caution Amber — warnings, pending/attention (hue 80).",
+      "50": { "$value": "oklch(0.98 0.015 80)", "$type": "color" },
+      "100": { "$value": "oklch(0.97 0.03 80)", "$type": "color" },
       "200": { "$value": "oklch(0.96 0.05 80)", "$type": "color" },
       "300": { "$value": "oklch(0.90 0.11 80)", "$type": "color" },
       "400": { "$value": "oklch(0.83 0.16 80)", "$type": "color" },
@@ -71,6 +77,8 @@
     },
     "info": {
       "$description": "Info Sky — neutral informational status (the finance --semantic-* taxonomy needs a blue the JRM brand lacks). Seeded from the score-king player-5 sky hex; OKLCH tonal ramp at hue 230, canonical hex anchored at 500.",
+      "50": { "$value": "oklch(0.98 0.01 230)", "$type": "color" },
+      "100": { "$value": "oklch(0.97 0.02 230)", "$type": "color" },
       "200": { "$value": "oklch(0.95 0.03 230)", "$type": "color" },
       "300": { "$value": "oklch(0.88 0.07 230)", "$type": "color" },
       "400": { "$value": "oklch(0.80 0.11 230)", "$type": "color" },
@@ -83,6 +91,19 @@
       "700": { "$value": "oklch(0.52 0.12 230)", "$type": "color" },
       "800": { "$value": "oklch(0.42 0.10 230)", "$type": "color" },
       "900": { "$value": "oklch(0.30 0.07 230)", "$type": "color" }
+    },
+    "pending": {
+      "$description": "Pending Teal — in-flight, processing, syncing, unsettled (hue 195). Distinct from Caution Amber because a pending operation is not a warning, and distinct from Info Sky because it resolves rather than informs. Sits between Win Green (165) and Info Sky (230), so pair it with an icon or label and never rely on hue alone.",
+      "50": { "$value": "oklch(0.98 0.012 195)", "$type": "color" },
+      "100": { "$value": "oklch(0.97 0.025 195)", "$type": "color" },
+      "200": { "$value": "oklch(0.95 0.04 195)", "$type": "color" },
+      "300": { "$value": "oklch(0.88 0.08 195)", "$type": "color" },
+      "400": { "$value": "oklch(0.80 0.11 195)", "$type": "color" },
+      "500": { "$value": "oklch(0.72 0.12 195)", "$type": "color" },
+      "600": { "$value": "oklch(0.61 0.11 195)", "$type": "color" },
+      "700": { "$value": "oklch(0.50 0.09 195)", "$type": "color" },
+      "800": { "$value": "oklch(0.40 0.07 195)", "$type": "color" },
+      "900": { "$value": "oklch(0.28 0.05 195)", "$type": "color" }
     },
     "ink": {
       "$description": "Dark neutral ramp — Midnight Court through Moonlight (canonical hexes).",

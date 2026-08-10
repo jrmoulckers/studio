@@ -22,7 +22,7 @@ export const tokens = {
     "press": "50ms",
     "state": "150ms",
     "tile": "120ms",
-    "reduced": "0ms"
+    "reduced": "1ms"
   },
   "easing": {
     "standard": "ease",
@@ -132,6 +132,8 @@ export const tokens = {
       "ink-light": "#806600"
     },
     "win": {
+      "50": "oklch(0.98 0.015 165)",
+      "100": "oklch(0.97 0.03 165)",
       "200": "oklch(0.95 0.05 165)",
       "300": "oklch(0.87 0.10 165)",
       "400": "oklch(0.78 0.15 165)",
@@ -142,6 +144,8 @@ export const tokens = {
       "900": "oklch(0.25 0.05 165)"
     },
     "loss": {
+      "50": "oklch(0.98 0.012 25)",
+      "100": "oklch(0.97 0.025 25)",
       "200": "oklch(0.95 0.04 25)",
       "300": "oklch(0.88 0.09 25)",
       "400": "oklch(0.79 0.14 25)",
@@ -152,6 +156,8 @@ export const tokens = {
       "900": "oklch(0.28 0.06 25)"
     },
     "caution": {
+      "50": "oklch(0.98 0.015 80)",
+      "100": "oklch(0.97 0.03 80)",
       "200": "oklch(0.96 0.05 80)",
       "300": "oklch(0.90 0.11 80)",
       "400": "oklch(0.83 0.16 80)",
@@ -162,6 +168,8 @@ export const tokens = {
       "900": "oklch(0.29 0.05 80)"
     },
     "info": {
+      "50": "oklch(0.98 0.01 230)",
+      "100": "oklch(0.97 0.02 230)",
       "200": "oklch(0.95 0.03 230)",
       "300": "oklch(0.88 0.07 230)",
       "400": "oklch(0.80 0.11 230)",
@@ -170,6 +178,18 @@ export const tokens = {
       "700": "oklch(0.52 0.12 230)",
       "800": "oklch(0.42 0.10 230)",
       "900": "oklch(0.30 0.07 230)"
+    },
+    "pending": {
+      "50": "oklch(0.98 0.012 195)",
+      "100": "oklch(0.97 0.025 195)",
+      "200": "oklch(0.95 0.04 195)",
+      "300": "oklch(0.88 0.08 195)",
+      "400": "oklch(0.80 0.11 195)",
+      "500": "oklch(0.72 0.12 195)",
+      "600": "oklch(0.61 0.11 195)",
+      "700": "oklch(0.50 0.09 195)",
+      "800": "oklch(0.40 0.07 195)",
+      "900": "oklch(0.28 0.05 195)"
     },
     "ink": {
       "midnight": "#0f1020",
@@ -277,7 +297,15 @@ export const tokens = {
       "positive": "oklch(0.47 0.10 165)",
       "negative": "oklch(0.50 0.13 25)",
       "warning": "oklch(0.41 0.08 80)",
-      "info": "oklch(0.42 0.10 230)"
+      "info": "oklch(0.42 0.10 230)",
+      "pending": "oklch(0.50 0.09 195)",
+      "neutral": "#5b5e7e",
+      "positiveSubtle": "oklch(0.98 0.015 165)",
+      "negativeSubtle": "oklch(0.98 0.012 25)",
+      "warningSubtle": "oklch(0.98 0.015 80)",
+      "infoSubtle": "oklch(0.98 0.01 230)",
+      "pendingSubtle": "oklch(0.98 0.012 195)",
+      "neutralSubtle": "#dcdcea"
     }
   },
   "text": {
@@ -367,7 +395,7 @@ export const tokens = {
       "easing": "ease"
     },
     "reduced": {
-      "duration": "0ms",
+      "duration": "1ms",
       "easing": "linear"
     }
   },

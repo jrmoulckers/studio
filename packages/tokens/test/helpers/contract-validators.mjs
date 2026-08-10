@@ -267,13 +267,19 @@ const tailwindAliasName = (name) =>
     'on-primary': 'primary-foreground',
   })[name] ?? name;
 
+const kebab = (segment) => segment.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+
+// CSS custom properties are emitted kebab-cased, so a camelCase token segment such as
+// "positiveSubtle" becomes "positive-subtle". Model that here rather than joining raw segments.
+const cssVarName = (path) => path.map(kebab).join('-');
+
 export function assertTailwindContract(preset, semanticPaths, aliasPaths) {
   const colors = preset?.theme?.extend?.colors;
   if (!colors) fail('Tailwind entry point is missing theme.extend.colors.');
 
   for (const path of semanticPaths.filter(([group]) => group === 'semantic')) {
     const target = ['semantic', ...path.slice(1)];
-    const expected = `var(--${path.join('-')})`;
+    const expected = `var(--${cssVarName(path)})`;
     let value = colors;
     for (const part of target) value = value?.[part];
     if (value !== expected) fail(`Tailwind entry point is missing "${target.join('.')}".`);
@@ -369,7 +375,7 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
       fail(`CSS ${name} entry point is missing its required data-theme selector.`);
     }
     for (const path of paths) {
-      if (!new RegExp(`${escapeRegExp(`--${path.join('-')}`)}\\s*:`).test(themeBlock)) {
+      if (!new RegExp(`${escapeRegExp(`--${cssVarName(path)}`)}\\s*:`).test(themeBlock)) {
         fail(`CSS ${name} entry point is missing "${path.join('.')}".`);
       }
     }
@@ -404,7 +410,7 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
   ];
   for (const [header, mode] of preferenceBlocks) {
     const rootBlock = blockBody(blockBody(indexCss, header), ':root:not([data-theme])');
-    for (const path of modeByName.get(mode).paths) assertDeclaration(rootBlock, path.join('-'));
+    for (const path of modeByName.get(mode).paths) assertDeclaration(rootBlock, cssVarName(path));
     if (mode === 'high-contrast') {
       for (const [name, value] of chartDeclarations) assertDeclaration(rootBlock, name, value);
     }
@@ -434,8 +440,10 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
   );
   const cognitive = blockBody(indexCss, '[data-a11y-cognitive="true"]');
   for (const name of ['press', 'state', 'tile']) {
-    assertDeclaration(reducedMotion, `motion-${name}-duration`, '0ms');
-    assertDeclaration(cognitive, `motion-${name}-duration`, '0ms');
+    // 1ms, not 0ms — see the reduced-motion block in style-dictionary.config.mjs.
+    // A zero-duration transition never dispatches transitionend/animationend.
+    assertDeclaration(reducedMotion, `motion-${name}-duration`, '1ms');
+    assertDeclaration(cognitive, `motion-${name}-duration`, '1ms');
   }
   for (const role of ['display', 'title', 'body', 'label', 'overline']) {
     for (const property of ['size', 'line-height']) {

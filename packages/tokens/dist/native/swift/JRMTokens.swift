@@ -24,6 +24,14 @@ public struct JRMColorScheme: Equatable {
     public let statusNegative: Color
     public let statusWarning: Color
     public let statusInfo: Color
+    public let statusPending: Color
+    public let statusNeutral: Color
+    public let statusPositiveSubtle: Color
+    public let statusNegativeSubtle: Color
+    public let statusWarningSubtle: Color
+    public let statusInfoSubtle: Color
+    public let statusPendingSubtle: Color
+    public let statusNeutralSubtle: Color
 
     public init(
         backgroundPrimary: Color,
@@ -46,7 +54,15 @@ public struct JRMColorScheme: Equatable {
         statusPositive: Color,
         statusNegative: Color,
         statusWarning: Color,
-        statusInfo: Color
+        statusInfo: Color,
+        statusPending: Color,
+        statusNeutral: Color,
+        statusPositiveSubtle: Color,
+        statusNegativeSubtle: Color,
+        statusWarningSubtle: Color,
+        statusInfoSubtle: Color,
+        statusPendingSubtle: Color,
+        statusNeutralSubtle: Color
     ) {
         self.backgroundPrimary = backgroundPrimary
         self.backgroundSecondary = backgroundSecondary
@@ -69,6 +85,14 @@ public struct JRMColorScheme: Equatable {
         self.statusNegative = statusNegative
         self.statusWarning = statusWarning
         self.statusInfo = statusInfo
+        self.statusPending = statusPending
+        self.statusNeutral = statusNeutral
+        self.statusPositiveSubtle = statusPositiveSubtle
+        self.statusNegativeSubtle = statusNegativeSubtle
+        self.statusWarningSubtle = statusWarningSubtle
+        self.statusInfoSubtle = statusInfoSubtle
+        self.statusPendingSubtle = statusPendingSubtle
+        self.statusNeutralSubtle = statusNeutralSubtle
     }
 }
 
@@ -94,7 +118,15 @@ extension JRMColorScheme {
         statusPositive: Color(red: 0, green: 0.4235, blue: 0.302, opacity: 1),
         statusNegative: Color(red: 0.6275, green: 0.2471, blue: 0.2353, opacity: 1),
         statusWarning: Color(red: 0.3804, green: 0.2706, blue: 0.0353, opacity: 1),
-        statusInfo: Color(red: 0, green: 0.3373, blue: 0.4745, opacity: 1)
+        statusInfo: Color(red: 0, green: 0.3373, blue: 0.4745, opacity: 1),
+        statusPending: Color(red: 0, green: 0.451, blue: 0.451, opacity: 1),
+        statusNeutral: Color(red: 0.3569, green: 0.3686, blue: 0.4941, opacity: 1),
+        statusPositiveSubtle: Color(red: 0.9412, green: 0.9882, blue: 0.9647, opacity: 1),
+        statusNegativeSubtle: Color(red: 1, green: 0.9647, blue: 0.9569, opacity: 1),
+        statusWarningSubtle: Color(red: 0.9961, green: 0.9725, blue: 0.9294, opacity: 1),
+        statusInfoSubtle: Color(red: 0.949, green: 0.9804, blue: 0.9961, opacity: 1),
+        statusPendingSubtle: Color(red: 0.9412, green: 0.9843, blue: 0.9843, opacity: 1),
+        statusNeutralSubtle: Color(red: 0.8627, green: 0.8627, blue: 0.9176, opacity: 1)
     )
 
     public static let dark = JRMColorScheme(
@@ -118,7 +150,15 @@ extension JRMColorScheme {
         statusPositive: Color(red: 0.2039, green: 0.8275, blue: 0.6, opacity: 1),
         statusNegative: Color(red: 0.9725, green: 0.4431, blue: 0.4431, opacity: 1),
         statusWarning: Color(red: 0.9843, green: 0.749, blue: 0.1412, opacity: 1),
-        statusInfo: Color(red: 0.4196, green: 0.7961, blue: 0.9686, opacity: 1)
+        statusInfo: Color(red: 0.4196, green: 0.7961, blue: 0.9686, opacity: 1),
+        statusPending: Color(red: 0.3412, green: 0.8314, blue: 0.8314, opacity: 1),
+        statusNeutral: Color(red: 0.6392, green: 0.651, blue: 0.7961, opacity: 1),
+        statusPositiveSubtle: Color(red: 0.0078, green: 0.1608, blue: 0.1098, opacity: 1),
+        statusNegativeSubtle: Color(red: 0.2588, green: 0.1098, blue: 0.098, opacity: 1),
+        statusWarningSubtle: Color(red: 0.2196, green: 0.1569, blue: 0.0392, opacity: 1),
+        statusInfoSubtle: Color(red: 0, green: 0.2, blue: 0.2902, opacity: 1),
+        statusPendingSubtle: Color(red: 0, green: 0.1882, blue: 0.1882, opacity: 1),
+        statusNeutralSubtle: Color(red: 0.1725, green: 0.1804, blue: 0.302, opacity: 1)
     )
 
     public static let darkOled = JRMColorScheme(
@@ -142,7 +182,15 @@ extension JRMColorScheme {
         statusPositive: Color(red: 0.2039, green: 0.8275, blue: 0.6, opacity: 1),
         statusNegative: Color(red: 0.9725, green: 0.4431, blue: 0.4431, opacity: 1),
         statusWarning: Color(red: 0.9843, green: 0.749, blue: 0.1412, opacity: 1),
-        statusInfo: Color(red: 0.4196, green: 0.7961, blue: 0.9686, opacity: 1)
+        statusInfo: Color(red: 0.4196, green: 0.7961, blue: 0.9686, opacity: 1),
+        statusPending: Color(red: 0.3412, green: 0.8314, blue: 0.8314, opacity: 1),
+        statusNeutral: Color(red: 0.6392, green: 0.651, blue: 0.7961, opacity: 1),
+        statusPositiveSubtle: Color(red: 0.0078, green: 0.1608, blue: 0.1098, opacity: 1),
+        statusNegativeSubtle: Color(red: 0.2588, green: 0.1098, blue: 0.098, opacity: 1),
+        statusWarningSubtle: Color(red: 0.2196, green: 0.1569, blue: 0.0392, opacity: 1),
+        statusInfoSubtle: Color(red: 0, green: 0.2, blue: 0.2902, opacity: 1),
+        statusPendingSubtle: Color(red: 0, green: 0.1882, blue: 0.1882, opacity: 1),
+        statusNeutralSubtle: Color(red: 0.1725, green: 0.1804, blue: 0.302, opacity: 1)
     )
 
     public static let highContrast = JRMColorScheme(
@@ -165,8 +213,16 @@ extension JRMColorScheme {
         accentInk: Color(red: 0.502, green: 0.4, blue: 0, opacity: 1),
         statusPositive: Color(red: 0, green: 0.4235, blue: 0.302, opacity: 1),
         statusNegative: Color(red: 0.6275, green: 0.2471, blue: 0.2353, opacity: 1),
-        statusWarning: Color(red: 0.5529, green: 0.3882, blue: 0, opacity: 1),
-        statusInfo: Color(red: 0, green: 0.4549, blue: 0.6275, opacity: 1)
+        statusWarning: Color(red: 0.3804, green: 0.2706, blue: 0.0353, opacity: 1),
+        statusInfo: Color(red: 0, green: 0.3373, blue: 0.4745, opacity: 1),
+        statusPending: Color(red: 0, green: 0.3255, blue: 0.3255, opacity: 1),
+        statusNeutral: Color(red: 0.0588, green: 0.0627, blue: 0.1255, opacity: 1),
+        statusPositiveSubtle: Color(red: 0.9412, green: 0.9882, blue: 0.9647, opacity: 1),
+        statusNegativeSubtle: Color(red: 1, green: 0.9647, blue: 0.9569, opacity: 1),
+        statusWarningSubtle: Color(red: 0.9961, green: 0.9725, blue: 0.9294, opacity: 1),
+        statusInfoSubtle: Color(red: 0.949, green: 0.9804, blue: 0.9961, opacity: 1),
+        statusPendingSubtle: Color(red: 0.9412, green: 0.9843, blue: 0.9843, opacity: 1),
+        statusNeutralSubtle: Color(red: 0.8627, green: 0.8627, blue: 0.9176, opacity: 1)
     )
 }
 
@@ -256,5 +312,5 @@ public enum JRMDuration {
     public static let press: TimeInterval = 0.05
     public static let state: TimeInterval = 0.15
     public static let tile: TimeInterval = 0.12
-    public static let reduced: TimeInterval = 0
+    public static let reduced: TimeInterval = 0.001
 }

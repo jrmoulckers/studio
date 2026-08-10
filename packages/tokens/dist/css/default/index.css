@@ -41,6 +41,14 @@
     --semantic-status-negative: var(--color-loss-500);
     --semantic-status-warning: var(--color-caution-500);
     --semantic-status-info: var(--color-info-400);
+    --semantic-status-pending: var(--color-pending-400);
+    --semantic-status-neutral: var(--color-ink-lavender-gray);
+    --semantic-status-positive-subtle: var(--color-win-900);
+    --semantic-status-negative-subtle: var(--color-loss-900);
+    --semantic-status-warning-subtle: var(--color-caution-900);
+    --semantic-status-info-subtle: var(--color-info-900);
+    --semantic-status-pending-subtle: var(--color-pending-900);
+    --semantic-status-neutral-subtle: var(--color-ink-lifted-slate);
     --shadow-lift: var(--shadow-soft-lift-dark);
     --shadow-hairline: var(--shadow-inset-hairline);
   }
@@ -71,8 +79,16 @@
     --semantic-accent-ink: var(--color-crown-gold-ink-light);
     --semantic-status-positive: var(--color-win-700);
     --semantic-status-negative: var(--color-loss-700);
-    --semantic-status-warning: var(--color-caution-700);
-    --semantic-status-info: var(--color-info-700);
+    --semantic-status-warning: var(--color-caution-800);
+    --semantic-status-info: var(--color-info-800);
+    --semantic-status-pending: var(--color-pending-800);
+    --semantic-status-neutral: var(--color-ink-midnight);
+    --semantic-status-positive-subtle: var(--color-win-50);
+    --semantic-status-negative-subtle: var(--color-loss-50);
+    --semantic-status-warning-subtle: var(--color-caution-50);
+    --semantic-status-info-subtle: var(--color-info-50);
+    --semantic-status-pending-subtle: var(--color-pending-50);
+    --semantic-status-neutral-subtle: var(--color-paper-cloud-line);
     --shadow-lift: var(--shadow-soft-lift-light);
     --shadow-hairline: var(--shadow-inset-hairline);
     --color-chart-1: var(--color-chart-hc-1);
@@ -111,9 +127,12 @@
  */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --motion-press-duration: 0ms;
-    --motion-state-duration: 0ms;
-    --motion-tile-duration: 0ms;
+    /* Deliberately 1ms, not 0ms: a zero-duration transition or animation never
+       fires transitionend/animationend, so cleanup or focus hand-off that awaits
+       those events would hang for reduced-motion users. Matches --duration-reduced. */
+    --motion-press-duration: 1ms;
+    --motion-state-duration: 1ms;
+    --motion-tile-duration: 1ms;
   }
 }
 
@@ -134,7 +153,9 @@
   --text-overline-size: var(--cognitive-type-overline-size);
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
 
-  --motion-press-duration: 0ms;
-  --motion-state-duration: 0ms;
-  --motion-tile-duration: 0ms;
+  /* Matches --duration-reduced: an instant-but-nonzero duration still fires
+     transitionend/animationend, so listeners that await them never hang. */
+  --motion-press-duration: 1ms;
+  --motion-state-duration: 1ms;
+  --motion-tile-duration: 1ms;
 }

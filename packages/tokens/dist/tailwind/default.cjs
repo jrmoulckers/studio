@@ -92,7 +92,15 @@ module.exports = {
             "positive": "var(--semantic-status-positive)",
             "negative": "var(--semantic-status-negative)",
             "warning": "var(--semantic-status-warning)",
-            "info": "var(--semantic-status-info)"
+            "info": "var(--semantic-status-info)",
+            "pending": "var(--semantic-status-pending)",
+            "neutral": "var(--semantic-status-neutral)",
+            "positiveSubtle": "var(--semantic-status-positive-subtle)",
+            "negativeSubtle": "var(--semantic-status-negative-subtle)",
+            "warningSubtle": "var(--semantic-status-warning-subtle)",
+            "infoSubtle": "var(--semantic-status-info-subtle)",
+            "pendingSubtle": "var(--semantic-status-pending-subtle)",
+            "neutralSubtle": "var(--semantic-status-neutral-subtle)"
           }
         }
       },

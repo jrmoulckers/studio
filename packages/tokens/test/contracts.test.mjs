@@ -488,7 +488,7 @@ test('generated contract guards reject removed exports, aliases, selectors, and 
     rmSync(malformedTypesRoot, { recursive: true, force: true });
   }
 
-  const scopedPreferenceMutation = indexCss.replace('    --motion-press-duration: 0ms;', '');
+  const scopedPreferenceMutation = indexCss.replace('    --motion-press-duration: 1ms;', '');
   assert.throws(
     () =>
       assertCssContract({
