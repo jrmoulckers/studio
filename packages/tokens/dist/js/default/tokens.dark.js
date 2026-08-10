@@ -558,7 +558,7 @@ export const tokens = {
   },
   "avatar": {
     "bg": "#7c5cff",
-    "text": "#0f1020",
+    "text": "#000000",
     "ring": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
     "weight": 700,
     "size": "28px",

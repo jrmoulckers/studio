@@ -307,15 +307,15 @@ export const tokens = {
     "border": "#dcdcea",
     "text": "#1c1d2e",
     "text-muted": "#5b5e7e",
-    "primary": "#7c5cff",
-    "primary-strong": "#6b46f0",
+    "primary": "#6b46f0",
+    "primary-strong": "oklch(0.38 0.14 285)",
     "on-primary": "#ffffff",
     "accent": "#ffd166",
     "accent-ink": "#806600",
     "success": "oklch(0.47 0.10 165)",
     "danger": "oklch(0.50 0.13 25)",
     "warning": "oklch(0.41 0.08 80)",
-    "focus-ring": "#7c5cff"
+    "focus-ring": "#6b46f0"
   },
   "semantic": {
     "background": {
@@ -332,13 +332,13 @@ export const tokens = {
     },
     "border": {
       "default": "#dcdcea",
-      "focus": "#7c5cff",
+      "focus": "#6b46f0",
       "error": "#f87171"
     },
     "interactive": {
-      "default": "#7c5cff",
-      "hover": "#6b46f0",
-      "pressed": "oklch(0.38 0.14 285)",
+      "default": "#6b46f0",
+      "hover": "oklch(0.38 0.14 285)",
+      "pressed": "oklch(0.28 0.10 285)",
       "disabled": "#e7e7f4"
     },
     "accent": {
@@ -574,7 +574,7 @@ export const tokens = {
   },
   "avatar": {
     "bg": "#7c5cff",
-    "text": "#ffffff",
+    "text": "#000000",
     "ring": "inset 0 0 0 1px rgba(0, 0, 0, 0.18)",
     "weight": 700,
     "size": "28px",
@@ -582,10 +582,10 @@ export const tokens = {
   },
   "button": {
     "primary": {
-      "bg": "#7c5cff",
+      "bg": "#6b46f0",
       "text": "#ffffff",
-      "border": "#6b46f0",
-      "hover-bg": "#6b46f0",
+      "border": "oklch(0.38 0.14 285)",
+      "hover-bg": "oklch(0.38 0.14 285)",
       "radius": "8px",
       "min-height": "46px",
       "padding-x": "18px",
@@ -623,7 +623,7 @@ export const tokens = {
     "bg": "#ffffff",
     "text": "#1c1d2e",
     "border": "#dcdcea",
-    "hover-border": "#7c5cff",
+    "hover-border": "#6b46f0",
     "radius": "16px",
     "padding": "16px",
     "shadow": "0 10px 30px rgba(60, 50, 120, 0.12)"
@@ -693,7 +693,7 @@ export const tokens = {
     "text": "#1c1d2e",
     "border": "#dcdcea",
     "placeholder": "#5b5e7e",
-    "focus-ring": "#7c5cff",
+    "focus-ring": "#6b46f0",
     "radius": "8px",
     "min-height": "46px",
     "padding-x": "12px",
@@ -746,7 +746,7 @@ export const tokens = {
   },
   "progress": {
     "track": "#f1f1f9",
-    "fill": "#7c5cff",
+    "fill": "#6b46f0",
     "height": "8px",
     "height-lg": "12px",
     "radius": "9999px",
@@ -776,7 +776,7 @@ export const tokens = {
     "text": "#1c1d2e",
     "text-muted": "#5b5e7e",
     "border": "#dcdcea",
-    "action": "#ffd166",
+    "action": "#806600",
     "radius": "16px",
     "elevation": "0 10px 30px rgba(60, 50, 120, 0.12)",
     "layer": 2000,

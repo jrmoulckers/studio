@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { TextDecoder } from 'node:util';
+import { contrastRatio } from './contrast.mjs';
 
 const TOKEN_METADATA = new Set(['$description', '$deprecated', '$extensions', '$type']);
 const REFERENCE_PATTERN = /\{([^{}]+)\}/g;
@@ -440,6 +441,123 @@ export function assertCognitiveComponentContract({ rootCss, indexCss, componentN
 
   if (overrides === 0) {
     fail('Cognitive mode overrides no component property; the tokens are shipped but inert.');
+  }
+}
+
+/**
+ * Every composited color pair must meet its WCAG 2.2 minimum in every theme.
+ *
+ * This guard exists because five real failures shipped without it, including a toast
+ * action label at 1.44:1 — gold text on a white surface, in a palette whose own token
+ * description warns that pure Crown Gold fails on light surfaces. Nothing compared the
+ * two tokens, so the rule was documented and violated at the same time.
+ *
+ * References are resolved through the full token graph exactly as the build resolves
+ * them, per theme, so a pair can pass in dark and fail in light and still be caught.
+ */
+export function assertContrastContract({ documents, modes, pairs, minimumOverride }) {
+  const base = new Map();
+  const collect = (into, node, path = []) => {
+    for (const [key, value] of Object.entries(node ?? {})) {
+      if (key.startsWith('$')) continue;
+      if (!value || typeof value !== 'object' || Array.isArray(value)) continue;
+      if (value.$value !== undefined) into.set([...path, key].join('.'), value.$value);
+      else collect(into, value, [...path, key]);
+    }
+  };
+
+  for (const { file, document } of documents) {
+    if (!file.includes('color.semantic.')) collect(base, document);
+  }
+
+  const failures = [];
+  for (const { name, document } of modes) {
+    const table = new Map(base);
+    collect(table, document);
+
+    const resolve = (value, depth = 0) => {
+      if (typeof value !== 'string' || !value.startsWith('{')) return value;
+      if (depth > 20) fail(`Reference cycle while resolving "${value}".`);
+      const key = value.slice(1, -1);
+      if (!table.has(key)) fail(`Contrast pair references undeclared token "${value}".`);
+      return resolve(table.get(key), depth + 1);
+    };
+
+    for (const [background, foreground, label, minimum] of pairs) {
+      if (!table.has(background)) fail(`Contrast pair references missing token "${background}".`);
+      if (!table.has(foreground)) fail(`Contrast pair references missing token "${foreground}".`);
+
+      const required = minimumOverride ?? minimum;
+      const measured = contrastRatio(
+        resolve(table.get(background)),
+        resolve(table.get(foreground)),
+      );
+      if (measured + 0.005 < required) {
+        failures.push(
+          `${name}: ${label} is ${measured.toFixed(2)}:1, below the required ${required}:1`,
+        );
+      }
+    }
+  }
+
+  if (failures.length > 0) {
+    fail(`WCAG contrast contract violated:\n  ${failures.join('\n  ')}`);
+  }
+}
+
+/**
+ * The avatar ink is measured against every player fill, not just the default one.
+ *
+ * `avatar.bg` names `color.player.1`, but the runtime cycles all twelve. A guard that
+ * only checked the declared default would have passed while eleven other fills went
+ * unmeasured — and the fills are theme-invariant, so an ink that flips with the theme
+ * is wrong in one theme by construction.
+ */
+export function assertAvatarInkContract({ documents, fillCount, minimum = 4.5 }) {
+  const table = new Map();
+  const collect = (node, path = []) => {
+    for (const [key, value] of Object.entries(node ?? {})) {
+      if (key.startsWith('$')) continue;
+      if (!value || typeof value !== 'object' || Array.isArray(value)) continue;
+      if (value.$value !== undefined) table.set([...path, key].join('.'), value.$value);
+      else collect(value, [...path, key]);
+    }
+  };
+  for (const { file, document } of documents) {
+    if (!file.includes('color.semantic.')) collect(document);
+  }
+
+  const resolve = (value, depth = 0) => {
+    if (typeof value !== 'string' || !value.startsWith('{')) return value;
+    if (depth > 20) fail(`Reference cycle while resolving "${value}".`);
+    const key = value.slice(1, -1);
+    if (!table.has(key)) fail(`Avatar contract references undeclared token "${value}".`);
+    return resolve(table.get(key), depth + 1);
+  };
+
+  const ink = table.get('avatar.text');
+  if (ink === undefined) fail('avatar.text is not declared.');
+  if (typeof ink === 'string' && ink.startsWith('{semantic.')) {
+    fail(
+      `avatar.text resolves through "${ink}", which changes per theme, but the player fills do not. ` +
+        'The ink must be theme-invariant so it is measured against the fill it is actually drawn on.',
+    );
+  }
+
+  const resolvedInk = resolve(ink);
+  const failures = [];
+  for (let index = 1; index <= fillCount; index += 1) {
+    const key = `color.player.${index}`;
+    if (!table.has(key))
+      fail(`Avatar contract expects ${fillCount} player fills; ${key} is missing.`);
+    const measured = contrastRatio(resolve(table.get(key)), resolvedInk);
+    if (measured + 0.005 < minimum) {
+      failures.push(`player.${index} is ${measured.toFixed(2)}:1, below the required ${minimum}:1`);
+    }
+  }
+
+  if (failures.length > 0) {
+    fail(`Avatar initials fail contrast on some fills:\n  ${failures.join('\n  ')}`);
   }
 }
 
