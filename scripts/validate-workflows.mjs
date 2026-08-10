@@ -111,23 +111,60 @@ const windows = jobBlock('format_windows');
 assert.match(windows, /runs-on: windows-latest/);
 assert.match(windows, /run: pnpm format:check/, 'Windows formatting parity must remain local');
 
-for (const localJob of [tokens, windows, jobBlock('build')]) {
+for (const localJob of [
+  tokens,
+  windows,
+  jobBlock('native_kotlin'),
+  jobBlock('native_swift'),
+  jobBlock('build'),
+]) {
   assert.match(localJob, /timeout-minutes: \d+/, 'every local job must have a timeout');
 }
 
+// Studio owns native codegen correctness; the backbone transports these files but never
+// compiles them. See issue #58.
+const nativeKotlin = jobBlock('native_kotlin');
+assert.match(nativeKotlin, /runs-on: ubuntu-latest/);
+assert.match(
+  nativeKotlin,
+  /sha256sum --check --strict/,
+  'the pinned Kotlin compiler download must be checksum-verified',
+);
+assert.match(
+  nativeKotlin,
+  /packages\/tokens\/dist\/native\/compose\/JrmTokens\.kt/,
+  'the Kotlin job must compile the generated token source',
+);
+
+const nativeSwift = jobBlock('native_swift');
+assert.match(nativeSwift, /runs-on: macos-latest/);
+assert.match(
+  nativeSwift,
+  /swiftc -typecheck packages\/tokens\/dist\/native\/swift\/JRMTokens\.swift/,
+  'the Swift job must type-check the generated token source',
+);
+
+// Counting guarded checkouts against total checkouts, rather than against a fixed
+// number, keeps this assertion correct as jobs are added.
+const totalCheckouts = [...workflow.matchAll(/uses: actions\/checkout@/g)];
 const localCheckouts = [
   ...workflow.matchAll(
     /uses: actions\/checkout@[^\n]+\n {8}with:\n {10}persist-credentials: false/g,
   ),
 ];
-assert.equal(localCheckouts.length, 2, 'every local checkout must disable persisted credentials');
+assert.ok(totalCheckouts.length > 0, 'the workflow must check out the repository');
+assert.equal(
+  localCheckouts.length,
+  totalCheckouts.length,
+  'every local checkout must disable persisted credentials',
+);
 
 const aggregate = jobBlock('build');
 assert.match(aggregate, /name: build/, 'the aggregate required-check name must remain stable');
 assert.match(aggregate, /permissions: {}/, 'the aggregate must not receive repository permissions');
 assert.match(
   aggregate,
-  /needs: \[lint, web, security, tokens_dist, format_windows\]/,
+  /needs: \[lint, web, security, tokens_dist, format_windows, native_kotlin, native_swift\]/,
   'the stable build aggregate must require every evidence job',
 );
 for (const result of [
@@ -136,6 +173,8 @@ for (const result of [
   'needs.security.result',
   'needs.tokens_dist.result',
   'needs.format_windows.result',
+  'needs.native_kotlin.result',
+  'needs.native_swift.result',
 ]) {
   assert.ok(aggregate.includes(result), `build aggregate must inspect ${result}`);
 }
