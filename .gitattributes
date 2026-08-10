@@ -6,3 +6,10 @@
 # the registry-free sync engine, so its bytes must be deterministic (LF) on every
 # platform regardless of core.autocrlf. Keep the whole dist tree LF.
 packages/tokens/dist/** text eol=lf
+
+# studio:base:start
+# synced from jrmoulckers/.github — canonical source; do not edit here
+# Normalize every detected text file to LF in the index and working tree.
+# Git's automatic text detection leaves binary files byte-for-byte unchanged.
+* text=auto eol=lf
+# studio:base:end
