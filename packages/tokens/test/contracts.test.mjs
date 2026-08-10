@@ -57,7 +57,7 @@ const require = createRequire(import.meta.url);
 const packageJson = require(join(packageRoot, 'package.json'));
 const documents = readTokenDocuments(tokenRoot);
 const byFile = new Map(documents.map((document) => [document.file, document]));
-const modeNames = ['light', 'dark', 'dark-oled', 'high-contrast'];
+const modeNames = ['light', 'dark', 'dark-oled', 'high-contrast', 'high-contrast-dark'];
 const modeDocuments = modeNames.map((name) => ({
   name,
   document: byFile.get(`themes/default/color.semantic.${name}.json`),

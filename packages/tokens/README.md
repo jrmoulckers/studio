@@ -29,6 +29,7 @@ tokens/
 │       ├── color.semantic.dark.json            # [data-theme="dark"]  (canonical mode)
 │       ├── color.semantic.dark-oled.json       # [data-theme="dark-oled"]  (true-black)
 │       ├── color.semantic.high-contrast.json   # [data-theme="high-contrast"]
+│       ├── color.semantic.high-contrast-dark.json # [data-theme="high-contrast-dark"]
 │       └── color.alias.json                    # flat --color-* back-compat aliases
 ├── semantic/             # theme-agnostic purposes
 │   ├── typography.json  motion.json  cognitive.json
@@ -89,9 +90,15 @@ consumers keep working and re-flow across every mode automatically:
 ### Color modes
 
 `light` is the CSS `:root` default. `dark` (the canonical narrative mode — the app boots
-`data-theme="dark"`), `dark-oled` (true-black `#000` surfaces for OLED), and `high-contrast`
-are `[data-theme]` overrides that only restate the semantic colors, so component vars and flat
-aliases in `:root` re-flow automatically.
+`data-theme="dark"`), `dark-oled` (true-black `#000` surfaces for OLED), `high-contrast`, and
+`high-contrast-dark` are `[data-theme]` overrides that only restate the semantic colors, so
+component vars and flat aliases in `:root` re-flow automatically.
+
+`high-contrast-dark` serves users who need maximum contrast _and_ dark surfaces. It previously
+existed only as a hand-maintained `@media` block in the generated `index.css`, which meant JS and
+native consumers could not see it and no user could select it explicitly. It is now a real theme
+backed by its own file, and the media block is generated from that same file so the two paths
+cannot drift.
 
 ### Auto-switching & accessibility
 
@@ -100,8 +107,12 @@ The generated `index.css` bakes in system-preference auto-switching (each guarde
 
 - `@media (prefers-color-scheme: dark)` → dark palette
 - `@media (prefers-contrast: more)` → high-contrast palette + CVD-safe chart ramp
-- `@media (prefers-color-scheme: dark) and (prefers-contrast: more)` → brighter dark-HC combo
-- `@media (prefers-reduced-motion: reduce)` → motion durations collapse to `0ms`
+- `@media (prefers-color-scheme: dark) and (prefers-contrast: more)` → the full
+  `high-contrast-dark` palette + CVD-safe chart ramp
+- `@media (prefers-reduced-motion: reduce)` → motion durations collapse to `1ms`
+
+`1ms`, not `0ms`: a zero-duration transition never dispatches `transitionend`/`animationend`, so
+listeners awaiting those events would hang for exactly the users who opted out of motion.
 
 **Cognitive mode:** set `data-a11y-cognitive="true"` to step up the type scale, relax leading,
 and disable motion (finance's activation mechanism).
@@ -121,6 +132,7 @@ build/
 │   ├── tokens-dark.css           # [data-theme="dark"]
 │   ├── tokens-dark-oled.css      # [data-theme="dark-oled"]
 │   ├── tokens-high-contrast.css  # [data-theme="high-contrast"]
+│   ├── tokens-high-contrast-dark.css # [data-theme="high-contrast-dark"]
 │   └── index.css                 # @imports all modes + auto-switching + cognitive blocks
 ├── tailwind/default.cjs          # complete, self-sufficient Tailwind preset (var(--…)-backed)
 ├── native/
@@ -148,13 +160,13 @@ runs the Style Dictionary build and then deterministically mirrors the consumabl
 
 ```
 packages/tokens/dist/
-├── css/default/{tokens,tokens-dark,tokens-dark-oled,tokens-high-contrast,index}.css
+├── css/default/{tokens,tokens-dark,tokens-dark-oled,tokens-high-contrast,tokens-high-contrast-dark,index}.css
 ├── tailwind/default.cjs
 ├── native/compose/JrmTokens.kt
 ├── native/swift/JRMTokens.swift
 └── js/
     ├── index.js  index.d.ts
-    └── default/tokens.{light,dark,dark-oled,high-contrast}.{js,d.ts}
+    └── default/tokens.{light,dark,dark-oled,high-contrast,high-contrast-dark}.{js,d.ts}
 ```
 
 The copy is reproducible — files are walked in a stable order and normalized to LF (a repo-root

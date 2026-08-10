@@ -226,6 +226,7 @@ export function assertJsContract(module, semanticPaths, aliasPaths) {
     'tokensDark',
     'tokensDarkOled',
     'tokensHighContrast',
+    'tokensHighContrastDark',
     'themes',
   ];
   for (const name of exports) {
@@ -240,12 +241,13 @@ export function assertJsContract(module, semanticPaths, aliasPaths) {
     dark: module.tokensDark,
     'dark-oled': module.tokensDarkOled,
     'high-contrast': module.tokensHighContrast,
+    'high-contrast-dark': module.tokensHighContrastDark,
   };
   if (
     Object.keys(module.themes).sort().join(',') !== Object.keys(themes).sort().join(',') ||
     Object.entries(themes).some(([name, tokens]) => module.themes[name] !== tokens)
   ) {
-    fail('JS themes export does not expose the four documented modes.');
+    fail('JS themes export does not expose the five documented modes.');
   }
   for (const [name, tokens] of Object.entries(themes)) {
     for (const path of semanticPaths) {
@@ -386,6 +388,7 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
     "@import './tokens-dark.css';",
     "@import './tokens-dark-oled.css';",
     "@import './tokens-high-contrast.css';",
+    "@import './tokens-high-contrast-dark.css';",
   ]) {
     const remaining = indexCss.trimStart();
     if (!remaining.startsWith(cssImport)) {
@@ -398,7 +401,11 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
     `color-chart-${index + 1}`,
     `var(--color-chart-hc-${index + 1})`,
   ]);
-  const explicitHighContrast = blockBody(indexCss, '[data-theme="high-contrast"]');
+  // Both high-contrast themes share the CVD-safe chart ramp via one grouped selector.
+  const explicitHighContrast = blockBody(
+    indexCss,
+    '[data-theme="high-contrast"],\n[data-theme="high-contrast-dark"]',
+  );
   for (const [name, value] of chartDeclarations) {
     assertDeclaration(explicitHighContrast, name, value);
   }
@@ -407,31 +414,20 @@ export function assertCssContract({ rootCss, indexCss, aliases, modes }) {
   const preferenceBlocks = [
     ['@media (prefers-color-scheme: dark)', 'dark'],
     ['@media (prefers-contrast: more)', 'high-contrast'],
+    [
+      '@media (prefers-color-scheme: dark) and (prefers-contrast: more)',
+      'high-contrast-dark',
+      // Previously a hand-maintained subset. It is now generated from the
+      // high-contrast-dark theme file, so assert the full path set: the
+      // preference-driven path and [data-theme="high-contrast-dark"] must not drift.
+    ],
   ];
   for (const [header, mode] of preferenceBlocks) {
     const rootBlock = blockBody(blockBody(indexCss, header), ':root:not([data-theme])');
     for (const path of modeByName.get(mode).paths) assertDeclaration(rootBlock, cssVarName(path));
-    if (mode === 'high-contrast') {
+    if (mode.startsWith('high-contrast')) {
       for (const [name, value] of chartDeclarations) assertDeclaration(rootBlock, name, value);
     }
-  }
-
-  const combinedContrast = blockBody(
-    blockBody(indexCss, '@media (prefers-color-scheme: dark) and (prefers-contrast: more)'),
-    ':root:not([data-theme])',
-  );
-  for (const name of [
-    'semantic-text-primary',
-    'semantic-text-secondary',
-    'semantic-border-default',
-    'semantic-border-focus',
-    'semantic-interactive-default',
-    'semantic-status-positive',
-    'semantic-status-negative',
-    'semantic-status-warning',
-    'semantic-status-info',
-  ]) {
-    assertDeclaration(combinedContrast, name);
   }
 
   const reducedMotion = blockBody(
@@ -463,6 +459,7 @@ export function assertTypeContract(source) {
     'tokensDark',
     'tokensDarkOled',
     'tokensHighContrast',
+    'tokensHighContrastDark',
     'themes',
   ];
   for (const name of names) {
