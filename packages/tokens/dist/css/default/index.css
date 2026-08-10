@@ -159,10 +159,18 @@
   :root {
     /* Deliberately 1ms, not 0ms: a zero-duration transition or animation never
        fires transitionend/animationend, so cleanup or focus hand-off that awaits
-       those events would hang for reduced-motion users. Matches --duration-reduced. */
+       those events would hang for reduced-motion users. Matches --duration-reduced.
+       Generated from tokens/semantic/motion.json so a new purpose cannot escape it. */
     --motion-press-duration: 1ms;
     --motion-state-duration: 1ms;
     --motion-tile-duration: 1ms;
+    --motion-page-transition-duration: 1ms;
+    --motion-list-item-duration: 1ms;
+    --motion-progress-duration: 1ms;
+    --motion-celebrate-duration: 1ms;
+    --motion-fade-in-duration: 1ms;
+    --motion-fade-out-duration: 1ms;
+    --motion-loading-duration: 1ms;
   }
 }
 
@@ -184,8 +192,18 @@
   --text-overline-line-height: var(--cognitive-type-overline-line-height);
 
   /* Matches --duration-reduced: an instant-but-nonzero duration still fires
-     transitionend/animationend, so listeners that await them never hang. */
+     transitionend/animationend, so listeners that await them never hang.
+     Generated from tokens/semantic/motion.json, like the media-query block above —
+     cognitive mode is documented as a superset of prefers-reduced-motion, so the two
+     lists must never diverge. */
   --motion-press-duration: 1ms;
   --motion-state-duration: 1ms;
   --motion-tile-duration: 1ms;
+  --motion-page-transition-duration: 1ms;
+  --motion-list-item-duration: 1ms;
+  --motion-progress-duration: 1ms;
+  --motion-celebrate-duration: 1ms;
+  --motion-fade-in-duration: 1ms;
+  --motion-fade-out-duration: 1ms;
+  --motion-loading-duration: 1ms;
 }

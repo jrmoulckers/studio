@@ -114,6 +114,12 @@ The generated `index.css` bakes in system-preference auto-switching (each guarde
 `1ms`, not `0ms`: a zero-duration transition never dispatches `transitionend`/`animationend`, so
 listeners awaiting those events would hang for exactly the users who opted out of motion.
 
+Both this block and the cognitive-mode block are **generated from `semantic/motion.json`**. They
+were previously hand-maintained lists of three purposes, which meant a newly authored motion
+purpose kept animating under `prefers-reduced-motion` and nothing failed. Adding a purpose to
+`motion` is now sufficient; a contract test pins that every `--motion-*-duration` is collapsed in
+both blocks.
+
 **Cognitive mode:** set `data-a11y-cognitive="true"` to step up the type scale, relax leading,
 and disable motion (finance's activation mechanism).
 

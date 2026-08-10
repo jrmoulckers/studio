@@ -441,6 +441,34 @@ export const tokens = {
       "duration": "120ms",
       "easing": "ease"
     },
+    "page-transition": {
+      "duration": "250ms",
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
+    },
+    "list-item": {
+      "duration": "150ms",
+      "easing": "cubic-bezier(0, 0, 0, 1)"
+    },
+    "progress": {
+      "duration": "400ms",
+      "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    "celebrate": {
+      "duration": "800ms",
+      "easing": "cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+    },
+    "fade-in": {
+      "duration": "250ms",
+      "easing": "cubic-bezier(0, 0, 0, 1)"
+    },
+    "fade-out": {
+      "duration": "150ms",
+      "easing": "cubic-bezier(0.3, 0, 1, 1)"
+    },
+    "loading": {
+      "duration": "800ms",
+      "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
     "reduced": {
       "duration": "1ms",
       "easing": "linear"
@@ -619,6 +647,24 @@ export const tokens = {
     "padding-x": "12px",
     "padding-y": "11px"
   },
+  "modal": {
+    "surface": "#ffffff",
+    "text": "#1c1d2e",
+    "text-muted": "#5b5e7e",
+    "border": "#dcdcea",
+    "radius": "16px",
+    "elevation": "0 10px 30px rgba(60, 50, 120, 0.12)",
+    "layer": 1000,
+    "scrim-layer": 500,
+    "scrim-opacity": 0.24,
+    "padding": "20px",
+    "gap": "16px",
+    "max-width": "560px",
+    "enter-duration": "250ms",
+    "enter-easing": "cubic-bezier(0.2, 0, 0, 1)",
+    "exit-duration": "150ms",
+    "exit-easing": "cubic-bezier(0.3, 0, 1, 1)"
+  },
   "nav": {
     "tabbar": {
       "bg": "#ffffff",
@@ -662,6 +708,38 @@ export const tokens = {
     "exceeded": "oklch(0.50 0.13 25)",
     "pending": "oklch(0.50 0.09 195)",
     "complete": "oklch(0.47 0.10 165)"
+  },
+  "skeleton": {
+    "base": "#f1f1f9",
+    "highlight": "#e7e7f4",
+    "radius": "8px",
+    "radius-text": "4px",
+    "line-height": "12px",
+    "gap": "8px",
+    "duration": "800ms",
+    "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  "toast": {
+    "surface": "#ffffff",
+    "text": "#1c1d2e",
+    "text-muted": "#5b5e7e",
+    "border": "#dcdcea",
+    "action": "#ffd166",
+    "radius": "16px",
+    "elevation": "0 10px 30px rgba(60, 50, 120, 0.12)",
+    "layer": 2000,
+    "padding-block": "12px",
+    "padding-inline": "16px",
+    "gap": "12px",
+    "max-width": "420px",
+    "enter-duration": "250ms",
+    "enter-easing": "cubic-bezier(0, 0, 0, 1)",
+    "exit-duration": "150ms",
+    "exit-easing": "cubic-bezier(0.3, 0, 1, 1)",
+    "positive": "oklch(0.47 0.10 165)",
+    "negative": "oklch(0.50 0.13 25)",
+    "warning": "oklch(0.41 0.08 80)",
+    "info": "oklch(0.42 0.10 230)"
   }
 };
 export default tokens;
