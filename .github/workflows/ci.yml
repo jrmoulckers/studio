@@ -111,10 +111,70 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
+  # Studio owns native codegen correctness. The backbone sync engine transports these
+  # files but never compiles them, so a malformed emission would otherwise only surface
+  # in a consuming member's build, one repo away. See issue #58.
+  native_kotlin:
+    name: native-kotlin
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      KOTLIN_VERSION: 2.1.20
+      KOTLIN_SHA256: a118197b0de55ffab2bc8d5cd03a5e39033cfb53383d6931bc761dec0784891a
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
+        with:
+          persist-credentials: false
+
+      - name: Setup Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0 (verified 2026-08-10)
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install kotlinc
+        run: |
+          curl -fsSL -o kotlin-compiler.zip \
+            "https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip"
+          echo "${KOTLIN_SHA256}  kotlin-compiler.zip" | sha256sum --check --strict
+          unzip -q kotlin-compiler.zip -d "${RUNNER_TEMP}/kotlin"
+
+      # Compiled against the minimal Compose stubs in packages/tokens/test/native/,
+      # which type-check the generated source without pulling in the Android SDK.
+      # See that directory's README for what this does and does not prove.
+      - name: Compile generated Kotlin tokens
+        run: |
+          "${RUNNER_TEMP}/kotlin/kotlinc/bin/kotlinc" \
+            packages/tokens/dist/native/compose/JrmTokens.kt \
+            packages/tokens/test/native/androidx-compose-graphics-stub.kt \
+            packages/tokens/test/native/androidx-compose-unit-stub.kt \
+            -d "${RUNNER_TEMP}/kotlin-out" \
+            -nowarn
+
+  native_swift:
+    name: native-swift
+    runs-on: macos-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (verified 2026-08-03)
+        with:
+          persist-credentials: false
+
+      # swiftc and the SDK ship on the macOS runner, so unlike the Kotlin job this is a
+      # genuine type-check against real SwiftUI rather than against stubs.
+      - name: Type-check generated Swift tokens
+        run: |
+          swift --version
+          swiftc -typecheck packages/tokens/dist/native/swift/JRMTokens.swift
+
   build:
     name: build
     if: ${{ always() }}
-    needs: [lint, web, security, tokens_dist, format_windows]
+    needs: [lint, web, security, tokens_dist, format_windows, native_kotlin, native_swift]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
@@ -126,12 +186,16 @@ jobs:
           SECURITY_RESULT: ${{ needs.security.result }}
           TOKENS_RESULT: ${{ needs.tokens_dist.result }}
           WINDOWS_RESULT: ${{ needs.format_windows.result }}
+          KOTLIN_RESULT: ${{ needs.native_kotlin.result }}
+          SWIFT_RESULT: ${{ needs.native_swift.result }}
         run: |
           if [[ "$LINT_RESULT" != "success" ||
                 "$WEB_RESULT" != "success" ||
                 "$SECURITY_RESULT" != "success" ||
                 "$TOKENS_RESULT" != "success" ||
-                "$WINDOWS_RESULT" != "success" ]]; then
-            echo "Required CI job failed: lint=$LINT_RESULT, web=$WEB_RESULT, security=$SECURITY_RESULT, tokens=$TOKENS_RESULT, windows=$WINDOWS_RESULT"
+                "$WINDOWS_RESULT" != "success" ||
+                "$KOTLIN_RESULT" != "success" ||
+                "$SWIFT_RESULT" != "success" ]]; then
+            echo "Required CI job failed: lint=$LINT_RESULT, web=$WEB_RESULT, security=$SECURITY_RESULT, tokens=$TOKENS_RESULT, windows=$WINDOWS_RESULT, kotlin=$KOTLIN_RESULT, swift=$SWIFT_RESULT"
             exit 1
           fi
