@@ -22,9 +22,9 @@
       "$description": "Hairline edge, so the toast holds its shape on a busy surface."
     },
     "action": {
-      "$value": "{semantic.accent.default}",
+      "$value": "{semantic.accent.ink}",
       "$type": "color",
-      "$description": "Inline action (\"Undo\"). Must remain a real control, never the only way to recover."
+      "$description": "Inline action (\"Undo\"). Must remain a real control, never the only way to recover. Uses accent.ink, not accent.default: this is gold TEXT, and pure Crown Gold measures 1.44:1 on a light toast surface. accent.ink is the per-theme gold that is legible as text."
     },
     "radius": {
       "$value": "{radius.md}",

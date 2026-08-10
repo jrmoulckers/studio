@@ -91,6 +91,50 @@ export const REQUIRED_TAILWIND_SHELL = Object.freeze([
   ['minWidth', 'min', 'var(--target-min)'],
 ]);
 
+/**
+ * Foreground/background pairs that a user actually sees composited, with the WCAG 2.2
+ * minimum each one owes.
+ *
+ * Studio distributes these components to every product, so a contrast failure here is
+ * inherited by all of them at once. The pairs are listed rather than inferred because
+ * only a human knows which two tokens end up on top of each other — `toast.action` is
+ * text on `toast.surface`, but nothing in the token graph says so.
+ *
+ * `4.5` is normal-size text (SC 1.4.3). `3` is a non-text/large-text pair such as an
+ * icon or a status glyph (SC 1.4.11). Disabled states are exempt from both.
+ */
+export const CONTRAST_PAIRS = Object.freeze(
+  [
+    ['button.primary.bg', 'button.primary.text', 'primary button label', 4.5],
+    ['button.default.bg', 'button.default.text', 'default button label', 4.5],
+    ['semantic.background.primary', 'button.ghost.text', 'ghost button label', 4.5],
+    ['semantic.background.primary', 'button.danger.text', 'danger button label', 4.5],
+    ['pill.bg', 'pill.text', 'pill label', 4.5],
+    ['input.bg', 'input.text', 'input value', 4.5],
+    ['input.bg', 'input.placeholder', 'input placeholder', 4.5],
+    ['toast.surface', 'toast.text', 'toast body', 4.5],
+    ['toast.surface', 'toast.text-muted', 'toast muted body', 4.5],
+    ['toast.surface', 'toast.action', 'toast action label', 4.5],
+    ['toast.surface', 'toast.positive', 'toast positive glyph', 3],
+    ['toast.surface', 'toast.negative', 'toast negative glyph', 3],
+    ['toast.surface', 'toast.warning', 'toast warning glyph', 3],
+    ['toast.surface', 'toast.info', 'toast info glyph', 3],
+    ['modal.surface', 'modal.text', 'modal body', 4.5],
+    ['modal.surface', 'modal.text-muted', 'modal muted body', 4.5],
+    ['card.bg', 'card.text', 'card body', 4.5],
+    ['tile.bg', 'tile.text', 'tile body', 4.5],
+    ['nav.tabbar.bg', 'nav.tab.text', 'inactive tab label', 4.5],
+    ['nav.tab.active-bg', 'nav.tab.active-text', 'active tab label', 4.5],
+    ['nav.iconbtn.bg', 'nav.iconbtn.text', 'icon button glyph', 4.5],
+  ].map((pair) => Object.freeze(pair)),
+);
+
+/**
+ * Avatar fills are theme-invariant player identities, so their ink must clear AA against
+ * every one of them rather than against a single default.
+ */
+export const AVATAR_FILL_COUNT = 12;
+
 export const REQUIRED_SEMANTIC_TOKENS = Object.freeze(
   [
     'semantic.background.primary',

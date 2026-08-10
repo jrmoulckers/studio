@@ -246,11 +246,11 @@
   --semantic-text-disabled: var(--color-paper-cloud-line); /** Disabled text — WCAG-exempt. */
   --semantic-text-inverse: var(--color-base-white); /** Text on interactive/brand fills. */
   --semantic-border-default: var(--color-paper-cloud-line);
-  --semantic-border-focus: var(--color-royal-violet-500); /** Shared Royal Violet focus ring. */
+  --semantic-border-focus: var(--color-royal-violet-600); /** Shared Royal Violet focus ring, tracking interactive.default. */
   --semantic-border-error: var(--color-loss-500);
-  --semantic-interactive-default: var(--color-royal-violet-500); /** Royal Violet — the one brand action color. */
-  --semantic-interactive-hover: var(--color-royal-violet-600); /** Deep Violet hover echo. */
-  --semantic-interactive-pressed: var(--color-royal-violet-700);
+  --semantic-interactive-default: var(--color-royal-violet-600); /** Royal Violet — the one brand action color. Uses the 600 step, not 500: this fill carries text.inverse on primary buttons, and 500 measures only 4.35:1 against white, below WCAG 2.2 AA for normal text. */
+  --semantic-interactive-hover: var(--color-royal-violet-700); /** Deep Violet hover echo — one step below default, keeping three distinct stops. */
+  --semantic-interactive-pressed: var(--color-royal-violet-800);
   --semantic-interactive-disabled: var(--color-paper-haze); /** Disabled interactive fill — WCAG-exempt. */
   --semantic-accent-default: var(--color-crown-gold-500); /** Crown Gold — leader & winner fills/washes (the Crown Gold Rule). */
   --semantic-accent-ink: var(--color-crown-gold-ink-light); /** Pure Crown Gold fails WCAG on light surfaces — darken gold TEXT to #806600 while keeping gold fills as accent.default. */
@@ -348,6 +348,7 @@
   --state-scrim-opacity: var(--opacity-strong); /** Dimming strength behind modals and sheets. */
   --elevation-flat: var(--shadow-none); /** No lift — the default for in-flow content. */
   --avatar-bg: var(--color-player-1); /** Default fill; runtime assigns #7c5cff–#facc15 in order. */
+  --avatar-text: var(--color-base-black); /** Initials ink. Deliberately theme-invariant, because the fill is: player colors are fixed identities that do not change between light and dark, so an ink that flipped with the theme would be measured against the wrong background. Black is the only ink that clears WCAG 2.2 AA against all twelve fills (worst case player.1 at 4.83:1). */
   --avatar-weight: var(--font-weight-bold);
   --button-primary-min-height: var(--target-min);
   --button-default-min-height: var(--target-min);
@@ -407,7 +408,6 @@
   --cognitive-spacing-block-padding: var(--spacing-xl); /** Vertical padding inside containers — 20px. */
   --elevation-hairline: var(--shadow-hairline); /** 1px inner ring that preserves an edge without a drop shadow. */
   --elevation-raised: var(--shadow-lift); /** The single Soft Lift — cards, tiles, popovers, toast. */
-  --avatar-text: var(--semantic-text-inverse);
   --avatar-ring: var(--shadow-hairline);
   --avatar-radius: var(--radius-pill);
   --button-primary-bg: var(--semantic-interactive-default);
@@ -516,7 +516,7 @@
   --toast-text: var(--semantic-text-primary); /** Message text. */
   --toast-text-muted: var(--semantic-text-secondary); /** Supporting detail or timestamp. */
   --toast-border: var(--semantic-border-default); /** Hairline edge, so the toast holds its shape on a busy surface. */
-  --toast-action: var(--semantic-accent-default); /** Inline action ("Undo"). Must remain a real control, never the only way to recover. */
+  --toast-action: var(--semantic-accent-ink); /** Inline action ("Undo"). Must remain a real control, never the only way to recover. Uses accent.ink, not accent.default: this is gold TEXT, and pure Crown Gold measures 1.44:1 on a light toast surface. accent.ink is the per-theme gold that is legible as text. */
   --toast-radius: var(--radius-md); /** Container radius — matches cards. */
   --toast-layer: var(--layer-toast); /** Above dialogs, so a toast raised by a dialog action stays visible. */
   --toast-enter-duration: var(--motion-fade-in-duration); /** Entrance. */

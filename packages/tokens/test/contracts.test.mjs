@@ -31,7 +31,9 @@ import {
   assertCssContract,
   assertA11yContract,
   assertReducedMotionContract,
+  assertAvatarInkContract,
   assertCognitiveComponentContract,
+  assertContrastContract,
   assertDocumentSet,
   assertJsContract,
   assertTailwindContract,
@@ -45,6 +47,8 @@ import {
   validateReferenceGraph,
 } from './helpers/contract-validators.mjs';
 import {
+  AVATAR_FILL_COUNT,
+  CONTRAST_PAIRS,
   REQUIRED_ALIASES,
   REQUIRED_SEMANTIC_TOKENS,
   REQUIRED_STRUCTURAL_TOKENS,
@@ -185,6 +189,79 @@ test('all authored token JSON is DTCG-shaped and references resolve without cycl
   for (const { document } of modeDocuments) {
     validateReferenceGraph([...sharedDocuments, document]);
   }
+});
+
+test('every composited color pair meets its WCAG 2.2 minimum in every theme', () => {
+  const themes = modeDocuments.map(({ name, document }) => ({ name, document: document.document }));
+  assertContrastContract({ documents, modes: themes, pairs: CONTRAST_PAIRS });
+  assertAvatarInkContract({ documents, fillCount: AVATAR_FILL_COUNT });
+
+  // Raising every minimum must fail, proving the ratios are measured rather than assumed.
+  assert.throws(
+    () =>
+      assertContrastContract({
+        documents,
+        modes: themes,
+        pairs: CONTRAST_PAIRS,
+        minimumOverride: 21.01,
+      }),
+    /WCAG contrast contract violated/,
+  );
+
+  // The exact regression this guard exists for: gold text on a light surface at 1.44:1.
+  // The palette documents this rule; nothing enforced it until now.
+  const goldAction = documents.map((document) =>
+    document.file === 'component/toast.json'
+      ? {
+          ...document,
+          document: JSON.parse(
+            JSON.stringify(document.document).replace(
+              '{semantic.accent.ink}',
+              '{semantic.accent.default}',
+            ),
+          ),
+        }
+      : document,
+  );
+  assert.throws(
+    () => assertContrastContract({ documents: goldAction, modes: themes, pairs: CONTRAST_PAIRS }),
+    /toast action label/,
+  );
+
+  // An avatar ink that flips with the theme is wrong by construction: the fills do not flip.
+  const themedInk = documents.map((document) =>
+    document.file === 'component/avatar.json'
+      ? {
+          ...document,
+          document: JSON.parse(
+            JSON.stringify(document.document).replace(
+              '{color.base.black}',
+              '{semantic.text.inverse}',
+            ),
+          ),
+        }
+      : document,
+  );
+  assert.throws(
+    () => assertAvatarInkContract({ documents: themedInk, fillCount: AVATAR_FILL_COUNT }),
+    /changes per theme/,
+  );
+
+  // White initials pass on the declared default fill but fail on eleven others.
+  const whiteInk = documents.map((document) =>
+    document.file === 'component/avatar.json'
+      ? {
+          ...document,
+          document: JSON.parse(
+            JSON.stringify(document.document).replace('{color.base.black}', '{color.base.white}'),
+          ),
+        }
+      : document,
+  );
+  assert.throws(
+    () => assertAvatarInkContract({ documents: whiteInk, fillCount: AVATAR_FILL_COUNT }),
+    /player\.\d+ is \d/,
+  );
 });
 
 test('theme-agnostic structural tokens expose the documented layer, state, elevation, focus, and target contract', () => {

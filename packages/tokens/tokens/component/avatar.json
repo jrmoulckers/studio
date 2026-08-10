@@ -6,7 +6,11 @@
       "$type": "color",
       "$description": "Default fill; runtime assigns {color.player.1}–{color.player.12} in order."
     },
-    "text": { "$value": "{semantic.text.inverse}", "$type": "color" },
+    "text": {
+      "$value": "{color.base.black}",
+      "$type": "color",
+      "$description": "Initials ink. Deliberately theme-invariant, because the fill is: player colors are fixed identities that do not change between light and dark, so an ink that flipped with the theme would be measured against the wrong background. Black is the only ink that clears WCAG 2.2 AA against all twelve fills (worst case player.1 at 4.83:1)."
+    },
     "ring": { "$value": "{shadow.hairline}", "$type": "shadow" },
     "weight": { "$value": "{font.weight.bold}", "$type": "fontWeight" },
     "size": { "$value": "28px", "$type": "dimension" },

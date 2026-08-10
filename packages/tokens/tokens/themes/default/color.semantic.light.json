@@ -40,24 +40,24 @@
     "border": {
       "default": { "$value": "{color.paper.cloud-line}", "$type": "color" },
       "focus": {
-        "$value": "{color.royal-violet.500}",
+        "$value": "{color.royal-violet.600}",
         "$type": "color",
-        "$description": "Shared Royal Violet focus ring."
+        "$description": "Shared Royal Violet focus ring, tracking interactive.default."
       },
       "error": { "$value": "{color.loss.500}", "$type": "color" }
     },
     "interactive": {
       "default": {
-        "$value": "{color.royal-violet.500}",
-        "$type": "color",
-        "$description": "Royal Violet — the one brand action color."
-      },
-      "hover": {
         "$value": "{color.royal-violet.600}",
         "$type": "color",
-        "$description": "Deep Violet hover echo."
+        "$description": "Royal Violet — the one brand action color. Uses the 600 step, not 500: this fill carries text.inverse on primary buttons, and 500 measures only 4.35:1 against white, below WCAG 2.2 AA for normal text."
       },
-      "pressed": { "$value": "{color.royal-violet.700}", "$type": "color" },
+      "hover": {
+        "$value": "{color.royal-violet.700}",
+        "$type": "color",
+        "$description": "Deep Violet hover echo — one step below default, keeping three distinct stops."
+      },
+      "pressed": { "$value": "{color.royal-violet.800}", "$type": "color" },
       "disabled": {
         "$value": "{color.paper.haze}",
         "$type": "color",
