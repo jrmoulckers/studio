@@ -117,6 +117,33 @@ listeners awaiting those events would hang for exactly the users who opted out o
 **Cognitive mode:** set `data-a11y-cognitive="true"` to step up the type scale, relax leading,
 and disable motion (finance's activation mechanism).
 
+## Accessibility base stylesheet
+
+The a11y tokens (`--focus-ring-*`, `--target-*`) describe an intent, but a token cannot apply
+itself. `@jrm/tokens/css/a11y` is the missing application layer — the rules every consumer was
+otherwise writing, and drifting on, independently:
+
+```css
+@import '@jrm/tokens/css';
+@import '@jrm/tokens/css/a11y';
+```
+
+| Provides                                          | Notes                                                      |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| `:focus-visible` ring + composite `:focus-within` | Token-driven; `:focus` suppression guarded by `@supports`  |
+| `.jrm-sr-only` / `.jrm-sr-only-focusable`         | `clip-path` technique — stays in the accessibility tree    |
+| Touch targets (WCAG 2.5.8)                        | Controls and widget roles only, plus `.jrm-target-compact` |
+| Dark-surface picker chrome                        | Selector list **generated** from the theme set             |
+| `@media (forced-colors: active)`                  | Re-anchors the ring to `CanvasText`                        |
+
+Two decisions worth knowing. Target sizing deliberately excludes bare `a[href]`: a minimum
+inline size on every anchor breaks inline prose links, so it keys off real controls and explicit
+widget roles instead. And the dark-mode selector list is not hand-written — the build classifies
+each mode by measuring the relative luminance of its own `background.primary`, so a sixth theme
+scopes itself. A contract test re-derives that set from the shipped CSS and fails on any drift.
+
+Utilities are `.jrm-`-prefixed because Tailwind already defines a bare `.sr-only`.
+
 ## Build
 
 ```bash
@@ -133,6 +160,7 @@ build/
 │   ├── tokens-dark-oled.css      # [data-theme="dark-oled"]
 │   ├── tokens-high-contrast.css  # [data-theme="high-contrast"]
 │   ├── tokens-high-contrast-dark.css # [data-theme="high-contrast-dark"]
+│   ├── a11y.css                  # focus ring, sr-only, target sizing, forced-colors
 │   └── index.css                 # @imports all modes + auto-switching + cognitive blocks
 ├── tailwind/default.cjs          # complete, self-sufficient Tailwind preset (var(--…)-backed)
 ├── native/
@@ -161,6 +189,7 @@ runs the Style Dictionary build and then deterministically mirrors the consumabl
 ```
 packages/tokens/dist/
 ├── css/default/{tokens,tokens-dark,tokens-dark-oled,tokens-high-contrast,tokens-high-contrast-dark,index}.css
+├── css/default/a11y.css
 ├── tailwind/default.cjs
 ├── native/compose/JrmTokens.kt
 ├── native/swift/JRMTokens.swift

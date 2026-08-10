@@ -16,7 +16,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { mkdirSync, writeFileSync, readFileSync } from 'fs';
 
-import { NATIVE_MODES, renderCompose, renderSwift } from './native.mjs';
+import { NATIVE_MODES, parseColor, renderCompose, renderSwift } from './native.mjs';
+import { renderA11yCss } from './a11y-css.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
@@ -56,6 +57,23 @@ const semDark = `${themeDir}/color.semantic.dark.json`;
 const semDarkOled = `${themeDir}/color.semantic.dark-oled.json`;
 const semHighContrast = `${themeDir}/color.semantic.high-contrast.json`;
 const semHighContrastDark = `${themeDir}/color.semantic.high-contrast-dark.json`;
+
+/**
+ * Every color mode, in documented order, paired with the selector it is emitted
+ * under. Downstream generators derive from this rather than restating the list,
+ * so adding a mode cannot leave a hand-written selector list behind.
+ */
+const COLOR_MODES = [
+  { name: 'light', file: semLight, selector: ':root' },
+  { name: 'dark', file: semDark, selector: '[data-theme="dark"]' },
+  { name: 'dark-oled', file: semDarkOled, selector: '[data-theme="dark-oled"]' },
+  { name: 'high-contrast', file: semHighContrast, selector: '[data-theme="high-contrast"]' },
+  {
+    name: 'high-contrast-dark',
+    file: semHighContrastDark,
+    selector: '[data-theme="high-contrast-dark"]',
+  },
+];
 
 /** Theme-agnostic semantic tokens (typography + motion + cognitive purposes,
  *  plus the structural layer/state/elevation purposes). Elevation references the
@@ -452,6 +470,63 @@ const chartHcRemap = (indent = '    ') =>
     .map((n) => `${indent}--color-chart-${n}: var(--color-chart-hc-${n});`)
     .join('\n');
 
+/**
+ * Resolve a `{color.x.y}` reference against the theme's primitive palette.
+ * Only the primitive file is consulted, which is all the semantic color layer
+ * ever points at.
+ */
+function resolvePrimitive(reference) {
+  const primitiveJson = JSON.parse(readFileSync(colorPrimitive, 'utf8'));
+  let node = { color: primitiveJson.color };
+  for (const segment of String(reference).replace(/[{}]/g, '').trim().split('.')) {
+    node = node?.[segment];
+    if (node === undefined) return undefined;
+  }
+  return node?.$value;
+}
+
+/**
+ * Classify a color mode as dark by measuring its own base surface rather than
+ * matching on its name.
+ *
+ * This is the whole reason the a11y sheet can't go stale. A hand-written list
+ * like `[data-theme='dark'], [data-theme='dark-oled']` silently omits every mode
+ * added after it was written — which is exactly how a consumer ended up shipping
+ * light-mode form-control chrome on a black surface. Adding a sixth mode here
+ * classifies itself.
+ */
+function isDarkMode(semanticFile) {
+  const json = JSON.parse(readFileSync(semanticFile, 'utf8'));
+  const value = resolvePrimitive(json.semantic?.background?.primary?.$value);
+  if (!value)
+    throw new Error(`Cannot classify mode: ${semanticFile} has no resolvable base surface.`);
+  const { r, g, b } = parseColor(value);
+  const channel = (c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b) < 0.5;
+}
+
+/**
+ * Emit the accessibility base stylesheet. The dark-mode selector list is derived
+ * by measuring each mode's own base surface, so a newly added mode classifies
+ * itself instead of waiting to be remembered.
+ */
+function writeA11yStylesheet() {
+  mkdirSync(cssBuildPath, { recursive: true });
+  const darkSelectors = COLOR_MODES.filter((mode) => isDarkMode(mode.file))
+    .map((mode) => mode.selector)
+    .filter((selector) => selector !== ':root');
+  if (darkSelectors.length === 0) {
+    throw new Error('Accessibility stylesheet: no dark color mode was detected.');
+  }
+  writeFileSync(
+    join(root, 'build', 'css', THEME, 'a11y.css'),
+    renderA11yCss({ autogen: AUTOGEN.replace('//', '/*'), darkSelectors }),
+  );
+}
+
 function writeBarrels() {
   mkdirSync(cssBuildPath, { recursive: true });
   mkdirSync(jsBuildPath.replace(`${THEME}/`, ''), { recursive: true });
@@ -634,6 +709,7 @@ try {
   await highContrastSd.buildAllPlatforms();
   await highContrastDarkSd.buildAllPlatforms();
   writeBarrels();
+  writeA11yStylesheet();
   writeNative();
   console.log(
     `✅ @jrm/tokens built (${THEME}: light + dark + dark-oled + high-contrast + high-contrast-dark → css, tailwind, js, native).`,
