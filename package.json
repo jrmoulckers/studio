@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "turbo run test && pnpm run principles:check && pnpm run workflows:check && pnpm run prettier-ignore:check && pnpm run text:check",
+    "test": "turbo run test && pnpm run principles:check && pnpm run workflows:check && pnpm run prettier-ignore:check && pnpm run text:check && pnpm run dist-ext:check",
     "principles:check": "node scripts/validate-principles.mjs",
     "workflows:check": "node scripts/validate-workflows.mjs",
     "principles:verify-live": "node scripts/validate-principles.mjs --live",
@@ -25,7 +25,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "prettier-ignore:check": "node scripts/validate-prettier-ignore.mjs",
-    "text:check": "node scripts/validate-text-classification.mjs"
+    "text:check": "node scripts/validate-text-classification.mjs",
+    "dist-ext:check": "node scripts/validate-dist-extensions.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
