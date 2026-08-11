@@ -231,6 +231,33 @@ pnpm tokens:dist:check    # regenerates dist, then `git diff --exit-code -- pack
 
 If it fails, run `pnpm tokens:dist` and commit the updated `dist/`.
 
+### Reporting value shifts
+
+The freshness guard proves `dist/` is **current**. It does not say what changed in _value_, and
+that gap is inverted against the risk:
+
+| Change          | Surfaces as    | Risk                                        |
+| --------------- | -------------- | ------------------------------------------- |
+| Rename, removal | Build breaks   | **Loud** — a consumer investigates          |
+| Value shift     | Compiles clean | **Quiet** — layout and contrast move unseen |
+
+The sync engine can't cover for it either: it compares hashes, not meanings, so a 2px shift and a
+brand-new file both arrive as a path under **Updated**. The file list is a transport signal, not a
+safety signal.
+
+So token value changes are stated as per-token before/after tables in the PR body and release
+notes — `spacing.md: 14px → 12px`, not "the spacing tier changed". Generate the table:
+
+```bash
+pnpm tokens:diff                    # vs the merge-base with origin/main
+pnpm tokens:diff -- --base v1.2.0   # or any explicit ref
+```
+
+It diffs the committed `dist/js` theme maps — the bytes consumers actually receive — separates
+value shifts from adds and removes, and names the re-check surface: colour moves invalidate
+contrast (a passing WCAG 2.2 AA result is not carried over by a value change), dimension moves
+change layout. It's a reporter, not a gate, so it is deliberately not part of `pnpm test`.
+
 ### Contract tests
 
 From the repository root, `pnpm test` builds the token package and runs the Node test suite.

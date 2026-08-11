@@ -74,11 +74,16 @@ pnpm format:check
 pnpm workflows:check
 pnpm tokens:dist
 pnpm tokens:dist:check
+pnpm tokens:diff
 ```
 
 `packages/tokens/build/` is disposable local output.
 `packages/tokens/dist/` is the committed distribution interface and must remain
 deterministic, current, and text-only.
+
+`pnpm tokens:diff` reports token **value** shifts against a base ref as a
+paste-ready before/after table. Value changes compile clean, so they are stated
+explicitly in PR bodies and release notes rather than left to the file list.
 
 ## Continuous integration
 
