@@ -16,6 +16,21 @@
       "$type": "dimension",
       "$description": "Padding between the container edge and the plot area."
     },
+    "min-height": {
+      "$value": "240px",
+      "$type": "dimension",
+      "$description": "Floor for a legible plot area. Below this, axis labels collide and a chart stops being readable faster than it stops fitting."
+    },
+    "default-height": {
+      "$value": "320px",
+      "$type": "dimension",
+      "$description": "Height a chart takes when the layout expresses no preference."
+    },
+    "max-height": {
+      "$value": "480px",
+      "$type": "dimension",
+      "$description": "Ceiling, so a chart in a tall container does not crowd out everything beneath it."
+    },
     "axis": {
       "$value": "{semantic.border.default}",
       "$type": "color",
@@ -45,6 +60,11 @@
       "$value": "{radius.sm}",
       "$type": "dimension",
       "$description": "Legend color swatch corner radius."
+    },
+    "swatch-size": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Legend color swatch size. Deliberately not on the 4px grid's spacing scale: this is a glyph dimension, not a layout gap, and it is sized to sit optically with the legend label rather than with the layout."
     },
     "tooltip-bg": {
       "$value": "{semantic.background.elevated}",
@@ -95,6 +115,61 @@
       "$value": "{semantic.background.primary}",
       "$type": "color",
       "$description": "Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined."
+    },
+    "slice-stroke-width": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Width of the slice separator. Studio already had the stroke color but not its width, so every consumer picked one and adjacent slices merged at different thresholds."
+    },
+    "donut-inner-ratio": {
+      "$value": 0.6,
+      "$type": "number",
+      "$description": "Inner radius as a fraction of the outer radius. A ratio rather than a length so the hole scales with the chart instead of swallowing it at small sizes."
+    },
+    "line-width": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Line series stroke width. Matches the slice separator so strokes across chart types read as one weight."
+    },
+    "dot-radius": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Data point marker radius on a line series. Markers are required, not decorative: they are what makes a series distinguishable without relying on color."
+    },
+    "dot-radius-active": {
+      "$value": "6px",
+      "$type": "dimension",
+      "$description": "Marker radius for the hovered or focused point. The size change is the non-color signal for the active point."
+    },
+    "empty-icon": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Glyph on the no-data state. Finance used text.disabled, which measured 1.24:1 in light. Strictly this icon is decorative — the empty-state text is required alongside it, so WCAG 1.4.11 does not apply — but an invisible icon is not a subtle icon, it is a missing one. Raised to the same value as the accompanying text."
+    },
+    "empty-text": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Explanatory copy on the no-data state. Always required: a chart with no data must say why, never render blank."
+    },
+    "enter-duration": {
+      "$value": "{motion.progress.duration}",
+      "$type": "duration",
+      "$description": "Series entrance. Shares the progress duration because both animate a value growing into place, and both collapse to 1ms under prefers-reduced-motion."
+    },
+    "enter-easing": {
+      "$value": "{motion.progress.easing}",
+      "$type": "cubicBezier",
+      "$description": "Series entrance easing."
+    },
+    "transition-duration": {
+      "$value": "{motion.fade-in.duration}",
+      "$type": "duration",
+      "$description": "Transition when the underlying data changes without the chart being re-entered."
+    },
+    "transition-easing": {
+      "$value": "{motion.fade-in.easing}",
+      "$type": "cubicBezier",
+      "$description": "Data transition easing."
     },
     "series-1": { "$value": "{color.chart.1}", "$type": "color" },
     "series-2": { "$value": "{color.chart.2}", "$type": "color" },

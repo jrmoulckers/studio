@@ -219,6 +219,15 @@
   --button-default-padding-y: 12px;
   --button-ghost-bg: transparent;
   --button-danger-bg: transparent;
+  --chart-min-height: 240px; /** Floor for a legible plot area. Below this, axis labels collide and a chart stops being readable faster than it stops fitting. */
+  --chart-default-height: 320px; /** Height a chart takes when the layout expresses no preference. */
+  --chart-max-height: 480px; /** Ceiling, so a chart in a tall container does not crowd out everything beneath it. */
+  --chart-swatch-size: 12px; /** Legend color swatch size. Deliberately not on the 4px grid's spacing scale: this is a glyph dimension, not a layout gap, and it is sized to sit optically with the legend label rather than with the layout. */
+  --chart-slice-stroke-width: 2px; /** Width of the slice separator. Studio already had the stroke color but not its width, so every consumer picked one and adjacent slices merged at different thresholds. */
+  --chart-donut-inner-ratio: 0.6; /** Inner radius as a fraction of the outer radius. A ratio rather than a length so the hole scales with the chart instead of swallowing it at small sizes. */
+  --chart-line-width: 2px; /** Line series stroke width. Matches the slice separator so strokes across chart types read as one weight. */
+  --chart-dot-radius: 4px; /** Data point marker radius on a line series. Markers are required, not decorative: they are what makes a series distinguishable without relying on color. */
+  --chart-dot-radius-active: 6px; /** Marker radius for the hovered or focused point. The size change is the non-color signal for the active point. */
   --input-padding-y: 11px;
   --modal-max-width: 560px; /** Comfortable measure for dialog prose. */
   --pill-padding-y: 3px;
@@ -461,6 +470,12 @@
   --chart-bar-radius: var(--radius-sm); /** Bar cap rounding. */
   --chart-bar-gap: var(--spacing-xs); /** Gap between adjacent bars. */
   --chart-slice-stroke: var(--semantic-background-primary); /** Separator stroke between pie or donut slices. Matches the background so slices read as separated rather than outlined. */
+  --chart-empty-icon: var(--semantic-text-secondary); /** Glyph on the no-data state. Finance used text.disabled, which measured 1.24:1 in light. Strictly this icon is decorative — the empty-state text is required alongside it, so WCAG 1.4.11 does not apply — but an invisible icon is not a subtle icon, it is a missing one. Raised to the same value as the accompanying text. */
+  --chart-empty-text: var(--semantic-text-secondary); /** Explanatory copy on the no-data state. Always required: a chart with no data must say why, never render blank. */
+  --chart-enter-duration: var(--motion-progress-duration); /** Series entrance. Shares the progress duration because both animate a value growing into place, and both collapse to 1ms under prefers-reduced-motion. */
+  --chart-enter-easing: var(--motion-progress-easing); /** Series entrance easing. */
+  --chart-transition-duration: var(--motion-fade-in-duration); /** Transition when the underlying data changes without the chart being re-entered. */
+  --chart-transition-easing: var(--motion-fade-in-easing); /** Data transition easing. */
   --chart-series-other: var(--semantic-status-neutral); /** Grouped tail categories rendered as a single "Other" series. Neutral by design, so it never competes with a real series. */
   --cognitive-button-min-height: var(--cognitive-target-min); /** Minimum target height. */
   --cognitive-input-min-height: var(--cognitive-target-min); /** Minimum target height. */

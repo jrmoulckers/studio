@@ -142,6 +142,11 @@ export const CONTRAST_PAIRS = Object.freeze(
       'paywall feature check glyph',
       3,
     ],
+    ['chart.bg', 'chart.axis-label', 'chart axis label', 4.5],
+    ['chart.bg', 'chart.legend-label', 'chart legend label', 4.5],
+    ['chart.tooltip-bg', 'chart.tooltip-text', 'chart tooltip text', 4.5],
+    ['chart.bg', 'chart.empty-text', 'chart empty-state text', 4.5],
+    ['chart.bg', 'chart.empty-icon', 'chart empty-state glyph', 3],
   ].map((pair) => Object.freeze(pair)),
 );
 
