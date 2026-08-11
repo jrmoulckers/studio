@@ -103,9 +103,56 @@ export const REQUIRED_TAILWIND_SHELL = Object.freeze([
  *
  * `4.5` is normal-size text (SC 1.4.3). `3` is a non-text/large-text pair such as an
  * icon or a status glyph (SC 1.4.11). Disabled states are exempt from both.
+ *
+ * Two status pairings are deliberately absent, and their absence is the point:
+ *
+ * - **A subtle status fill against the page** is not pinned at 3:1 because it does not
+ *   reach it, by design. Subtle fills measure 1.03–1.61 against `background.primary` in
+ *   every theme but `high-contrast-dark`. They are washes, not bounded objects, so they
+ *   rely on `border.default` for their edge rather than on the fill itself. Pinning 1.4.11
+ *   here would assert a boundary the fill was never meant to provide.
+ * - **Status-colored text on its own subtle fill** is not pinned because it is not
+ *   universally supported. It clears 4.5 in four themes (5.40–13.87) but lands at
+ *   3.12–4.14 in `high-contrast-dark`, where the fill is deliberately lightened to the
+ *   700 step so the chip is visible at all. On that theme the chip's foreground must be
+ *   `text.primary`, which is pinned above. Pinning the status-colored variant at 4.5 would
+ *   force a change to a documented, correct high-contrast decision.
  */
 export const CONTRAST_PAIRS = Object.freeze(
   [
+    // Status colors carried as text on the three page surfaces. These were entirely
+    // unpinned until now: every one passes today, but nothing held them there, and the
+    // status ramp is the most frequently re-tuned part of the palette.
+    ['semantic.background.primary', 'semantic.status.positive', 'positive text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.positive', 'positive text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.positive', 'positive text on card', 4.5],
+    ['semantic.background.primary', 'semantic.status.negative', 'negative text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.negative', 'negative text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.negative', 'negative text on card', 4.5],
+    ['semantic.background.primary', 'semantic.status.warning', 'warning text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.warning', 'warning text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.warning', 'warning text on card', 4.5],
+    ['semantic.background.primary', 'semantic.status.info', 'info text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.info', 'info text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.info', 'info text on card', 4.5],
+    ['semantic.background.primary', 'semantic.status.pending', 'pending text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.pending', 'pending text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.pending', 'pending text on card', 4.5],
+    ['semantic.background.primary', 'semantic.status.neutral', 'neutral text on page', 4.5],
+    ['semantic.background.secondary', 'semantic.status.neutral', 'neutral text on sunken', 4.5],
+    ['semantic.background.elevated', 'semantic.status.neutral', 'neutral text on card', 4.5],
+
+    // Text on a subtle status fill (the status-chip pattern). `text.primary` is the
+    // supported foreground in every theme — worst case 5.25 in high-contrast-dark.
+    // `text.inverse` is NOT: it inverts with the theme, so on a dark theme's subtle fill
+    // it measures 3.25 and fails AA. See the note on status-colored text below.
+    ['semantic.status.positiveSubtle', 'semantic.text.primary', 'text on positive chip', 4.5],
+    ['semantic.status.negativeSubtle', 'semantic.text.primary', 'text on negative chip', 4.5],
+    ['semantic.status.warningSubtle', 'semantic.text.primary', 'text on warning chip', 4.5],
+    ['semantic.status.infoSubtle', 'semantic.text.primary', 'text on info chip', 4.5],
+    ['semantic.status.pendingSubtle', 'semantic.text.primary', 'text on pending chip', 4.5],
+    ['semantic.status.neutralSubtle', 'semantic.text.primary', 'text on neutral chip', 4.5],
+
     ['button.primary.bg', 'button.primary.text', 'primary button label', 4.5],
     ['button.default.bg', 'button.default.text', 'default button label', 4.5],
     ['semantic.background.primary', 'button.ghost.text', 'ghost button label', 4.5],
