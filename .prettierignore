@@ -9,11 +9,30 @@ build/
 
 # Canonical AI assets are provenance-stamped, hash-locked generated output.
 # Formatting consumer copies would create drift from jrmoulckers/.github.
+#
+# This is not a style preference. The sync engine hashes the bytes it writes; if they
+# no longer match it cannot tell "the member edited this" from "canon changed", so it
+# refuses to overwrite and only warns. A single `pnpm format` over these paths would
+# therefore stop Studio receiving updates to them, permanently and quietly. That is
+# the state jrmoulckers/finance is in today: its vendored tokens.css sat at 20,889
+# bytes against canon's 45,465 while the warning went to a log nobody read.
+#
+# Anything containing a `studio:base` managed region belongs here too, even though
+# only part of the file is canon — Prettier cannot format around a region, and
+# rewriting inside the markers is drift. `scripts/validate-prettier-ignore.mjs`
+# enforces that and fails the build if a marker-bearing file is missing.
 .github/agents/
 .github/instructions/
 .github/prompts/
 .github/skills/
+.github/copilot-instructions.md
+.gitattributes
 .studio-sync.lock.json
+
+# Canon with no Prettier parser. `agency.toml` is generated upstream and Prettier
+# supports no TOML parser, so leaving it in scope is a hard `--check` error rather
+# than a formatting warning.
+agency.toml
 
 # Lockfile — owned by pnpm.
 pnpm-lock.yaml
