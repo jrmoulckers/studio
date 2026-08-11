@@ -728,6 +728,34 @@ export const tokens = {
     "padding-x": "8px",
     "padding-y": "3px"
   },
+  "premium-badge": {
+    "bg": "oklch(0.83 0.10 285)",
+    "text": "#000000",
+    "radius": "9999px",
+    "padding-x": "8px",
+    "padding-y": "4px"
+  },
+  "premium-gate": {
+    "overlay-bg": "#000000",
+    "overlay-opacity": 0.24,
+    "icon": "#e9e9f4",
+    "icon-size": "24px"
+  },
+  "premium-upsell": {
+    "bg": "#0f1020",
+    "border": "#a3a6cb",
+    "radius": "16px",
+    "padding": "16px",
+    "icon": "oklch(0.88 0.07 230)"
+  },
+  "premium-paywall": {
+    "preview-radius": "16px",
+    "feature-check": "oklch(0.78 0.15 165)",
+    "price-selector-radius": "12px",
+    "cta-padding-x": "32px",
+    "cta-padding-y": "12px",
+    "cta-min-height": "46px"
+  },
   "progress": {
     "track": "#0f1020",
     "fill": "oklch(0.83 0.10 285)",

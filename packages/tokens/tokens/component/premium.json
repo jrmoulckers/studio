@@ -1,0 +1,115 @@
+{
+  "$description": "Premium-tier UI: subscription badges, feature gates, inline upsells, and the paywall. Ported from finance's component/premium.json. Studio owns all visual expression, so subscription surfaces are kernel components rather than product-local ones — a second product selling a subscription must not have to reinvent the lock icon.",
+  "premium-badge": {
+    "$description": "The pill marking a feature or plan as premium. Text, not decoration: it must clear 4.5:1, and it is the one premium surface that appears inside otherwise-normal content.",
+    "bg": {
+      "$value": "{semantic.interactive.default}",
+      "$type": "color",
+      "$description": "Badge fill — the brand interactive color, so premium reads as actionable rather than as a warning."
+    },
+    "text": {
+      "$value": "{semantic.text.inverse}",
+      "$type": "color",
+      "$description": "Badge label. This pair measured 4.35:1 in finance and failed WCAG AA; it clears in Studio only because the light interactive ramp was shifted one step. Pinned in CONTRAST_PAIRS so it cannot regress."
+    },
+    "radius": {
+      "$value": "{radius.pill}",
+      "$type": "dimension",
+      "$description": "Fully rounded — a badge is a pill, never a button."
+    },
+    "padding-x": {
+      "$value": "{spacing.2}",
+      "$type": "dimension",
+      "$description": "Horizontal padding."
+    },
+    "padding-y": {
+      "$value": "{spacing.1}",
+      "$type": "dimension",
+      "$description": "Vertical padding."
+    }
+  },
+  "premium-gate": {
+    "$description": "The lock affordance over a feature the current plan does not include.",
+    "overlay-bg": {
+      "$value": "{semantic.background.primary}",
+      "$type": "color",
+      "$description": "Overlay fill, composited at overlay-opacity."
+    },
+    "overlay-opacity": {
+      "$value": "{state.scrim.opacity}",
+      "$type": "number",
+      "$description": "Added in the port. Finance's overlay said 'applied with opacity' but shipped no opacity token, so every consumer picked its own and gated features dimmed inconsistently. Shares the modal scrim strength: a gate and a modal are both 'you cannot reach this yet'."
+    },
+    "icon": {
+      "$value": "{semantic.text.secondary}",
+      "$type": "color",
+      "$description": "Lock glyph. Deliberately NOT text.disabled, which finance used: a lock is not a disabled control, it is the only signal that the feature is gated, so WCAG 1.4.11 applies and the disabled-state exemption does not. text.disabled measured 1.24:1 (light), 1.56:1 (dark), 1.74:1 (dark-oled) against its own background; text.secondary clears 3:1 in every theme, worst case 6.23:1."
+    },
+    "icon-size": {
+      "$value": "{spacing.6}",
+      "$type": "dimension",
+      "$description": "Lock glyph size."
+    }
+  },
+  "premium-upsell": {
+    "$description": "Inline upsell card shown next to a gated feature — the quiet ask, as opposed to the paywall's explicit one.",
+    "bg": {
+      "$value": "{semantic.background.secondary}",
+      "$type": "color",
+      "$description": "Card fill — recessed, so an upsell never outranks the content it sits beside."
+    },
+    "border": {
+      "$value": "{semantic.border.default}",
+      "$type": "color",
+      "$description": "Card edge. Decorative: the card is not a control, so the 3:1 non-text minimum does not apply, matching card.border."
+    },
+    "radius": {
+      "$value": "{radius.md}",
+      "$type": "dimension",
+      "$description": "Container radius. Finance used 12px here, which would have made the upsell the only card in the system with a non-standard corner; realigned to the shared container radius (16px) that card and tile already use."
+    },
+    "padding": {
+      "$value": "{spacing.4}",
+      "$type": "dimension",
+      "$description": "Card padding."
+    },
+    "icon": {
+      "$value": "{semantic.status.info}",
+      "$type": "color",
+      "$description": "Informational glyph — an upsell informs, it does not warn."
+    }
+  },
+  "premium-paywall": {
+    "$description": "The full purchase surface: blurred preview, feature list, price selection, and call to action.",
+    "preview-radius": {
+      "$value": "{radius.md}",
+      "$type": "dimension",
+      "$description": "Blurred feature preview — a container, so it takes the container radius."
+    },
+    "feature-check": {
+      "$value": "{semantic.status.positive}",
+      "$type": "color",
+      "$description": "Checkmark in the included-features list. Never the only signal that a feature is included — pair it with the feature text itself."
+    },
+    "price-selector-radius": {
+      "$value": "{radius.chip}",
+      "$type": "dimension",
+      "$description": "Price option card. Deliberately smaller than the container radius: it nests inside the paywall, and the tighter corner preserves the nesting hierarchy finance authored."
+    },
+    "cta-padding-x": {
+      "$value": "{spacing.8}",
+      "$type": "dimension",
+      "$description": "Extra-wide horizontal padding — the CTA is the most prominent control on the surface."
+    },
+    "cta-padding-y": {
+      "$value": "{spacing.3}",
+      "$type": "dimension",
+      "$description": "Vertical padding."
+    },
+    "cta-min-height": {
+      "$value": "{target.min}",
+      "$type": "dimension",
+      "$description": "Added in the port. Finance sized the CTA by padding alone, so its height depended on the inherited line-height and could fall under the touch-target floor. The single most important button in a paid product should not be the one that is hard to tap."
+    }
+  }
+}
