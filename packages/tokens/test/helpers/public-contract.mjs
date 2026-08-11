@@ -8,6 +8,7 @@ export const REQUIRED_TOKEN_FILES = Object.freeze([
   'component/modal.json',
   'component/nav.json',
   'component/pill.json',
+  'component/premium.json',
   'component/progress.json',
   'component/skeleton.json',
   'component/toast.json',
@@ -126,6 +127,21 @@ export const CONTRAST_PAIRS = Object.freeze(
     ['nav.tabbar.bg', 'nav.tab.text', 'inactive tab label', 4.5],
     ['nav.tab.active-bg', 'nav.tab.active-text', 'active tab label', 4.5],
     ['nav.iconbtn.bg', 'nav.iconbtn.text', 'icon button glyph', 4.5],
+    ['premium-badge.bg', 'premium-badge.text', 'premium badge label', 4.5],
+    ['premium-upsell.bg', 'premium-upsell.icon', 'premium upsell glyph', 3],
+    ['semantic.background.primary', 'premium-gate.icon', 'premium gate lock glyph', 3],
+    [
+      'semantic.background.secondary',
+      'premium-gate.icon',
+      'premium gate lock glyph on recessed bg',
+      3,
+    ],
+    [
+      'semantic.background.primary',
+      'premium-paywall.feature-check',
+      'paywall feature check glyph',
+      3,
+    ],
   ].map((pair) => Object.freeze(pair)),
 );
 

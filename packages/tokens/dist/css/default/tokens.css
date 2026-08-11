@@ -377,6 +377,13 @@
   --modal-padding: var(--spacing-5); /** Dialog padding. */
   --modal-gap: var(--spacing-4); /** Gap between title, body, and actions. */
   --nav-iconbtn-size: var(--target-min);
+  --premium-badge-padding-x: var(--spacing-2); /** Horizontal padding. */
+  --premium-badge-padding-y: var(--spacing-1); /** Vertical padding. */
+  --premium-gate-icon-size: var(--spacing-6); /** Lock glyph size. */
+  --premium-upsell-padding: var(--spacing-4); /** Card padding. */
+  --premium-paywall-cta-padding-x: var(--spacing-8); /** Extra-wide horizontal padding — the CTA is the most prominent control on the surface. */
+  --premium-paywall-cta-padding-y: var(--spacing-3); /** Vertical padding. */
+  --premium-paywall-cta-min-height: var(--target-min); /** Added in the port. Finance sized the CTA by padding alone, so its height depended on the inherited line-height and could fall under the touch-target floor. The single most important button in a paid product should not be the one that is hard to tap. */
   --skeleton-radius-text: var(--radius-1); /** Tighter radius for text-line placeholders. */
   --skeleton-line-height: var(--spacing-3); /** Height of a single text-line placeholder. */
   --skeleton-gap: var(--spacing-2); /** Gap between stacked placeholder lines. */
@@ -492,6 +499,19 @@
   --pill-border: var(--semantic-border-default);
   --pill-radius: var(--radius-pill);
   --pill-padding-x: var(--spacing-sm);
+  --premium-badge-bg: var(--semantic-interactive-default); /** Badge fill — the brand interactive color, so premium reads as actionable rather than as a warning. */
+  --premium-badge-text: var(--semantic-text-inverse); /** Badge label. This pair measured 4.35:1 in finance and failed WCAG AA; it clears in Studio only because the light interactive ramp was shifted one step. Pinned in CONTRAST_PAIRS so it cannot regress. */
+  --premium-badge-radius: var(--radius-pill); /** Fully rounded — a badge is a pill, never a button. */
+  --premium-gate-overlay-bg: var(--semantic-background-primary); /** Overlay fill, composited at overlay-opacity. */
+  --premium-gate-overlay-opacity: var(--state-scrim-opacity); /** Added in the port. Finance's overlay said 'applied with opacity' but shipped no opacity token, so every consumer picked its own and gated features dimmed inconsistently. Shares the modal scrim strength: a gate and a modal are both 'you cannot reach this yet'. */
+  --premium-gate-icon: var(--semantic-text-secondary); /** Lock glyph. Deliberately NOT text.disabled, which finance used: a lock is not a disabled control, it is the only signal that the feature is gated, so WCAG 1.4.11 applies and the disabled-state exemption does not. text.disabled measured 1.24:1 (light), 1.56:1 (dark), 1.74:1 (dark-oled) against its own background; text.secondary clears 3:1 in every theme, worst case 6.23:1. */
+  --premium-upsell-bg: var(--semantic-background-secondary); /** Card fill — recessed, so an upsell never outranks the content it sits beside. */
+  --premium-upsell-border: var(--semantic-border-default); /** Card edge. Decorative: the card is not a control, so the 3:1 non-text minimum does not apply, matching card.border. */
+  --premium-upsell-radius: var(--radius-md); /** Container radius. Finance used 12px here, which would have made the upsell the only card in the system with a non-standard corner; realigned to the shared container radius (16px) that card and tile already use. */
+  --premium-upsell-icon: var(--semantic-status-info); /** Informational glyph — an upsell informs, it does not warn. */
+  --premium-paywall-preview-radius: var(--radius-md); /** Blurred feature preview — a container, so it takes the container radius. */
+  --premium-paywall-feature-check: var(--semantic-status-positive); /** Checkmark in the included-features list. Never the only signal that a feature is included — pair it with the feature text itself. */
+  --premium-paywall-price-selector-radius: var(--radius-chip); /** Price option card. Deliberately smaller than the container radius: it nests inside the paywall, and the tighter corner preserves the nesting hierarchy finance authored. */
   --progress-track: var(--semantic-background-secondary); /** Unfilled portion of a bar or ring. */
   --progress-fill: var(--semantic-interactive-default); /** Filled portion, for progress that carries no status meaning. */
   --progress-height: var(--spacing-sm); /** Bar thickness at the default size. */
