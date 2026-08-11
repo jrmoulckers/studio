@@ -5,21 +5,21 @@
 // Why this exists
 // ---------------
 // The sync engine prepends a provenance header to every distributed file and
-// picks the comment syntax from the file's extension. Its fallback is HTML:
+// picks the comment syntax from the file's extension. Canon classifies that in
+// one place -- sync/lib/comment-syntax.mjs -- into `hash`, `html`, `block` or
+// `none`, and an unknown type THROWS. There is no fallback, deliberately: both
+// plausible defaults fail quietly, HTML by destroying anything with a real
+// grammar and `none` by dropping provenance altogether.
 //
-//     <!-- generated + synced from jrmoulckers/studio ... -->
-//
-// which is correct for Markdown and silently wrong for anything with a real
-// grammar. A `.scss` or `.plist` that lands in the fallback is emitted with an
-// HTML comment at byte zero and stops compiling -- in the CONSUMER's build,
-// after distribution, in a repository that did not change.
+// So an unclassified format does not reach a consumer corrupted; it stops the
+// sync. That is the better failure, but it is still Studio's to prevent, and
+// it lands somewhere nobody here is watching -- distribution, not this build.
 //
 // Canon states the obligation this creates: a new extension arriving in a
-// distribution "must be classified here" (sync/lib/provenance.mjs). That
-// sentence cannot be enforced where it is written. The enumeration lives in
-// canon; the event that invalidates it -- adding a Style Dictionary output
-// format -- happens HERE. Canon's tests cannot know Studio added a format, and
-// Studio cannot read canon's table at test time. So the obligation binds
+// distribution must be classified there first. That sentence cannot be
+// enforced where it is written. The enumeration lives in canon; the event that
+// invalidates it -- adding a Style Dictionary output format -- happens HERE.
+// Canon's tests cannot know Studio added a format. So the obligation binds
 // whoever adds a file type and fires in nobody's run.
 //
 // This guard closes that half. Studio is the repository whose change creates
@@ -28,11 +28,14 @@
 //
 // Why the set is declared here rather than read from canon
 // -------------------------------------------------------
-// Reading canon's table live would need a network fetch or a second checkout,
-// making a correctness gate depend on availability. A local declaration is a
-// deliberately duplicated fact -- but it is duplicated against a table that
-// changes rarely, and the failure mode of drift is a false alarm that a human
-// resolves by looking at canon, not a silent miscompile in a consumer.
+// Canon does export its enumeration (`CLASSIFIED_TYPES`), so a real second
+// source exists -- but reading it needs a network fetch or a second checkout,
+// which would make a correctness gate depend on availability. The local
+// declaration is a deliberately duplicated fact, kept because drift surfaces
+// as a false alarm a human resolves by looking at canon, never as a silent
+// miscompile. Note the two are not the same set: canon classifies types this
+// map omits, so drift shows up as this guard firing on a file canon would in
+// fact have handled.
 //
 // Following ALLOWED_BINARY in validate-text-classification.mjs: an entry here
 // is a decision, not a default. Adding one asserts you have confirmed canon
@@ -108,19 +111,21 @@ function main() {
     [
       '',
       'The sync engine stamps a provenance header onto every file it distributes and',
-      'chooses the comment syntax from the extension. Anything it does not classify',
-      'falls back to HTML, so these files would be delivered to every consuming repo',
-      'with `<!-- ... -->` at byte zero. For a format with a real grammar that is not',
-      'a cosmetic defect -- it stops compiling, in the consumer, after distribution.',
+      'chooses the comment syntax from the extension. Canon classifies that in ONE',
+      'place and an unknown type throws rather than defaulting, so an unclassified',
+      'format does not ship corrupted -- it stops the sync, downstream, after this',
+      'build is green. That is the failure this guard exists to move forward.',
       '',
       'Do NOT silence this by adding the extension below. Classify it in canon FIRST:',
       '',
-      '  jrmoulckers/.github  sync/lib/provenance.mjs   (the stamper; the write path)',
-      '  jrmoulckers/.github  sync/lib/basemerge.mjs    (keep the two tables in step)',
+      '  jrmoulckers/.github  sync/lib/comment-syntax.mjs   (the only classifier)',
+      '',
+      'It is deliberately one table -- provenance.mjs and basemerge.mjs both derive',
+      'from it and hold no list of their own. Do not add one back.',
       '',
       'Then add the extension to CLASSIFIED in this script, recording the syntax canon',
       'actually applies. Shipping the format before canon can stamp it is the ordering',
-      'that breaks consumers.',
+      'that breaks the distribution.',
       '',
     ].join('\n'),
   );
