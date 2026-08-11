@@ -21,6 +21,14 @@ build/
 # only part of the file is canon — Prettier cannot format around a region, and
 # rewriting inside the markers is drift. `scripts/validate-prettier-ignore.mjs`
 # enforces that and fails the build if a marker-bearing file is missing.
+#
+# Which of these Prettier can actually damage depends on whether it can infer a
+# parser. Markdown it parses, so `.github/copilot-instructions.md` was a real
+# `format:check` failure — table padding and `*em*` -> `_em_`. The entries below
+# with no parser are declarations of ownership, not fixes for an observed break.
+# The distinction matters most for AGENTS.md: it is Markdown and a managed-region
+# file in canon, but has no region in Studio yet. The day sync adds one, Prettier
+# will rewrite inside the markers. That is the case the guard exists for.
 .github/agents/
 .github/instructions/
 .github/prompts/
@@ -29,9 +37,12 @@ build/
 .gitattributes
 .studio-sync.lock.json
 
-# Canon with no Prettier parser. `agency.toml` is generated upstream and Prettier
-# supports no TOML parser, so leaving it in scope is a hard `--check` error rather
-# than a formatting warning.
+# Canon Prettier cannot parse. `agency.toml` and `.gitattributes` (above) have no
+# inferred parser, so `prettier --check .` skips them silently — they are listed to
+# declare that the bytes are upstream-owned, and to stay safe if either is ever named
+# explicitly or a TOML plugin is added. Naming such a file on the CLI *is* a hard
+# error ("No parser could be inferred"), which is easy to mistake for a repo-wide
+# failure when reproducing CI locally with an explicit file list. It is not one.
 agency.toml
 
 # Lockfile — owned by pnpm.
