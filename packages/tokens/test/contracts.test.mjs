@@ -21,11 +21,14 @@ import { TextDecoder } from 'node:util';
 import ts from 'typescript';
 
 import {
+  DIST_FILES,
   DIST_OUTPUTS,
   assembleDist,
+  assertDeclaredBuild,
   assertDeclaredDistribution,
   assertFileTreesEqual,
   readFileTree,
+  renderDistReadme,
 } from '../scripts/dist-contract.mjs';
 import {
   assertCssContract,
@@ -178,7 +181,7 @@ function runIsolatedTokenBuild(isolatedRoot) {
     stdio: 'pipe',
   });
   const tree = readFileTree(join(isolatedRoot, 'build'));
-  assertDeclaredDistribution(tree);
+  assertDeclaredBuild(tree);
   return tree;
 }
 
@@ -761,10 +764,53 @@ test('generated contract guards reject removed exports, aliases, selectors, and 
   );
 });
 
+test('the generated distribution map covers every shipped file and is self-consistent', () => {
+  const readme = readText(join(distRoot, 'README.md'));
+
+  // Regenerating must reproduce the committed text exactly, or the determinism guard
+  // above would be asserting against a file nobody can rebuild.
+  assert.equal(readme, renderDistReadme());
+
+  // Every copied output is described. This is the property the file exists for: a
+  // vendored consumer holds only these bytes, so an unlisted file is unexplained.
+  for (const relativePath of DIST_OUTPUTS) {
+    assert.ok(
+      readme.includes(`\`${relativePath}\``),
+      `dist/README.md does not describe "${relativePath}".`,
+    );
+  }
+
+  // The two entry points a consumer actually has to choose between must be
+  // distinguished, since conflating them is the failure this file prevents.
+  assert.match(readme, /\*\*Start here\.\*\*/);
+  assert.match(readme, /\*\*Not imported by `index\.css`\*\*/);
+  assert.match(readme, /by value, not by name/);
+
+  // Nothing may claim a file that is not shipped.
+  for (const quoted of readme.matchAll(/^\| `([^`]+)` \|/gm)) {
+    assert.ok(
+      DIST_OUTPUTS.includes(quoted[1]),
+      `dist/README.md describes "${quoted[1]}", which is not distributed.`,
+    );
+  }
+});
+
+test('an undescribed distribution output fails rendering rather than shipping unlabelled', () => {
+  // The parameter exists only for this: it proves the guard fires, so adding a file to
+  // DIST_OUTPUTS without describing it cannot quietly ship an unexplained file.
+  assert.throws(
+    () => renderDistReadme([...DIST_OUTPUTS, 'js/undeclared.js']),
+    /no README description: js\/undeclared\.js/,
+  );
+
+  // And the happy path still renders, so the guard is not simply always throwing.
+  assert.ok(renderDistReadme([...DIST_OUTPUTS]).includes('| `js/index.js` |'));
+});
+
 test('committed dist is declared text and regeneration is deterministic and removes stale files', () => {
   const committed = readFileTree(distRoot);
   assertDeclaredDistribution(committed);
-  assert.deepEqual([...committed.keys()].sort(), [...DIST_OUTPUTS].sort());
+  assert.deepEqual([...committed.keys()].sort(), [...DIST_FILES].sort());
 
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'jrm-token-dist-'));
   const generatedRoot = join(temporaryRoot, 'dist');
