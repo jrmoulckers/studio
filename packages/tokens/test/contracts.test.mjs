@@ -27,6 +27,7 @@ import {
   assertDeclaredBuild,
   assertDeclaredDistribution,
   assertFileTreesEqual,
+  decodeUtf8Text,
   readFileTree,
   renderDistReadme,
 } from '../scripts/dist-contract.mjs';
@@ -867,6 +868,25 @@ test('dist guards reject undeclared, non-UTF-8, and non-LF artifacts', () => {
   const crlf = new Map(baseline);
   crlf.set('js/index.js', Buffer.from('export {};\r\n'));
   assert.throws(() => assertDeclaredDistribution(crlf), /not LF-normalized/);
+
+  // Mojibake is VALID UTF-8, so the fatal decoder above cannot see it. Uses the real
+  // provenance line, whose U+2014 is the character actually at risk on this surface.
+  const mojibake = new Map(baseline);
+  mojibake.set(
+    'css/default/index.css',
+    Buffer.from('/* generated + synced from jrmoulckers/studio \uFFFD do not edit */\n', 'utf8'),
+  );
+  assert.throws(
+    () => assertDeclaredDistribution(mojibake),
+    /"css\/default\/index\.css" contains 1 replacement character\(s\) \(U\+FFFD\)/,
+  );
+
+  // Non-vacuity: the same line with its em-dash intact must survive both guards.
+  const intact = Buffer.from(
+    '/* generated + synced from jrmoulckers/studio \u2014 do not edit */\n',
+    'utf8',
+  );
+  assert.equal(decodeUtf8Text(intact, 'css/default/index.css').includes('\u2014'), true);
 
   const temporaryRoot = mkdtempSync(join(tmpdir(), 'jrm-token-dist-encoding-'));
   try {
