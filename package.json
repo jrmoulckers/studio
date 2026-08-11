@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "turbo run test && pnpm run principles:check && pnpm run workflows:check",
+    "test": "turbo run test && pnpm run principles:check && pnpm run workflows:check && pnpm run prettier-ignore:check",
     "principles:check": "node scripts/validate-principles.mjs",
     "workflows:check": "node scripts/validate-workflows.mjs",
     "principles:verify-live": "node scripts/validate-principles.mjs --live",
@@ -22,7 +22,8 @@
     "tokens:dist": "pnpm --filter @jrm/tokens dist",
     "tokens:dist:check": "pnpm --filter @jrm/tokens dist && git diff --exit-code -- packages/tokens/dist",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "prettier-ignore:check": "node scripts/validate-prettier-ignore.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
