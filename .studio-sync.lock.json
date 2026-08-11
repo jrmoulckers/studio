@@ -1,8 +1,13 @@
 {
   "version": 1,
   "backbone": "jrmoulckers/.github",
-  "generatedAt": "2026-08-08T22:41:54.378Z",
+  "generatedAt": "2026-08-11T04:27:46.091Z",
   "entries": {
+    ".gitattributes": {
+      "sourceSha256": "4be6041de14159436002446da3193a178a4defa235fe71585c04002d070d80c7",
+      "targetSha256": "a591a7816b02daf54849d69af18396ff6175f24de0b06d0a1def97d0b5a9274a",
+      "syncedAt": "2026-08-11T04:27:46.087Z"
+    },
     ".github/agents/accessibility-reviewer.agent.md": {
       "sourceSha256": "f83d90b50ea87be04935ba849c0a93eda729452a2d7eee81e0cb02b4bf04dae5",
       "targetSha256": "f616ea0dbb9d4fc8414ea502196b4b6dd1da7a3e67e0c71b65c0352fabb1d38a",
@@ -113,6 +118,11 @@
       "targetSha256": "c11e3f7bccca27ccdedcd7ed54743c484b5208a96ab373d2a0b50be74efcbdf9",
       "syncedAt": "2026-08-08T01:05:55.826Z"
     },
+    ".github/copilot-instructions.md": {
+      "sourceSha256": "f8f1ed9ad63ac948bf568540bfd3551d269af4d511112771d0818805f3c7e09d",
+      "targetSha256": "7c8a5883a4b81879ac7f0fafe2aeb40b6627387f5beb7934a1c31f2493ac4dd4",
+      "syncedAt": "2026-08-11T04:27:46.087Z"
+    },
     ".github/instructions/agents.instructions.md": {
       "sourceSha256": "70f066ca74342a504f7411fbb21e62012b5b8ce05403ed32e93c3d39d145c8aa",
       "targetSha256": "a772cb8d4790f9ae3763e6b94013000c16fb9192ab184b8ce20c3a297a10e78a",
@@ -129,14 +139,14 @@
       "syncedAt": "2026-08-08T22:41:54.373Z"
     },
     ".github/instructions/tokens.instructions.md": {
-      "sourceSha256": "9f4057f4cb29336105e7fdcd01191302167cff4cc9c43553416b28910772b51a",
-      "targetSha256": "88b251762e6cb19d28ec0e5e672f8caf778ebfe58066558d0bb0507fe56f7dff",
-      "syncedAt": "2026-08-08T22:41:54.375Z"
+      "sourceSha256": "da5d995cceba6a3f72ed47b771b3ba81658132cdfe3f9a83e13fe7cc5635ee1b",
+      "targetSha256": "492b9cc97e2fe3e05b412ccc4bc72796e7a8f713319f49da1920b8db56f5fe71",
+      "syncedAt": "2026-08-11T04:27:46.091Z"
     },
     ".github/instructions/workflow.instructions.md": {
-      "sourceSha256": "118a896744ff62a4c1ed99c2a4d83ff1937a94d61a17ed0379ef9a03160b0a34",
-      "targetSha256": "9aaecb7bd0637b91768781c47dc29acee3d3a6cb6e176870ea442be0398cf1af",
-      "syncedAt": "2026-08-08T22:41:54.376Z"
+      "sourceSha256": "f832c6dfa49f91055a8f5f4a91d0fccf88481fad9dc09dcde08381c67bed5c7c",
+      "targetSha256": "4206060d01da2c70515289c2750a497eff07c3f33c7a51c074b94234a09f279a",
+      "syncedAt": "2026-08-11T04:27:46.091Z"
     },
     ".github/prompts/backlog.prompt.md": {
       "sourceSha256": "662578e4e512ac591b86127f50c601283a27b6ce96c9e09b022b833f720fe750",
@@ -197,6 +207,16 @@
       "sourceSha256": "186152a23ac83b712e07c589cc1dc37ea9d8e7f17589dc4b535e731817b29a8a",
       "targetSha256": "74df8f5d411a4b609a7d3960dcb11e7cb8431926fe6164b7261c3fcdc4d0f29a",
       "syncedAt": "2026-08-08T01:05:55.831Z"
+    },
+    ".github/skills/edge-sync/SKILL.md": {
+      "sourceSha256": "9f19298b4b1e97dd1af00550ad04ddc4b0f0f894b69bacc898fe8a977bd9544b",
+      "targetSha256": "b9893c29f908f10224369a44a32dfc3315b2b633db4fe1eebec876015dfb71ed",
+      "syncedAt": "2026-08-11T04:27:46.089Z"
+    },
+    ".github/skills/fleet-orchestration/SKILL.md": {
+      "sourceSha256": "e8a1ebe885f80ddfc64fa2974677117328c81900d6e627eab213e776d7adfe04",
+      "targetSha256": "2a09b3780cf9ef2f0836522d75f58c7b991cb220ba469967e25c66d726fd2575",
+      "syncedAt": "2026-08-11T04:27:46.089Z"
     },
     ".github/skills/go-to-market/SKILL.md": {
       "sourceSha256": "e0bddf960967f049fd3c395868bd462ad55d5e6df99a696b4377f686509019ab",
@@ -272,6 +292,11 @@
       "sourceSha256": "4d95bab786514ec948002de0906986a01577159e90907f8065516f73943dfdb8",
       "targetSha256": "c3d3da17e254f6ce8132e1c6040f7f09e7ff494d4e902e287ee72e5abc61753e",
       "syncedAt": "2026-08-08T01:05:55.850Z"
+    },
+    "agency.toml": {
+      "sourceSha256": "b097fc1ca3d98462ac07d6ba013858773a3c4eee4d98262f8373223709286e1a",
+      "targetSha256": "c07e8341261e1451d416c1f8644a937d3f7f067794929474f21a5a48eba161da",
+      "syncedAt": "2026-08-11T04:27:46.087Z"
     }
   }
 }
