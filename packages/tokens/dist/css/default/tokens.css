@@ -23,9 +23,8 @@
   --duration-slow: 400ms; /** Deliberate transitions — sheets, expanding panels */
   --duration-slower: 800ms; /** Extended animations: celebrations, complex transitions */
   --duration-reduced: 1ms; /** Reduced-motion alternative — effectively instant, but deliberately 1ms rather than 0ms. A zero-duration transition or animation never fires transitionend or animationend, so any cleanup, focus hand-off, or promise that awaits those events hangs forever under prefers-reduced-motion. 1ms is imperceptible and still dispatches the event. */
-  --easing-standard: ease; /** Default functional easing */
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1); /** Default functional easing — the Material 3 standard curve, balanced enter/exit. Deliberately not the CSS `ease` keyword: `ease` is the browser default that applies when no easing is authored, so emitting it as the kernel's standard curve makes designed and undesigned motion indistinguishable, and a consumer that overrides `easing.standard` with a real curve silently loses it when this layer loads last. */
   --easing-linear: linear; /** Reduced-motion / crossfade easing */
-  --easing-balanced: cubic-bezier(0.2, 0, 0, 1); /** Material 3 standard curve — balanced enter/exit */
   --easing-in: cubic-bezier(0.4, 0, 1, 1); /** Ease-in — motion leaving the viewport */
   --easing-out: cubic-bezier(0, 0, 0.2, 1); /** Ease-out — motion entering the viewport */
   --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1); /** Symmetric ease-in-out */
@@ -233,6 +232,7 @@
   --pill-padding-y: 3px;
   --toast-max-width: 420px; /** Keeps a toast readable in one or two lines on a wide viewport. */
   --duration-fast: var(--duration-state); /** Generic short transition — alias of the state duration. */
+  --easing-balanced: var(--easing-standard); /** Compatibility alias of easing.standard, retained so existing references keep resolving. Prefer easing.standard. */
   --radius-sm: var(--radius-2); /** Controls: buttons, inputs, steppers */
   --radius-chip: var(--radius-3); /** Icon buttons and small chips */
   --radius-md: var(--radius-4); /** Containers: cards, tiles */
@@ -308,7 +308,6 @@
   --motion-tile-duration: var(--duration-tile);
   --motion-tile-easing: var(--easing-standard);
   --motion-page-transition-duration: var(--duration-normal);
-  --motion-page-transition-easing: var(--easing-balanced);
   --motion-list-item-easing: var(--easing-decelerate);
   --motion-progress-duration: var(--duration-slow);
   --motion-progress-easing: var(--easing-in-out);
@@ -415,6 +414,7 @@
   --color-danger: var(--semantic-status-negative);
   --color-warning: var(--semantic-status-warning);
   --color-focus-ring: var(--semantic-border-focus);
+  --motion-page-transition-easing: var(--easing-balanced);
   --motion-list-item-duration: var(--duration-fast);
   --motion-fade-out-duration: var(--duration-fast);
   --cognitive-spacing-section-gap: var(--spacing-3xl); /** Gap between major sections — 32px. */
@@ -497,7 +497,6 @@
   --modal-scrim-layer: var(--layer-scrim); /** Dimming plane, directly beneath the dialog. */
   --modal-scrim-opacity: var(--state-scrim-opacity); /** Scrim strength. Shared with sheets so every modal surface dims identically. */
   --modal-enter-duration: var(--motion-page-transition-duration); /** Entrance — a dialog is a page-scale move. */
-  --modal-enter-easing: var(--motion-page-transition-easing); /** Entrance easing. */
   --modal-exit-easing: var(--motion-fade-out-easing); /** Exit easing. */
   --nav-tabbar-bg: var(--semantic-background-elevated); /** Consumers may layer glass (backdrop-filter: blur(12px)) + alpha per the Glass-Chrome Rule. */
   --nav-tabbar-border: var(--semantic-border-default);
@@ -566,6 +565,7 @@
   --cognitive-card-padding: var(--cognitive-spacing-inline-padding); /** Roomier card padding. */
   --cognitive-card-gap: var(--cognitive-spacing-element-gap); /** Gap between elements inside the card. */
   --modal-elevation: var(--elevation-raised); /** The single Soft Lift. */
+  --modal-enter-easing: var(--motion-page-transition-easing); /** Entrance easing. */
   --modal-exit-duration: var(--motion-fade-out-duration); /** Exit. */
   --toast-elevation: var(--elevation-raised); /** The single Soft Lift. */
   --toast-exit-duration: var(--motion-fade-out-duration); /** Exit — faster than the entrance, so a dismissal feels answered. */
