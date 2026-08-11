@@ -130,6 +130,15 @@ export const tokens = {
       "bold": 700
     },
     "size": {
+      "xs": "0.8rem",
+      "sm": "0.9rem",
+      "base": "1rem",
+      "md": "1.125rem",
+      "lg": "1.25rem",
+      "xl": "1.4rem",
+      "2xl": "1.6rem",
+      "3xl": "2rem",
+      "4xl": "2.5rem",
       "display": "1.6rem",
       "title": "1.25rem",
       "body": "1rem",

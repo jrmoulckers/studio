@@ -30,24 +30,63 @@
       }
     },
     "size": {
-      "display": {
-        "$value": "1.6rem",
+      "$description": "Type scale. The t-shirt keys are the primitive ladder; the role keys below are aliases that carry the intent (display, title, body, label, overline). Both are emitted, deliberately: a source that ships only roles gives callers no name for a size between two roles, so they invent one — and an undefined CSS custom property fails silently, rendering at the inherited size with nothing to catch it. The ladder is derived from the existing role values rather than imported from another system, so every role resolves to exactly the value it always had.",
+      "xs": {
+        "$value": "0.8rem",
         "$type": "dimension"
       },
-      "title": {
-        "$value": "1.25rem",
-        "$type": "dimension"
-      },
-      "body": {
-        "$value": "1rem",
-        "$type": "dimension"
-      },
-      "label": {
+      "sm": {
         "$value": "0.9rem",
         "$type": "dimension"
       },
+      "base": {
+        "$value": "1rem",
+        "$type": "dimension",
+        "$description": "Body copy — the reference size the rest of the ladder is read against."
+      },
+      "md": {
+        "$value": "1.125rem",
+        "$type": "dimension",
+        "$description": "Between body and title. No role occupies this step, which is why callers reach for it by name."
+      },
+      "lg": {
+        "$value": "1.25rem",
+        "$type": "dimension"
+      },
+      "xl": {
+        "$value": "1.4rem",
+        "$type": "dimension"
+      },
+      "2xl": {
+        "$value": "1.6rem",
+        "$type": "dimension"
+      },
+      "3xl": {
+        "$value": "2rem",
+        "$type": "dimension"
+      },
+      "4xl": {
+        "$value": "2.5rem",
+        "$type": "dimension"
+      },
+      "display": {
+        "$value": "{font.size.2xl}",
+        "$type": "dimension"
+      },
+      "title": {
+        "$value": "{font.size.lg}",
+        "$type": "dimension"
+      },
+      "body": {
+        "$value": "{font.size.base}",
+        "$type": "dimension"
+      },
+      "label": {
+        "$value": "{font.size.sm}",
+        "$type": "dimension"
+      },
       "overline": {
-        "$value": "0.8rem",
+        "$value": "{font.size.xs}",
         "$type": "dimension"
       }
     },
