@@ -254,10 +254,11 @@ If it fails, run `pnpm tokens:dist` and commit the updated `dist/`.
 The freshness guard proves `dist/` is **current**. It does not say what changed in _value_, and
 that gap is inverted against the risk:
 
-| Change          | Surfaces as    | Risk                                        |
-| --------------- | -------------- | ------------------------------------------- |
-| Rename, removal | Build breaks   | **Loud** — a consumer investigates          |
-| Value shift     | Compiles clean | **Quiet** — layout and contrast move unseen |
+| Change            | Surfaces as    | Risk                                        |
+| ----------------- | -------------- | ------------------------------------------- |
+| Rename, removal   | Build breaks   | **Loud** — a consumer investigates          |
+| Value shift       | Compiles clean | **Quiet** — layout and contrast move unseen |
+| **Adding a name** | Compiles clean | **Quiet, and invisible here** — see below   |
 
 The sync engine can't cover for it either: it compares hashes, not meanings, so a 2px shift and a
 brand-new file both arrive as a path under **Updated**. The file list is a transport signal, not a
@@ -275,6 +276,37 @@ It diffs the committed `dist/js` theme maps — the bytes consumers actually rec
 value shifts from adds and removes, and names the re-check surface: colour moves invalidate
 contrast (a passing WCAG 2.2 AA result is not carried over by a value change), dimension moves
 change layout. It's a reporter, not a gate, so it is deliberately not part of `pnpm test`.
+
+### An added name is not an additive change downstream
+
+`pnpm tokens:diff` reports adds separately from value shifts, which is correct **for this
+repository** — here a new name changes nothing. That framing does not survive the trip to a
+consumer, and the report cannot tell you so, because the collision lives in the consumer's
+stylesheet and not in `dist/`.
+
+Two mechanisms, both compiling clean:
+
+1. **A consumer may already define the name.** Canon's layer is imported after a product's own
+   base tokens in every current consumer. At equal `:root` specificity the later declaration wins,
+   so canon silently takes over a name the product was already authoring against.
+2. **Guarded references stop being guarded.** `var(--font-size-md, 1rem)` renders the fallback
+   only while the name is undefined. The moment canon supplies it, the fallback stops applying and
+   every such site takes canon's value. This is the trap, because a dangling-reference audit
+   correctly **excludes** guarded refs as non-defects — so the sites most likely to move are
+   exactly the ones a pre-adoption census filters out.
+
+Worked example, measured in `jrmoulckers/finance` against the primitive `font.size` ladder:
+it already defined eight of the nine names in px, canon supplies them in rem, and **175 call sites
+change rendered size** — `--font-size-sm` at 103 sites (14px → 14.4px), `--font-size-lg` at 18
+(18px → 20px), `--font-size-xl` at 9 (20px → 22.4px). `--font-size-md` contributes 3 sites that a
+census had correctly scored as guarded and inert; they move 16px → 18px. The ladder is also offset
+by a rung against that consumer's — canon's `md` sits where its `lg` was — so names above the
+insertion point change meaning, not just value.
+
+None of that is an argument against the addition; converging on a rem ladder is an accessibility
+improvement, since fixed-px type ignores browser font-size preference. It is an argument that
+**"purely additive" is a producer-side measurement**. State added names in the PR body alongside
+value shifts, and expect a first-adoption sync to need a visual review rather than a rubber stamp.
 
 ### Contract tests
 
