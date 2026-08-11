@@ -354,6 +354,51 @@ function selfTest() {
       } finally {
         rmSync(short, { recursive: true, force: true });
       }
+
+      // A third end-to-end, launched from a SUBDIRECTORY. The two runs above
+      // both use cwd = repo root, where cwd-relative and root-relative paths
+      // coincide -- so dropping `--full-name`/`-- :/` from main()'s own listing
+      // changes nothing they can observe. Measured: that mutation survives the
+      // entire self-test, because the cwd-invariance assertion above pins a
+      // listing it constructs itself rather than the one main() evaluates.
+      //
+      // The corruption lives at the ROOT and the subdirectory holds only a
+      // clean file whose name does not exist at the root. An unanchored walk
+      // launched from sub/ therefore lists that one file, fails to resolve it
+      // against the repo root, and exits 1 via the COVERAGE fault -- so exit
+      // status alone cannot tell the two apart. The assertion is on the
+      // message: an anchored walk names the corrupt file.
+      const deep = mkdtempSync(path.join(os.tmpdir(), 'studio-text-anchor-'));
+      try {
+        const d = (a) => execFileSync('git', ['-C', deep, ...a], { encoding: 'utf8' });
+        d(['init', '--quiet']);
+        d(['config', 'core.autocrlf', 'false']);
+        mkdirSync(path.join(deep, 'nested'), { recursive: true });
+        writeFileSync(path.join(deep, '.gitattributes'), '* !text\n');
+        writeFileSync(path.join(deep, 'doubled-cr.txt'), Buffer.from('a\r\r\nb\r\r\n', 'latin1'));
+        writeFileSync(path.join(deep, 'nested', 'only-here.txt'), Buffer.from('a\nb\n', 'latin1'));
+        d(['add', '--all']);
+        const fromNested = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], {
+          cwd: path.join(deep, 'nested'),
+          encoding: 'utf8',
+          env: { ...process.env, STUDIO_TEXT_SELFTEST_CHILD: '1' },
+        });
+        if (fromNested.status !== 1) {
+          throw new Error(
+            `self-test: run from a subdirectory must exit 1, got ${fromNested.status}.`,
+          );
+        }
+        const said = fromNested.stdout + fromNested.stderr;
+        if (!/doubled-cr\.txt/.test(said)) {
+          throw new Error(
+            "self-test: main()'s listing is not anchored -- a run from a subdirectory " +
+              'did not reach the root corruption. Got: ' +
+              said.replace(/\s+/g, ' ').trim().slice(0, 160),
+          );
+        }
+      } finally {
+        rmSync(deep, { recursive: true, force: true });
+      }
     }
   } finally {
     rmSync(dir, { recursive: true, force: true });
