@@ -32,7 +32,7 @@ export const tokens = {
     "reduced": "1ms"
   },
   "easing": {
-    "standard": "ease",
+    "standard": "cubic-bezier(0.2, 0, 0, 1)",
     "linear": "linear",
     "balanced": "cubic-bezier(0.2, 0, 0, 1)",
     "in": "cubic-bezier(0.4, 0, 1, 1)",
@@ -451,15 +451,15 @@ export const tokens = {
   "motion": {
     "press": {
       "duration": "50ms",
-      "easing": "ease"
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
     },
     "state": {
       "duration": "150ms",
-      "easing": "ease"
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
     },
     "tile": {
       "duration": "120ms",
-      "easing": "ease"
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
     },
     "page-transition": {
       "duration": "250ms",
@@ -795,7 +795,7 @@ export const tokens = {
     "radius": "9999px",
     "stroke": "8px",
     "duration": "150ms",
-    "easing": "ease",
+    "easing": "cubic-bezier(0.2, 0, 0, 1)",
     "label": "#1c1d2e",
     "label-muted": "#5b5e7e",
     "on-track": "oklch(0.47 0.10 165)",

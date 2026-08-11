@@ -47,11 +47,11 @@
     }
   },
   "easing": {
-    "$description": "Easing curves. standard and linear are the functional defaults; the named curves below are for directional motion and are referenced by component tokens rather than used ad hoc.",
+    "$description": "Easing curves. standard and linear are the functional defaults; the named curves below are for directional motion and are referenced by component tokens rather than used ad hoc. standard carries the Material 3 curve, and balanced is a compatibility alias of it.",
     "standard": {
-      "$value": "ease",
+      "$value": "cubic-bezier(0.2, 0, 0, 1)",
       "$type": "cubicBezier",
-      "$description": "Default functional easing"
+      "$description": "Default functional easing — the Material 3 standard curve, balanced enter/exit. Deliberately not the CSS `ease` keyword: `ease` is the browser default that applies when no easing is authored, so emitting it as the kernel's standard curve makes designed and undesigned motion indistinguishable, and a consumer that overrides `easing.standard` with a real curve silently loses it when this layer loads last."
     },
     "linear": {
       "$value": "linear",
@@ -59,9 +59,9 @@
       "$description": "Reduced-motion / crossfade easing"
     },
     "balanced": {
-      "$value": "cubic-bezier(0.2, 0, 0, 1)",
+      "$value": "{easing.standard}",
       "$type": "cubicBezier",
-      "$description": "Material 3 standard curve — balanced enter/exit"
+      "$description": "Compatibility alias of easing.standard, retained so existing references keep resolving. Prefer easing.standard."
     },
     "in": {
       "$value": "cubic-bezier(0.4, 0, 1, 1)",
