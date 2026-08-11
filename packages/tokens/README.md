@@ -219,6 +219,14 @@ can never rewrite the artifact out from under `tokens:dist:check`.
 > valid UTF-8 and exits non-zero, so a binary artifact fails the build (and CI, via
 > `tokens:dist:check`) instead of reaching a member repo. The check has to live here, because by
 > the time the sync engine sees the file the original bytes are already gone.
+>
+> **The UTF-8 check does not cover every way a file becomes binary.** Git's heuristic is not only
+> about NUL bytes: a file whose CR count exceeds its CRLF pairs is classified `-text`. A doubled
+> `\r\r\n` file is _valid UTF-8_, so it passes `dist.mjs` and is still treated as binary — at which
+> point it becomes **exempt from `eol=lf`**, and `git add --renormalize` **skips it**, so the
+> corruption blocks its own repair while the remedy reports success. `pnpm text:check`
+> (`scripts/validate-text-classification.mjs`) covers that gap for every tracked file, not just
+> `dist/`. Canon shipped thirteen health files in exactly this state before it was caught.
 
 ### Freshness guard
 

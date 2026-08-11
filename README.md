@@ -72,6 +72,7 @@ pnpm lint
 pnpm test
 pnpm format:check
 pnpm workflows:check
+pnpm text:check
 pnpm tokens:dist
 pnpm tokens:dist:check
 pnpm tokens:diff
