@@ -4,10 +4,18 @@
 //
 // Why this exists
 // ---------------
-// Git's binary heuristic is not only about NUL bytes. A file whose CR count
-// exceeds its CRLF pairs is classified `-text`. Canon shipped thirteen
-// community-health files in exactly that state -- doubled `\r\r\n`
-// terminators, zero NUL bytes, classified binary.
+// Git's binary heuristic is not only about NUL bytes. Git classifies a blob
+// `-text` when its CR count DIFFERS from its CRLF-pair count -- `cr != crlf`,
+// an inequality, not a majority. One carriage return outside a CRLF pair is
+// enough. Measured:
+//
+//   cr=20 crlf=20 nul=0  ->  i/crlf    (pure CRLF, fine)
+//   cr=21 crlf=20 nul=0  ->  i/-text   (ONE lone CR flips it)
+//   cr=40 crlf=20 nul=0  ->  i/-text   (doubled \r\r\n)
+//
+// There is no tolerance band and no gradual slide. Canon shipped thirteen
+// community-health files in that state -- doubled `\r\r\n` terminators, zero
+// NUL bytes, classified binary.
 //
 // Three properties compound into a silent defect:
 //
@@ -72,9 +80,9 @@ function main() {
 
     if (index === 'i/-text') {
       // `-text` has two causes and they need opposite remedies. Git classifies a
-      // blob binary on a NUL byte OR on a CR count exceeding its CRLF pairs, so
-      // the discriminator is the conjunction: binary AND no NUL is the doubled-CR
-      // corruption; binary WITH a NUL is an ordinary binary file. Both still fail
+      // blob binary on a NUL byte OR on `cr != crlf`, so the discriminator is the
+      // conjunction: binary AND no NUL is the doubled-CR corruption; binary WITH
+      // a NUL is an ordinary binary file. Both still fail
       // -- an undeclared binary is a decision nobody made -- but telling someone
       // to "rewrite with LF terminators" would destroy a real PNG.
       let hasNul;
@@ -90,9 +98,11 @@ function main() {
       continue;
     }
 
-    // A stray CR in a committed blob is the precursor: enough of them and the
-    // file crosses into `-text`, at which point eol=lf stops applying and
-    // renormalize can no longer repair it.
+    // A single stray CR is not a precursor -- it is the defect. Git flips a blob
+    // to `-text` on `cr != crlf`, so one carriage return outside a CRLF pair is
+    // already enough, at which point eol=lf stops applying and renormalize can
+    // no longer repair it. There is no safe number of stray CRs to tolerate,
+    // which is why this fails on cr > 0 rather than on any ratio.
     let bytes;
     try {
       bytes = readFileSync(path.join(root, file));
@@ -121,8 +131,9 @@ function main() {
       console.error(`  ${file}  (${index} ${worktree})`);
     }
     console.error(
-      '\nA file whose CR count exceeds its CRLF pairs is treated as binary even with',
-      '\nno NUL bytes. Such a file is exempt from `eol=lf`, and `git add --renormalize`',
+      '\nGit treats a blob as binary when its CR count differs from its CRLF-pair',
+      '\ncount (`cr != crlf`) -- an inequality, not a majority -- even with no NUL',
+      '\nbytes. Such a file is exempt from `eol=lf`, and `git add --renormalize`',
       '\nskips it -- so it cannot repair itself. Rewrite the file with LF terminators',
       '\nand commit the result.',
     );

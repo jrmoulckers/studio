@@ -221,12 +221,15 @@ can never rewrite the artifact out from under `tokens:dist:check`.
 > the time the sync engine sees the file the original bytes are already gone.
 >
 > **The UTF-8 check does not cover every way a file becomes binary.** Git's heuristic is not only
-> about NUL bytes: a file whose CR count exceeds its CRLF pairs is classified `-text`. A doubled
+> about NUL bytes: git classifies a blob `-text` when its CR count **differs** from its CRLF-pair
+> count (`cr != crlf`) — an inequality, not a majority, so **one** carriage return outside a CRLF
+> pair is enough (measured: `cr=20 crlf=20` → `i/crlf`, but `cr=21 crlf=20` → `i/-text`). A doubled
 > `\r\r\n` file is _valid UTF-8_, so it passes `dist.mjs` and is still treated as binary — at which
 > point it becomes **exempt from `eol=lf`**, and `git add --renormalize` **skips it**, so the
 > corruption blocks its own repair while the remedy reports success. `pnpm text:check`
 > (`scripts/validate-text-classification.mjs`) covers that gap for every tracked file, not just
-> `dist/`. Canon shipped thirteen health files in exactly this state before it was caught.
+> `dist/`, and fails on **any** stray CR rather than on a ratio, because there is no tolerance band
+> to slide down. Canon shipped thirteen health files in exactly this state before it was caught.
 
 ### Freshness guard
 
