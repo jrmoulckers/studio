@@ -8,6 +8,22 @@
 // passes, and layout or contrast moves unreviewed. The ceremony was on the
 // case that announces itself and absent from the case that cannot.
 //
+// Additions are the third case, and the worst of the three: quiet AND
+// unobservable from inside this repository. A name Studio has never emitted
+// before changes nothing HERE, so every measurement taken here reports zero.
+// At a consumer it can already be defined -- canon's layer imports after a
+// product's base tokens, so at equal `:root` specificity canon wins a name the
+// product was authoring against -- and it silently retires fallbacks, because
+// `var(--x, 1rem)` renders that fallback only while `--x` is undefined.
+//
+// That second mechanism inverts the usual audit: a dangling-reference census
+// correctly EXCLUDES guarded refs as non-defects, so the sites most likely to
+// move are exactly the ones a careful pre-adoption check filters out.
+//
+// Hence: this reporter must never print an addition count without saying so.
+// Reporting "0 value shifts, 45 added" bare reads as "nothing happened," and
+// once it did -- the consumer measured 175 shifted call sites.
+//
 // Studio's other guards do not close this. `tokens:dist:check` proves dist/
 // is CURRENT -- it fails when generated output is stale -- but says nothing
 // about what changed in value. The sync engine compares hashes, not meanings,
@@ -217,6 +233,23 @@ function main() {
       '> Names held while values moved. The compile-clean path is the risky one:',
       '> nothing in CI fails when a value shifts, so review the table below rather',
       '> than the file list.',
+      '',
+    );
+  }
+
+  if (totalAdded > 0) {
+    lines.push(
+      '> **An added name is not an additive change downstream.** This count is',
+      '> measured inside Studio, where a new name changes nothing -- so it reads as',
+      '> zero risk and is not. At a consumer the name may already be defined, and',
+      '> canon imports after a product\u2019s base tokens, so at equal `:root`',
+      '> specificity canon wins it. Additions also retire fallbacks: `var(--x, 1rem)`',
+      '> renders that fallback only while `--x` is undefined, and a dangling-ref',
+      '> census correctly excludes guarded refs \u2014 so the sites most likely to move',
+      '> are the ones such a check filters out.',
+      '>',
+      '> Carry the added names into the PR body next to the value shifts, and treat',
+      '> the first sync into a consumer as a visual review, not a rubber stamp.',
       '',
     );
   }
