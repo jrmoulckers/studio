@@ -63,14 +63,30 @@ function main() {
     process.exit(1);
   }
 
-  const binary = [];
+  const corrupt = [];
+  const undeclaredBinary = [];
   const crBlobs = [];
 
   for (const { index, worktree, file } of rows) {
     if (ALLOWED_BINARY.has(file)) continue;
 
     if (index === 'i/-text') {
-      binary.push({ file, index, worktree });
+      // `-text` has two causes and they need opposite remedies. Git classifies a
+      // blob binary on a NUL byte OR on a CR count exceeding its CRLF pairs, so
+      // the discriminator is the conjunction: binary AND no NUL is the doubled-CR
+      // corruption; binary WITH a NUL is an ordinary binary file. Both still fail
+      // -- an undeclared binary is a decision nobody made -- but telling someone
+      // to "rewrite with LF terminators" would destroy a real PNG.
+      let hasNul;
+      try {
+        hasNul = readFileSync(path.join(root, file)).includes(0x00);
+      } catch {
+        // Absent from the working tree, so the cause cannot be determined.
+        // Report it under the safer remedy rather than guessing.
+        undeclaredBinary.push({ file, index, worktree });
+        continue;
+      }
+      (hasNul ? undeclaredBinary : corrupt).push({ file, index, worktree });
       continue;
     }
 
@@ -90,18 +106,18 @@ function main() {
     if (cr > 0) crBlobs.push({ file, cr });
   }
 
-  if (binary.length === 0 && crBlobs.length === 0) {
+  if (corrupt.length === 0 && undeclaredBinary.length === 0 && crBlobs.length === 0) {
     console.log(
       `text-classification: OK — ${rows.length} tracked file(s), none classified -text, no stray CR.`,
     );
     return;
   }
 
-  if (binary.length) {
+  if (corrupt.length) {
     console.error(
-      `\ntext-classification: ${binary.length} tracked file(s) classified as binary by git:\n`,
+      `\ntext-classification: ${corrupt.length} tracked file(s) classified as binary by git:\n`,
     );
-    for (const { file, index, worktree } of binary) {
+    for (const { file, index, worktree } of corrupt) {
       console.error(`  ${file}  (${index} ${worktree})`);
     }
     console.error(
@@ -109,6 +125,21 @@ function main() {
       '\nno NUL bytes. Such a file is exempt from `eol=lf`, and `git add --renormalize`',
       '\nskips it -- so it cannot repair itself. Rewrite the file with LF terminators',
       '\nand commit the result.',
+    );
+  }
+
+  if (undeclaredBinary.length) {
+    console.error(
+      `\ntext-classification: ${undeclaredBinary.length} undeclared binary file(s) tracked:\n`,
+    );
+    for (const { file, index, worktree } of undeclaredBinary) {
+      console.error(`  ${file}  (${index} ${worktree})`);
+    }
+    console.error(
+      '\nThese contain NUL bytes, so they are ordinary binaries rather than the',
+      '\ndoubled-CR corruption above. Do NOT rewrite them with LF terminators --',
+      '\nthat would destroy them. Studio tracks no binaries by design; if one now',
+      '\nbelongs here, add it to ALLOWED_BINARY in this script deliberately.',
     );
   }
 
