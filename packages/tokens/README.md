@@ -230,6 +230,13 @@ can never rewrite the artifact out from under `tokens:dist:check`.
 > (`scripts/validate-text-classification.mjs`) covers that gap for every tracked file, not just
 > `dist/`, and fails on **any** stray CR rather than on a ratio, because there is no tolerance band
 > to slide down. Canon shipped thirteen health files in exactly this state before it was caught.
+>
+> The discriminator is **`-text` AND no NUL byte**, because `-text` alone does not mean corruption —
+> an ordinary PNG is `-text` too. `git check-attr text` cannot separate them: under `* text=auto`
+> both an undeclared asset and a doubled-CR Markdown file resolve to `auto`. Only the bytes
+> distinguish them, so the check reads bytes and exempts NUL-bearing files with **no allowlist to
+> maintain** — a logo added tomorrow exempts itself. Text-only remains hard-enforced where it is
+> load-bearing (`dist/`) by `dist.mjs` and `tokens:dist-ext:check`.
 
 ### Freshness guard
 

@@ -34,10 +34,15 @@
 // changes rarely, and the failure mode of drift is a false alarm that a human
 // resolves by looking at canon, not a silent miscompile in a consumer.
 //
-// Following ALLOWED_BINARY in validate-text-classification.mjs: an entry here
-// is a decision, not a default. Adding one asserts you have confirmed canon
-// classifies that extension, and that its comment syntax is one the format
-// actually accepts.
+// An entry in CLASSIFIED is a decision, not a default. Adding one asserts you
+// have confirmed canon classifies that extension, and that its comment syntax
+// is one the format actually accepts.
+//
+// This list is deliberate, unlike the empirical NUL predicate in
+// validate-text-classification.mjs. The difference is that "is this file a
+// binary" is answerable from the bytes, whereas "does canon's provenance
+// comment survive in this format" is not -- it depends on a syntax table only a
+// human can check against canon.
 
 import { execFileSync } from 'node:child_process';
 import process from 'node:process';
