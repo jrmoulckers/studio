@@ -163,8 +163,20 @@ function selfTest() {
     // and silently normalizes doubled-cr.txt to `i/crlf` -- retiring the very
     // fixture that reaches the discriminator. Measured: with a global
     // `* text`, an empty repo file yields `i/crlf` and `* !text` yields
-    // `i/-text`. Note `* -text` would NOT work here; `-text` only appears in
-    // the `attr/` column and never changes `i/`.
+    // `i/-text`.
+    //
+    // `* -text` works here too, and an earlier version of this comment was
+    // wrong to say otherwise. Measured against the same global, `* -text` also
+    // yields `i/-text`: `i/` is computed from the bytes stored in the index,
+    // and the attribute decides whether conversion runs on `add`. `text`
+    // rewrites `61 0D 0D 0A` to `61 0D 0A` (hence `i/crlf`), while `-text`
+    // suppresses that conversion so the doubled CRs survive and content
+    // detection reads them. `-text` does not write the `i/` column, but it
+    // determines the content that column is computed from. Its only other
+    // effect is `attr/-text` where `!text` leaves `attr/` empty, and
+    // parseEolRows() never reads that column. `!text` is kept as the minimal
+    // intervention -- restoring git's default detection rather than asserting
+    // an attribute -- not because the alternative fails.
     mkdirSync(path.join(dir, 'sub'), { recursive: true });
     writeFileSync(path.join(dir, '.gitattributes'), '* !text\n');
 
