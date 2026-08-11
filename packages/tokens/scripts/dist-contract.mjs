@@ -171,16 +171,51 @@ function listFiles(root) {
   return files;
 }
 
+/**
+ * Decode a distribution file, rejecting the three ways its text can already be lost.
+ *
+ * `TextDecoder(fatal)` answers "were these bytes UTF-8?", which is not the question a
+ * distribution surface needs. Mojibake is VALID UTF-8: once a tool has replaced a
+ * character with U+FFFD the bytes are EF BF BD, a well-formed encoding of a real code
+ * point, and `fatal` decodes it happily. The corruption is upstream and permanent by
+ * the time these bytes exist.
+ *
+ * Same shape as the doubled-CR case `validate-text-classification.mjs` documents -- a
+ * doubled-CR file is also valid UTF-8 and still classifies binary. In both, validity
+ * is the wrong predicate; the question is whether the text already lost characters.
+ *
+ * This matters here rather than repo-wide because dist/ is the SYNCED surface. The
+ * provenance line the sync engine prepends carries U+2014, and token descriptions
+ * carry em-dashes and typographic quotes, so one mangled character is copied into
+ * every member repository -- past a build that compiles, a CSS comment that does not
+ * break, a formatter with no opinion, and a determinism check that sees a stable file.
+ *
+ * Any tool that reads text in fixed-size pieces can introduce this: a multi-byte
+ * sequence straddling a chunk boundary decodes to U+FFFD. No allowlist is needed
+ * because generated token output has no legitimate use for the replacement character.
+ */
 export function decodeUtf8Text(bytes, relativePath) {
   if (bytes.includes(0)) {
     throw new Error(`Distribution output "${relativePath}" contains a NUL byte.`);
   }
 
+  let text;
   try {
-    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
   } catch {
     throw new Error(`Distribution output "${relativePath}" is not valid UTF-8.`);
   }
+
+  const replacements = (text.match(/\uFFFD/g) ?? []).length;
+  if (replacements > 0) {
+    throw new Error(
+      `Distribution output "${relativePath}" contains ${replacements} replacement ` +
+        `character(s) (U+FFFD). The text lost characters before reaching dist/; ` +
+        `re-run the token build rather than committing this file.`,
+    );
+  }
+
+  return text;
 }
 
 export const normalizeLf = (text) => text.replace(/\r\n?/g, '\n');
