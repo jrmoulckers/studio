@@ -320,10 +320,12 @@ theme values it carries the shared shell — the `class` + `[data-theme="dark"]`
 strategy, the centered container, `borderRadius` `DEFAULT`/`full` aliases, token-backed
 `ringWidth`/`ringOffsetWidth`, `env(safe-area-inset-*)` spacing, the structural `zIndex`,
 `opacity`, `minHeight`/`minWidth` and elevation `boxShadow` scales, and the `fade-in`/`pop-in`
-animations. It `require`s nothing, so it works from a copied directory with no package
-resolution. The only thing it cannot carry is a plugin _instance_; add `tailwindcss-animate`
-yourself if you use those utilities, or depend on `@jrm/tailwind-preset`, which re-exports this
-same object and adds exactly that plugin.
+animations — both the `animation` entries and their `keyframes`, so those two work with no plugin.
+It `require`s nothing, so it works from a copied directory with no package resolution (verified: it
+loads standalone from a directory containing only the file). The only thing it cannot carry is a
+plugin _instance_. That matters solely if you use utilities from `tailwindcss-animate` itself —
+`animate-in`, `slide-in-from-*` and friends — in which case add that plugin yourself, or depend on
+`@jrm/tailwind-preset`, which re-exports this same object and adds exactly that plugin.
 
 | Utility                                           | Backing token                               |
 | ------------------------------------------------- | ------------------------------------------- |
