@@ -80,11 +80,15 @@
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-size-display: 1.6rem;
-  --font-size-title: 1.25rem;
-  --font-size-body: 1rem;
-  --font-size-label: 0.9rem;
-  --font-size-overline: 0.8rem;
+  --font-size-xs: 0.8rem;
+  --font-size-sm: 0.9rem;
+  --font-size-base: 1rem; /** Body copy — the reference size the rest of the ladder is read against. */
+  --font-size-md: 1.125rem; /** Between body and title. No role occupies this step, which is why callers reach for it by name. */
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.4rem;
+  --font-size-2xl: 1.6rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
   --font-line-height-tight: 1.2;
   --font-line-height-snug: 1.4;
   --font-line-height-normal: 1.5;
@@ -246,6 +250,11 @@
   --spacing-xl: var(--spacing-5); /** Roomier block padding — cognitive-accessibility mode. */
   --spacing-2xl: var(--spacing-6); /** Card gap / inline padding — cognitive-accessibility mode. */
   --spacing-3xl: var(--spacing-8); /** Section gap — cognitive-accessibility mode. */
+  --font-size-display: var(--font-size-2xl);
+  --font-size-title: var(--font-size-lg);
+  --font-size-body: var(--font-size-base);
+  --font-size-label: var(--font-size-sm);
+  --font-size-overline: var(--font-size-xs);
   --semantic-background-primary: var(--color-paper-lilac-mist); /** App background. */
   --semantic-background-secondary: var(--color-paper-frost); /** Secondary chrome surface. */
   --semantic-background-elevated: var(--color-paper-white); /** Elevated surface — cards, popovers, inputs. */
@@ -276,28 +285,22 @@
   --semantic-status-pending-subtle: var(--color-pending-50); /** Low-emphasis pending fill. Carries text.primary at 15.73:1. */
   --semantic-status-neutral-subtle: var(--color-paper-cloud-line); /** Low-emphasis neutral fill for uncategorized badges. */
   --text-display-family: var(--font-family-sans);
-  --text-display-size: var(--font-size-display);
   --text-display-weight: var(--font-weight-bold);
   --text-display-line-height: var(--font-line-height-tight);
   --text-title-family: var(--font-family-sans);
-  --text-title-size: var(--font-size-title);
   --text-title-weight: var(--font-weight-bold);
   --text-title-line-height: var(--font-line-height-tight);
   --text-body-family: var(--font-family-sans);
-  --text-body-size: var(--font-size-body);
   --text-body-weight: var(--font-weight-regular);
   --text-body-line-height: var(--font-line-height-normal);
   --text-label-family: var(--font-family-sans);
-  --text-label-size: var(--font-size-label);
   --text-label-weight: var(--font-weight-regular);
   --text-label-line-height: var(--font-line-height-snug);
   --text-overline-family: var(--font-family-sans);
-  --text-overline-size: var(--font-size-overline);
   --text-overline-weight: var(--font-weight-semibold);
   --text-overline-line-height: var(--font-line-height-tight);
   --text-overline-letter-spacing: var(--font-letter-spacing-wide);
   --text-amount-family: var(--font-family-sans);
-  --text-amount-size: var(--font-size-body);
   --text-amount-weight: var(--font-weight-semibold);
   --text-amount-line-height: var(--font-line-height-normal);
   --text-amount-variant-numeric: var(--font-variant-numeric-tabular);
@@ -320,19 +323,14 @@
   --motion-loading-easing: var(--easing-in-out);
   --motion-reduced-duration: var(--duration-reduced);
   --motion-reduced-easing: var(--easing-linear);
-  --cognitive-type-display-size: var(--font-size-display);
   --cognitive-type-display-weight: var(--font-weight-bold);
   --cognitive-type-display-line-height: var(--font-line-height-normal); /** Relaxed from tight (1.2) to normal (1.5). */
-  --cognitive-type-title-size: var(--font-size-title);
   --cognitive-type-title-weight: var(--font-weight-bold);
   --cognitive-type-title-line-height: var(--font-line-height-normal); /** Relaxed from tight (1.2) to normal (1.5). */
-  --cognitive-type-body-size: var(--font-size-title); /** Stepped up from body (1rem) to title (1.25rem) for readability. */
   --cognitive-type-body-weight: var(--font-weight-regular);
   --cognitive-type-body-line-height: var(--font-line-height-relaxed); /** Relaxed from normal (1.5) to relaxed (1.75). */
-  --cognitive-type-label-size: var(--font-size-body); /** Stepped up from label (0.9rem) to body (1rem). */
   --cognitive-type-label-weight: var(--font-weight-regular);
   --cognitive-type-label-line-height: var(--font-line-height-relaxed);
-  --cognitive-type-overline-size: var(--font-size-label); /** Stepped up from overline (0.8rem) to label (0.9rem) — 0.8rem is too small for cognitive needs. */
   --cognitive-type-overline-weight: var(--font-weight-semibold);
   --cognitive-type-overline-line-height: var(--font-line-height-snug);
   --cognitive-focus-width: var(--cognitive-focus-ring-width);
@@ -414,9 +412,20 @@
   --color-danger: var(--semantic-status-negative);
   --color-warning: var(--semantic-status-warning);
   --color-focus-ring: var(--semantic-border-focus);
+  --text-display-size: var(--font-size-display);
+  --text-title-size: var(--font-size-title);
+  --text-body-size: var(--font-size-body);
+  --text-label-size: var(--font-size-label);
+  --text-overline-size: var(--font-size-overline);
+  --text-amount-size: var(--font-size-body);
   --motion-page-transition-easing: var(--easing-balanced);
   --motion-list-item-duration: var(--duration-fast);
   --motion-fade-out-duration: var(--duration-fast);
+  --cognitive-type-display-size: var(--font-size-display);
+  --cognitive-type-title-size: var(--font-size-title);
+  --cognitive-type-body-size: var(--font-size-title); /** Stepped up from body (1rem) to title (1.25rem) for readability. */
+  --cognitive-type-label-size: var(--font-size-body); /** Stepped up from label (0.9rem) to body (1rem). */
+  --cognitive-type-overline-size: var(--font-size-label); /** Stepped up from overline (0.8rem) to label (0.9rem) — 0.8rem is too small for cognitive needs. */
   --cognitive-spacing-section-gap: var(--spacing-3xl); /** Gap between major sections — 32px. */
   --cognitive-spacing-card-gap: var(--spacing-2xl); /** Gap between cards — 24px. */
   --cognitive-spacing-element-gap: var(--spacing-lg); /** Gap between elements within a section — 16px. */
