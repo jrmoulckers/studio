@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Asserts no tracked file is classified as binary, and no committed text blob
-// carries a stray CR.
+// Asserts no tracked text file has been silently reclassified as binary by
+// doubled-CR corruption, and no committed text blob carries a stray CR.
 //
 // Why this exists
 // ---------------
@@ -29,18 +29,30 @@
 // aren't valid UTF-8, but a doubled-CR file IS valid UTF-8: it passes the
 // encoding check and still becomes `-text`.
 //
-// Studio tracks no binaries -- the text-only dist/ constraint means there is
-// no legitimate `-text` file to exempt -- so this invariant needs no carve-out
-// list. If Studio ever legitimately tracks a binary, add it to ALLOWED_BINARY
-// deliberately rather than weakening the check.
+// Studio's text-only constraint is load-bearing for the SYNCED SURFACE, not for
+// the repository at large: the sync engine prepends a provenance comment to
+// every file it transports, which is impossible for a binary. That surface has
+// its own two guards -- `dist.mjs` rejects non-UTF-8, and
+// `validate-dist-extensions.mjs` rejects any extension whose comment syntax
+// isn't classified (verified: a PNG staged into dist/ fails it by name).
+//
+// So this check does NOT fail on an ordinary binary. Classification here is
+// EMPIRICAL, not declared: an asset is `-text` BECAUSE it contains NUL bytes,
+// while doubled-CR corruption is `-text` DESPITE containing none. That
+// conjunction -- `-text` AND no NUL -- is the whole discriminator, and it needs
+// no allowlist: a logo added tomorrow exempts itself by being a real binary.
+//
+// `git check-attr text` cannot make this distinction. Under canon's
+// `* text=auto`, an undeclared PNG and a doubled-CR Markdown file BOTH resolve
+// to `auto`; only an explicit `binary` rule yields `unset`. Asking git to
+// separate them sounds more principled than reading bytes -- "only git resolves
+// attributes" is the right rule for ADR-0011 -- but it is the wrong predicate
+// here, because the answer does not vary between the two cases.
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-
-// Deliberately empty. An entry here is a decision, not a default.
-const ALLOWED_BINARY = new Set();
 
 function git(args) {
   return execFileSync('git', args, {
@@ -72,29 +84,26 @@ function main() {
   }
 
   const corrupt = [];
-  const undeclaredBinary = [];
+  const binaries = [];
   const crBlobs = [];
 
   for (const { index, worktree, file } of rows) {
-    if (ALLOWED_BINARY.has(file)) continue;
-
     if (index === 'i/-text') {
-      // `-text` has two causes and they need opposite remedies. Git classifies a
-      // blob binary on a NUL byte OR on `cr != crlf`, so the discriminator is the
-      // conjunction: binary AND no NUL is the doubled-CR corruption; binary WITH
-      // a NUL is an ordinary binary file. Both still fail
-      // -- an undeclared binary is a decision nobody made -- but telling someone
-      // to "rewrite with LF terminators" would destroy a real PNG.
+      // Read the bytes, because only the bytes separate the two causes. A NUL
+      // byte means an ordinary binary -- exempt, and telling someone to
+      // "rewrite it with LF terminators" would destroy it. No NUL means the
+      // doubled-CR corruption, which is the defect this guard exists to catch.
       let hasNul;
       try {
         hasNul = readFileSync(path.join(root, file)).includes(0x00);
       } catch {
         // Absent from the working tree, so the cause cannot be determined.
-        // Report it under the safer remedy rather than guessing.
-        undeclaredBinary.push({ file, index, worktree });
+        // Report it rather than exempting it: an unreadable `-text` file is
+        // the one case where silence could hide real corruption.
+        corrupt.push({ file, index, worktree, unread: true });
         continue;
       }
-      (hasNul ? undeclaredBinary : corrupt).push({ file, index, worktree });
+      (hasNul ? binaries : corrupt).push({ file, index, worktree });
       continue;
     }
 
@@ -116,19 +125,20 @@ function main() {
     if (cr > 0) crBlobs.push({ file, cr });
   }
 
-  if (corrupt.length === 0 && undeclaredBinary.length === 0 && crBlobs.length === 0) {
+  if (corrupt.length === 0 && crBlobs.length === 0) {
+    const note = binaries.length ? ` ${binaries.length} binary file(s) exempt (NUL-bearing).` : '';
     console.log(
-      `text-classification: OK — ${rows.length} tracked file(s), none classified -text, no stray CR.`,
+      `text-classification: OK — ${rows.length} tracked file(s), no doubled-CR corruption, no stray CR.${note}`,
     );
     return;
   }
 
   if (corrupt.length) {
     console.error(
-      `\ntext-classification: ${corrupt.length} tracked file(s) classified as binary by git:\n`,
+      `\ntext-classification: ${corrupt.length} tracked file(s) classified as binary with no NUL byte:\n`,
     );
-    for (const { file, index, worktree } of corrupt) {
-      console.error(`  ${file}  (${index} ${worktree})`);
+    for (const { file, index, worktree, unread } of corrupt) {
+      console.error(`  ${file}  (${index} ${worktree})${unread ? '  [unreadable]' : ''}`);
     }
     console.error(
       '\nGit treats a blob as binary when its CR count differs from its CRLF-pair',
@@ -136,21 +146,8 @@ function main() {
       '\nbytes. Such a file is exempt from `eol=lf`, and `git add --renormalize`',
       '\nskips it -- so it cannot repair itself. Rewrite the file with LF terminators',
       '\nand commit the result.',
-    );
-  }
-
-  if (undeclaredBinary.length) {
-    console.error(
-      `\ntext-classification: ${undeclaredBinary.length} undeclared binary file(s) tracked:\n`,
-    );
-    for (const { file, index, worktree } of undeclaredBinary) {
-      console.error(`  ${file}  (${index} ${worktree})`);
-    }
-    console.error(
-      '\nThese contain NUL bytes, so they are ordinary binaries rather than the',
-      '\ndoubled-CR corruption above. Do NOT rewrite them with LF terminators --',
-      '\nthat would destroy them. Studio tracks no binaries by design; if one now',
-      '\nbelongs here, add it to ALLOWED_BINARY in this script deliberately.',
+      '\n\nA file marked [unreadable] was absent from the working tree, so its cause',
+      '\ncould not be determined; it is reported rather than exempted.',
     );
   }
 
