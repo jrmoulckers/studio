@@ -49,7 +49,29 @@ import prettier from 'prettier';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const PROVENANCE = 'synced from jrmoulckers/.github';
-const REGION_MARKER = ['studio', 'base', 'start'].join(':');
+
+/**
+ * A managed region is recognised by a line that is *only* the start delimiter.
+ *
+ * Matching the bare name anywhere in the file is not sufficient: canon's own body
+ * documents the convention, so any file that discusses the markers — including this
+ * repository's `.github/copilot-instructions.md` and any note a member writes about
+ * it — would be misclassified as canon and demanded in .prettierignore.
+ *
+ * Matching a single hardcoded delimiter is not sufficient either. The comment syntax
+ * varies with file type: `<!-- -->` in Markdown, `#` in .gitattributes and .toml/.yml,
+ * `/* *\/` in .js/.ts/.css/.kt/.swift. Hardcoding the Markdown form would make
+ * .gitattributes invisible here — the invisible-population bug of #82 in miniature.
+ *
+ * So: anchored to a whole line, trimmed, with the syntax left open. Anchoring is what
+ * excludes prose, since a sentence mentioning the marker is never a line consisting
+ * solely of it.
+ */
+const REGION_START = new RegExp(
+  String.raw`^(?:<!--|#|\/\*|\/\/)\s*` +
+    ['studio', 'base', 'start'].join(':') +
+    String.raw`\s*(?:-->|\*\/)?$`,
+);
 
 /** The engine's own record of every path it wrote. Authoritative; stamp-agnostic. */
 const LOCK = '.studio-sync.lock.json';
@@ -125,7 +147,7 @@ function readTextOrNull(absolute) {
 }
 
 function classify(relative, text) {
-  if (text.includes(REGION_MARKER)) return 'managed region';
+  if (text.split('\n').some((line) => REGION_START.test(line.trim()))) return 'managed region';
   const header = text.split('\n', PROVENANCE_SCAN_LINES).join('\n');
   if (header.includes(PROVENANCE)) return 'generated (provenance-stamped)';
   return null;
