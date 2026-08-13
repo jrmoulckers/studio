@@ -42,6 +42,22 @@
  * byte-exactly to canon's copy at `d13f39a`, the revision this repository was delivered.
  * Because a clean verdict over an empty population is indistinguishable from a clean verdict
  * over a real one, the population is asserted before any result is printed.
+ *
+ * ## A count cannot express how far behind a file is
+ *
+ * The verdict led with `N current, M superseded` — a count, which reads identically whether
+ * one file is a revision behind or a third of a megabyte behind, and which keeps reading
+ * identically as the gap widens. Worse, it reads *reassuringly* exactly when it should not:
+ * staleness concentrates in the largest file, because the largest file is the one that
+ * changes most, so a one-in-sixty count can sit atop a majority of the delivered bytes.
+ *
+ * So a byte deficit is reported per file and in the headline — and only when proven. The
+ * lock records no size, so the delivered source size is reconstructed from the target file
+ * and accepted only if it reproduces `sourceSha256`; otherwise the deficit is `unknown`.
+ * The tempting fallback — subtract the target file's size — is forbidden, because the target
+ * carries the injected provenance line and canon's source does not, making the result wrong
+ * by the stamp. That error is far too small to change any verdict, which is exactly why
+ * nothing downstream would ever surface it.
  */
 
 import { createHash } from 'node:crypto';
@@ -57,6 +73,17 @@ const LOCK = '.studio-sync.lock.json';
 
 /** Canon lives in one repository; the lock names it, and this is the fallback. */
 const DEFAULT_BACKBONE = 'jrmoulckers/.github';
+
+/**
+ * How far into a target to look for the injected provenance line.
+ *
+ * The engine writes it at the top, but not always at line 1 — a Markdown file with
+ * frontmatter carries it below the closing delimiter. A bounded search keeps a failed
+ * reconstruction cheap and, more importantly, keeps it *honest*: a scan of the whole file
+ * would eventually find some line whose removal happens to collide, and a deficit is worth
+ * reporting only when the digest proves it.
+ */
+const PROVENANCE_SEARCH_LINES = 24;
 
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
 
@@ -230,6 +257,54 @@ async function fetchCanonBytes(repository, sourcePath, ref, token) {
   return null;
 }
 
+/**
+ * How many bytes of canon does one delivered file represent?
+ *
+ * The lock records `sourceSha256`, `targetSha256` and `syncedAt` — and no byte size at all.
+ * So the delivered source size cannot be read; it can only be *reconstructed* from the file
+ * on disk, and a reconstruction is worth nothing unless it is proven.
+ *
+ * The engine injects a provenance line into most whole-file targets, so the target and the
+ * canon source differ by that line. Removing one line and hashing the remainder either
+ * reproduces `sourceSha256` — in which case the size is established, not estimated — or it
+ * does not, in which case this returns null and the caller must report the deficit as
+ * unknown. Managed-region merges and rendered targets fall in the second class by design.
+ *
+ * The forbidden shortcut is subtracting the *target* size from canon's size. Those are
+ * different byte channels and the difference is the injected stamp, so the result is wrong
+ * by exactly the provenance line. It is a small error that changes no conclusion, which is
+ * precisely why nothing would ever catch it.
+ */
+function deliveredSourceBytes(target, sourceSha256) {
+  let buf;
+  try {
+    buf = readFileSync(path.join(repoRoot, target));
+  } catch {
+    return { bytes: null, reason: 'target file is not present in this checkout' };
+  }
+
+  if (sha256(buf) === sourceSha256) {
+    // Delivered verbatim: the target *is* the canon source.
+    return { bytes: buf.length, reason: null };
+  }
+
+  const lines = buf.toString('utf8').split('\n');
+  const limit = Math.min(PROVENANCE_SEARCH_LINES, lines.length);
+  for (let i = 0; i < limit; i++) {
+    const withoutLine = lines
+      .slice(0, i)
+      .concat(lines.slice(i + 1))
+      .join('\n');
+    const candidate = Buffer.from(withoutLine, 'utf8');
+    if (sha256(candidate) === sourceSha256) return { bytes: candidate.length, reason: null };
+  }
+
+  return {
+    bytes: null,
+    reason: 'delivered source size is not reconstructible from the target file',
+  };
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const { entries, backbone, generatedAt } = readLock();
@@ -269,7 +344,20 @@ async function main() {
     if (upstream === recorded) {
       current.push({ target, source });
     } else {
-      stale.push({ target, source, delivered: recorded, upstream, upstreamBytes: bytes.length });
+      const { bytes: deliveredBytes, reason: deficitReason } = deliveredSourceBytes(
+        target,
+        recorded,
+      );
+      stale.push({
+        target,
+        source,
+        delivered: recorded,
+        upstream,
+        upstreamBytes: bytes.length,
+        deliveredBytes,
+        deficitReason,
+        deficit: deliveredBytes === null ? null : bytes.length - deliveredBytes,
+      });
     }
   }
 
@@ -306,6 +394,10 @@ async function main() {
     process.exit(1);
   }
 
+  const netDeficit = stale.reduce((sum, item) => sum + (item.deficit ?? 0), 0);
+  const grossDeficit = stale.reduce((sum, item) => sum + Math.abs(item.deficit ?? 0), 0);
+  const unprovenDeficits = stale.filter((item) => item.deficit === null).length;
+
   if (options.json) {
     console.log(
       JSON.stringify(
@@ -314,6 +406,9 @@ async function main() {
           ref: options.ref,
           generatedAt,
           compared,
+          netDeficit,
+          grossDeficit,
+          unprovenDeficits,
           current,
           stale,
           unresolved,
@@ -324,18 +419,55 @@ async function main() {
       ),
     );
   } else {
+    // Lead with a quantity that can move. A count reads the same at any deficit, and it
+    // reads *reassuringly* whenever staleness concentrates in the largest file — which is
+    // the normal case, because the largest file is the one that changes most.
+    //
+    // Report gross and net together. Net alone repeats the count's defect one level up: a
+    // file that grew and a file that shrank cancel, so a large divergence can sum to zero
+    // and read as agreement. Net alone is also not signed the way a reader assumes — against
+    // an older `--ref` canon is *smaller*, and "behind by a negative number" is not a
+    // sentence. Gross states how much moved; net states which way.
+    const headlineDeficit =
+      stale.length === 0
+        ? ''
+        : ` Canon differs by ${grossDeficit} proven byte(s)` +
+          ` (net ${netDeficit >= 0 ? '+' : ''}${netDeficit}, positive meaning canon is ahead)` +
+          (unprovenDeficits > 0 ? `, plus ${unprovenDeficits} file(s) of unknown size` : '') +
+          '.';
+
     console.log(
       `canon-currency: ${repository}@${options.ref} — ${current.length} current, ` +
-        `${stale.length} superseded, of ${compared} compared.`,
+        `${stale.length} superseded, of ${compared} compared.${headlineDeficit}`,
+    );
+    console.log(
+      `Population: the ${entries.length} entr(ies) recorded in ${LOCK}, which is not the\n` +
+        'set of files in any one directory — it omits locally authored files and includes\n' +
+        'synced files outside .github.',
     );
 
     if (stale.length > 0) {
       console.log('\nSuperseded upstream since delivery:\n');
       for (const item of stale) {
         console.log(`  ${item.target}`);
-        console.log(`     delivered ${item.delivered}`);
-        console.log(`     canon     ${item.upstream}  (${item.upstreamBytes} bytes)`);
+        if (item.deliveredBytes === null) {
+          console.log(`     delivered ${item.delivered}  (source size unknown)`);
+          console.log(`     canon     ${item.upstream}  (${item.upstreamBytes} bytes)`);
+          console.log(`     deficit   unknown — ${item.deficitReason}`);
+        } else {
+          console.log(`     delivered ${item.delivered}  (${item.deliveredBytes} bytes)`);
+          console.log(`     canon     ${item.upstream}  (${item.upstreamBytes} bytes)`);
+          console.log(`     deficit   ${item.deficit} bytes`);
+        }
       }
+      console.log(
+        '\nA deficit is reported only where the delivered source size was reproduced from\n' +
+          'the target file and proven against sourceSha256. Where it was not, it is reported\n' +
+          'as unknown rather than derived by subtracting the target size: the target carries\n' +
+          "the engine's injected provenance line and canon's source does not, so that\n" +
+          'subtraction is wrong by the stamp — a small error that changes no conclusion and\n' +
+          'is therefore never caught.',
+      );
       console.log(
         '\nThese are not defects here and are not fixable here: canon is authored upstream\n' +
           'and arrives by sync. The remedy is an upstream dispatch, which is why this is a\n' +
