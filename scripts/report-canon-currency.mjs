@@ -88,12 +88,26 @@ const PROVENANCE_SEARCH_LINES = 40;
 /**
  * How many consecutive lines the injected block may occupy.
  *
- * Measured across this repo's lock: 52 of 60 entries reconstruct by removing one line, and
+ * Measured across this repo's lock: 54 of 60 entries reconstruct by removing one line, and
  * four skill checklists need two — the stamp plus the blank line under it. Constraining the
  * *shape* to one line was an error of the same kind a count is: it refused six entries whose
  * size is fully provable, and an over-refusal spends the credibility of the refusals that are
  * real. The two managed-region merges must still refuse, and they do, because no removal
  * reproduces their digest at any width.
+ *
+ * The removed *width* is a second quantity, and it is not the stamp's width. Comment syntax
+ * fixes the stamp; block shape fixes the removal; they diverge wherever a blank line follows.
+ * Measured here: 73 B once (`agency.toml`, hash syntax), 80 B on 53 Markdown files (HTML
+ * syntax), and 81 B on the four checklists — the same 80-byte HTML stamp plus the blank line,
+ * a width no comment-syntax table can produce. Anyone correcting a byte deficit by hand needs
+ * the removal width, so reaching for the engine's syntax table returns a plausible wrong
+ * answer rather than an obviously missing one.
+ *
+ * Note what the pre-widening instrument could report about this. Permitting only one-line
+ * removals left those four entries unproven, contributing no width, so a census of observed
+ * widths returned exactly two and read as complete. The bound under test and the quantity
+ * being measured were the same variable: a shape-constrained search cannot enumerate shapes,
+ * and nothing in its output says so.
  */
 const PROVENANCE_MAX_LINES = 2;
 
