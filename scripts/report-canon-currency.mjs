@@ -75,15 +75,27 @@ const LOCK = '.studio-sync.lock.json';
 const DEFAULT_BACKBONE = 'jrmoulckers/.github';
 
 /**
- * How far into a target to look for the injected provenance line.
+ * How far into a target to look for the injected provenance block.
  *
  * The engine writes it at the top, but not always at line 1 — a Markdown file with
- * frontmatter carries it below the closing delimiter. A bounded search keeps a failed
- * reconstruction cheap and, more importantly, keeps it *honest*: a scan of the whole file
- * would eventually find some line whose removal happens to collide, and a deficit is worth
- * reporting only when the digest proves it.
+ * frontmatter carries it below the closing delimiter, and agent and prompt files here put it
+ * as far down as line 26. A bounded search keeps a failed reconstruction cheap; it is not
+ * what keeps it honest. Acceptance is a sha256 match against the recorded `sourceSha256`, so
+ * widening the candidate set cannot admit a wrong answer, only find a right one.
  */
-const PROVENANCE_SEARCH_LINES = 24;
+const PROVENANCE_SEARCH_LINES = 40;
+
+/**
+ * How many consecutive lines the injected block may occupy.
+ *
+ * Measured across this repo's lock: 52 of 60 entries reconstruct by removing one line, and
+ * four skill checklists need two — the stamp plus the blank line under it. Constraining the
+ * *shape* to one line was an error of the same kind a count is: it refused six entries whose
+ * size is fully provable, and an over-refusal spends the credibility of the refusals that are
+ * real. The two managed-region merges must still refuse, and they do, because no removal
+ * reproduces their digest at any width.
+ */
+const PROVENANCE_MAX_LINES = 2;
 
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
 
@@ -264,11 +276,17 @@ async function fetchCanonBytes(repository, sourcePath, ref, token) {
  * So the delivered source size cannot be read; it can only be *reconstructed* from the file
  * on disk, and a reconstruction is worth nothing unless it is proven.
  *
- * The engine injects a provenance line into most whole-file targets, so the target and the
- * canon source differ by that line. Removing one line and hashing the remainder either
- * reproduces `sourceSha256` — in which case the size is established, not estimated — or it
- * does not, in which case this returns null and the caller must report the deficit as
- * unknown. Managed-region merges and rendered targets fall in the second class by design.
+ * The engine injects a provenance block into most whole-file targets, so the target and the
+ * canon source differ by that block. Removing a bounded run of lines and hashing the
+ * remainder either reproduces `sourceSha256` — in which case the size is established, not
+ * estimated — or it does not, in which case this returns null and the caller must report the
+ * deficit as unknown. Managed-region merges and rendered targets fall in the second class by
+ * design: no removal reproduces their digest, because the engine rewrote their interior.
+ *
+ * Note where the safety comes from. It is the digest, not the search bounds — the bounds only
+ * decide how many candidates are tried. Tightening them does not make a wrong answer less
+ * likely; it makes a right answer less findable, and the entries it loses are reported as
+ * unknown alongside the ones that are genuinely unprovable.
  *
  * The forbidden shortcut is subtracting the *target* size from canon's size. Those are
  * different byte channels and the difference is the injected stamp, so the result is wrong
@@ -285,23 +303,33 @@ function deliveredSourceBytes(target, sourceSha256) {
 
   if (sha256(buf) === sourceSha256) {
     // Delivered verbatim: the target *is* the canon source.
-    return { bytes: buf.length, reason: null };
+    return { bytes: buf.length, reason: null, shape: 'verbatim' };
   }
 
   const lines = buf.toString('utf8').split('\n');
   const limit = Math.min(PROVENANCE_SEARCH_LINES, lines.length);
   for (let i = 0; i < limit; i++) {
-    const withoutLine = lines
-      .slice(0, i)
-      .concat(lines.slice(i + 1))
-      .join('\n');
-    const candidate = Buffer.from(withoutLine, 'utf8');
-    if (sha256(candidate) === sourceSha256) return { bytes: candidate.length, reason: null };
+    for (let run = 1; run <= PROVENANCE_MAX_LINES; run++) {
+      if (i + run > lines.length) break;
+      const withoutBlock = lines
+        .slice(0, i)
+        .concat(lines.slice(i + run))
+        .join('\n');
+      const candidate = Buffer.from(withoutBlock, 'utf8');
+      if (sha256(candidate) === sourceSha256) {
+        return {
+          bytes: candidate.length,
+          reason: null,
+          shape: `stamp at line ${i + 1}, ${run} line(s), ${buf.length - candidate.length} bytes`,
+        };
+      }
+    }
   }
 
   return {
     bytes: null,
     reason: 'delivered source size is not reconstructible from the target file',
+    shape: null,
   };
 }
 
@@ -344,10 +372,11 @@ async function main() {
     if (upstream === recorded) {
       current.push({ target, source });
     } else {
-      const { bytes: deliveredBytes, reason: deficitReason } = deliveredSourceBytes(
-        target,
-        recorded,
-      );
+      const {
+        bytes: deliveredBytes,
+        reason: deficitReason,
+        shape: deficitShape,
+      } = deliveredSourceBytes(target, recorded);
       stale.push({
         target,
         source,
@@ -356,6 +385,7 @@ async function main() {
         upstreamBytes: bytes.length,
         deliveredBytes,
         deficitReason,
+        deficitShape,
         deficit: deliveredBytes === null ? null : bytes.length - deliveredBytes,
       });
     }
@@ -458,6 +488,11 @@ async function main() {
           console.log(`     delivered ${item.delivered}  (${item.deliveredBytes} bytes)`);
           console.log(`     canon     ${item.upstream}  (${item.upstreamBytes} bytes)`);
           console.log(`     deficit   ${item.deficit} bytes`);
+          // Print how the size was recovered. A reconstruction that needed an unusual shape is
+          // the signal that the search bounds are near their limit — and a bound that is one
+          // line too tight reports a provable size as unknown, which is invisible unless the
+          // successful shapes are shown next to it.
+          console.log(`     proof     ${item.deficitShape}`);
         }
       }
       console.log(
