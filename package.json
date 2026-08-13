@@ -27,7 +27,8 @@
     "prettier-ignore:check": "node scripts/validate-prettier-ignore.mjs",
     "text:check": "node scripts/validate-text-classification.mjs",
     "dist-ext:check": "node scripts/validate-dist-extensions.mjs",
-    "canon-lock:check": "node scripts/validate-canon-lock.mjs"
+    "canon-lock:check": "node scripts/validate-canon-lock.mjs",
+    "canon:currency": "node scripts/report-canon-currency.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
