@@ -18,6 +18,7 @@ jobs:
     name: lint
     permissions:
       contents: read
+      packages: read
       pull-requests: read
     uses: jrmoulckers/.github/.github/workflows/reusable-ci-lint.yml@97ff60ec21321563fa0fc7ba80015261e7dcd6fa
     with:
@@ -31,6 +32,7 @@ jobs:
     name: web
     permissions:
       contents: read
+      packages: read
     uses: jrmoulckers/.github/.github/workflows/reusable-ci-web.yml@97ff60ec21321563fa0fc7ba80015261e7dcd6fa
     with:
       node-version: '24'
