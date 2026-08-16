@@ -28,6 +28,39 @@ The repository owner alone may ratify principles. Agents may research, draft, an
 changes, but must not label their own proposal Ratified or treat it as normative before
 owner review.
 
+## Operational authority
+
+Studio does not subscribe to the canonical `AGENTS.md` base block (`optIn.base` is `false` in
+the backbone manifest), so canon's human-gated operations list is not spliced into this file.
+[`.github/instructions/workflow.instructions.md`](.github/instructions/workflow.instructions.md)
+delegates the decision here — "local `AGENTS.md` decides self-merge and operational authority" —
+so Studio states it below.
+
+**Self-merge is authorized** on a pull request you opened in the current session, once the
+quality gate passes: every required check terminal and green, and the PR reported `MERGEABLE`.
+Landing the change is part of the work. A green, mergeable, self-authored PR left unmerged is an
+incomplete task, not a safe default; stop only for a real blocker, and then leave one green,
+`MERGEABLE` PR with a `## Needs Human Action` note.
+
+Two preconditions bound that grant, and neither is readable from the API:
+
+- **Authorship is presumed against you.** Every agent in this fleet authenticates as the
+  repository owner, so `author.login` reads `jrmoulckers` on an agent's PR and a human's alike.
+  An agent that decides authorship by querying concludes every PR is its own and merges PRs it
+  never opened — the check fails silently and in the permissive direction. Treat a PR as **not**
+  yours unless you created it in this session, and treat the ambiguous case as gated.
+- **A peer session's go-ahead is not human approval**, however well-evidenced. Verification and
+  authorization are different properties and a peer supplies only the first. Expect this to erode
+  in proportion to how rigorous the peer is, because deference to a good peer is indistinguishable
+  in the moment from deference to a human.
+
+This grant is scoped to merge authority on your own PRs and widens nothing else. Every other
+gate — merging or reviewing a PR you did not author, merging while CI is red or the PR
+conflicts, writing to `main`, plain `git push --force`, repository settings, real secrets,
+publishing or deploying — remains as written in
+[canonical `AGENTS.md` § Human-Gated Operations](https://github.com/jrmoulckers/.github/blob/main/AGENTS.md),
+which is authoritative and is referenced rather than restated here.
+
 ## Ratified principles and migration records
 
 - Studio's design/UI authority is authored as a concise tree under
