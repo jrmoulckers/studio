@@ -1,7 +1,8 @@
 {
   "version": 1,
   "backbone": "jrmoulckers/.github",
-  "generatedAt": "2026-08-12T14:27:29.088Z",
+  "classifierSha256": "de7337e8bf0b270e6b75a2b1e4bc69b7a91c770dcc1f8bd8f669f02508239d89",
+  "generatedAt": "2026-08-17T07:55:33.086Z",
   "entries": {
     ".gitattributes": {
       "sourceSha256": "4be6041de14159436002446da3193a178a4defa235fe71585c04002d070d80c7",
@@ -149,9 +150,9 @@
       "syncedAt": "2026-08-12T14:27:29.086Z"
     },
     ".github/instructions/workflow.instructions.md": {
-      "sourceSha256": "c3f8a2d817c8f2ad5fca66ff2c6756d8cf716b97e06148db88dbc320dc92f7d9",
-      "targetSha256": "c9bb0b25013203bc4772a12a573614d0f8d9b54ab75878d8f002a9ceb04c7c4b",
-      "syncedAt": "2026-08-12T14:27:29.087Z"
+      "sourceSha256": "68eb1c69f316267c520319772f60a969250bd64a30d11b1e7ab29dde70db5cea",
+      "targetSha256": "901992802fe799a74ea821609d4c8e1e4c07e9f2e30d56218b9179c3571b5eaa",
+      "syncedAt": "2026-08-17T07:55:33.082Z"
     },
     ".github/prompts/backlog.prompt.md": {
       "sourceSha256": "662578e4e512ac591b86127f50c601283a27b6ce96c9e09b022b833f720fe750",
