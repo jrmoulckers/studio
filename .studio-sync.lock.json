@@ -2,12 +2,17 @@
   "version": 1,
   "backbone": "jrmoulckers/.github",
   "classifierSha256": "de7337e8bf0b270e6b75a2b1e4bc69b7a91c770dcc1f8bd8f669f02508239d89",
-  "generatedAt": "2026-08-16T21:30:31.489Z",
+  "generatedAt": "2026-08-31T14:56:43.514Z",
   "entries": {
     ".gitattributes": {
       "sourceSha256": "4be6041de14159436002446da3193a178a4defa235fe71585c04002d070d80c7",
       "targetSha256": "a591a7816b02daf54849d69af18396ff6175f24de0b06d0a1def97d0b5a9274a",
       "syncedAt": "2026-08-11T04:27:46.087Z"
+    },
+    ".github/agents/3d-print-specialist.agent.md": {
+      "sourceSha256": "52b8b229d57d4cbc519cd1990213ce69806f8d410e180b8e3ae7bf608d933faa",
+      "targetSha256": "d49253ace120841304bfeeb48922ff3867653c251038fd65959049291712e06b",
+      "syncedAt": "2026-08-31T14:56:43.502Z"
     },
     ".github/agents/accessibility-reviewer.agent.md": {
       "sourceSha256": "f83d90b50ea87be04935ba849c0a93eda729452a2d7eee81e0cb02b4bf04dae5",
@@ -150,9 +155,9 @@
       "syncedAt": "2026-08-12T14:27:29.086Z"
     },
     ".github/instructions/workflow.instructions.md": {
-      "sourceSha256": "b34b85bebe168f95a8b8b09d4fb607e1657878aaa395d30292d53b1b0c3dd7ca",
-      "targetSha256": "9992c1f7d000689c117d458308546f33caa118fb107bc978e5c994f6b8c3548d",
-      "syncedAt": "2026-08-16T21:30:31.485Z"
+      "sourceSha256": "68eb1c69f316267c520319772f60a969250bd64a30d11b1e7ab29dde70db5cea",
+      "targetSha256": "901992802fe799a74ea821609d4c8e1e4c07e9f2e30d56218b9179c3571b5eaa",
+      "syncedAt": "2026-08-31T14:56:43.508Z"
     },
     ".github/prompts/backlog.prompt.md": {
       "sourceSha256": "662578e4e512ac591b86127f50c601283a27b6ce96c9e09b022b833f720fe750",
@@ -193,6 +198,11 @@
       "sourceSha256": "ad23c3f288955ff4c369d26f846c47c62b8e687c7f9e1683e550bf89335de571",
       "targetSha256": "350f984d725ae4042418f65e8f91888a12dd651c543060fb6ce4e3e131cf16b4",
       "syncedAt": "2026-08-08T21:05:57.540Z"
+    },
+    ".github/skills/3d-print-preparation/SKILL.md": {
+      "sourceSha256": "e741a53196c1e423d4d8b8fd14269087b39309ce0f8af8b85941e5bd18784bcf",
+      "targetSha256": "26bba404fb867678c2c5610b60cce3eda9b145ab8c68a954b246c601fd51816c",
+      "syncedAt": "2026-08-31T14:56:43.504Z"
     },
     ".github/skills/accessibility-testing/CHECKLIST.md": {
       "sourceSha256": "3beba6418cb63661b908ed82bb156ecd1fd4b588996f5f0dbdad7443655670ad",
